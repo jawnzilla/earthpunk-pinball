@@ -481,3 +481,25 @@ The drain condition was global: any ball below the bottom threshold lost stabili
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Center and edge drain paths should be exercised on a real device.
+
+## 2026-08-14 — Prototype 23: lower-lip escape and drain alignment
+
+### Harsh review findings
+
+- Edge balls could repeatedly hit the horizontal lower lip, lose energy, and remain trapped indefinitely.
+- The collision drain range was wider than the visible throat, allowing a ball to drain outside the apparent opening.
+- The lower lip lacked a strong continuous hardware edge.
+
+### Implemented
+
+- Narrowed the center drain rule to `156 < ball.x < 204`, matching the visible throat.
+- Added a minimum inward horizontal escape velocity for edge-lip rebounds.
+- Added a minimum upward escape velocity so edge contacts cannot settle into a zero-energy loop.
+- Drew a high-contrast split lower lip at the exact drain threshold, leaving the center opening visibly empty.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Edge-loop and center-drain harness tests should be repeated against the deployed build.

@@ -211,11 +211,12 @@
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
     if (b.y > H - 35) {
-      if (b.x > 145 && b.x < 215) {
+      if (b.x > 156 && b.x < 204) {
         state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
         if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); }
       } else {
-        b.y = H - 35; b.vy = -Math.abs(b.vy) * .55;
+        const towardCenter = b.x < 156 ? 1 : -1;
+        b.y = H - 35; b.vx = towardCenter * Math.max(Math.abs(b.vx) * .7, 1.05); b.vy = -Math.max(Math.abs(b.vy) * .7, 1.45);
       }
     }
     updateHud();
@@ -248,7 +249,8 @@
       ctx.fillStyle = '#f1b35b'; ctx.fillRect(x - 27, y - 3, 12, 6); ctx.fillRect(x + 15, y - 3, 12, 6);
     });
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(42, H - 43); ctx.lineTo(156, H - 43); ctx.moveTo(204, H - 43); ctx.lineTo(W - 42, H - 43); ctx.stroke();
-    ctx.strokeStyle = 'rgba(241,179,91,.34)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(44, H - 48); ctx.lineTo(156, H - 48); ctx.moveTo(204, H - 48); ctx.lineTo(W - 44, H - 48); ctx.stroke();
+    ctx.strokeStyle = '#8da895'; ctx.lineWidth = 3; ctx.lineCap = 'butt'; ctx.beginPath(); ctx.moveTo(42, H - 35); ctx.lineTo(156, H - 35); ctx.moveTo(204, H - 35); ctx.lineTo(W - 42, H - 35); ctx.stroke();
+    ctx.strokeStyle = 'rgba(241,179,91,.72)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(44, H - 39); ctx.lineTo(156, H - 39); ctx.moveTo(204, H - 39); ctx.lineTo(W - 44, H - 39); ctx.stroke();
     ctx.restore();
   }
   function drawReactor() {
