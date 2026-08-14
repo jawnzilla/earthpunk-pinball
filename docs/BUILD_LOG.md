@@ -165,3 +165,25 @@ Reset recreated the gameplay state but did not clear held keyboard state. A run 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Full real-device interruption testing remains required.
+
+## 2026-08-14 — Prototype 08: industrial depth pass
+
+### Harsh visual findings
+
+- The upgrade screen read as a generic web modal rather than an in-world machine interface.
+- Upgrade choices were visually identical and lacked iconography or hierarchy.
+- The playfield still read as a flat debug diagram instead of physical underground machinery.
+
+### Implemented
+
+- Added a framed, layered upgrade console with safe viewport height and overflow handling.
+- Added upgrade icons, stronger selection states, material gradients, and industrial panel treatment.
+- Added a layered playfield deck with directional lighting, restrained bioluminescent core glow, inset rails, vertical service ribs, and a gradient reactor housing with indicator bolts.
+- Preserved the offline-safe, code-drawn asset strategy.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Live visual review remains required after deployment; browser screenshot tooling is still blocked by Chrome remote-debugging consent.
