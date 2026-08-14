@@ -8,8 +8,11 @@ Prototype 01 answers one question: **is moving a probe through an underground in
 
 - Touch left/right halves of the table to work the flippers.
 - Keyboard fallback: `A` / `D` or arrow keys.
-- Hit all six salvage targets to recover the surface signal.
-- Missing the ball costs stability; lose all three stability points and the probe is lost.
+- Hit all six salvage targets to complete a descent.
+- Complete three descents in one run.
+- Choose one between-descent modification: stability, ball handling, or salvage yield.
+- Missing the ball costs stability; lose all stability and the probe is lost.
+- Reach the third descent's final signal to win.
 - Reset is available after a win or loss.
 
 ## Run locally

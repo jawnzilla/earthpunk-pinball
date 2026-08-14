@@ -83,3 +83,27 @@
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Browser visual deployment review remains pending because the optional remote-debug browser harness is blocked by Chrome consent; do not treat this phase as AAA-complete.
+
+## 2026-08-14 — Prototype 04: descent progression and run upgrades
+
+### Harsh review findings
+
+- The initial slice did not yet demonstrate the selected Survival & Resource Management genre strongly enough.
+- A complete session needed within-run escalation and a meaningful decision point, not only a final win screen.
+
+### Implemented
+
+- Added a three-descent run structure.
+- Added a between-descent upgrade choice with three materially different effects:
+  - Reinforced bulkhead: increases maximum Stability and restores one point.
+  - Tuned launch coil: raises the safe ball-speed ceiling.
+  - Salvage magnet: increases Charge gained from targets.
+- Added stage-aware HUD messaging and a deeper-descent transition.
+- Added a real upgrade selection overlay with touch-friendly buttons.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Full browser playthrough and deployed visual review remain required before treating this phase as complete.
