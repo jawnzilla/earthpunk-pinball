@@ -565,3 +565,22 @@ The reserved label band was within the canvas and clear of the flipper centers, 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Exact viewport visual capture remains the final mobile signoff step.
+
+## 2026-08-14 — Prototype 27: short-viewport Canvas sizing
+
+### Harsh visual finding
+
+A headless 320px bitmap exposed a possible right-edge crop, but a computed-layout probe showed Chrome desktop headless was using a 764px CSS viewport and then rasterizing to 320px. The product still needed a deterministic short-viewport sizing rule independent of intrinsic Canvas dimensions.
+
+### Implemented
+
+- Added `min-width: 0` and overflow containment to the table wrapper.
+- Added a short-viewport rule that sizes Canvas width from the available height using the 9:16 ratio.
+- Preserved `max-width: 100%` so the Canvas cannot exceed the content column on real mobile CSS viewports.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Desktop headless visual capture is not accepted as mobile pixel evidence without mobile emulation; real-device or CDP device emulation remains required.
