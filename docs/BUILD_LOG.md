@@ -314,3 +314,25 @@ Flipper and rail collisions were boolean-only, so the renderer could not place f
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Real-device playtesting remains required for final kick strength.
+
+## 2026-08-14 — Prototype 15: center drain and narrow HUD correction
+
+### Harsh QA findings
+
+- Resting flippers overlapped in collision space, physically blocking a centered ball from draining.
+- The single-line header could collide or overflow at 320px CSS width.
+
+### Implemented
+
+- Shortened flippers from length 86 to 78 while keeping pivots outward at x=64/296.
+- Resting tip gap is now approximately 78px before collision expansion, safely wider than the ball diameter plus flipper widths.
+- Added a narrow-width header rule for 360px and below with constrained status width and reduced typography.
+- Added `min-width: 0` to header regions to prevent flex overflow.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Numeric center-gap check passes.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Real-phone drain and 320px layout checks remain required.
