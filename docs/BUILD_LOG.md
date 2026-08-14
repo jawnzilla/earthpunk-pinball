@@ -545,3 +545,23 @@ The responsive control backing boxes extended below the table shell and crowded 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Exact 280/320/360 viewport screenshots remain required for final visual signoff.
+
+## 2026-08-14 — Prototype 26: pivot-clear control labels
+
+### Harsh mobile finding
+
+The reserved label band was within the canvas and clear of the flipper centers, but its backing boxes overlapped the upper 6px of the 19px pivot housings.
+
+### Implemented
+
+- Moved label backing boxes from `H-110..H-88` to `H-118..H-96`.
+- Moved label text with the band.
+- Preserved width scaling, shell bounds, and the 53px lower-lip clearance.
+- New label bottom is `y=544`, clearing the pivot ring start at `y=546`.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Exact viewport visual capture remains the final mobile signoff step.
