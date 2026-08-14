@@ -34,3 +34,29 @@
 - Tune ball speed, drain forgiveness, and flipper response.
 - Add the first between-stage upgrade choice.
 - Add escalating hazards so the survival category is visible in the run, not only in the documentation.
+
+## 2026-08-14 — Prototype 02: flipper feel and drain safety
+
+### Locked decisions
+
+- Flippers rest at a slight downward angle toward the outside edges.
+- Flippers remain solid collision surfaces while idle.
+- Activated flippers animate toward an upward striking angle.
+- Post-collision ball speed is capped to keep returns playable.
+- Side drain guards protect the ball from draining outside the flippers while preserving the center drain risk.
+
+### Implemented
+
+- Segment-based flipper collision instead of activation-only bounce zones.
+- Animated flipper rotation with touch/keyboard activation feedback.
+- Side guard rails with collision and visible rendering.
+- Global ball velocity cap after bumper and flipper impacts.
+- Pointer-capture fallback so non-standard pointer environments do not break input.
+
+### Verification notes
+
+- Clean local load renders the portrait table.
+- Resting flippers visibly angle downward.
+- Synthetic left activation visibly raises the left flipper.
+- Reset and touch event path remain functional.
+- Offline scan and `git diff --check` pass.

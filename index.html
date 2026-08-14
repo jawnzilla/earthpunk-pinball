@@ -61,6 +61,15 @@
     { x: 77, y: 274, r: 15, hit: false }, { x: 283, y: 274, r: 15, hit: false }, { x: 180, y: 242, r: 14, hit: false }
   ];
   const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }, { x: 180, y: 405, r: 23 }];
+  const flippers = {
+    left: { pivotX: 108, pivotY: H - 75, length: 104, width: 15, rest: Math.PI - .18, active: Math.PI + .42, angle: Math.PI - .18 },
+    right: { pivotX: 252, pivotY: H - 75, length: 104, width: 15, rest: .18, active: -.42, angle: .18 }
+  };
+  const sideGuards = [
+    { x1: 38, y1: H - 38, x2: 62, y2: H - 128 },
+    { x1: W - 38, y1: H - 38, x2: W - 62, y2: H - 128 }
+  ];
+  const MAX_BALL_SPEED = 6.4;
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
@@ -98,20 +107,53 @@
     }
     return false;
   }
+  function capBallSpeed(ball, maxSpeed = MAX_BALL_SPEED) {
+    const speed = Math.hypot(ball.vx, ball.vy);
+    if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
+  }
+  function flipperEndpoints(flipper) {
+    return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(flipper.angle) * flipper.length, y2: flipper.pivotY + Math.sin(flipper.angle) * flipper.length };
+  }
+  function segmentCollision(ball, segment, restitution = .82, kick = 0) {
+    const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
+    const lengthSquared = dx * dx + dy * dy || 1;
+    const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
+    const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+    let nx = ball.x - closestX, ny = ball.y - closestY;
+    const distance = Math.hypot(nx, ny), radius = ball.r + (segment.width || 0) / 2;
+    if (distance >= radius) return false;
+    if (distance < .001) { nx = -dy; ny = dx; }
+    const normalLength = Math.hypot(nx, ny) || 1;
+    nx /= normalLength; ny /= normalLength;
+    ball.x = closestX + nx * radius; ball.y = closestY + ny * radius;
+    const incoming = ball.vx * nx + ball.vy * ny;
+    if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
+    ball.vx += nx * kick; ball.vy += ny * kick;
+    capBallSpeed(ball);
+    return true;
+  }
+  function updateFlippers() {
+    const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
+    const rightTarget = input.right ? flippers.right.active : flippers.right.rest;
+    flippers.left.angle += (leftTarget - flippers.left.angle) * .28;
+    flippers.right.angle += (rightTarget - flippers.right.angle) * .28;
+  }
   function update() {
     if (!state.running) return;
     const b = state.ball;
     state.pulse += .08; state.flash = Math.max(0, state.flash - 1);
+    updateFlippers();
     b.vy += .115; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
     if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * .96; }
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .96; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .92; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
-    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); state.flash = 4; setMessage('Generator impact. Charge rising.'); } });
-    const leftFlipper = { x: 93, y: H - 75, r: 48 }, rightFlipper = { x: 267, y: H - 75, r: 48 };
-    if (input.left && b.y > H - 135 && b.x < 180 && b.x > 38) { b.vy = -Math.abs(b.vy) - 2.1; b.vx -= .6; }
-    if (input.right && b.y > H - 135 && b.x > 180 && b.x < 322) { b.vy = -Math.abs(b.vy) - 2.1; b.vx += .6; }
+    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); state.flash = 4; capBallSpeed(b); setMessage('Generator impact. Charge rising.'); } });
+    sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
+    segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, .9, input.left ? 1.2 : .15);
+    segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, .9, input.right ? 1.2 : .15);
+    capBallSpeed(b);
     if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }
     updateHud();
   }
@@ -135,9 +177,19 @@
   }
   function drawBumpers() { bumpers.forEach(item => { ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = '#6f9b84'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke(); }); }
   function drawFlippers() {
-    const activeLeft = input.left, activeRight = input.right;
-    ctx.fillStyle = activeLeft ? '#ffd083' : '#f1b35b'; ctx.beginPath(); ctx.roundRect(38, H - 75, 104, 15, 7); ctx.fill();
-    ctx.fillStyle = activeRight ? '#ffd083' : '#f1b35b'; ctx.beginPath(); ctx.roundRect(218, H - 75, 104, 15, 7); ctx.fill();
+    sideGuards.forEach(guard => {
+      ctx.beginPath(); ctx.moveTo(guard.x1, guard.y1); ctx.lineTo(guard.x2, guard.y2);
+      ctx.strokeStyle = '#57756a'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.strokeStyle = '#8da895'; ctx.lineWidth = 3; ctx.stroke();
+    });
+    [flippers.left, flippers.right].forEach(flipper => {
+      const end = flipperEndpoints(flipper);
+      ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
+      ctx.strokeStyle = (flipper === flippers.left ? input.left : input.right) ? '#ffd083' : '#f1b35b';
+      ctx.lineWidth = flipper.width; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.strokeStyle = '#fff0ba'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
+    });
   }
   function drawMeters() {
     ctx.textAlign = 'left'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
@@ -147,7 +199,7 @@
   function drawBall() { const b = state.ball; ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill(); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
   function loop() { update(); draw(); requestAnimationFrame(loop); }
   function setControl(side, value) { input[side] = value; }
-  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', true); canvas.setPointerCapture(event.pointerId); });
+  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', true); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
   canvas.addEventListener('pointerup', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', false); });
   canvas.addEventListener('pointercancel', () => { input.left = false; input.right = false; });
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
