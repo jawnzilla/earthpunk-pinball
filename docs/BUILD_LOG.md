@@ -126,3 +126,23 @@ The original simulation advanced once per render frame. That made gravity, dampi
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Cross-refresh-rate playtesting remains required on real devices.
+
+## 2026-08-14 — Prototype 06: resilient touch release
+
+### Harsh review finding
+
+The touch handler released controls based on the release coordinate. Dragging across the table could leave the originally pressed flipper active, and pointer capture loss had no cleanup path.
+
+### Implemented
+
+- Track the pointer's active flipper side independently from release location.
+- Clear the correct side on pointerup.
+- Clear all relevant state on pointercancel and lostpointercapture.
+- Keep the handler resilient to synthetic or interrupted pointer sessions.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Real-device drag and interruption testing remains required.

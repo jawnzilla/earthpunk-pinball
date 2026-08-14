@@ -66,6 +66,7 @@
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   let input = { left: false, right: false };
+  let activePointerSide = null;
   let state;
   const targets = [
     { x: 90, y: 164, r: 17, hit: false }, { x: 180, y: 134, r: 17, hit: false }, { x: 270, y: 164, r: 17, hit: false },
@@ -237,9 +238,11 @@
     draw(); requestAnimationFrame(loop);
   }
   function setControl(side, value) { input[side] = value; }
-  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', true); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
-  canvas.addEventListener('pointerup', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', false); });
-  canvas.addEventListener('pointercancel', () => { input.left = false; input.right = false; });
+  function clearPointerControl() { if (activePointerSide) input[activePointerSide] = false; activePointerSide = null; }
+  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; clearPointerControl(); activePointerSide = x < W / 2 ? 'left' : 'right'; setControl(activePointerSide, true); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
+  canvas.addEventListener('pointerup', () => { clearPointerControl(); });
+  canvas.addEventListener('pointercancel', () => { clearPointerControl(); input.left = false; input.right = false; });
+  canvas.addEventListener('lostpointercapture', () => { clearPointerControl(); });
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
   resetButton.addEventListener('click', reset);
