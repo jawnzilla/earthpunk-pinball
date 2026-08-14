@@ -503,3 +503,25 @@ The drain condition was global: any ball below the bottom threshold lost stabili
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Edge-loop and center-drain harness tests should be repeated against the deployed build.
+
+## 2026-08-14 — Prototype 24: respawn lock reset and responsive controls
+
+### Harsh review findings
+
+- Flipper contact locks could survive a ball respawn, suppressing the first valid impulse of the next ball.
+- Fixed intrinsic label sizing became too small after responsive Canvas scaling and had no contrast backing.
+
+### Implemented
+
+- `spawnBall()` now clears both continuous-contact locks.
+- Lower control labels derive their intrinsic font size from Canvas display scale.
+- Labels maintain at least a 14px CSS-equivalent target size, capped for large displays.
+- Added dark backing rectangles, border, and text outline for `LIFT L` / `LIFT R`.
+- Kept labels inside the canvas with bottom clearance.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Exact 280/320/360 viewport screenshots remain required for final visual signoff.

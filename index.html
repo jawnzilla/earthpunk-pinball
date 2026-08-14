@@ -107,6 +107,7 @@
     updateHud();
   }
   function spawnBall() {
+    state.flipperContacts.left = false; state.flipperContacts.right = false;
     state.ball = { x: W / 2, y: H - 108, vx: (Math.random() - .5) * 1.3, vy: -5.1, r: 8, trail: [] };
     state.launched = true;
   }
@@ -282,8 +283,17 @@
       ctx.strokeStyle = '#fff0ba'; ctx.lineWidth = 2; ctx.stroke();
       ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
     });
-    ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(196,210,189,.9)';
-    ctx.fillText('LIFT L', 76, H - 20); ctx.fillText('LIFT R', 284, H - 20);
+    const displayScale = canvas.getBoundingClientRect().width / W || 1;
+    const labelFont = Math.max(13, Math.min(19, 14 / displayScale));
+    ctx.font = `bold ${labelFont}px Trebuchet MS`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    [['LIFT L', 76], ['LIFT R', 284]].forEach(([label, x]) => {
+      const width = ctx.measureText(label).width + 14;
+      ctx.fillStyle = 'rgba(7,13,15,.82)'; ctx.fillRect(x - width / 2, H - 34, width, 22);
+      ctx.strokeStyle = 'rgba(141,168,149,.72)'; ctx.lineWidth = 1; ctx.strokeRect(x - width / 2, H - 34, width, 22);
+      ctx.strokeStyle = '#0b1112'; ctx.lineWidth = 3; ctx.strokeText(label, x, H - 23);
+      ctx.fillStyle = 'rgba(229,241,223,.94)'; ctx.fillText(label, x, H - 23);
+    });
+    ctx.textBaseline = 'alphabetic';
   }
   function drawMeters() {
     ctx.textAlign = 'left'; ctx.font = 'bold 13px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
