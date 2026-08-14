@@ -60,3 +60,26 @@
 - Synthetic left activation visibly raises the left flipper.
 - Reset and touch event path remain functional.
 - Offline scan and `git diff --check` pass.
+
+## 2026-08-14 — Prototype 03: core table read and flipper geometry
+
+### Harsh review findings
+
+- The previous flippers pointed outward, leaving an oversized center drain and failing the expected pinball read.
+- The table read as a debug diagram rather than a physical machine because the hierarchy and action affordances were weak.
+- The ball had no motion trail, making fast movement harder to read on mobile.
+
+### Implemented
+
+- Moved flipper pivots outward and tips inward to create a readable protected center lane.
+- Kept the slight downward resting angle and upward activated angle.
+- Added a restrained ball trail for motion readability.
+- Added explicit in-table `LEFT FLIPPER` / `RIGHT FLIPPER` touch affordances that switch to `LIFT` while pressed.
+
+### Verification notes
+
+- Corrected endpoints now converge toward the center drain rather than the walls.
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Browser visual deployment review remains pending because the optional remote-debug browser harness is blocked by Chrome consent; do not treat this phase as AAA-complete.
