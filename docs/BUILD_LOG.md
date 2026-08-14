@@ -359,3 +359,23 @@ Flipper and rail collisions were boolean-only, so the renderer could not place f
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - New lower-rail simulation should be repeated against the deployed build.
+
+## 2026-08-14 — Prototype 17: guard/flipper collision separation
+
+### Harsh QA findings
+
+- Side-guard and flipper collision envelopes overlapped near the pivots, creating ambiguous sequential contacts and a sticky-launch risk.
+- The narrow HUD subtitle used nowrap, creating an avoidable overflow risk at 320px.
+
+### Implemented
+
+- Shortened the collidable side guards to end at outer points `(48, H-82)` and its mirror, leaving clearance from the flipper pivots and noses.
+- Kept the guard slope inward while removing the overlapping collision volume.
+- Allowed the narrow subtitle to wrap within a bounded 150px region.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- `git diff --check` passes.
+- Offline-resource scan passes.
+- Guard-to-flipper segment-distance regression should be rerun against the deployed build.
