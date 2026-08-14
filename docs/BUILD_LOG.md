@@ -611,3 +611,25 @@ The ball still felt too light and flipper strength required repeated code edits 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Slider tuning and drain behavior require live gameplay testing.
+
+## 2026-08-14 — Prototype 29: anti-hug flipper contact and stronger defaults
+
+### Player correction
+
+The ball could follow a flipper when rolling tangentially because the collision solver only reflected velocity when the ball was moving into the blade. Positional separation alone left a tangential contact that looked glued to the flipper.
+
+### Implemented
+
+- Set tuning defaults to gravity `0.08`, active kick `6`, catch damping `0.30`, moving rebound `0.50`, passive rebound `0.30`, and speed cap `7`.
+- Reset state now inherits the live speed-cap default instead of reverting to `6.4`.
+- Flipper kick scaling now reaches the requested active-kick ceiling on a well-timed swing.
+- Segment contacts now guarantee an outward normal velocity at least equal to the supplied kick, even when the ball is rolling along the blade rather than into it.
+- Existing contact locks remain in place, so the fix does not reintroduce repeated impulses while the ball stays in contact.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Focused tangential-contact regression passes: the ball exits at `6.0` normal velocity instead of hugging the segment.
+- Speed-cap regression passes at `7.0`.
+- Offline-resource scan passes.
+- `git diff --check` passes.
