@@ -336,3 +336,26 @@ Flipper and rail collisions were boolean-only, so the renderer could not place f
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Real-phone drain and 320px layout checks remain required.
+
+## 2026-08-14 — Prototype 16: lower-funnel safety and drain readability
+
+### Harsh review findings
+
+- A lower guard endpoint could eject a valid ball outward, causing an unfair immediate drain.
+- Active kick was applied even when the ball was already moving away from a segment.
+- The central machinery wedge visually filled the drain zone.
+- Fixed 9px/11px Canvas labels were too small on narrow phones.
+
+### Implemented
+
+- Shortened side-guard endpoints to meet the flipper zone safely at `H - 70`.
+- Applied flipper kick only when the ball is approaching the segment normal.
+- Reduced the central throat silhouette to the immediate drain edge, preserving an open visual gap.
+- Increased lower flipper labels and meter labels to 13px intrinsic Canvas text.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- New lower-rail simulation should be repeated against the deployed build.
