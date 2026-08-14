@@ -208,3 +208,23 @@ Reset recreated the gameplay state but did not clear held keyboard state. A run 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Multi-input and multi-pointer behavior should still be exercised on a real touch device.
+
+## 2026-08-14 — Prototype 10: localized impact feedback
+
+### Harsh feel finding
+
+The table previously communicated impacts mostly through a global flash and text message. That made fast targets and generators difficult to read spatially and weakened the tactile connection between ball, machine, and resource gain.
+
+### Implemented
+
+- Added bounded localized impact effects for salvage targets and generator bumpers.
+- Added expanding rings and short spark bursts at the exact impact location.
+- Kept the global flash as a restrained secondary cue.
+- Capped active effects to prevent unbounded memory or draw growth.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Visual intensity and readability should be checked on a real phone before adding more effects.

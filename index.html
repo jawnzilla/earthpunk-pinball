@@ -90,7 +90,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED, targets: 0, running: true, launched: false, flash: 0, pulse: 0, message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED, targets: 0, running: true, launched: false, flash: 0, pulse: 0, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true;
@@ -106,8 +106,9 @@
     messageEl.textContent = state.message;
   }
   function setMessage(text) { state.message = text; updateHud(); }
+  function emitImpact(x, y, color, power = 1) { state.effects.push({ x, y, color, power, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
   function hitTarget(target) {
-    target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += 100; state.flash = 8;
+    target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += 100; state.flash = 8; emitImpact(target.x, target.y, '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? 'Descent mapped. Choose a modification.' : 'Salvage secured.');
     if (state.targets === targets.length) completeStage();
   }
@@ -170,7 +171,7 @@
   function update() {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1);
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
     b.vy += .115; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
@@ -179,7 +180,7 @@
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .96; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .92; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
-    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); state.flash = 4; capBallSpeed(b); setMessage('Generator impact. Charge rising.'); } });
+    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); state.flash = 4; emitImpact(item.x, item.y, '#b5d3a1', .8); capBallSpeed(b); setMessage('Generator impact. Charge rising.'); } });
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
     segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, .9, input.left ? 1.2 : .15);
     segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, .9, input.right ? 1.2 : .15);
@@ -201,7 +202,7 @@
     ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
-    drawReactor(); drawTargets(); drawBumpers(); drawFlippers(); drawMeters(); drawBall();
+    drawReactor(); drawTargets(); drawBumpers(); drawFlippers(); drawMeters(); drawEffects(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawReactor() {
@@ -235,6 +236,15 @@
     ctx.textAlign = 'left'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
     ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);
     ctx.fillStyle = '#f1b35b'; ctx.fillRect(34, 130, Math.min(130, state.charge * 13), 7); ctx.fillStyle = '#c56d49'; ctx.fillRect(220, 130, 106 * (state.targets / targets.length), 7);
+  }
+  function drawEffects() {
+    state.effects.forEach(effect => {
+      const radius = (1 - effect.life) * 28 * effect.power + 5;
+      ctx.save(); ctx.globalAlpha = effect.life; ctx.strokeStyle = effect.color; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = effect.life * .8; ctx.fillStyle = effect.color;
+      for (let i = 0; i < 6; i += 1) { const angle = state.pulse * .4 + i * Math.PI / 3; const distance = radius + 4; ctx.beginPath(); ctx.arc(effect.x + Math.cos(angle) * distance, effect.y + Math.sin(angle) * distance, 2 * effect.power, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+    });
   }
   function drawBall() {
     const b = state.ball;
