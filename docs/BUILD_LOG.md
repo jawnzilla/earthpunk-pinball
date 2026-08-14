@@ -250,3 +250,24 @@ The table previously communicated impacts mostly through a global flash and text
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Real-phone tuning remains required for final gravity and drain feel.
+
+## 2026-08-14 — Prototype 12: edge service machinery silhouettes
+
+### Harsh art finding
+
+The table still read as a decorated diagram because the frame had no authored manufactured silhouettes, shell thickness, or localized edge hardware.
+
+### Implemented
+
+- Added a central dark drain throat behind the flippers.
+- Added side hinge housings aligned to the flipper pivots.
+- Added amber service indicator slits near each hinge.
+- Added a split retaining bar that frames the drain without closing it.
+- Kept all new detail at the perimeter so the center target field remains readable.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Mobile visual review remains required at narrow CSS viewports.
