@@ -271,3 +271,23 @@ The table still read as a decorated diagram because the frame had no authored ma
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Mobile visual review remains required at narrow CSS viewports.
+
+## 2026-08-14 — Prototype 13: contact-aware flipper feedback
+
+### Harsh feel finding
+
+Flipper and rail collisions were boolean-only, so the renderer could not place feedback at the actual contact point. This made active flipper hits feel disconnected from the ball response.
+
+### Implemented
+
+- `segmentCollision` now returns contact position and normal data on a hit.
+- Active flipper hits emit a restrained local amber impact cue.
+- Added a short cooldown to prevent effect spam during sustained overlap.
+- Kept rails and inactive flippers free of global flashes.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Contact behavior still needs real-device playtesting.
