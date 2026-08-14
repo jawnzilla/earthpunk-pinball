@@ -228,3 +228,25 @@ The table previously communicated impacts mostly through a global flash and text
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Visual intensity and readability should be checked on a real phone before adding more effects.
+
+## 2026-08-14 — Prototype 11: ball arc and drain geometry correction
+
+### Player correction
+
+- Gravity was too strong, compressing the ball's flight and making flipper timing feel restrictive.
+- The outer funnel rails were too long and misaligned with the shortened flipper row, creating a risk of trapped side rebounds.
+- The flippers needed a more explicit center drain gap.
+
+### Implemented
+
+- Reduced gravity from `0.115` to `0.08` per fixed simulation step.
+- Shortened both flippers to leave a clear center drain gap.
+- Repositioned outer funnel rails closer to the flipper row.
+- Kept both rails sloping inward toward the playable table rather than forming side pockets.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Real-phone tuning remains required for final gravity and drain feel.
