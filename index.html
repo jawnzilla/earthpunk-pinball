@@ -70,6 +70,7 @@
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   let input = { left: false, right: false };
+  let activePointerId = null;
   let activePointerSide = null;
   let state;
   const targets = [
@@ -90,7 +91,7 @@
 
   function reset() {
     state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED, targets: 0, running: true, launched: false, flash: 0, pulse: 0, message: 'Map the first descent.' };
-    input.left = false; input.right = false; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
+    input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true;
     spawnBall();
@@ -251,13 +252,14 @@
     draw(); requestAnimationFrame(loop);
   }
   function setControl(side, value) { input[side] = value; }
-  function clearPointerControl() { if (activePointerSide) input[activePointerSide] = false; activePointerSide = null; }
-  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; clearPointerControl(); activePointerSide = x < W / 2 ? 'left' : 'right'; setControl(activePointerSide, true); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
-  canvas.addEventListener('pointerup', () => { clearPointerControl(); });
-  canvas.addEventListener('pointercancel', () => { clearPointerControl(); input.left = false; input.right = false; });
-  canvas.addEventListener('lostpointercapture', () => { clearPointerControl(); });
-  window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
-  window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
+  function syncInput() { input.left = keys.a || keys.ArrowLeft || activePointerSide === 'left'; input.right = keys.d || keys.ArrowRight || activePointerSide === 'right'; }
+  function clearPointerControl(pointerId = null) { if (pointerId !== null && pointerId !== activePointerId) return; activePointerId = null; activePointerSide = null; syncInput(); }
+  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; clearPointerControl(); activePointerId = event.pointerId; activePointerSide = x < W / 2 ? 'left' : 'right'; syncInput(); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
+  canvas.addEventListener('pointerup', event => { clearPointerControl(event.pointerId); });
+  canvas.addEventListener('pointercancel', event => { clearPointerControl(event.pointerId); });
+  canvas.addEventListener('lostpointercapture', event => { clearPointerControl(event.pointerId); });
+  window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
+  window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   resetButton.addEventListener('click', reset);
   reset(); loop();
 })();

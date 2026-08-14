@@ -187,3 +187,24 @@ Reset recreated the gameplay state but did not clear held keyboard state. A run 
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Live visual review remains required after deployment; browser screenshot tooling is still blocked by Chrome remote-debugging consent.
+
+## 2026-08-14 — Prototype 09: multi-input pointer correctness
+
+### Harsh QA findings
+
+- A touch release could disable a still-held keyboard flipper because input sources overwrote each other.
+- A stale pointerup/pointercancel/lostpointercapture event could clear a newer active pointer.
+
+### Implemented
+
+- Added active pointer-ID tracking.
+- Added a single `syncInput` path that composes keyboard and touch state.
+- Ignored cleanup events belonging to stale pointer IDs.
+- Preserved reset, cancel, and lost-capture cleanup behavior.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Multi-input and multi-pointer behavior should still be exercised on a real touch device.
