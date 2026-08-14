@@ -291,3 +291,26 @@ Flipper and rail collisions were boolean-only, so the renderer could not place f
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Contact behavior still needs real-device playtesting.
+
+## 2026-08-14 — Prototype 14: flipper spacing, funnel direction, and kick tuning
+
+### Player correction
+
+- Flippers still left too little room for a readable center drain.
+- Side funnel panels sloped outward toward the lower edge, steering the ball away from the flippers.
+- Active flipper kick was too soft.
+
+### Implemented
+
+- Moved pivots outward to x=64 and x=296.
+- Shortened both flippers to length 86, widening the center gap.
+- Reversed side-guard endpoints so the lower funnel exits point inward toward the flipper row.
+- Increased active flipper kick from 1.2 to 2.05 and inactive contact kick from .15 to .2.
+- Realigned hinge housings with the new pivots.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Real-device playtesting remains required for final kick strength.
