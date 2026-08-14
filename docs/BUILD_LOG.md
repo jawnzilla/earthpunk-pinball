@@ -440,3 +440,25 @@ The heavier physics behavior was not visually communicated: angular velocity aff
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Mobile screenshot verification remains blocked by Chrome remote-debugging consent.
+
+## 2026-08-14 — Prototype 21: single-impulse flipper contacts
+
+### Player correction
+
+- Active flippers still felt weak because the launch impulse capped too low.
+- A ball rolling along a flipper could trigger consecutive-frame impulses, producing a weak-looking double hit instead of one decisive launch.
+
+### Implemented
+
+- Added per-flipper continuous-contact locks.
+- Each flipper now applies its activation impulse once per contact and waits for separation before arming again.
+- Increased motion-scaled launch kick cap from `2.65` to `4.2`.
+- Stationary held catches retain zero-like kick; released flippers retain passive kick.
+- Global speed cap remains enforced.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- High-speed single-hit, rolling-contact, and catch/release behavior require real-device tuning.

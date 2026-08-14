@@ -99,7 +99,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true;
@@ -202,10 +202,12 @@
     const rightMotion = Math.abs(flippers.right.angularVelocity);
     const leftRestitution = leftActive ? (leftMotion < .04 ? .14 : .46) : .82;
     const rightRestitution = rightActive ? (rightMotion < .04 ? .14 : .46) : .82;
-    const leftKick = leftActive ? Math.min(2.65, .08 + leftMotion * 14) : .2;
-    const rightKick = rightActive ? Math.min(2.65, .08 + rightMotion * 14) : .2;
+    const leftKick = leftActive && !state.flipperContacts.left ? Math.min(4.2, .08 + leftMotion * 20) : (leftActive ? 0 : .2);
+    const rightKick = rightActive && !state.flipperContacts.right ? Math.min(4.2, .08 + rightMotion * 20) : (rightActive ? 0 : .2);
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick);
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick);
+    state.flipperContacts.left = Boolean(leftHit);
+    state.flipperContacts.right = Boolean(rightHit);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
     if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }
