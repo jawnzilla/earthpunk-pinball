@@ -88,8 +88,8 @@
   ];
   const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }, { x: 180, y: 405, r: 23 }];
   const flippers = {
-    left: { pivotX: 64, pivotY: H - 75, length: 78, width: 15, rest: .16, active: -.5, angle: .16 },
-    right: { pivotX: 296, pivotY: H - 75, length: 78, width: 15, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16 }
+    left: { pivotX: 64, pivotY: H - 75, length: 78, width: 15, rest: .16, active: -.5, angle: .16, angularVelocity: 0 },
+    right: { pivotX: 296, pivotY: H - 75, length: 78, width: 15, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0 }
   };
   const sideGuards = [
     { x1: 36, y1: H - 95, x2: 48, y2: H - 82 },
@@ -176,8 +176,11 @@
   function updateFlippers() {
     const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
     const rightTarget = input.right ? flippers.right.active : flippers.right.rest;
+    const leftPrevious = flippers.left.angle, rightPrevious = flippers.right.angle;
     flippers.left.angle += (leftTarget - flippers.left.angle) * .28;
     flippers.right.angle += (rightTarget - flippers.right.angle) * .28;
+    flippers.left.angularVelocity = flippers.left.angle - leftPrevious;
+    flippers.right.angularVelocity = flippers.right.angle - rightPrevious;
   }
   function update() {
     if (!state.running) return;
@@ -195,8 +198,14 @@
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
     const leftActive = input.left;
     const rightActive = input.right;
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftActive ? .46 : .82, leftActive ? 2.65 : .2);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightActive ? .46 : .82, rightActive ? 2.65 : .2);
+    const leftMotion = Math.abs(flippers.left.angularVelocity);
+    const rightMotion = Math.abs(flippers.right.angularVelocity);
+    const leftRestitution = leftActive ? (leftMotion < .04 ? .14 : .46) : .82;
+    const rightRestitution = rightActive ? (rightMotion < .04 ? .14 : .46) : .82;
+    const leftKick = leftActive ? Math.min(2.65, .08 + leftMotion * 14) : .2;
+    const rightKick = rightActive ? Math.min(2.65, .08 + rightMotion * 14) : .2;
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
     if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }

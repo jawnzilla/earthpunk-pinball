@@ -399,3 +399,24 @@ The flippers previously used nearly the same high-restitution collision for both
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Catch, release, and hard-launch behavior still require real-device tuning.
+
+## 2026-08-14 — Prototype 19: motion-aware flipper catch
+
+### Harsh physics finding
+
+Low active restitution alone did not guarantee a catch because the active kick was still applied on every held overlap. A stationary held flipper could continue launching a descending ball instead of absorbing it.
+
+### Implemented
+
+- Added per-flipper angular velocity tracking.
+- Stationary held flippers use restitution `0.14` and kick `0.08`, allowing a descending ball to settle.
+- Moving flippers ramp kick from angular velocity up to `2.65` and use restitution `0.46` for a hard launch.
+- Released flippers retain restitution `0.82` and passive kick `0.2`.
+- Global speed cap remains enforced after every collision.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Catch, release, high-speed descent, and hard-launch behavior require real-device tuning.
