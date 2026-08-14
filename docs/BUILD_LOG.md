@@ -462,3 +462,22 @@ The heavier physics behavior was not visually communicated: angular velocity aff
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - High-speed single-hit, rolling-contact, and catch/release behavior require real-device tuning.
+
+## 2026-08-14 — Prototype 22: spatially honest drain
+
+### Harsh physics finding
+
+The drain condition was global: any ball below the bottom threshold lost stability, including balls outside the visual center opening. That contradicted the machine silhouette and could create unfair edge drains.
+
+### Implemented
+
+- Center drain now requires `145 < ball.x < 215` in the intrinsic 360px table.
+- Balls reaching the lower threshold outside the center opening rebound from a restrained lower lip instead of losing stability.
+- Center drain remains the only path that consumes a descent.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Center and edge drain paths should be exercised on a real device.

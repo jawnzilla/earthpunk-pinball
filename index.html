@@ -210,7 +210,14 @@
     state.flipperContacts.right = Boolean(rightHit);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
-    if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }
+    if (b.y > H - 35) {
+      if (b.x > 145 && b.x < 215) {
+        state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
+        if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); }
+      } else {
+        b.y = H - 35; b.vy = -Math.abs(b.vy) * .55;
+      }
+    }
     updateHud();
   }
   function draw() {
