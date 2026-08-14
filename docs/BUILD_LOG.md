@@ -633,3 +633,20 @@ The ball could follow a flipper when rolling tangentially because the collision 
 - Speed-cap regression passes at `7.0`.
 - Offline-resource scan passes.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 30: sealed funnel-to-wall guide
+
+### Player correction
+
+A gap existed between each angled funnel guard and the outer table wall. A ball could enter that seam and become trapped instead of continuing toward the flippers or drain.
+
+### Implemented
+
+- Extended the side guard endpoints to the table-wall collision surface using the same `table.left` geometry that defines the outer wall.
+- Kept the render and collision segments shared, so the visible funnel now closes the physical seam.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Guard endpoints now begin at `x=26` and `x=334`, matching the inner edge of the 5px table wall stroke.
+- `git diff --check` passes.
