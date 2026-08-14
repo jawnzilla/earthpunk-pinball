@@ -420,3 +420,23 @@ Low active restitution alone did not guarantee a catch because the active kick w
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Catch, release, high-speed descent, and hard-launch behavior require real-device tuning.
+
+## 2026-08-14 — Prototype 20: visible flipper motion state
+
+### Harsh visual finding
+
+The heavier physics behavior was not visually communicated: angular velocity affected collision math but not the rendered flipper. Long `LEFT FLIPPER` / `RIGHT FLIPPER` labels also crowded the lower drain zone on mobile.
+
+### Implemented
+
+- Moving active flippers now render with a brighter core and stronger amber glow.
+- Stationary held flippers retain a softer warm glow, distinguishing catch state from launch state.
+- Replaced long lower labels with persistent compact `LIFT L` and `LIFT R` labels.
+- Kept labels centered and clear of the drain opening.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Mobile screenshot verification remains blocked by Chrome remote-debugging consent.

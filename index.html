@@ -260,14 +260,19 @@
     });
     [flippers.left, flippers.right].forEach(flipper => {
       const end = flipperEndpoints(flipper);
+      const active = flipper === flippers.left ? input.left : input.right;
+      const moving = Math.abs(flipper.angularVelocity) > .04;
+      ctx.save(); ctx.shadowColor = active ? '#f1b35b' : 'transparent'; ctx.shadowBlur = active ? (moving ? 14 : 5) : 0;
       ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
-      ctx.strokeStyle = (flipper === flippers.left ? input.left : input.right) ? '#ffd083' : '#f1b35b';
+      ctx.strokeStyle = active ? (moving ? '#fff0ba' : '#ffd083') : '#f1b35b';
       ctx.lineWidth = flipper.width; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.restore();
+      ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
       ctx.strokeStyle = '#fff0ba'; ctx.lineWidth = 2; ctx.stroke();
       ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
     });
-    ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(196,210,189,.86)';
-    ctx.fillText(input.left ? 'LIFT' : 'LEFT FLIPPER', 76, H - 20); ctx.fillText(input.right ? 'LIFT' : 'RIGHT FLIPPER', 284, H - 20);
+    ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(196,210,189,.9)';
+    ctx.fillText('LIFT L', 76, H - 20); ctx.fillText('LIFT R', 284, H - 20);
   }
   function drawMeters() {
     ctx.textAlign = 'left'; ctx.font = 'bold 13px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
