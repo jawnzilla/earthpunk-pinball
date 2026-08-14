@@ -227,7 +227,15 @@
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill();
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke();
   }
-  function loop() { update(); draw(); requestAnimationFrame(loop); }
+  let previousTime = 0;
+  let timeAccumulator = 0;
+  function loop(timestamp = 0) {
+    if (!previousTime) previousTime = timestamp;
+    timeAccumulator += Math.min(3, (timestamp - previousTime) / (1000 / 60));
+    previousTime = timestamp;
+    while (timeAccumulator >= 1) { update(); timeAccumulator -= 1; }
+    draw(); requestAnimationFrame(loop);
+  }
   function setControl(side, value) { input[side] = value; }
   canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', true); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
   canvas.addEventListener('pointerup', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', false); });

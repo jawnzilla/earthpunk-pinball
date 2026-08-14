@@ -107,3 +107,22 @@
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Full browser playthrough and deployed visual review remain required before treating this phase as complete.
+
+## 2026-08-14 — Prototype 05: fixed-step physics timing
+
+### Harsh review finding
+
+The original simulation advanced once per render frame. That made gravity, damping, flipper animation, collision response, and timers vary with device refresh rate.
+
+### Implemented
+
+- Added a fixed-step accumulator at 60 simulation steps per second.
+- Capped catch-up work after long pauses to avoid a spiral of updates.
+- Kept rendering independent from simulation cadence.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Cross-refresh-rate playtesting remains required on real devices.
