@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#101518">
+  <title>Deadlight // Earthpunk Pinball</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Trebuchet MS", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #101518; color: #e9f1df; }
+    body { display: grid; place-items: center; overflow: hidden; }
+    main { width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
+    header { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
+    h1 { margin: 0; color: #f1b35b; font-size: clamp(18px, 5vw, 25px); letter-spacing: .12em; text-transform: uppercase; }
+    .subtitle { margin: 3px 0 0; color: #87a39b; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .status { text-align: right; color: #c4d2bd; font-size: 12px; line-height: 1.45; }
+    .status strong { color: #f1b35b; }
+    .table-wrap { min-height: 0; display: grid; place-items: center; }
+    canvas { width: min(100%, 420px); max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
+    footer { color: #87a39b; text-align: center; font-size: 12px; letter-spacing: .03em; }
+    footer b { color: #e9f1df; }
+    .overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 22px; background: rgba(8,11,12,.78); }
+    .overlay[hidden] { display: none; }
+    .card { width: min(100%, 370px); padding: 24px; border: 1px solid #61776a; border-radius: 18px; background: #182226; box-shadow: 0 20px 80px rgba(0,0,0,.55); }
+    .card h2 { margin: 0 0 8px; color: #f1b35b; text-transform: uppercase; letter-spacing: .1em; }
+    .card p { color: #c4d2bd; line-height: 1.5; }
+    button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+    button:active { transform: translateY(1px); background: #ffd083; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div><h1>Deadlight</h1><p class="subtitle">Earthpunk pinball // prototype 01</p></div>
+      <div class="status"><strong id="stage">BOOT</strong><br><span id="message">Keep the probe alive.</span></div>
+    </header>
+    <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
+    <footer><b>Touch left/right</b> to work the flippers · keyboard: A / D or ← / →</footer>
+  </main>
+  <div class="overlay" id="overlay" hidden>
+    <section class="card"><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><button id="reset">Start another descent</button></section>
+  </div>
+<script>
+(() => {
+  "use strict";
+  const canvas = document.querySelector('#game');
+  const ctx = canvas.getContext('2d');
+  const stageEl = document.querySelector('#stage');
+  const messageEl = document.querySelector('#message');
+  const overlay = document.querySelector('#overlay');
+  const overlayTitle = document.querySelector('#overlay-title');
+  const overlayCopy = document.querySelector('#overlay-copy');
+  const resetButton = document.querySelector('#reset');
+  const W = canvas.width, H = canvas.height;
+  const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
+  let input = { left: false, right: false };
+  let state;
+  const targets = [
+    { x: 90, y: 164, r: 17, hit: false }, { x: 180, y: 134, r: 17, hit: false }, { x: 270, y: 164, r: 17, hit: false },
+    { x: 77, y: 274, r: 15, hit: false }, { x: 283, y: 274, r: 15, hit: false }, { x: 180, y: 242, r: 14, hit: false }
+  ];
+  const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }, { x: 180, y: 405, r: 23 }];
+  const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
+
+  function reset() {
+    state = { score: 0, charge: 0, stability: 3, targets: 0, running: true, launched: false, flash: 0, pulse: 0, message: 'Keep the probe alive.' };
+    targets.forEach(t => t.hit = false);
+    overlay.hidden = true;
+    spawnBall();
+    updateHud();
+  }
+  function spawnBall() {
+    state.ball = { x: W / 2, y: H - 108, vx: (Math.random() - .5) * 1.3, vy: -5.1, r: 8 };
+    state.launched = true;
+  }
+  function updateHud() {
+    stageEl.textContent = state.running ? `STABILITY ${state.stability}/3` : (state.stability > 0 ? 'RECOVERED' : 'COLLAPSE');
+    messageEl.textContent = state.message;
+  }
+  function setMessage(text) { state.message = text; updateHud(); }
+  function hitTarget(target) {
+    target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + 1); state.score += 100; state.flash = 8;
+    setMessage(state.targets === targets.length ? 'Extraction route open.' : 'Salvage secured.');
+    if (state.targets === targets.length) win();
+  }
+  function win() { state.running = false; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
+  function lose() { state.running = false; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
+  function circleCollision(ball, item, restitution = 1) {
+    const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
+    const dist = Math.hypot(dx, dy);
+    if (dist < min && dist > 0) {
+      const nx = dx / dist, ny = dy / dist;
+      ball.x = item.x + nx * min; ball.y = item.y + ny * min;
+      const dot = ball.vx * nx + ball.vy * ny;
+      ball.vx -= (1 + restitution) * dot * nx; ball.vy -= (1 + restitution) * dot * ny;
+      return true;
+    }
+    return false;
+  }
+  function update() {
+    if (!state.running) return;
+    const b = state.ball;
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1);
+    b.vy += .115; b.vx *= .999; b.vy *= .999;
+    b.x += b.vx; b.y += b.vy;
+    if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * .96; }
+    if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .96; }
+    if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .92; }
+    targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
+    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); state.flash = 4; setMessage('Generator impact. Charge rising.'); } });
+    const leftFlipper = { x: 93, y: H - 75, r: 48 }, rightFlipper = { x: 267, y: H - 75, r: 48 };
+    if (input.left && b.y > H - 135 && b.x < 180 && b.x > 38) { b.vy = -Math.abs(b.vy) - 2.1; b.vx -= .6; }
+    if (input.right && b.y > H - 135 && b.x > 180 && b.x < 322) { b.vy = -Math.abs(b.vy) - 2.1; b.vx += .6; }
+    if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }
+    updateHud();
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#182226'; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = '#29413f'; ctx.lineWidth = 2;
+    for (let y = 30; y < H - 20; y += 26) { ctx.beginPath(); ctx.moveTo(24, y); ctx.lineTo(W - 24, y); ctx.stroke(); }
+    ctx.restore();
+    ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
+    ctx.fillStyle = '#101518'; ctx.fillRect(30, H - 125, W - 60, 88);
+    drawReactor(); drawTargets(); drawBumpers(); drawFlippers(); drawMeters(); drawBall();
+    if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
+  }
+  function drawReactor() {
+    ctx.fillStyle = '#253c39'; ctx.fillRect(62, 54, W - 124, 48); ctx.strokeStyle = '#57756a'; ctx.strokeRect(62, 54, W - 124, 48);
+    ctx.fillStyle = '#f1b35b'; ctx.font = 'bold 11px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('SURFACE SIGNAL // MAP THE ROUTE', W / 2, 82);
+  }
+  function drawTargets() {
+    targets.forEach(t => { ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 4 + Math.sin(state.pulse + t.x) * 2, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#344743' : '#c56d49'; ctx.fill(); ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fill(); ctx.fillStyle = '#182226'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', t.x, t.y + 3); });
+  }
+  function drawBumpers() { bumpers.forEach(item => { ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = '#6f9b84'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke(); }); }
+  function drawFlippers() {
+    const activeLeft = input.left, activeRight = input.right;
+    ctx.fillStyle = activeLeft ? '#ffd083' : '#f1b35b'; ctx.beginPath(); ctx.roundRect(38, H - 75, 104, 15, 7); ctx.fill();
+    ctx.fillStyle = activeRight ? '#ffd083' : '#f1b35b'; ctx.beginPath(); ctx.roundRect(218, H - 75, 104, 15, 7); ctx.fill();
+  }
+  function drawMeters() {
+    ctx.textAlign = 'left'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
+    ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);
+    ctx.fillStyle = '#f1b35b'; ctx.fillRect(34, 130, Math.min(130, state.charge * 13), 7); ctx.fillStyle = '#c56d49'; ctx.fillRect(220, 130, 106 * (state.targets / targets.length), 7);
+  }
+  function drawBall() { const b = state.ball; ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill(); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
+  function loop() { update(); draw(); requestAnimationFrame(loop); }
+  function setControl(side, value) { input[side] = value; }
+  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', true); canvas.setPointerCapture(event.pointerId); });
+  canvas.addEventListener('pointerup', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; setControl(x < W / 2 ? 'left' : 'right', false); });
+  canvas.addEventListener('pointercancel', () => { input.left = false; input.right = false; });
+  window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
+  window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; input.left = keys.a || keys.ArrowLeft; input.right = keys.d || keys.ArrowRight; event.preventDefault(); } });
+  resetButton.addEventListener('click', reset);
+  reset(); loop();
+})();
+</script>
+</body>
+</html>
