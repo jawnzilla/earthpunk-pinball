@@ -525,3 +525,23 @@ The drain condition was global: any ball below the bottom threshold lost stabili
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Exact 280/320/360 viewport screenshots remain required for final visual signoff.
+
+## 2026-08-14 — Prototype 25: reserved mobile control band
+
+### Harsh visual finding
+
+The responsive control backing boxes extended below the table shell and crowded the split lower lip. Moving them directly above the lip would overlap the flipper shoulders.
+
+### Implemented
+
+- Moved `LIFT L` / `LIFT R` backing boxes into a reserved band above the pivot/guard zone.
+- Kept the display-scale-derived font and 14px CSS-equivalent target.
+- Preserved dark backing, border, and outline treatment.
+- Kept the drain/lip region visually open and unobstructed.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Exact 280/320/360 viewport screenshots remain required for final visual signoff.

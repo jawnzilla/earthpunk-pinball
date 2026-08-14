@@ -288,10 +288,10 @@
     ctx.font = `bold ${labelFont}px Trebuchet MS`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     [['LIFT L', 76], ['LIFT R', 284]].forEach(([label, x]) => {
       const width = ctx.measureText(label).width + 14;
-      ctx.fillStyle = 'rgba(7,13,15,.82)'; ctx.fillRect(x - width / 2, H - 34, width, 22);
-      ctx.strokeStyle = 'rgba(141,168,149,.72)'; ctx.lineWidth = 1; ctx.strokeRect(x - width / 2, H - 34, width, 22);
-      ctx.strokeStyle = '#0b1112'; ctx.lineWidth = 3; ctx.strokeText(label, x, H - 23);
-      ctx.fillStyle = 'rgba(229,241,223,.94)'; ctx.fillText(label, x, H - 23);
+      ctx.fillStyle = 'rgba(7,13,15,.82)'; ctx.fillRect(x - width / 2, H - 110, width, 22);
+      ctx.strokeStyle = 'rgba(141,168,149,.72)'; ctx.lineWidth = 1; ctx.strokeRect(x - width / 2, H - 110, width, 22);
+      ctx.strokeStyle = '#0b1112'; ctx.lineWidth = 3; ctx.strokeText(label, x, H - 99);
+      ctx.fillStyle = 'rgba(229,241,223,.94)'; ctx.fillText(label, x, H - 99);
     });
     ctx.textBaseline = 'alphabetic';
   }
