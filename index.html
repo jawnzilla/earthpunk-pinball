@@ -48,7 +48,13 @@
     .upgrade-icon { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #f1b35b; border-radius: 50%; color: #f1b35b; font-size: 17px; }
     .choices button:active { background: #38524e; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
-    button:active { transform: translateY(1px); background: #ffd083; }
+    .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
+    .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+    .debug-panel[hidden] { display: none; }
+    .debug-panel h3 { margin: 0 0 8px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+    .debug-row { display: grid; grid-template-columns: 1fr 54px; gap: 8px; align-items: center; margin: 7px 0; color: #c4d2bd; font-size: 11px; }
+    .debug-row input { width: 100%; accent-color: #f1b35b; }
+    .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
@@ -63,6 +69,16 @@
   <div class="overlay" id="overlay" hidden>
     <section class="card"><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset">Start another descent</button></section>
   </div>
+  <button class="debug-toggle" id="debug-toggle" type="button">Tune</button>
+  <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
+    <h3>Live physics tuning</h3>
+    <label class="debug-row">Gravity <input data-tune="gravity" type="range" min="0.02" max="0.16" step="0.005" value="0.08"><span class="debug-value" data-value="gravity">0.080</span></label>
+    <label class="debug-row">Active kick <input data-tune="activeKick" type="range" min="0.5" max="8" step="0.1" value="4.2"><span class="debug-value" data-value="activeKick">4.20</span></label>
+    <label class="debug-row">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0.14"><span class="debug-value" data-value="catchRestitution">0.14</span></label>
+    <label class="debug-row">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.46"><span class="debug-value" data-value="movingRestitution">0.46</span></label>
+    <label class="debug-row">Passive rebound <input data-tune="passiveRestitution" type="range" min="0.3" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="passiveRestitution">0.82</span></label>
+    <label class="debug-row">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
+  </section>
 <script>
 (() => {
   "use strict";
@@ -75,6 +91,13 @@
   const overlayCopy = document.querySelector('#overlay-copy');
   const choices = document.querySelector('#choices');
   const resetButton = document.querySelector('#reset');
+  const debugToggle = document.querySelector('#debug-toggle');
+  const debugPanel = document.querySelector('#debug-panel');
+  const debugConfig = { gravity: .08, activeKick: 4.2, catchRestitution: .14, movingRestitution: .46, passiveRestitution: .82, maxSpeed: 6.4 };
+  debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
+  debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
+    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
+  }));
   const upgradePool = [
     { id: 'bulkhead', icon: '◆', title: 'Reinforced bulkhead', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
     { id: 'coil', icon: 'ϟ', title: 'Tuned launch coil', text: 'Raise the safe ball-speed ceiling for stronger, more controlled returns.', apply: s => { s.maxSpeed += .6; } },
@@ -192,7 +215,7 @@
     const b = state.ball;
     state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
-    b.vy += .08; b.vx *= .999; b.vy *= .999;
+    b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
     if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * .96; }
@@ -205,10 +228,10 @@
     const rightActive = input.right;
     const leftMotion = Math.abs(flippers.left.angularVelocity);
     const rightMotion = Math.abs(flippers.right.angularVelocity);
-    const leftRestitution = leftActive ? (leftMotion < .04 ? .14 : .46) : .82;
-    const rightRestitution = rightActive ? (rightMotion < .04 ? .14 : .46) : .82;
-    const leftKick = leftActive && !state.flipperContacts.left ? Math.min(4.2, .08 + leftMotion * 20) : (leftActive ? 0 : .2);
-    const rightKick = rightActive && !state.flipperContacts.right ? Math.min(4.2, .08 + rightMotion * 20) : (rightActive ? 0 : .2);
+    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
+    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
+    const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick, .08 + leftMotion * 20) : (leftActive ? 0 : .2);
+    const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick, .08 + rightMotion * 20) : (rightActive ? 0 : .2);
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick);
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick);
     state.flipperContacts.left = Boolean(leftHit);
@@ -216,13 +239,8 @@
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
     if (b.y > H - 35) {
-      if (b.x > 156 && b.x < 204) {
-        state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
-        if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); }
-      } else {
-        const towardCenter = b.x < 156 ? 1 : -1;
-        b.y = H - 35; b.vx = towardCenter * Math.max(Math.abs(b.vx) * .7, 1.05); b.vy = -Math.max(Math.abs(b.vy) * .7, 1.45);
-      }
+      state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
+      if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); }
     }
     updateHud();
   }
@@ -254,8 +272,6 @@
       ctx.fillStyle = '#f1b35b'; ctx.fillRect(x - 27, y - 3, 12, 6); ctx.fillRect(x + 15, y - 3, 12, 6);
     });
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(42, H - 43); ctx.lineTo(156, H - 43); ctx.moveTo(204, H - 43); ctx.lineTo(W - 42, H - 43); ctx.stroke();
-    ctx.strokeStyle = '#8da895'; ctx.lineWidth = 3; ctx.lineCap = 'butt'; ctx.beginPath(); ctx.moveTo(42, H - 35); ctx.lineTo(156, H - 35); ctx.moveTo(204, H - 35); ctx.lineTo(W - 42, H - 35); ctx.stroke();
-    ctx.strokeStyle = 'rgba(241,179,91,.72)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(44, H - 39); ctx.lineTo(156, H - 39); ctx.moveTo(204, H - 39); ctx.lineTo(W - 44, H - 39); ctx.stroke();
     ctx.restore();
   }
   function drawReactor() {

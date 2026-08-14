@@ -584,3 +584,30 @@ A headless 320px bitmap exposed a possible right-edge crop, but a computed-layou
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Desktop headless visual capture is not accepted as mobile pixel evidence without mobile emulation; real-device or CDP device emulation remains required.
+
+## 2026-08-14 — Prototype 28: live physics tuning and authoritative drain
+
+### Player correction
+
+The ball still felt too light and flipper strength required repeated code edits to tune. A lower wall also visually and physically suggested a save after the ball should have drained.
+
+### Implemented
+
+- Added a collapsible `TUNE` panel with live sliders for:
+  - Gravity
+  - Active kick
+  - Catch damping
+  - Moving rebound
+  - Passive rebound
+  - Speed cap
+- Slider changes apply immediately to the running simulation.
+- Removed the non-center lower-lip rebound branch; crossing the drain threshold now always costs stability and respawns/ends the run.
+- Removed the bright lower-wall stroke that falsely implied a playable deflector.
+- Kept the retaining bar above the drain as visual machine framing only.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Slider tuning and drain behavior require live gameplay testing.
