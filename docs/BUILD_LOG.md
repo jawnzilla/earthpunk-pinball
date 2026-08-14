@@ -650,3 +650,22 @@ A gap existed between each angled funnel guard and the outer table wall. A ball 
 - `node --check` passes for the extracted game script.
 - Guard endpoints now begin at `x=26` and `x=334`, matching the inner edge of the 5px table wall stroke.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 31: rolling-contact separation
+
+### Player correction
+
+The first anti-hug fix guaranteed separation on the initial flipper impact, but a ball rolling down the blade could remain in contact on later frames because the single-hit lock suppressed all additional kick.
+
+### Implemented
+
+- Added a live `Contact separation` slider, default `0.70`.
+- First active contact still receives the full configured active kick.
+- Subsequent active locked contacts receive only the smaller separation force, preventing repeated full-power hits while forcing the ball away from the blade.
+- Passive contacts remain at the lower `.2` separation value.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Focused first-contact, tangential-contact, and speed-cap regressions remain green.
+- `git diff --check` passes.
