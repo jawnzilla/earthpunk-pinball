@@ -379,3 +379,23 @@ Flipper and rail collisions were boolean-only, so the renderer could not place f
 - `git diff --check` passes.
 - Offline-resource scan passes.
 - Guard-to-flipper segment-distance regression should be rerun against the deployed build.
+
+## 2026-08-14 — Prototype 18: weighted flipper catch and launch
+
+### Player correction
+
+The flippers previously used nearly the same high-restitution collision for both held and released states. A descending ball therefore bounced out of a held flipper instead of settling into a controllable catch, while active hits were not forceful enough.
+
+### Implemented
+
+- Held flippers now use low restitution `0.46` to absorb descending impact.
+- Held flippers now use a stronger directional kick `2.65` for deliberate launches.
+- Released flippers use restitution `0.82` and passive kick `0.2`.
+- The global speed cap remains enforced after every contact.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Catch, release, and hard-launch behavior still require real-device tuning.

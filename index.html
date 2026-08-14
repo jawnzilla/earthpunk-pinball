@@ -193,8 +193,10 @@
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); emitImpact(item.x, item.y, '#b5d3a1', .8); capBallSpeed(b); setMessage('Generator impact. Charge rising.'); } });
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, .9, input.left ? 2.05 : .2);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, .9, input.right ? 2.05 : .2);
+    const leftActive = input.left;
+    const rightActive = input.right;
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftActive ? .46 : .82, leftActive ? 2.65 : .2);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightActive ? .46 : .82, rightActive ? 2.65 : .2);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
     capBallSpeed(b);
     if (b.y > H - 35) { state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1)); if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); } }
