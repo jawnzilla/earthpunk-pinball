@@ -146,3 +146,22 @@ The touch handler released controls based on the release coordinate. Dragging ac
 - Offline-resource scan passes.
 - `git diff --check` passes.
 - Real-device drag and interruption testing remains required.
+
+## 2026-08-14 — Prototype 07: reset control hygiene
+
+### Harsh QA finding
+
+Reset recreated the gameplay state but did not clear held keyboard state. A run restarted while a key remained logically pressed could begin with a flipper stuck active.
+
+### Implemented
+
+- Reset now clears both flipper input flags.
+- Reset clears the active pointer side.
+- Reset clears all keyboard key state.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+- Full real-device interruption testing remains required.
