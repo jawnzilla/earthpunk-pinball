@@ -76,13 +76,13 @@
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
-    <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.13" step="0.01" value="0.07"><span class="debug-value" data-value="gravity">0.07</span></label>
-    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="12" step="0.1" value="8"><span class="debug-value" data-value="activeKick">8.00</span></label>
+    <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.16" step="0.01" value="0.08"><span class="debug-value" data-value="gravity">0.08</span></label>
+    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="14" step="0.1" value="12"><span class="debug-value" data-value="activeKick">12.00</span></label>
     <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
     <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.1"><span class="debug-value" data-value="movingRestitution">0.10</span></label>
-    <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0.3" max="1" step="0.01" value="0.3"><span class="debug-value" data-value="passiveRestitution">0.30</span></label>
+    <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail. Zero is a true cradle catch.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0" max="0.6" step="0.01" value="0"><span class="debug-value" data-value="passiveRestitution">0.00</span></label>
     <label class="debug-row" title="Small outward/upward push applied while an active contact remains locked.">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="2"><span class="debug-value" data-value="contactSeparation">2.00</span></label>
-    <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="7"><span class="debug-value" data-value="maxSpeed">7.00</span></label>
+    <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="8"><span class="debug-value" data-value="maxSpeed">8.00</span></label>
   </section>
 <script>
 (() => {
@@ -98,28 +98,29 @@
   const resetButton = document.querySelector('#reset');
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .07, activeKick: 8, catchRestitution: 0, movingRestitution: .1, passiveRestitution: .3, contactSeparation: 2, maxSpeed: 7 };
+  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .1, passiveRestitution: 0, contactSeparation: 2, maxSpeed: 8 };
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
   }));
+  const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
+  function installHingeElement(stateRef, element) { const slot = stateRef.hingeElements.left === null ? 'left' : stateRef.hingeElements.right === null ? 'right' : (stateRef.hingeLevels.left <= stateRef.hingeLevels.right ? 'left' : 'right'); if (stateRef.hingeElements[slot] === element) stateRef.hingeLevels[slot] = Math.min(3, stateRef.hingeLevels[slot] + 1); else { stateRef.hingeElements[slot] = element; stateRef.hingeLevels[slot] = 1; } return slot; }
   const upgradePool = [
-    { id: 'fire', element: 'Fire', image: 'assets/elements/fire.png', title: 'Ember strike coil', text: '+1.8 active kick and a hotter moving rebound.', cost: 3, apply: s => { s.flipperKickBonus += 1.8; s.flipperReboundBonus += .1; } },
-    { id: 'water', element: 'Water', image: 'assets/elements/water.png', title: 'Tidal catch lattice', text: 'Catches retain more control and restore one Stability.', cost: 2, apply: s => { s.catchBonus += .12; s.stability = Math.min(s.stabilityMax, s.stability + 1); } },
-    { id: 'earth', element: 'Earth', image: 'assets/elements/earth.png', title: 'Bedrock pressure shell', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
-    { id: 'air', element: 'Air', image: 'assets/elements/air.png', title: 'Slipstream vanes', text: '+10px flipper reach and +0.4 controlled speed ceiling.', cost: 4, apply: s => { s.flipperLengthBonus += 10; s.maxSpeed += .4; } },
-    { id: 'salvage', element: 'Earth', image: 'assets/elements/earth.png', title: 'Verdant salvage lattice', text: 'Every salvage target yields an additional Charge.', cost: 3, apply: s => { s.salvageBonus += 1; } },
-    { id: 'repair', element: 'Water', image: 'assets/elements/water.png', title: 'Pressure-hull spring', text: 'Spend Charge to restore one Stability.', cost: 2, apply: s => { s.stability = Math.min(s.stabilityMax, s.stability + 1); } }
+    { id: 'fire', element: 'Fire', image: 'assets/elements/fire.png', title: 'Ember hinge module', text: 'Attune a cradle point to apply stacking Fire imprints to the ball.', cost: 3, apply: s => installHingeElement(s, 'Fire') },
+    { id: 'water', element: 'Water', image: 'assets/elements/water.png', title: 'Tidal hinge module', text: 'Attune a cradle point to apply stacking Water imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Water') },
+    { id: 'earth', element: 'Earth', image: 'assets/elements/earth.png', title: 'Bedrock hinge module', text: 'Attune a cradle point to apply stacking Earth imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Earth') },
+    { id: 'air', element: 'Air', image: 'assets/elements/air.png', title: 'Slipstream hinge module', text: 'Attune a cradle point to apply stacking Air imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Air') }
   ];
+  const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
-    { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ x: 112, y: 350, r: 25, type: 'standard' }, { x: 248, y: 350, r: 25, type: 'standard' }], gate: null },
-    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ x: 92, y: 332, r: 21, type: 'pulse' }, { x: 268, y: 332, r: 21, type: 'pulse' }, { x: 180, y: 390, r: 18, type: 'pulse' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9 } },
-    { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ x: 78, y: 318, r: 18, type: 'armor', hits: 0 }, { x: 282, y: 318, r: 18, type: 'armor', hits: 0 }, { x: 118, y: 408, r: 18, type: 'standard' }, { x: 242, y: 408, r: 18, type: 'standard' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8 } }
+    { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ x: 112, y: 350, r: 25, type: 'standard', element: 'Fire' }, { x: 248, y: 350, r: 25, type: 'standard', element: 'Earth' }], gate: null },
+    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ x: 92, y: 332, r: 21, type: 'pulse', element: 'Air' }, { x: 268, y: 332, r: 21, type: 'pulse', element: 'Water' }, { x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9, element: 'Water' } },
+    { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0 }, { x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0 }, { x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
   ];
   function resetLayoutDamage() { levelLayouts.forEach(layout => layout.bumpers.forEach(item => { item.hits = 0; })); }
-  function applyTargetLayout() { state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.hit = false; }); }
+  function applyTargetLayout() { const targetElements = ['Fire', 'Water', 'Earth', 'Air', 'Fire', 'Water']; state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.element = targetElements[index]; target.hit = false; }); }
   let input = { left: false, right: false };
   let activePointerId = null;
   let activePointerSide = null;
@@ -137,11 +138,11 @@
     { x1: table.left + 8, y1: H - 95, x2: 48, y2: H - 82 },
     { x1: W - table.left - 8, y1: H - 95, x2: W - 48, y2: H - 82 }
   ];
-  const MAX_BALL_SPEED = 6.4;
+  const MAX_BALL_SPEED = 8;
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, catchBonus: 0, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, attunements: [], layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -153,7 +154,7 @@
   function spawnBall() {
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
-    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108 };
+    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108, cradleSide: null, elementEffects: {} };
     state.launched = true;
   }
   function updateHud() {
@@ -163,8 +164,14 @@
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1) { state.effects.push({ x, y, color, power, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
+  function refreshElement(element, source = 'hinge') { const effect = state.ball.elementEffects[element] || { stacks: 0, timer: 0 }; effect.stacks = Math.min(3, effect.stacks + 1); effect.timer = 360; state.ball.elementEffects[element] = effect; emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15); setMessage(`${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
+  function activeElement(element) { const effect = state.ball.elementEffects[element]; return effect && effect.stacks > 0 && effect.timer > 0; }
+  function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
+  function hingeCradle(side) { const flipper = flippers[side], b = state.ball; const distance = Math.hypot(b.x - flipper.pivotX, b.y - flipper.pivotY); return input[side] && distance < 30 && b.y < flipper.pivotY + 18; }
+  function imprintFromHinge(side) { const element = state.hingeElements[side]; if (element) refreshElement(element, `${element} hinge`); }
+  function decayElementEffects() { Object.entries(state.ball.elementEffects).forEach(([element, effect]) => { effect.timer -= 1; if (effect.timer <= 0) { effect.timer = 0; effect.stacks = 0; } }); }
   function hitTarget(target) {
-    const multiplier = chainHit(); target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += Math.round(100 * multiplier); state.flash = 3; emitImpact(target.x, target.y, '#f1b35b', 1.25);
+    const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += Math.round((100 + (reaction ? 35 : 0)) * multiplier); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? 'Descent mapped. Choose a modification.' : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length) completeStage();
   }
@@ -250,7 +257,7 @@
   function update() {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
     b.prevX = b.x; b.prevY = b.y;
     b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
@@ -260,21 +267,25 @@
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .78; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .72; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
-    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.85 : item.type === 'armor' ? 1.2 : 1.6; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); state.score += Math.round((item.type === 'pulse' ? 40 : 25) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
-    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { const multiplier = chainHit(); state.charge = Math.min(99, state.charge + 1); state.score += Math.round(50 * multiplier); state.relayCooldown = 12; emitImpact(state.layout.gate.x1 + (state.layout.gate.x2 - state.layout.gate.x1) / 2, state.layout.gate.y1 + (state.layout.gate.y2 - state.layout.gate.y1) / 2, '#f1b35b', .9); setMessage(`Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
+    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.85 : item.type === 'armor' ? 1.2 : 1.6; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .58));
     const leftActive = input.left;
     const rightActive = input.right;
     const leftMotion = Math.abs(flippers.left.angularVelocity);
     const rightMotion = Math.abs(flippers.right.angularVelocity);
-    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution + state.catchBonus : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
-    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution + state.catchBonus : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
     const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + leftMotion * 45) : (leftActive ? debugConfig.contactSeparation : .2);
     const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + rightMotion * 45) : (rightActive ? debugConfig.contactSeparation : .2);
     const leftEscape = leftActive ? (state.flipperContacts.left ? debugConfig.contactSeparation : Math.max(2.2, leftKick * .75)) : 0;
     const rightEscape = rightActive ? (state.flipperContacts.right ? debugConfig.contactSeparation : Math.max(2.2, rightKick * .75)) : 0;
+    const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right');
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), previous: flipperEndpointsAt(flippers.left, flippers.left.previousAngle), width: flippers.left.width }, leftRestitution, leftKick, leftEscape);
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), previous: flipperEndpointsAt(flippers.right, flippers.right.previousAngle), width: flippers.right.width }, rightRestitution, rightKick, rightEscape);
+    b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
+    if (leftHit && leftWasCradled) imprintFromHinge('left');
+    if (rightHit && rightWasCradled) imprintFromHinge('right');
     state.flipperContacts.left = Boolean(leftHit);
     state.flipperContacts.right = Boolean(rightHit);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
@@ -322,21 +333,23 @@
     ctx.fillStyle = '#b5d3a1'; [70, W - 70].forEach(x => { ctx.beginPath(); ctx.arc(x, 78, 4, 0, Math.PI * 2); ctx.fill(); });
   }
   function drawTargets() {
-    targets.forEach(t => { ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 4 + Math.sin(state.pulse + t.x) * 2, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#344743' : '#c56d49'; ctx.fill(); ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fill(); ctx.fillStyle = '#182226'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', t.x, t.y + 3); });
+    targets.forEach(t => { ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 4 + Math.sin(state.pulse + t.x) * 2, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#344743' : elementColors[t.element]; ctx.fill(); ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fill(); ctx.strokeStyle = t.hit ? '#6b8172' : elementColors[t.element]; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#182226'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', t.x, t.y + 3); });
   }
   function drawBumpers() {
     state.layout.bumpers.forEach(item => {
-      const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const outer = pulse ? '#c56d49' : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
+      const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const element = item.element || 'Earth'; const outer = pulse ? elementColors[element] : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * .25); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.stroke();
       if (armor) { ctx.beginPath(); ctx.arc(item.x, item.y, item.r - 5, 0, Math.PI * 2); ctx.strokeStyle = item.hits ? '#f1b35b' : '#b5d3a1'; ctx.lineWidth = item.hits ? 3 : 1; ctx.stroke(); if (item.hits) { ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); } }
     });
   }
   function drawRelayGate() {
     const gate = state.layout.gate; if (!gate) return;
     ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = state.relayCooldown ? '#ffd083' : '#526e63'; ctx.lineWidth = gate.width + 5; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke();
-    ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke(); ctx.restore();
+    ctx.strokeStyle = elementColors[gate.element] || '#f1b35b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke(); ctx.restore();
   }
+  function drawHingeModule(flipper, side) { const element = state.hingeElements[side]; const level = state.hingeLevels[side]; const color = element ? elementColors[element] : '#789487'; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 22, 0, Math.PI * 2); ctx.strokeStyle = color; ctx.globalAlpha = element ? .95 : .45; ctx.lineWidth = element ? 3 : 1; ctx.stroke(); ctx.globalAlpha = 1; if (element && elementImages[element]?.complete) { ctx.save(); ctx.globalAlpha = .82; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 14, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(elementImages[element], flipper.pivotX - 14, flipper.pivotY - 14, 28, 28); ctx.restore(); } if (element) { ctx.fillStyle = color; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(`${element[0]}${level}`, flipper.pivotX, flipper.pivotY + 34); } }
   function drawFlippers() {
     sideGuards.forEach(guard => {
       ctx.beginPath(); ctx.moveTo(guard.x1, guard.y1); ctx.lineTo(guard.x2, guard.y2);
@@ -355,6 +368,7 @@
       ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
       ctx.strokeStyle = '#fff0ba'; ctx.lineWidth = 2; ctx.stroke();
       ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
+      drawHingeModule(flipper, flipper === flippers.left ? 'left' : 'right');
     });
     const displayScale = canvas.getBoundingClientRect().width / W || 1;
     const labelFont = Math.max(13, Math.min(19, 14 / displayScale));
@@ -371,6 +385,8 @@
   function drawMeters() {
     ctx.textAlign = 'left'; ctx.font = 'bold 13px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
     if (state.combo > 1) { ctx.fillStyle = '#ffd083'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillText(`CHAIN x${(1 + (state.combo - 1) * .25).toFixed(2)}`, 34, 151); }
+    const imprintText = Object.entries(state.ball.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element.toUpperCase()} ${effect.stacks}`).join(' · ');
+    if (imprintText) { ctx.fillStyle = '#d7e8d0'; ctx.font = 'bold 10px Trebuchet MS'; ctx.fillText(`IMPRINT ${imprintText}`, 34, 166); }
     ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);
     ctx.fillStyle = '#f1b35b'; ctx.fillRect(34, 130, Math.min(130, state.charge * 13), 7); ctx.fillStyle = '#c56d49'; ctx.fillRect(220, 130, 106 * (state.targets / targets.length), 7);
   }
@@ -385,6 +401,8 @@
   }
   function drawBall() {
     const b = state.ball;
+    const activeEffects = Object.entries(b.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0);
+    activeEffects.forEach(([element, effect], index) => { ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 5 + index * 4, 0, Math.PI * 2); ctx.strokeStyle = elementColors[element]; ctx.globalAlpha = .35 + effect.stacks * .12; ctx.lineWidth = 2 + effect.stacks; ctx.stroke(); }); ctx.globalAlpha = 1;
     b.trail.forEach((point, index) => { const alpha = (index + 1) / b.trail.length * .18; ctx.beginPath(); ctx.arc(point.x, point.y, Math.max(2, b.r * (index + 1) / b.trail.length), 0, Math.PI * 2); ctx.fillStyle = `rgba(241,179,91,${alpha})`; ctx.fill(); });
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill();
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke();

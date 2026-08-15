@@ -932,6 +932,44 @@ Flipper input now listens across the full viewport’s left/right halves rather 
 - Elemental upgrade metadata, local asset paths, Water catch behavior, and full-viewport pointer listeners are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 45: hinge attunements and elemental reactions
+
+### Physics defaults
+
+- Gravity default is now `0.08`.
+- Active kick default is now `12`.
+- Catch damping remains `0`.
+- Passive rebound now has a `0–0.6` range with a default of `0`, allowing a true stationary cradle.
+- Contact separation remains `2`.
+- Speed cap default is now `8`.
+
+### Upgrade design correction
+
+Elemental upgrades no longer modify ball physics. They install elemental modules at the two flipper hinge/cradle points.
+
+- Fire, Water, Earth, and Air hinge modules cost Charge and can be stacked up to hinge level 3.
+- A held flipper can cradle the ball near its pivot.
+- Striking from that cradle applies the hinge’s elemental imprint.
+- The ball can carry multiple elemental imprints while it moves between flippers.
+- Each imprint stacks to three layers and decays over 360 fixed updates; cradle strikes and matching machinery refresh it.
+
+### Environment reactions
+
+Targets, bumpers, and relay gates now have elemental affinities. A matching ball imprint energizes the object, adds reaction score/Charge, refreshes the imprint, and produces a colored impact response.
+
+### Visual implementation
+
+- Hinge modules render colored rings, levels, and local generated emblem art at the flipper pivots.
+- Active ball imprints render as layered elemental auras.
+- Targets, bumpers, and relay gates expose their elemental affinity through colored rings and strokes.
+- Runtime assets remain local under `assets/elements/`.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Physics default, no-physics-upgrade, hinge imprint, stack/decay, environment reaction, visual, and local-asset assertions pass.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
