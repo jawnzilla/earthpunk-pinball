@@ -829,3 +829,22 @@ The three layouts previously changed lower-table routing but reused the same six
 - `node --check` passes for the extracted game script.
 - All three target banks, layout-application hooks, and existing bumper/gate variants are present.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 39: Charge-funded repair station
+
+### Economy link
+
+Charge now supports a second between-level decision besides flipper hardware: recovery versus power.
+
+### Implemented
+
+- Added `Patch the pressure hull`, costing `2 Charge` and restoring one Stability.
+- Repair is disabled when Stability is already full.
+- The affordability guard is enforced again inside the purchase handler.
+- The choice screen now presents a real tradeoff between preserving Charge for flipper modules and repairing a damaged run.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Repair cost, Stability restoration, full-Stability disable state, and purchase guard are present.
+- `git diff --check` passes.

@@ -106,6 +106,7 @@
     { id: 'bulkhead', icon: '◆', title: 'Reinforced bulkhead', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
     { id: 'coil', icon: 'ϟ', title: 'Tuned launch coil', text: 'Raise the safe ball-speed ceiling for stronger, more controlled returns.', apply: s => { s.maxSpeed += .6; } },
     { id: 'magnet', icon: '✦', title: 'Salvage magnet', text: 'Every salvage target yields an additional Charge.', apply: s => { s.salvageBonus += 1; } },
+    { id: 'repair', icon: '+', title: 'Patch the pressure hull', text: 'Spend Charge to restore one Stability.', cost: 2, apply: s => { s.stability = Math.min(s.stabilityMax, s.stability + 1); } },
     { id: 'hydraulic', icon: '↗', title: 'Hydraulic flipper arms', text: '+1.2 active kick and a stronger moving rebound.', cost: 3, apply: s => { s.flipperKickBonus += 1.2; s.flipperReboundBonus += .08; } },
     { id: 'longarms', icon: '⟷', title: 'Extended flipper arms', text: '+8px to both flippers for wider rescue coverage.', cost: 4, apply: s => { s.flipperLengthBonus += 8; } }
   ];
@@ -171,11 +172,12 @@
     if (state.stage >= state.stageCount) { win(); return; }
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
     overlayCopy.textContent = `Choose one modification before the probe drops deeper. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
-    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<span class="upgrade-icon" aria-hidden="true">${upgrade.icon}</span><span><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
+    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean((upgrade.cost && state.charge < upgrade.cost) || (upgrade.id === 'repair' && state.stability >= state.stabilityMax)); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<span class="upgrade-icon" aria-hidden="true">${upgrade.icon}</span><span><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return;
+    if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return;
     if (upgrade.cost) state.charge -= upgrade.cost;
     upgrade.apply(state); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.message = `${upgrade.title} installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
   }
