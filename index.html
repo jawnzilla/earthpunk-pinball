@@ -41,12 +41,13 @@
     .card h2 { margin: 0 0 8px; color: #ffd083; text-shadow: 0 0 18px rgba(241,179,91,.28); text-transform: uppercase; letter-spacing: .1em; }
     .card p { color: #c4d2bd; line-height: 1.5; }
     .choices { display: grid; gap: 8px; margin: 16px 0; }
-    .choices button { display: grid; grid-template-columns: 38px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 62px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
+    .choices button { display: grid; grid-template-columns: 48px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 70px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
     .choices button:hover { border-color: #f1b35b; box-shadow: 0 0 18px rgba(241,179,91,.16); }
     .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
     .choices button small { display: block; margin-top: 3px; color: #b8cbbb; line-height: 1.3; }
-    .upgrade-icon { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #f1b35b; border-radius: 50%; color: #f1b35b; font-size: 17px; }
+    .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
+    .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
     .choices button:active { background: #38524e; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
@@ -103,12 +104,12 @@
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
   }));
   const upgradePool = [
-    { id: 'bulkhead', icon: '◆', title: 'Reinforced bulkhead', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
-    { id: 'coil', icon: 'ϟ', title: 'Tuned launch coil', text: 'Raise the safe ball-speed ceiling for stronger, more controlled returns.', apply: s => { s.maxSpeed += .6; } },
-    { id: 'magnet', icon: '✦', title: 'Salvage magnet', text: 'Every salvage target yields an additional Charge.', apply: s => { s.salvageBonus += 1; } },
-    { id: 'repair', icon: '+', title: 'Patch the pressure hull', text: 'Spend Charge to restore one Stability.', cost: 2, apply: s => { s.stability = Math.min(s.stabilityMax, s.stability + 1); } },
-    { id: 'hydraulic', icon: '↗', title: 'Hydraulic flipper arms', text: '+1.2 active kick and a stronger moving rebound.', cost: 3, apply: s => { s.flipperKickBonus += 1.2; s.flipperReboundBonus += .08; } },
-    { id: 'longarms', icon: '⟷', title: 'Extended flipper arms', text: '+8px to both flippers for wider rescue coverage.', cost: 4, apply: s => { s.flipperLengthBonus += 8; } }
+    { id: 'fire', element: 'Fire', image: 'assets/elements/fire.png', title: 'Ember strike coil', text: '+1.8 active kick and a hotter moving rebound.', cost: 3, apply: s => { s.flipperKickBonus += 1.8; s.flipperReboundBonus += .1; } },
+    { id: 'water', element: 'Water', image: 'assets/elements/water.png', title: 'Tidal catch lattice', text: 'Catches retain more control and restore one Stability.', cost: 2, apply: s => { s.catchBonus += .12; s.stability = Math.min(s.stabilityMax, s.stability + 1); } },
+    { id: 'earth', element: 'Earth', image: 'assets/elements/earth.png', title: 'Bedrock pressure shell', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
+    { id: 'air', element: 'Air', image: 'assets/elements/air.png', title: 'Slipstream vanes', text: '+10px flipper reach and +0.4 controlled speed ceiling.', cost: 4, apply: s => { s.flipperLengthBonus += 10; s.maxSpeed += .4; } },
+    { id: 'salvage', element: 'Earth', image: 'assets/elements/earth.png', title: 'Verdant salvage lattice', text: 'Every salvage target yields an additional Charge.', cost: 3, apply: s => { s.salvageBonus += 1; } },
+    { id: 'repair', element: 'Water', image: 'assets/elements/water.png', title: 'Pressure-hull spring', text: 'Spend Charge to restore one Stability.', cost: 2, apply: s => { s.stability = Math.min(s.stabilityMax, s.stability + 1); } }
   ];
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
@@ -140,7 +141,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, catchBonus: 0, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, attunements: [], layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -172,14 +173,14 @@
     if (state.stage >= state.stageCount) { win(); return; }
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
     overlayCopy.textContent = `Choose one modification before the probe drops deeper. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
-    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean((upgrade.cost && state.charge < upgrade.cost) || (upgrade.id === 'repair' && state.stability >= state.stabilityMax)); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<span class="upgrade-icon" aria-hidden="true">${upgrade.icon}</span><span><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
+    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean((upgrade.cost && state.charge < upgrade.cost) || (upgrade.id === 'repair' && state.stability >= state.stabilityMax)); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return;
     if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return;
     if (upgrade.cost) state.charge -= upgrade.cost;
-    upgrade.apply(state); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.message = `${upgrade.title} installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
+    upgrade.apply(state); state.attunements.push(upgrade.element); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.message = `${upgrade.element} attunement installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
   }
   function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
   function lose() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; state.running = false; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
@@ -266,8 +267,8 @@
     const rightActive = input.right;
     const leftMotion = Math.abs(flippers.left.angularVelocity);
     const rightMotion = Math.abs(flippers.right.angularVelocity);
-    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
-    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution + state.catchBonus : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution + state.catchBonus : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
     const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + leftMotion * 45) : (leftActive ? debugConfig.contactSeparation : .2);
     const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + rightMotion * 45) : (rightActive ? debugConfig.contactSeparation : .2);
     const leftEscape = leftActive ? (state.flipperContacts.left ? debugConfig.contactSeparation : Math.max(2.2, leftKick * .75)) : 0;
@@ -400,10 +401,11 @@
   function setControl(side, value) { input[side] = value; }
   function syncInput() { input.left = keys.a || keys.ArrowLeft || activePointerSide === 'left'; input.right = keys.d || keys.ArrowRight || activePointerSide === 'right'; }
   function clearPointerControl(pointerId = null) { if (pointerId !== null && pointerId !== activePointerId) return; activePointerId = null; activePointerSide = null; syncInput(); }
-  canvas.addEventListener('pointerdown', event => { const rect = canvas.getBoundingClientRect(); const x = (event.clientX - rect.left) * W / rect.width; clearPointerControl(); activePointerId = event.pointerId; activePointerSide = x < W / 2 ? 'left' : 'right'; syncInput(); try { canvas.setPointerCapture(event.pointerId); } catch (_) {} });
-  canvas.addEventListener('pointerup', event => { clearPointerControl(event.pointerId); });
-  canvas.addEventListener('pointercancel', event => { clearPointerControl(event.pointerId); });
-  canvas.addEventListener('lostpointercapture', event => { clearPointerControl(event.pointerId); });
+  function isGameplayPointer(event) { return state?.running && !event.target.closest('button, .card, .debug-panel, .debug-toggle'); }
+  window.addEventListener('pointerdown', event => { if (!isGameplayPointer(event)) return; clearPointerControl(); activePointerId = event.pointerId; activePointerSide = event.clientX < window.innerWidth / 2 ? 'left' : 'right'; syncInput(); if (event.target === canvas) { try { canvas.setPointerCapture(event.pointerId); } catch (_) {} } });
+  window.addEventListener('pointerup', event => { clearPointerControl(event.pointerId); });
+  window.addEventListener('pointercancel', event => { clearPointerControl(event.pointerId); });
+  window.addEventListener('blur', () => clearPointerControl());
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   resetButton.addEventListener('click', reset);

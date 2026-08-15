@@ -909,6 +909,29 @@ The ball could still tunnel through the flipper tip because the blade rotated be
 - Moving-tip geometry, midpoint blade sweep, and blade-closing assertions are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 44: elemental upgrade modules and edge touch input
+
+### Upgrade overhaul
+
+The between-descent pool now presents elemental attunements instead of generic hardware labels.
+
+- **Fire — Ember strike coil:** stronger active flipper kick and moving rebound; costs 3 Charge.
+- **Water — Tidal catch lattice:** improves controlled catches and restores one Stability; costs 2 Charge.
+- **Earth — Bedrock pressure shell:** adds maximum Stability and restores one point; free choice.
+- **Air — Slipstream vanes:** extends both flippers and raises the controlled speed ceiling; costs 4 Charge.
+- Earth salvage and Water repair variants preserve economy and recovery choices with the same elemental identity.
+- Four locally generated emblem assets are stored under `assets/elements/` and loaded by the upgrade cards.
+
+### Touch accessibility
+
+Flipper input now listens across the full viewport’s left/right halves rather than only the Canvas bounds. Upgrade cards, buttons, and tuning controls are excluded from gameplay input, so UI remains tappable without accidentally firing a flipper.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Elemental upgrade metadata, local asset paths, Water catch behavior, and full-viewport pointer listeners are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link

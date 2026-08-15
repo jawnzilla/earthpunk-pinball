@@ -10,7 +10,8 @@ Prototype 01 answers one question: **is moving a probe through an underground in
 - Keyboard fallback: `A` / `D` or arrow keys.
 - Hit all six salvage targets to complete a descent.
 - Complete three descents in one run.
-- Choose one between-descent modification: stability, ball handling, or salvage yield.
+- Choose one between-descent modification: elemental Fire, Water, Earth, or Air attunement.
+- Flipper input works from either full-screen touch half, including the margins outside the table border.
 - Missing the ball costs stability; lose all stability and the probe is lost.
 - Reach the third descent's final signal to win.
 - Reset is available after a win or loss.
