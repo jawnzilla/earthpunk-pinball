@@ -43,6 +43,7 @@
     .choices { display: grid; gap: 8px; margin: 16px 0; }
     .choices button { display: grid; grid-template-columns: 38px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 62px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
     .choices button:hover { border-color: #f1b35b; box-shadow: 0 0 18px rgba(241,179,91,.16); }
+    .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
     .choices button small { display: block; margin-top: 3px; color: #b8cbbb; line-height: 1.3; }
     .upgrade-icon { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #f1b35b; border-radius: 50%; color: #f1b35b; font-size: 17px; }
@@ -105,8 +106,8 @@
     { id: 'bulkhead', icon: '◆', title: 'Reinforced bulkhead', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
     { id: 'coil', icon: 'ϟ', title: 'Tuned launch coil', text: 'Raise the safe ball-speed ceiling for stronger, more controlled returns.', apply: s => { s.maxSpeed += .6; } },
     { id: 'magnet', icon: '✦', title: 'Salvage magnet', text: 'Every salvage target yields an additional Charge.', apply: s => { s.salvageBonus += 1; } },
-    { id: 'hydraulic', icon: '↗', title: 'Hydraulic flipper arms', text: '+1.2 active kick and a stronger moving rebound.', apply: s => { s.flipperKickBonus += 1.2; s.flipperReboundBonus += .08; } },
-    { id: 'longarms', icon: '⟷', title: 'Extended flipper arms', text: '+8px to both flippers for wider rescue coverage.', apply: s => { s.flipperLengthBonus += 8; } }
+    { id: 'hydraulic', icon: '↗', title: 'Hydraulic flipper arms', text: '+1.2 active kick and a stronger moving rebound.', cost: 3, apply: s => { s.flipperKickBonus += 1.2; s.flipperReboundBonus += .08; } },
+    { id: 'longarms', icon: '⟷', title: 'Extended flipper arms', text: '+8px to both flippers for wider rescue coverage.', cost: 4, apply: s => { s.flipperLengthBonus += 8; } }
   ];
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
@@ -165,10 +166,12 @@
     if (state.stage >= state.stageCount) { win(); return; }
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
     overlayCopy.textContent = `Choose one modification before the probe drops deeper. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
-    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.innerHTML = `<span class="upgrade-icon" aria-hidden="true">${upgrade.icon}</span><span><strong>${upgrade.title}</strong><small>${upgrade.text}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
+    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<span class="upgrade-icon" aria-hidden="true">${upgrade.icon}</span><span><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
   function chooseUpgrade(upgrade) {
+    if (upgrade.cost && state.charge < upgrade.cost) return;
+    if (upgrade.cost) state.charge -= upgrade.cost;
     upgrade.apply(state); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; targets.forEach(t => t.hit = false); state.relayCooldown = 0; state.message = `${upgrade.title} installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
   }
   function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }

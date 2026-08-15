@@ -749,3 +749,24 @@ The prototype now has a stronger run structure beyond one repeated table: each d
 - `node --check` passes for the extracted game script.
 - All three layouts, seven tuning controls, persistent flipper module fields, and relay gate hooks are present in source.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 35: Charge-funded flipper modules
+
+### Economy link
+
+The between-level flipper modules were previously free choices, so Charge had no meaningful build decision attached to them.
+
+### Implemented
+
+- Hydraulic flipper arms now cost `3 Charge`.
+- Extended flipper arms now cost `4 Charge`.
+- Upgrade cards display `FREE` or their Charge cost.
+- Insufficient-cost cards are visibly disabled and cannot be selected.
+- Charge is deducted only after a valid purchase.
+- Existing free survival/economy upgrades remain available, preserving a fallback when the player cannot afford a module.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Upgrade cost fields, disabled-card styling, affordability guard, and Charge deduction are present.
+- `git diff --check` passes.
