@@ -698,3 +698,21 @@ A ball could still roll down the blade while technically separating along the co
 - `node --check` passes for the extracted game script.
 - Existing tangential-contact and speed-cap regressions remain green.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 33: swept flipper collision and angled respawn
+
+### Player correction
+
+The ball could cross a moving flipper between fixed updates and appear on the other side without a collision. Respawns also used a small random lateral velocity, so some balls launched nearly straight toward the center drain.
+
+### Implemented
+
+- Segment collision now samples the current, previous, and midpoint ball positions, catching fixed-step crossings through the flipper.
+- Removed the bottom-center bumper from the shared bumper list, eliminating both its collision and render.
+- Respawn launches now choose a side and use lateral velocity `1.1–1.8` with upward velocity `-5.2`, guaranteeing a visibly angled launch.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Swept samples use the same collision geometry as the rendered flippers.
+- `git diff --check` passes.

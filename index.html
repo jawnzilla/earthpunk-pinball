@@ -116,7 +116,7 @@
     { x: 90, y: 164, r: 17, hit: false }, { x: 180, y: 134, r: 17, hit: false }, { x: 270, y: 164, r: 17, hit: false },
     { x: 77, y: 274, r: 15, hit: false }, { x: 283, y: 274, r: 15, hit: false }, { x: 180, y: 242, r: 14, hit: false }
   ];
-  const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }, { x: 180, y: 405, r: 23 }];
+  const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }];
   const flippers = {
     left: { pivotX: 64, pivotY: H - 75, length: 78, width: 15, rest: .16, active: -.5, angle: .16, angularVelocity: 0 },
     right: { pivotX: 296, pivotY: H - 75, length: 78, width: 15, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0 }
@@ -138,7 +138,8 @@
   }
   function spawnBall() {
     state.flipperContacts.left = false; state.flipperContacts.right = false;
-    state.ball = { x: W / 2, y: H - 108, vx: (Math.random() - .5) * 1.3, vy: -5.1, r: 8, trail: [] };
+    const launchSide = Math.random() < .5 ? -1 : 1;
+    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108 };
     state.launched = true;
   }
   function updateHud() {
@@ -187,22 +188,27 @@
   function segmentCollision(ball, segment, restitution = .82, kick = 0, upwardEscape = 0) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
-    const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
-    const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
-    let nx = ball.x - closestX, ny = ball.y - closestY;
-    const distance = Math.hypot(nx, ny), radius = ball.r + (segment.width || 0) / 2;
-    if (distance >= radius) return null;
-    if (distance < .001) { nx = -dy; ny = dx; }
-    const normalLength = Math.hypot(nx, ny) || 1;
-    nx /= normalLength; ny /= normalLength;
-    ball.x = closestX + nx * radius; ball.y = closestY + ny * radius;
+    const samples = [[ball.x, ball.y], [ball.prevX ?? ball.x, ball.prevY ?? ball.y], [(ball.x + (ball.prevX ?? ball.x)) / 2, (ball.y + (ball.prevY ?? ball.y)) / 2]];
+    let hit = null;
+    for (const [sampleX, sampleY] of samples) {
+      const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared));
+      const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+      const nx0 = sampleX - closestX, ny0 = sampleY - closestY;
+      const distance = Math.hypot(nx0, ny0), radius = ball.r + (segment.width || 0) / 2;
+      if (distance < radius) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
+    }
+    if (!hit) return null;
+    let { nx, ny } = hit;
+    if (Math.hypot(nx, ny) < .001) { nx = -dy; ny = dx; }
+    const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
+    ball.x = hit.closestX + nx * hit.radius; ball.y = hit.closestY + ny * hit.radius;
     const incoming = ball.vx * nx + ball.vy * ny;
     if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
     const separatingVelocity = ball.vx * nx + ball.vy * ny;
     if (separatingVelocity < kick) { const correction = kick - separatingVelocity; ball.vx += nx * correction; ball.vy += ny * correction; }
     if (upwardEscape > 0) ball.vy = Math.min(ball.vy, -upwardEscape);
     capBallSpeed(ball);
-    return { x: closestX, y: closestY, nx, ny };
+    return { x: hit.closestX, y: hit.closestY, nx, ny };
   }
   function updateFlippers() {
     const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
@@ -218,6 +224,7 @@
     const b = state.ball;
     state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
+    b.prevX = b.x; b.prevY = b.y;
     b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
