@@ -1003,8 +1003,25 @@ The two-point moving sweep could still miss a fast ball/tip crossing when neithe
 
 ### Verification notes
 
-- Five-sample crossing regression passes.
+- `git diff --check` passes.
+
+## 2026-08-14 — Prototype 48: current-position collision resolution and invalid-ball recovery
+
+### Player correction
+
+The five-point detector could identify an early sweep contact, but the resolver reused that early position. A bad geometric value could then leave the ball with invalid coordinates; the normal drain comparison does not catch `NaN`, so no replacement ball appeared.
+
+### Implemented
+
+- Sweep detection remains multi-sample, but collision resolution now projects the ball’s current position onto the current blade.
+- Added finite/out-of-bounds validation for ball position and velocity after flipper contact.
+- Invalid or wildly displaced balls now cost one Stability and use the same guaranteed respawn path as a normal recovery.
+- Zero Stability still enters the loss state.
+
+### Verification notes
+
 - `node --check` passes for the extracted game script.
+- Current-position resolution, finite-ball recovery, and respawn-return assertions are present.
 - `git diff --check` passes.
 
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
