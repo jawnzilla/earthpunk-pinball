@@ -867,6 +867,29 @@ The swept flipper solver could repeatedly reuse a previous in-contact sample and
 - Anti-stick entering/exiting sweep guards and gravity defaults are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 42: damp terrain, stronger active impacts
+
+### Player correction
+
+The ball retained too much energy from terrain while active flipper and bumper impacts felt weak. The issue was material response, not one global speed value.
+
+### Implemented
+
+- Dampened outer wall restitution from `.96` to `.78`.
+- Dampened top wall restitution from `.92` to `.72`.
+- Dampened funnel-guard restitution to `.58`.
+- Increased standard bumper restitution to `1.60`.
+- Increased pulse bumper restitution to `1.85`.
+- Increased armored bumper restitution to `1.20`.
+- Increased flipper motion scaling from `32` to `45`, allowing a timed swing to reach the configured active-kick ceiling of `8`.
+- Kept the hard speed cap at `7` so stronger impacts do not become uncontrolled.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Material restitution values and stronger flipper scaling are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
