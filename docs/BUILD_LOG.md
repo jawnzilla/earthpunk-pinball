@@ -1041,6 +1041,24 @@ The current-position resolver could move the ball a large distance toward the bl
 - Bounded-separation and no-unconditional-teleport assertions are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 50: close the moving-sweep separation envelope
+
+### Player correction
+
+The five-point detector could register a valid tip crossing but the six-pixel correction envelope was narrower than the ball’s one-frame travel budget. The ball could therefore be detected and reflected while still visually appearing on the far side of the blade.
+
+### Implemented
+
+- Increased the current-position correction envelope from `hit radius + 6px` to `hit radius + 20px`.
+- Kept the correction bounded rather than unconditionally teleporting every swept hit.
+- Preserved finite-position recovery and the five-point moving-blade sweep.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Swept correction envelope and five-point moving-tip assertions are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link

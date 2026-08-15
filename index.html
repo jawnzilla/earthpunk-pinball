@@ -243,7 +243,7 @@
     const currentProjection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * currentDx + (ball.y - segment.y1) * currentDy) / currentLengthSquared));
     const currentClosestX = segment.x1 + currentProjection * currentDx, currentClosestY = segment.y1 + currentProjection * currentDy;
     const currentDistance = Math.hypot(ball.x - currentClosestX, ball.y - currentClosestY);
-    if (currentDistance < hit.radius + 6) { ball.x = currentClosestX + nx * hit.radius; ball.y = currentClosestY + ny * hit.radius; }
+    if (currentDistance < hit.radius + 20) { ball.x = currentClosestX + nx * hit.radius; ball.y = currentClosestY + ny * hit.radius; }
     if (!Number.isFinite(ball.x) || !Number.isFinite(ball.y)) return null;
     const incoming = ball.vx * nx + ball.vy * ny;
     if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
