@@ -220,10 +220,10 @@
     const previousX = ball.prevX ?? ball.x, previousY = ball.prevY ?? ball.y;
     const samples = [.2, .4, .6, .8, 1].map(t => {
       const sampleSegment = { x1: previousSegment.x1 + (segment.x1 - previousSegment.x1) * t, y1: previousSegment.y1 + (segment.y1 - previousSegment.y1) * t, x2: previousSegment.x2 + (segment.x2 - previousSegment.x2) * t, y2: previousSegment.y2 + (segment.y2 - previousSegment.y2) * t };
-      return [previousX + (ball.x - previousX) * t, previousY + (ball.y - previousY) * t, sampleSegment, t < 1];
+      return [previousX + (ball.x - previousX) * t, previousY + (ball.y - previousY) * t, sampleSegment, t < 1, t];
     });
     let hit = null;
-    for (const [sampleX, sampleY, sampleSegment, swept] of samples) {
+    for (const [sampleX, sampleY, sampleSegment, swept, sampleT] of samples) {
       const sampleDx = sampleSegment.x2 - sampleSegment.x1, sampleDy = sampleSegment.y2 - sampleSegment.y1;
       const sampleLengthSquared = sampleDx * sampleDx + sampleDy * sampleDy || 1;
       const projection = Math.max(0, Math.min(1, ((sampleX - sampleSegment.x1) * sampleDx + (sampleY - sampleSegment.y1) * sampleDy) / sampleLengthSquared));
@@ -232,24 +232,23 @@
       const distance = Math.hypot(nx0, ny0), radius = ball.r + (segment.width || 0) / 2;
       const entering = !swept || ball.vx * nx0 + ball.vy * ny0 < 0;
       const movingBladeContact = swept && Boolean(segment.previous);
-      if (distance < radius && (entering || movingBladeContact)) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
+      if (distance < radius && (entering || movingBladeContact)) { hit = { closestX, closestY, nx: nx0, ny: ny0, radius, t: sampleT }; break; }
     }
     if (!hit) return null;
     let { nx, ny } = hit;
     if (Math.hypot(nx, ny) < .001) { nx = -dy; ny = dx; }
     const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
-    const currentDx = segment.x2 - segment.x1, currentDy = segment.y2 - segment.y1;
-    const currentLengthSquared = currentDx * currentDx + currentDy * currentDy || 1;
-    const currentProjection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * currentDx + (ball.y - segment.y1) * currentDy) / currentLengthSquared));
-    const currentClosestX = segment.x1 + currentProjection * currentDx, currentClosestY = segment.y1 + currentProjection * currentDy;
-    const currentDistance = Math.hypot(ball.x - currentClosestX, ball.y - currentClosestY);
-    if (currentDistance < hit.radius + 20) { ball.x = currentClosestX + nx * hit.radius; ball.y = currentClosestY + ny * hit.radius; }
-    if (!Number.isFinite(ball.x) || !Number.isFinite(ball.y)) return null;
+    ball.x = hit.closestX + nx * hit.radius;
+    ball.y = hit.closestY + ny * hit.radius;
     const incoming = ball.vx * nx + ball.vy * ny;
     if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
     const separatingVelocity = ball.vx * nx + ball.vy * ny;
     if (separatingVelocity < kick) { const correction = kick - separatingVelocity; ball.vx += nx * correction; ball.vy += ny * correction; }
     if (upwardEscape > 0) ball.vy = Math.min(ball.vy, -upwardEscape);
+    const remaining = Math.max(0, 1 - hit.t);
+    ball.x += ball.vx * remaining;
+    ball.y += ball.vy * remaining;
+    if (!Number.isFinite(ball.x) || !Number.isFinite(ball.y)) return null;
     capBallSpeed(ball);
     return { x: hit.closestX, y: hit.closestY, nx, ny };
   }

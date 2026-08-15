@@ -1059,6 +1059,26 @@ The five-point detector could register a valid tip crossing but the six-pixel co
 - Swept correction envelope and five-point moving-tip assertions are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 51: time-of-impact flipper resolution
+
+### Player correction
+
+The bounded current-position correction reduced misses but still resolved an early swept contact after the ball had already crossed the blade. That could look like a warp-through followed by a late velocity change.
+
+### Implemented
+
+- Swept hits now retain their normalized sample time.
+- The ball is placed at the actual sampled contact point.
+- Rebound and flipper kick are applied at contact.
+- The ball advances only through the remaining fraction of that fixed update.
+- Removed the distance-based late correction in favor of time-of-impact resolution.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Contact-time retention, remaining-frame advancement, and finite-position checks are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
