@@ -890,6 +890,25 @@ The ball retained too much energy from terrain while active flipper and bumper i
 - Material restitution values and stronger flipper scaling are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 43: moving-tip flipper sweep
+
+### Player correction
+
+The ball could still tunnel through the flipper tip because the blade rotated between physics frames while collision only tested the new blade position.
+
+### Implemented
+
+- Added previous-angle flipper geometry for every fixed update.
+- Swept the ball against the midpoint blade position as well as the current blade.
+- Added a blade-closing test so a moving tip catches a tangential ball when the blade itself enters the ball’s radius.
+- Preserved the stale-contact guard: the midpoint uses current-frame moving geometry, never an old ball position as a correction source.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Moving-tip geometry, midpoint blade sweep, and blade-closing assertions are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link

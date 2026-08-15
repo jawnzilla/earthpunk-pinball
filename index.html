@@ -200,20 +200,27 @@
     if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
   }
   function flipperEndpoints(flipper) {
-    return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(flipper.angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(flipper.angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
+    return flipperEndpointsAt(flipper, flipper.angle);
+  }
+  function flipperEndpointsAt(flipper, angle) {
+    return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
   }
   function segmentCollision(ball, segment, restitution = .82, kick = 0, upwardEscape = 0) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
-    const samples = [[ball.x, ball.y, false], [(ball.x + (ball.prevX ?? ball.x)) / 2, (ball.y + (ball.prevY ?? ball.y)) / 2, true]];
+    const midpointSegment = segment.previous ? { x1: (segment.x1 + segment.previous.x1) / 2, y1: (segment.y1 + segment.previous.y1) / 2, x2: (segment.x2 + segment.previous.x2) / 2, y2: (segment.y2 + segment.previous.y2) / 2 } : segment;
+    const samples = [[ball.x, ball.y, segment, false], [(ball.x + (ball.prevX ?? ball.x)) / 2, (ball.y + (ball.prevY ?? ball.y)) / 2, midpointSegment, true]];
     let hit = null;
-    for (const [sampleX, sampleY, swept] of samples) {
-      const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared));
-      const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+    for (const [sampleX, sampleY, sampleSegment, swept] of samples) {
+      const sampleDx = sampleSegment.x2 - sampleSegment.x1, sampleDy = sampleSegment.y2 - sampleSegment.y1;
+      const sampleLengthSquared = sampleDx * sampleDx + sampleDy * sampleDy || 1;
+      const projection = Math.max(0, Math.min(1, ((sampleX - sampleSegment.x1) * sampleDx + (sampleY - sampleSegment.y1) * sampleDy) / sampleLengthSquared));
+      const closestX = sampleSegment.x1 + projection * sampleDx, closestY = sampleSegment.y1 + projection * sampleDy;
       const nx0 = sampleX - closestX, ny0 = sampleY - closestY;
       const distance = Math.hypot(nx0, ny0), radius = ball.r + (segment.width || 0) / 2;
       const entering = !swept || ball.vx * nx0 + ball.vy * ny0 < 0;
-      if (distance < radius && entering) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
+      const bladeClosing = swept && segment.previous && ((segment.x2 - segment.previous.x2) * nx0 + (segment.y2 - segment.previous.y2) * ny0 > 0);
+      if (distance < radius && (entering || bladeClosing)) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
     }
     if (!hit) return null;
     let { nx, ny } = hit;
@@ -232,6 +239,8 @@
     const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
     const rightTarget = input.right ? flippers.right.active : flippers.right.rest;
     const leftPrevious = flippers.left.angle, rightPrevious = flippers.right.angle;
+    flippers.left.previousAngle = leftPrevious;
+    flippers.right.previousAngle = rightPrevious;
     flippers.left.angle += (leftTarget - flippers.left.angle) * .28;
     flippers.right.angle += (rightTarget - flippers.right.angle) * .28;
     flippers.left.angularVelocity = flippers.left.angle - leftPrevious;
@@ -263,8 +272,8 @@
     const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + rightMotion * 45) : (rightActive ? debugConfig.contactSeparation : .2);
     const leftEscape = leftActive ? (state.flipperContacts.left ? debugConfig.contactSeparation : Math.max(2.2, leftKick * .75)) : 0;
     const rightEscape = rightActive ? (state.flipperContacts.right ? debugConfig.contactSeparation : Math.max(2.2, rightKick * .75)) : 0;
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick, leftEscape);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick, rightEscape);
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), previous: flipperEndpointsAt(flippers.left, flippers.left.previousAngle), width: flippers.left.width }, leftRestitution, leftKick, leftEscape);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), previous: flipperEndpointsAt(flippers.right, flippers.right.previousAngle), width: flippers.right.width }, rightRestitution, rightKick, rightEscape);
     state.flipperContacts.left = Boolean(leftHit);
     state.flipperContacts.right = Boolean(rightHit);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
