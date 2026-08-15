@@ -1021,7 +1021,24 @@ The five-point detector could identify an early sweep contact, but the resolver 
 ### Verification notes
 
 - `node --check` passes for the extracted game script.
-- Current-position resolution, finite-ball recovery, and respawn-return assertions are present.
+- `git diff --check` passes.
+
+## 2026-08-14 — Prototype 49: bounded flipper separation
+
+### Player correction
+
+The current-position resolver could move the ball a large distance toward the blade after an early sweep hit. That made the playfield appear to shake when the ball crossed a fast flipper.
+
+### Implemented
+
+- Position separation is now applied only when the ball is within `hit radius + 6px` of the current blade.
+- Distant sweep hits resolve velocity without teleporting the rendered ball.
+- Finite/out-of-bounds recovery remains active for genuinely invalid trajectories.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Bounded-separation and no-unconditional-teleport assertions are present.
 - `git diff --check` passes.
 
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
