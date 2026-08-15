@@ -830,6 +830,23 @@ The three layouts previously changed lower-table routing but reused the same six
 - All three target banks, layout-application hooks, and existing bumper/gate variants are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 40: separate Split Reactor target from gate
+
+### Critic correction
+
+The Split Reactor’s lower center target was positioned directly on the vertical relay gate, causing the target and routing obstacle to overlap in both silhouette and collision space.
+
+### Implemented
+
+- Moved the lower center target from `x=180` to `x=155` at `y=330`.
+- The vertical relay remains at `x=180`, preserving a distinct target-versus-gate routing decision.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Split Reactor target and gate coordinates are now separated by 25px.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
