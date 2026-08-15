@@ -227,8 +227,8 @@
       const nx0 = sampleX - closestX, ny0 = sampleY - closestY;
       const distance = Math.hypot(nx0, ny0), radius = ball.r + (segment.width || 0) / 2;
       const entering = !swept || ball.vx * nx0 + ball.vy * ny0 < 0;
-      const bladeClosing = swept && segment.previous && ((segment.x2 - segment.previous.x2) * nx0 + (segment.y2 - segment.previous.y2) * ny0 > 0);
-      if (distance < radius && (entering || bladeClosing)) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
+      const movingBladeContact = swept && segment.previous;
+      if (distance < radius && (entering || movingBladeContact)) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
     }
     if (!hit) return null;
     let { nx, ny } = hit;
@@ -292,8 +292,8 @@
     capBallSpeed(b);
     if (b.y > H - 35) {
       state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
-      if (state.stability <= 0) lose(); else { setMessage('Probe recovered. Stability lost.'); spawnBall(); }
-    }
+      if (state.stability <= 0) { lose(); return; }
+      setMessage('Probe recovered. Stability lost.'); spawnBall(); return;    }
     updateHud();
   }
   function draw() {

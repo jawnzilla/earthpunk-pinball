@@ -970,6 +970,25 @@ Targets, bumpers, and relay gates now have elemental affinities. A matching ball
 - Physics default, no-physics-upgrade, hinge imprint, stack/decay, environment reaction, visual, and local-asset assertions pass.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 46: moving-flipper catch and drain recovery
+
+### Player correction
+
+After lowering stationary rebound to zero, a moving tip could still pass through the ball because the midpoint sweep rejected contacts unless a directional velocity test happened to agree with the blade’s rotation.
+
+### Implemented
+
+- Any overlap with the current-frame moving flipper midpoint is now a valid swept contact.
+- The solver still uses only current/midpoint ball samples, so the earlier stale-position sticking bug remains blocked.
+- The drain branch now returns immediately after spawning a replacement ball.
+- A zero-Stability drain returns immediately through the loss state instead of continuing the dead ball’s frame.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Moving-blade midpoint acceptance and immediate respawn-return assertions are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
