@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deadlight // Build Log</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;--bg:#0a1012;--panel:#111c1e;--panel2:#182827;--line:#36534b;--ink:#e9f1df;--muted:#9bb1a4;--amber:#f1b35b;--green:#b5d3a1;--red:#d77b5c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#26433a 0,#0a1012 42%),var(--bg);color:var(--ink);line-height:1.55}a{color:var(--amber)}.wrap{width:min(1120px,calc(100% - 32px));margin:auto;padding:42px 0 72px}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:end;margin-bottom:34px}.eyebrow{color:var(--green);font-size:12px;letter-spacing:.18em;text-transform:uppercase}.hero h1{margin:8px 0 10px;font-size:clamp(36px,8vw,76px);line-height:.95;letter-spacing:.04em;color:var(--amber)}.hero p{max-width:650px;color:var(--muted);font-size:18px}.hero-card,.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(24,40,39,.94),rgba(12,20,22,.96));box-shadow:0 18px 50px #0008,inset 0 1px #ffffff12;border-radius:14px}.hero-card{padding:20px}.hero-card strong{display:block;color:var(--amber);font-size:28px}.hero-card span{color:var(--muted);font-size:13px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.button{display:inline-block;padding:10px 15px;border-radius:8px;background:var(--amber);color:#101518;text-decoration:none;font-weight:800}.button.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0 34px}.card{padding:20px}.card h2{margin:0 0 12px;color:var(--amber);font-size:18px;text-transform:uppercase;letter-spacing:.08em}.card h3{margin:0 0 5px;color:var(--green);font-size:15px}.card p{margin:0;color:var(--muted);font-size:14px}.metric{font-size:31px;color:var(--ink);font-weight:800}.section-title{margin:38px 0 12px;font-size:24px}.timeline{position:relative;margin-left:12px;border-left:1px solid var(--line);padding-left:25px}.event{position:relative;padding:0 0 24px}.event:before{content:'';position:absolute;left:-32px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px #0a1012,0 0 16px #f1b35b66}.event time{color:var(--amber);font-size:12px;letter-spacing:.1em;text-transform:uppercase}.event h3{margin:4px 0;color:var(--ink)}.event p{margin:0;color:var(--muted);max-width:820px}.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.check{padding:13px 15px;border:1px solid var(--line);border-radius:9px;background:#0d1719;color:var(--muted);font-size:14px}.check b{color:var(--green);margin-right:7px}.note{border-left:3px solid var(--amber);padding:12px 16px;background:#171b16;color:var(--muted);margin-top:15px}.footer{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:16px}@media(max-width:760px){.hero{grid-template-columns:1fr}.grid,.checklist{grid-template-columns:1fr}.wrap{width:min(100% - 22px,620px);padding-top:25px}.hero p{font-size:16px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero">
+<div><div class="eyebrow">Meta Horizon Creator Competition // Game Prototype</div><h1>DEADLIGHT</h1><p>An Earthpunk industrial pinball survival roguelike. Launch the probe, route salvage through unstable machinery, buy a build between descents, and reach the surface signal.</p><div class="actions"><a class="button" href="../index.html">Open playable build</a><a class="button alt" href="https://jawnzilla.github.io/earthpunk-pinball/">Open hosted build</a></div></div>
+<div class="hero-card"><strong>Prototype 42</strong><span>Current deployed slice · 2026-08-14</span><hr><span>Genre: Survival &amp; Resource Management</span><br><span>Platform: portrait HTML5 Canvas · single-player · offline-safe</span></div>
+</header>
+<section class="grid">
+<article class="card"><div class="metric">3</div><h3>Descent layouts</h3><p>Generator Well, Pulse Manifold, and Split Reactor each have distinct target banks, bumper fields, and relay routing.</p></article>
+<article class="card"><div class="metric">7</div><h3>Live tuning controls</h3><p>Gravity, kick, rebound, contact separation, and speed are adjustable in the in-game Tune panel.</p></article>
+<article class="card"><div class="metric">6</div><h3>Between-level choices</h3><p>Survival, economy, repair, hydraulic, and extended-flipper modules create a Charge tradeoff.</p></article>
+</section>
+<h2 class="section-title">The current core loop</h2>
+<section class="grid">
+<article class="card"><h2>01 // Route</h2><p>Use touch halves or A/D to work the flippers. The ball has fixed-step physics, swept flipper contacts, material-specific restitution, and an authoritative drain.</p></article>
+<article class="card"><h2>02 // Salvage</h2><p>Hit six targets, generators, pulse bumpers, armored bumpers, and relay gates. Chain contacts increase Score while Charge remains the build currency.</p></article>
+<article class="card"><h2>03 // Commit</h2><p>Between descents, spend Charge on hydraulic arms, extended arms, or hull repair—or take a free survival/economy modification.</p></article>
+</section>
+<h2 class="section-title">Build timeline</h2>
+<section class="timeline">
+<article class="event"><time>Prototype 01–20</time><h3>Make the table playable</h3><p>Established portrait touch controls, fixed 60Hz physics, flippers, targets, stability, three-stage progression, win/loss/reset, and the industrial visual language.</p></article>
+<article class="event"><time>Prototype 21–27</time><h3>Make the lower table honest</h3><p>Aligned the drain geometry, removed edge rescue loops, sealed the funnel-to-wall seam, reserved the mobile label band, and corrected short-viewport Canvas sizing.</p></article>
+<article class="event"><time>Prototype 28–33</time><h3>Make impact feel intentional</h3><p>Added live physics tuning, stronger active contacts, anti-hug separation, upward flipper escape, swept collision sampling, angled respawns, and removed the bottom-center bumper.</p></article>
+<article class="event"><time>Prototype 34–40</time><h3>Expand the run</h3><p>Added three layouts, pulse and armored bumper variants, relay gates, layout-specific target banks, Charge-funded flipper modules, repair, Charge Chain scoring, and a two-hit armor breach.</p></article>
+<article class="event"><time>Prototype 41–42</time><h3>Refine the feel</h3><p>Stopped stale swept contacts from pulling exiting balls back onto the blade, corrected gravity to 0.07, damped terrain, and strengthened bumper/flipper impact response.</p></article>
+</section>
+<h2 class="section-title">Hackathon readiness checklist</h2>
+<section class="checklist">
+<div class="check"><b>PASS</b>Genuinely playable loop with real-time feedback, progression, win, loss, and reset.</div>
+<div class="check"><b>PASS</b>Single-player portrait experience with touch-first controls and keyboard fallback.</div>
+<div class="check"><b>PASS</b>Readable, unminified game code assembled in the root-level <code>index.html</code>.</div>
+<div class="check"><b>PASS</b>Offline-safe source scan: no CDN, external font, runtime fetch, XHR, WebSocket, analytics, or remote asset dependency.</div>
+<div class="check"><b>PASS</b>Original code-drawn industrial presentation and original game concept; no commercial artwork or branded products.</div>
+<div class="check"><b>PASS</b>AI-assisted build provenance documented by this log and the detailed markdown engineering log.</div>
+<div class="check"><b>PASS</b>Genre framing: Survival &amp; Resource Management through Stability, Charge, salvage, and upgrade decisions.</div>
+<div class="check"><b>OPEN</b>Final submission zip assembly and full offline play session remain packaging/signoff work, not runtime feature work.</div>
+</section>
+<div class="note"><b>Submission note:</b> The competition submission should package the root <code>index.html</code> at the top level. This presentation log can accompany the entry as documentation; it is not a runtime dependency.</div>
+<footer class="footer">Deadlight // Earthpunk Pinball · Build log presentation layer · Source detail remains in <a href="BUILD_LOG.md">BUILD_LOG.md</a> · <a href="../README.md">Project README</a></footer>
+</main>
+</body>
+</html>

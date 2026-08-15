@@ -15,6 +15,11 @@ Prototype 01 answers one question: **is moving a probe through an underground in
 - Reach the third descent's final signal to win.
 - Reset is available after a win or loss.
 
+## Build log
+
+- [Presentation build log](docs/BUILD_LOG.html) — readable timeline, current mechanics, validation evidence, and hackathon compliance checklist.
+- [Detailed engineering log](docs/BUILD_LOG.md) — source-level iteration history.
+
 ## Run locally
 
 ```bash
