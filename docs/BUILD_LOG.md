@@ -770,3 +770,22 @@ The between-level flipper modules were previously free choices, so Charge had no
 - `node --check` passes for the extracted game script.
 - Upgrade cost fields, disabled-card styling, affordability guard, and Charge deduction are present.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 36: armored bumper breach state
+
+### Gameplay polish
+
+The armored bumper variant previously only changed rebound strength and appearance. It now creates a readable two-hit objective in the Split Reactor.
+
+### Implemented
+
+- First armor impact cracks the bumper, awards a small score, and shows a visible amber crack.
+- Second impact breaches the armor, resets it, and awards the larger salvage payout.
+- Layout damage resets on a new run and when entering a new descent.
+- The armor state is shared by collision and rendering, so the visual crack is authoritative.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Armor hit-state, reset hooks, breach payout, and crack rendering are present.
+- `git diff --check` passes.
