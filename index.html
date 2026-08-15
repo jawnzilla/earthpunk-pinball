@@ -74,12 +74,12 @@
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
-    <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.02" max="0.16" step="0.005" value="0.08"><span class="debug-value" data-value="gravity">0.080</span></label>
-    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="8" step="0.1" value="6"><span class="debug-value" data-value="activeKick">6.00</span></label>
-    <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0.3"><span class="debug-value" data-value="catchRestitution">0.30</span></label>
-    <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.5"><span class="debug-value" data-value="movingRestitution">0.50</span></label>
+    <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.1" max="1.3" step="0.05" value="0.7"><span class="debug-value" data-value="gravity">0.70</span></label>
+    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="12" step="0.1" value="8"><span class="debug-value" data-value="activeKick">8.00</span></label>
+    <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
+    <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.1"><span class="debug-value" data-value="movingRestitution">0.10</span></label>
     <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0.3" max="1" step="0.01" value="0.3"><span class="debug-value" data-value="passiveRestitution">0.30</span></label>
-    <label class="debug-row" title="Small outward/upward push applied while an active contact remains locked.">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="0.7"><span class="debug-value" data-value="contactSeparation">0.70</span></label>
+    <label class="debug-row" title="Small outward/upward push applied while an active contact remains locked.">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="2"><span class="debug-value" data-value="contactSeparation">2.00</span></label>
     <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="7"><span class="debug-value" data-value="maxSpeed">7.00</span></label>
   </section>
 <script>
@@ -96,7 +96,7 @@
   const resetButton = document.querySelector('#reset');
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .08, activeKick: 6, catchRestitution: .3, movingRestitution: .5, passiveRestitution: .3, contactSeparation: .7, maxSpeed: 7 };
+  const debugConfig = { gravity: .7, activeKick: 8, catchRestitution: 0, movingRestitution: .1, passiveRestitution: .3, contactSeparation: 2, maxSpeed: 7 };
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
@@ -104,10 +104,17 @@
   const upgradePool = [
     { id: 'bulkhead', icon: '◆', title: 'Reinforced bulkhead', text: '+1 maximum Stability and restore one point.', apply: s => { s.stabilityMax += 1; s.stability += 1; } },
     { id: 'coil', icon: 'ϟ', title: 'Tuned launch coil', text: 'Raise the safe ball-speed ceiling for stronger, more controlled returns.', apply: s => { s.maxSpeed += .6; } },
-    { id: 'magnet', icon: '✦', title: 'Salvage magnet', text: 'Every salvage target yields an additional Charge.', apply: s => { s.salvageBonus += 1; } }
+    { id: 'magnet', icon: '✦', title: 'Salvage magnet', text: 'Every salvage target yields an additional Charge.', apply: s => { s.salvageBonus += 1; } },
+    { id: 'hydraulic', icon: '↗', title: 'Hydraulic flipper arms', text: '+1.2 active kick and a stronger moving rebound.', apply: s => { s.flipperKickBonus += 1.2; s.flipperReboundBonus += .08; } },
+    { id: 'longarms', icon: '⟷', title: 'Extended flipper arms', text: '+8px to both flippers for wider rescue coverage.', apply: s => { s.flipperLengthBonus += 8; } }
   ];
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
+  const levelLayouts = [
+    { name: 'Generator Well', bumpers: [{ x: 112, y: 350, r: 25, type: 'standard' }, { x: 248, y: 350, r: 25, type: 'standard' }], gate: null },
+    { name: 'Pulse Manifold', bumpers: [{ x: 92, y: 332, r: 21, type: 'pulse' }, { x: 268, y: 332, r: 21, type: 'pulse' }, { x: 180, y: 390, r: 18, type: 'pulse' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9 } },
+    { name: 'Split Reactor', bumpers: [{ x: 78, y: 318, r: 18, type: 'armor' }, { x: 282, y: 318, r: 18, type: 'armor' }, { x: 118, y: 408, r: 18, type: 'standard' }, { x: 242, y: 408, r: 18, type: 'standard' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8 } }
+  ];
   let input = { left: false, right: false };
   let activePointerId = null;
   let activePointerSide = null;
@@ -116,7 +123,7 @@
     { x: 90, y: 164, r: 17, hit: false }, { x: 180, y: 134, r: 17, hit: false }, { x: 270, y: 164, r: 17, hit: false },
     { x: 77, y: 274, r: 15, hit: false }, { x: 283, y: 274, r: 15, hit: false }, { x: 180, y: 242, r: 14, hit: false }
   ];
-  const bumpers = [{ x: 112, y: 350, r: 25 }, { x: 248, y: 350, r: 25 }];
+  const bumpers = levelLayouts[0].bumpers;
   const flippers = {
     left: { pivotX: 64, pivotY: H - 75, length: 78, width: 15, rest: .16, active: -.5, angle: .16, angularVelocity: 0 },
     right: { pivotX: 296, pivotY: H - 75, length: 78, width: 15, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0 }
@@ -129,7 +136,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true;
@@ -143,7 +150,7 @@
     state.launched = true;
   }
   function updateHud() {
-    stageEl.textContent = state.running ? `DESCENT ${state.stage}/${state.stageCount} · STABILITY ${state.stability}/${state.stabilityMax}` : (state.stability > 0 ? `DESCENT ${state.stage}/${state.stageCount} · RECOVERED` : 'COLLAPSE');
+    stageEl.textContent = state.running ? `DESCENT ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · STABILITY ${state.stability}/${state.stabilityMax}` : (state.stability > 0 ? `DESCENT ${state.stage}/${state.stageCount} · RECOVERED` : 'COLLAPSE');
     messageEl.textContent = state.message;
   }
   function setMessage(text) { state.message = text; updateHud(); }
@@ -162,7 +169,7 @@
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
   function chooseUpgrade(upgrade) {
-    upgrade.apply(state); state.stage += 1; state.targets = 0; targets.forEach(t => t.hit = false); state.message = `${upgrade.title} installed.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
+    upgrade.apply(state); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; targets.forEach(t => t.hit = false); state.relayCooldown = 0; state.message = `${upgrade.title} installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
   }
   function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
   function lose() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; state.running = false; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
@@ -183,7 +190,7 @@
     if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
   }
   function flipperEndpoints(flipper) {
-    return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(flipper.angle) * flipper.length, y2: flipper.pivotY + Math.sin(flipper.angle) * flipper.length };
+    return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(flipper.angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(flipper.angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
   }
   function segmentCollision(ball, segment, restitution = .82, kick = 0, upwardEscape = 0) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
@@ -222,7 +229,7 @@
   function update() {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
     b.prevX = b.x; b.prevY = b.y;
     b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
@@ -232,16 +239,17 @@
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .96; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .92; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
-    bumpers.forEach(item => { if (circleCollision(b, item, 1.18)) { state.score += 25; state.charge = Math.min(99, state.charge + .1); emitImpact(item.x, item.y, '#b5d3a1', .8); capBallSpeed(b); setMessage('Generator impact. Charge rising.'); } });
+    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.38 : item.type === 'armor' ? .92 : 1.18; if (circleCollision(b, item, restitution)) { state.score += item.type === 'pulse' ? 40 : 25; state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : .1)); emitImpact(item.x, item.y, item.type === 'pulse' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(item.type === 'pulse' ? 'Pulse rebound. Charge rising.' : 'Generator impact. Charge rising.'); } });
+    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { state.charge = Math.min(99, state.charge + 1); state.score += 50; state.relayCooldown = 12; emitImpact(state.layout.gate.x1 + (state.layout.gate.x2 - state.layout.gate.x1) / 2, state.layout.gate.y1 + (state.layout.gate.y2 - state.layout.gate.y1) / 2, '#f1b35b', .9); setMessage('Relay gate charged.'); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
     const leftActive = input.left;
     const rightActive = input.right;
     const leftMotion = Math.abs(flippers.left.angularVelocity);
     const rightMotion = Math.abs(flippers.right.angularVelocity);
-    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
-    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
-    const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick, .08 + leftMotion * 32) : (leftActive ? debugConfig.contactSeparation : .2);
-    const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick, .08 + rightMotion * 32) : (rightActive ? debugConfig.contactSeparation : .2);
+    const leftRestitution = leftActive ? (leftMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution + state.flipperReboundBonus) : debugConfig.passiveRestitution;
+    const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + leftMotion * 32) : (leftActive ? debugConfig.contactSeparation : .2);
+    const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick + state.flipperKickBonus, .08 + rightMotion * 32) : (rightActive ? debugConfig.contactSeparation : .2);
     const leftEscape = leftActive ? (state.flipperContacts.left ? debugConfig.contactSeparation : Math.max(2.2, leftKick * .75)) : 0;
     const rightEscape = rightActive ? (state.flipperContacts.right ? debugConfig.contactSeparation : Math.max(2.2, rightKick * .75)) : 0;
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick, leftEscape);
@@ -270,7 +278,7 @@
     ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
-    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawFlippers(); drawMeters(); drawEffects(); drawBall();
+    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawFlippers(); drawMeters(); drawEffects(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawEdgeMachinery() {
@@ -295,7 +303,19 @@
   function drawTargets() {
     targets.forEach(t => { ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 4 + Math.sin(state.pulse + t.x) * 2, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#344743' : '#c56d49'; ctx.fill(); ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fill(); ctx.fillStyle = '#182226'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', t.x, t.y + 3); });
   }
-  function drawBumpers() { bumpers.forEach(item => { ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = '#6f9b84'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke(); }); }
+  function drawBumpers() {
+    state.layout.bumpers.forEach(item => {
+      const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const outer = pulse ? '#c56d49' : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
+      ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
+      ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
+      if (armor) { ctx.beginPath(); ctx.arc(item.x, item.y, item.r - 5, 0, Math.PI * 2); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 1; ctx.stroke(); }
+    });
+  }
+  function drawRelayGate() {
+    const gate = state.layout.gate; if (!gate) return;
+    ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = state.relayCooldown ? '#ffd083' : '#526e63'; ctx.lineWidth = gate.width + 5; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke();
+    ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke(); ctx.restore();
+  }
   function drawFlippers() {
     sideGuards.forEach(guard => {
       ctx.beginPath(); ctx.moveTo(guard.x1, guard.y1); ctx.lineTo(guard.x2, guard.y2);

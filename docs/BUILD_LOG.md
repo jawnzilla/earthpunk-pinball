@@ -716,3 +716,36 @@ The ball could cross a moving flipper between fixed updates and appear on the ot
 - `node --check` passes for the extracted game script.
 - Swept samples use the same collision geometry as the rendered flippers.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 34: level variants, flipper modules, and relay gate
+
+### Gameplay expansion
+
+The prototype now has a stronger run structure beyond one repeated table: each descent changes routing, bumper behavior, and the available flipper build path.
+
+### Implemented
+
+- Added named layouts: `Generator Well`, `Pulse Manifold`, and `Split Reactor`.
+- Added bumper variants:
+  - Standard generators: normal rebound and small Charge gain.
+  - Pulse bumpers: stronger rebound, animated amber shell, and larger Charge gain.
+  - Armored bumpers: muted lower-rebound bumpers with an inner armor ring.
+- Added a level-specific relay gate rail in descents 2 and 3. It changes ball routing and grants Charge/Score when struck, with a cooldown to prevent farming.
+- Added persistent between-level flipper modules:
+  - Hydraulic flipper arms: active kick and moving rebound bonus.
+  - Extended flipper arms: longer collision/render geometry.
+- HUD now names the active descent layout.
+- Updated tuning defaults:
+  - Gravity `0.70`
+  - Active kick `8`
+  - Catch damping `0.00`
+  - Moving rebound `0.10`
+  - Passive rebound `0.30`
+  - Contact separation `2.00`
+  - Speed cap `7`
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- All three layouts, seven tuning controls, persistent flipper module fields, and relay gate hooks are present in source.
+- `git diff --check` passes.
