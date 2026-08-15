@@ -789,3 +789,23 @@ The armored bumper variant previously only changed rebound strength and appearan
 - `node --check` passes for the extracted game script.
 - Armor hit-state, reset hooks, breach payout, and crack rendering are present.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 37: Charge Chain scoring
+
+### Gameplay polish
+
+The expanded tables now reward maintaining a route through multiple interactables instead of treating every hit as an isolated event.
+
+### Implemented
+
+- Added a Charge Chain multiplier shared by salvage targets, bumper impacts, and relay gates.
+- Chain starts at `x1.00`, increases by `0.25` per chained contact, and expires after 90 fixed updates without a contact.
+- Chain multiplier increases Score rewards, not Charge inflation.
+- Added a visible `CHAIN xN` readout beneath the top meters.
+- Contact messages now communicate chain value during pulse and relay interactions.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Chain state, timeout decay, reward multiplication, and HUD readout are present.
+- `git diff --check` passes.

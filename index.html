@@ -138,7 +138,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, flipperKickBonus: 0, flipperReboundBonus: 0, flipperLengthBonus: 0, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -157,10 +157,11 @@
     messageEl.textContent = state.message;
   }
   function setMessage(text) { state.message = text; updateHud(); }
+  function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1) { state.effects.push({ x, y, color, power, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
   function hitTarget(target) {
-    target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += 100; state.flash = 3; emitImpact(target.x, target.y, '#f1b35b', 1.25);
-    setMessage(state.targets === targets.length ? 'Descent mapped. Choose a modification.' : 'Salvage secured.');
+    const multiplier = chainHit(); target.hit = true; state.targets += 1; state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += Math.round(100 * multiplier); state.flash = 3; emitImpact(target.x, target.y, '#f1b35b', 1.25);
+    setMessage(state.targets === targets.length ? 'Descent mapped. Choose a modification.' : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length) completeStage();
   }
   function completeStage() {
@@ -234,7 +235,7 @@
   function update() {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
     b.prevX = b.x; b.prevY = b.y;
     b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
@@ -244,8 +245,8 @@
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .96; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .92; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
-    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.38 : item.type === 'armor' ? .92 : 1.18; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } state.score += item.type === 'pulse' ? 40 : 25; state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(item.type === 'pulse' ? 'Pulse rebound. Charge rising.' : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
-    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { state.charge = Math.min(99, state.charge + 1); state.score += 50; state.relayCooldown = 12; emitImpact(state.layout.gate.x1 + (state.layout.gate.x2 - state.layout.gate.x1) / 2, state.layout.gate.y1 + (state.layout.gate.y2 - state.layout.gate.y1) / 2, '#f1b35b', .9); setMessage('Relay gate charged.'); }
+    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.38 : item.type === 'armor' ? .92 : 1.18; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); state.score += Math.round((item.type === 'pulse' ? 40 : 25) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { const multiplier = chainHit(); state.charge = Math.min(99, state.charge + 1); state.score += Math.round(50 * multiplier); state.relayCooldown = 12; emitImpact(state.layout.gate.x1 + (state.layout.gate.x2 - state.layout.gate.x1) / 2, state.layout.gate.y1 + (state.layout.gate.y2 - state.layout.gate.y1) / 2, '#f1b35b', .9); setMessage(`Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .9));
     const leftActive = input.left;
     const rightActive = input.right;
@@ -354,6 +355,7 @@
   }
   function drawMeters() {
     ctx.textAlign = 'left'; ctx.font = 'bold 13px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
+    if (state.combo > 1) { ctx.fillStyle = '#ffd083'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillText(`CHAIN x${(1 + (state.combo - 1) * .25).toFixed(2)}`, 34, 151); }
     ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);
     ctx.fillStyle = '#f1b35b'; ctx.fillRect(34, 130, Math.min(130, state.charge * 13), 7); ctx.fillStyle = '#c56d49'; ctx.fillRect(220, 130, 106 * (state.targets / targets.length), 7);
   }
