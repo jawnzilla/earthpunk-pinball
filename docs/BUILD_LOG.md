@@ -809,3 +809,23 @@ The expanded tables now reward maintaining a route through multiple interactable
 - `node --check` passes for the extracted game script.
 - Chain state, timeout decay, reward multiplication, and HUD readout are present.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 38: layout-specific target banks
+
+### Level variation
+
+The three layouts previously changed lower-table routing but reused the same six-target pattern. Target banks now reinforce each layout’s intended route.
+
+### Implemented
+
+- Generator Well keeps the balanced opening target pattern.
+- Pulse Manifold spreads targets around the horizontal relay gate and pulse bumper field.
+- Split Reactor creates a wide side-versus-center target route around the vertical gate and armored bumpers.
+- Target positions and radii are applied when a run starts and whenever a new descent is entered.
+- Target collision and rendering continue to use the same mutable target objects, preserving the existing hit/state path.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- All three target banks, layout-application hooks, and existing bumper/gate variants are present.
+- `git diff --check` passes.
