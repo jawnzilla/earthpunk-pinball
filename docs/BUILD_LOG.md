@@ -1079,6 +1079,26 @@ The bounded current-position correction reduced misses but still resolved an ear
 - Contact-time retention, remaining-frame advancement, and finite-position checks are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 52: remove rewind-based flipper resolution
+
+### Player correction
+
+A later time-of-impact experiment reintroduced ball rewinding plus remaining-frame advancement. That made flipper contacts visually shake and allowed the ball to be counted as drained outside the center opening.
+
+### Implemented
+
+- Removed time-of-impact rewind and remaining-frame advancement.
+- Moving flippers resolve velocity without repositioning the ball.
+- Stationary/passive geometry only separates when the ball is close to the current segment.
+- Restored the center-only drain opening (`156 < x < 204`).
+- Kept the early return after respawn and the invalid-ball recovery path.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- No-rewind, center-drain, moving-flipper, and respawn assertions are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
