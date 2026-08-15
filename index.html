@@ -216,8 +216,12 @@
   function segmentCollision(ball, segment, restitution = .82, kick = 0, upwardEscape = 0) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
-    const midpointSegment = segment.previous ? { x1: (segment.x1 + segment.previous.x1) / 2, y1: (segment.y1 + segment.previous.y1) / 2, x2: (segment.x2 + segment.previous.x2) / 2, y2: (segment.y2 + segment.previous.y2) / 2 } : segment;
-    const samples = [[ball.x, ball.y, segment, false], [(ball.x + (ball.prevX ?? ball.x)) / 2, (ball.y + (ball.prevY ?? ball.y)) / 2, midpointSegment, true]];
+    const previousSegment = segment.previous || segment;
+    const previousX = ball.prevX ?? ball.x, previousY = ball.prevY ?? ball.y;
+    const samples = [.2, .4, .6, .8, 1].map(t => {
+      const sampleSegment = { x1: previousSegment.x1 + (segment.x1 - previousSegment.x1) * t, y1: previousSegment.y1 + (segment.y1 - previousSegment.y1) * t, x2: previousSegment.x2 + (segment.x2 - previousSegment.x2) * t, y2: previousSegment.y2 + (segment.y2 - previousSegment.y2) * t };
+      return [previousX + (ball.x - previousX) * t, previousY + (ball.y - previousY) * t, sampleSegment, t < 1];
+    });
     let hit = null;
     for (const [sampleX, sampleY, sampleSegment, swept] of samples) {
       const sampleDx = sampleSegment.x2 - sampleSegment.x1, sampleDy = sampleSegment.y2 - sampleSegment.y1;
@@ -227,7 +231,7 @@
       const nx0 = sampleX - closestX, ny0 = sampleY - closestY;
       const distance = Math.hypot(nx0, ny0), radius = ball.r + (segment.width || 0) / 2;
       const entering = !swept || ball.vx * nx0 + ball.vy * ny0 < 0;
-      const movingBladeContact = swept && segment.previous;
+      const movingBladeContact = swept && Boolean(segment.previous);
       if (distance < radius && (entering || movingBladeContact)) { hit = { sampleX, sampleY, closestX, closestY, nx: nx0, ny: ny0, radius }; break; }
     }
     if (!hit) return null;
@@ -267,6 +271,7 @@
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .78; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .72; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
+    if (!state.running) return;
     state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.85 : item.type === 'armor' ? 1.2 : 1.6; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
     if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .58));

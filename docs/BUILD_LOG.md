@@ -986,7 +986,25 @@ After lowering stationary rebound to zero, a moving tip could still pass through
 ### Verification notes
 
 - `node --check` passes for the extracted game script.
-- Moving-blade midpoint acceptance and immediate respawn-return assertions are present.
+- `git diff --check` passes.
+
+## 2026-08-14 — Prototype 47: five-point moving flipper sweep
+
+### Player correction
+
+The two-point moving sweep could still miss a fast ball/tip crossing when neither the midpoint nor endpoint overlapped the blade radius. The apparent no-respawn case could also be contaminated by the same update continuing after a target-completion state transition.
+
+### Implemented
+
+- Moving collision now samples ball and blade interpolation at 20%, 40%, 60%, 80%, and 100% of each fixed update.
+- Moving flipper samples accept overlap even when the ball’s velocity is tangential, while passive geometry still requires an entering contact.
+- Target completion now returns before any later collision or drain work in that frame.
+- Drain recovery continues to return immediately after spawning the replacement ball.
+
+### Verification notes
+
+- Five-sample crossing regression passes.
+- `node --check` passes for the extracted game script.
 - `git diff --check` passes.
 
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
