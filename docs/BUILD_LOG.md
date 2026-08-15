@@ -669,3 +669,32 @@ The first anti-hug fix guaranteed separation on the initial flipper impact, but 
 - `node --check` passes for the extracted game script.
 - Focused first-contact, tangential-contact, and speed-cap regressions remain green.
 - `git diff --check` passes.
+
+## 2026-08-14 — Prototype 32: upward flipper escape and tuning help
+
+### Player correction
+
+A ball could still roll down the blade while technically separating along the collision normal. The visual symptom remained a ball attached to the flipper slope instead of launching upward.
+
+### Implemented
+
+- Added an explicit upward escape velocity to active flipper contacts.
+- First active contact forces at least `2.2` upward velocity, or 75% of the calculated kick when higher.
+- Locked follow-up contacts use the configurable `Contact separation` value as their upward escape.
+- Added concise inline help and hover descriptions for every tuning slider.
+
+### Slider meanings
+
+- Gravity: downward acceleration per fixed update; higher feels heavier.
+- Active kick: maximum first-hit flipper impulse.
+- Catch damping: rebound retained by a stationary held flipper.
+- Moving rebound: rebound retained when the flipper is moving.
+- Passive rebound: rebound from a released flipper acting as a rail.
+- Contact separation: small outward/upward push while active contact remains locked.
+- Speed cap: hard maximum ball speed.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Existing tangential-contact and speed-cap regressions remain green.
+- `git diff --check` passes.

@@ -51,7 +51,8 @@
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
     .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
     .debug-panel[hidden] { display: none; }
-    .debug-panel h3 { margin: 0 0 8px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+    .debug-panel h3 { margin: 0 0 5px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+    .debug-panel p { margin: 0 0 8px; color: #9fb5a7; font-size: 10px; line-height: 1.3; }
     .debug-row { display: grid; grid-template-columns: 1fr 54px; gap: 8px; align-items: center; margin: 7px 0; color: #c4d2bd; font-size: 11px; }
     .debug-row input { width: 100%; accent-color: #f1b35b; }
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
@@ -72,13 +73,14 @@
   <button class="debug-toggle" id="debug-toggle" type="button">Tune</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
     <h3>Live physics tuning</h3>
-    <label class="debug-row">Gravity <input data-tune="gravity" type="range" min="0.02" max="0.16" step="0.005" value="0.08"><span class="debug-value" data-value="gravity">0.080</span></label>
-    <label class="debug-row">Active kick <input data-tune="activeKick" type="range" min="0.5" max="8" step="0.1" value="6"><span class="debug-value" data-value="activeKick">6.00</span></label>
-    <label class="debug-row">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0.3"><span class="debug-value" data-value="catchRestitution">0.30</span></label>
-    <label class="debug-row">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.5"><span class="debug-value" data-value="movingRestitution">0.50</span></label>
-    <label class="debug-row">Passive rebound <input data-tune="passiveRestitution" type="range" min="0.3" max="1" step="0.01" value="0.3"><span class="debug-value" data-value="passiveRestitution">0.30</span></label>
-    <label class="debug-row">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="0.7"><span class="debug-value" data-value="contactSeparation">0.70</span></label>
-    <label class="debug-row">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="7"><span class="debug-value" data-value="maxSpeed">7.00</span></label>
+    <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
+    <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.02" max="0.16" step="0.005" value="0.08"><span class="debug-value" data-value="gravity">0.080</span></label>
+    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="8" step="0.1" value="6"><span class="debug-value" data-value="activeKick">6.00</span></label>
+    <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0.3"><span class="debug-value" data-value="catchRestitution">0.30</span></label>
+    <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.5"><span class="debug-value" data-value="movingRestitution">0.50</span></label>
+    <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0.3" max="1" step="0.01" value="0.3"><span class="debug-value" data-value="passiveRestitution">0.30</span></label>
+    <label class="debug-row" title="Small outward/upward push applied while an active contact remains locked.">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="0.7"><span class="debug-value" data-value="contactSeparation">0.70</span></label>
+    <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="7"><span class="debug-value" data-value="maxSpeed">7.00</span></label>
   </section>
 <script>
 (() => {
@@ -182,7 +184,7 @@
   function flipperEndpoints(flipper) {
     return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(flipper.angle) * flipper.length, y2: flipper.pivotY + Math.sin(flipper.angle) * flipper.length };
   }
-  function segmentCollision(ball, segment, restitution = .82, kick = 0) {
+  function segmentCollision(ball, segment, restitution = .82, kick = 0, upwardEscape = 0) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
     const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
@@ -198,6 +200,7 @@
     if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
     const separatingVelocity = ball.vx * nx + ball.vy * ny;
     if (separatingVelocity < kick) { const correction = kick - separatingVelocity; ball.vx += nx * correction; ball.vy += ny * correction; }
+    if (upwardEscape > 0) ball.vy = Math.min(ball.vy, -upwardEscape);
     capBallSpeed(ball);
     return { x: closestX, y: closestY, nx, ny };
   }
@@ -232,8 +235,10 @@
     const rightRestitution = rightActive ? (rightMotion < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const leftKick = leftActive && !state.flipperContacts.left ? Math.min(debugConfig.activeKick, .08 + leftMotion * 32) : (leftActive ? debugConfig.contactSeparation : .2);
     const rightKick = rightActive && !state.flipperContacts.right ? Math.min(debugConfig.activeKick, .08 + rightMotion * 32) : (rightActive ? debugConfig.contactSeparation : .2);
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick);
+    const leftEscape = leftActive ? (state.flipperContacts.left ? debugConfig.contactSeparation : Math.max(2.2, leftKick * .75)) : 0;
+    const rightEscape = rightActive ? (state.flipperContacts.right ? debugConfig.contactSeparation : Math.max(2.2, rightKick * .75)) : 0;
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, leftKick, leftEscape);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, rightKick, rightEscape);
     state.flipperContacts.left = Boolean(leftHit);
     state.flipperContacts.right = Boolean(rightHit);
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const hit = leftHit || rightHit; emitImpact(hit.x, hit.y, '#ffd083', .55); state.flipperEffectCooldown = 5; }
