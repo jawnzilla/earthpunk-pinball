@@ -847,6 +847,26 @@ The Split Reactor’s lower center target was positioned directly on the vertica
 - Split Reactor target and gate coordinates are now separated by 25px.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 41: anti-stick swept flipper correction
+
+### Player correction
+
+The swept flipper solver could repeatedly reuse a previous in-contact sample and reposition an exiting ball back onto the blade, producing a complete freeze against the flipper.
+
+### Implemented
+
+- Swept collision now samples only the current position and the frame midpoint.
+- Midpoint hits are accepted only when velocity is entering the flipper segment.
+- Exiting balls are no longer pulled backward into a stale contact point.
+- Corrected gravity default to `0.07`.
+- Gravity slider range is now `0.01–0.13`, placing `0.07` at the center of the slider range.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Anti-stick entering/exiting sweep guards and gravity defaults are present.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
