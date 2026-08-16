@@ -2182,3 +2182,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Selecting a reachable node updates the tooltip without committing a route.
 - Pages workflow succeeded for `93fc219`; hosted verification confirmed the persistent feedback rail at 320×568, 360×640, and 390×844, inner-only map scrolling, CTA reachability, selected-node updates, hidden route strip, and no horizontal overflow.
 - Physical-device touch-scroll testing remains pending.
+
+## 2026-08-16 — Loop 20: authored route-console chassis
+
+- Added `assets/sprites/route-console.svg`, an offline custom five-lane console with recessed rails, socket hardware, conduit waves, perimeter bars, and subtle bioluminescent accents.
+- Layered the asset behind the dynamic route nodes using `.route-console-art`; it is pointer-transparent and cannot interfere with route inspection or scrolling.
+- Preserved the persistent detail/legend rail, physical-chute-only commitment, five-lane topology, and mobile sizing.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Local screenshot confirms authored route chassis reads behind the five-lane symbols.
+- Exact 320×568: route-console asset loaded, feedback rail visible at `y=323..378`, CTA `y=439..491`, no horizontal overflow.
+- Selected-node tooltip remains functional.
+- Hosted verification pending deployment.
+- Physical-device touch-scroll testing remains pending.
