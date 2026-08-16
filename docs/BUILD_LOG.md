@@ -2136,3 +2136,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: map `350px`, CTA `y=486..538`, no horizontal overflow.
 - Pages workflow succeeded for `d002d0c`; hosted verification confirmed canvas context-menu guards, score-popup wiring, 350px map at 320×568, 292px map at 390×844, CTA reachability, and no horizontal overflow.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 19: five-lane route console
+
+- Replaced the previous stacked horizontal depth rows with a five-column route console in `#route-map-depth-content`.
+- Depth now progresses left-to-right from the current chamber toward future chambers; each depth is a vertically spaced lane with a depth label and separator rail.
+- Preserved 15 compact symbol nodes, selected-node tooltip details, physical-chute-only route commitment, and the hidden active-play route strip.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568, 360×640, and 390×844: five lanes, 15 nodes, no horizontal overflow.
+- 320×568 map `350px`, CTA `y=486..538`.
+- 360×640 and 390×844 map `292px`, CTA `y=428..480`.
+- Selecting an available node updates the tooltip without committing a route.
+- Hosted verification pending deployment.
+- Physical-device feel testing remains pending.

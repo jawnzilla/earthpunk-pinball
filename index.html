@@ -114,10 +114,11 @@
     .route-map-cue.visible { display: block; }
     .route-map-cue.complete { color: #9fd4c0; animation: none; }
     @keyframes mapCuePulse { 50% { opacity: .55; } }
-    .route-map-depth { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; min-height: 74px; }
-    .route-map-depth + .route-map-depth { margin-top: 13px; }
-    .route-map-depth + .route-map-depth::before { content: ''; position: absolute; left: 12%; right: 12%; top: -14px; border-top: 1px dashed #526e63; opacity: .9; }
-    .route-map-depth + .route-map-depth::after { content: ''; position: absolute; left: 50%; top: -14px; height: 14px; border-left: 1px dashed #526e63; opacity: .9; }
+    .route-map-depth-content { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; min-height: 422px; align-items: stretch; }
+    .route-map-depth { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-around; gap: 10px; min-height: 400px; padding: 26px 0 10px; }
+    .route-map-depth::before { content: 'D' attr(data-depth); position: absolute; top: 4px; left: 50%; transform: translateX(-50%); color: #6f9988; font-size: 8px; font-weight: 900; letter-spacing: .16em; }
+    .route-map-depth + .route-map-depth { margin-top: 0; border-left: 1px dashed rgba(159,212,192,.28); }
+    .route-map-depth + .route-map-depth::after { content: ''; position: absolute; left: -5px; top: 20%; bottom: 20%; border-left: 1px solid rgba(255,208,131,.22); opacity: .9; }
     .route-map-node { position: relative; z-index: 1; display: grid; place-items: center; width: 42px; height: 42px; min-width: 42px; min-height: 42px; padding: 0; border: 1px solid #38524e; border-radius: 50%; color: #9fb5a7; background: radial-gradient(circle, #29423d, #111b1e 68%); font: inherit; cursor: pointer; }
     .route-map-node::after { content: ''; position: absolute; width: 6px; height: 6px; right: 2px; top: 2px; border-radius: 50%; background: #526e63; }
     .route-map-node strong { display: block; color: #dce8d4; font-size: 18px; line-height: 1; }
