@@ -219,7 +219,7 @@
     { id: 'surface-vault', kind: 'reward', element: 'Air', title: 'Surface Vault', text: 'Reward route: upper-bank breach or 4 Charge opens the vault. No threat, doubled salvage.', unlock: s => s.topHits > 0 || s.charge >= 4, apply: s => { s.routeModifier = 'Water'; s.tableKind = 'reward'; s.tableLabel = 'REWARD'; s.salvageBonus += .5; s.charge += 2; } }
   ];
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
-  const spriteImages = { warden: new Image(), edgePod: new Image(), ball: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg'; spriteImages.ball.src = 'assets/sprites/probe-ball.svg';
+  const spriteImages = { warden: new Image(), edgePod: new Image(), ball: new Image(), bumperStandard: new Image(), bumperPulse: new Image(), bumperArmor: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg'; spriteImages.ball.src = 'assets/sprites/probe-ball.svg'; spriteImages.bumperStandard.src = 'assets/sprites/bumper-standard.svg'; spriteImages.bumperPulse.src = 'assets/sprites/bumper-pulse.svg'; spriteImages.bumperArmor.src = 'assets/sprites/bumper-armor.svg';
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
@@ -571,6 +571,7 @@
       ctx.save(); ctx.translate(item.x, item.y); ctx.rotate(state.pulse * .12); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.globalAlpha = .8; for (let tooth = 0; tooth < 8; tooth += 1) { ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(item.r - 2, 0); ctx.lineTo(item.r + 5, 0); ctx.stroke(); } ctx.restore();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * .25); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.stroke();
       ctx.beginPath(); ctx.arc(item.x, item.y, Math.max(4, item.r * .28), 0, Math.PI * 2); ctx.fillStyle = elementColors[element]; ctx.globalAlpha = .8; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = '#e9f1df'; ctx.lineWidth = 1; ctx.stroke();
+      const bumperSprite = armor ? spriteImages.bumperArmor : pulse ? spriteImages.bumperPulse : spriteImages.bumperStandard; if (bumperSprite.complete && bumperSprite.naturalWidth) { const spriteSize = (item.r + 8) * 2; ctx.globalAlpha = .82; ctx.drawImage(bumperSprite, item.x - spriteSize / 2, item.y - spriteSize / 2, spriteSize, spriteSize); ctx.globalAlpha = 1; }
       if (armor) { ctx.beginPath(); ctx.arc(item.x, item.y, item.r - 5, 0, Math.PI * 2); ctx.strokeStyle = item.hits ? '#f1b35b' : '#b5d3a1'; ctx.lineWidth = item.hits ? 3 : 1; ctx.stroke(); if (item.hits) { ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); } }
     });
   }

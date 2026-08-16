@@ -1770,3 +1770,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - HUD resource row hidden; drain stability renderer present; route strip remains non-reflowing.
 - `node --check`, `git diff --check`, offline, HUD-relocation, drain-counter, and maximum-table assertions pass.
 - Pages workflow succeeded for `28ece34`; hosted 320×568 verification confirmed the resource row is hidden, route identity remains in `#route-status`, Canvas is `241.875×430px`, controls bottom at `565px`, and horizontal overflow is false.
+
+## 2026-08-16 — Loop 5: authored bumper sprite family
+
+- Added local SVG assets for the three dominant bumper roles: `bumper-standard.svg`, `bumper-pulse.svg`, and `bumper-armor.svg`.
+- Wired `drawBumpers()` to select the matching sprite by mechanical role while preserving the procedural glow, pulse, armor damage, and Canvas fallback.
+- Kept edge rails on their separate slim angled segment renderer; the new bumper sprites do not change collision geometry.
+- Retained the simplified HUD and enlarged 320×568 table from the previous pass.
+
+### Verification notes
+
+- Extracted JavaScript passes `node --check`.
+- `git diff --check`, offline scan, bumper asset dispatch, HUD relocation, maximum-table, and angled one-way rail assertions pass.
+- SVG files exist locally and remain dependency-free.
