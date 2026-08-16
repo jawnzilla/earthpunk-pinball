@@ -2259,6 +2259,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: detail rail `28px`, CTA `y=429..481`, no horizontal overflow.
 - Exact 390×844: detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
-- Selected-node tooltip updates to `FLOODED SLUICE · LEFT CHUTE` without committing a route.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `74ddd68`; hosted verification confirmed compact `NOW · GENERATOR · TAP OPEN NODE` copy, selected `FLOODED SLUICE · LEFT CHUTE` copy, 28px detail rail, CTA reachability, and no horizontal overflow.
 - Physical-device route UX testing remains pending.
