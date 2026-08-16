@@ -1999,5 +1999,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: shell marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Hosted shell asset verification pending deployment.
+- Pages workflow succeeded for `e4acf37`; hosted verification confirmed `table-shell.svg`, `side-guard.svg`, `meter-rail.svg`, `drain-trough.svg`, all 20 authored SVG requests, `1004px / 568px` 320×568 modal scroll, `1098px / 844px` 390×844 modal scroll, responsive map caps, and no horizontal overflow.
 - Physical-device feel testing remains pending.
