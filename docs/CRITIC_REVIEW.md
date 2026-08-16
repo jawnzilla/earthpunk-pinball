@@ -35,3 +35,4 @@
 - Pass 28: replaced the flat route list with a compact risk-coded route map and locked high-reward node.
 - Pass 29: made route history persistent and Surface Vault a real Charge-gated reward branch.
 - Physics pass: added four test presets and separated muted surface rebound from bumper rebound.
+- Physics reach pass: added first-contact upward escape, repeat-kick lock, and live peak/launch telemetry.

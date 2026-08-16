@@ -88,6 +88,7 @@
     .preset-row button { min-height: 30px; padding: 4px 6px; border: 1px solid #648274; border-radius: 6px; color: #dce8d4; background: #1d2d2e; font-size: 9px; letter-spacing: .04em; }
     .preset-row button:hover, .preset-row button:focus-visible { border-color: #f1b35b; color: #ffd083; }
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
+    .physics-readout { margin-top: 8px; padding: 6px 7px; border-left: 2px solid #f1b35b; color: #b5d3a1; background: rgba(241,179,91,.06); font-size: 10px; line-height: 1.35; font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
@@ -122,6 +123,7 @@
     <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft">SOFT</button><button type="button" data-preset="balanced">BALANCED</button><button type="button" data-preset="reach">HIGH REACH</button><button type="button" data-preset="pop">POP</button></div>
+    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Last launch: —</div>
   </section>
 <script>
 (() => {
@@ -145,18 +147,19 @@
   const touchButtons = { left: document.querySelector('#touch-left'), right: document.querySelector('#touch-right') };
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82 };
+  const physicsReadout = document.querySelector('#physics-readout');
+  const debugConfig = { gravity: .08, activeKick: 12, activeEscape: 2.8, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82, profile: 'CUSTOM' };
   const physicsPresets = {
-    soft: { gravity: .075, activeKick: 12, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
-    balanced: { gravity: .09, activeKick: 12, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
-    reach: { gravity: .105, activeKick: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
-    pop: { gravity: .115, activeKick: 14, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
+    soft: { gravity: .075, activeKick: 12, activeEscape: 2.2, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
+    balanced: { gravity: .09, activeKick: 12, activeEscape: 2.8, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
+    reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
+    pop: { gravity: .115, activeKick: 14, activeEscape: 4, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); if (state) state.maxSpeed = debugConfig.maxSpeed; }
-  debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); syncTuningControls(); }));
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Last launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
-    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
+    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
   }));
   const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
   const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
@@ -206,7 +209,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -219,6 +222,7 @@
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
     state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108, cradleSide: null, elementEffects: {} };
+    state.peakY = state.ball.y; state.lastLaunchSpeed = Math.hypot(state.ball.vx, state.ball.vy);
     state.launched = true;
   }
   function updateHud() {
@@ -235,6 +239,7 @@
     const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
     elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
+    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Last launch: ${state.lastLaunchSpeed.toFixed(2)}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
@@ -356,6 +361,7 @@
     const routeGravity = state.routeModifier === 'Water' ? debugConfig.gravity * .72 : state.routeModifier === 'Earth' ? debugConfig.gravity * 1.08 : debugConfig.gravity;
     b.vy += routeGravity; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
+    state.peakY = Math.min(state.peakY, b.y);
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
     const wallRebound = Math.max(0, Math.min(1, debugConfig.surfaceRebound));
     if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * wallRebound; }
@@ -371,8 +377,10 @@
     const leftRestitution = input.left ? (Math.abs(flippers.left.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const rightRestitution = input.right ? (Math.abs(flippers.right.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const launchKick = debugConfig.activeKick * (state.routeModifier === 'Fire' ? 1.28 : state.routeModifier === 'Air' ? 1.12 : 1);
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? launchKick : debugConfig.contactSeparation);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? launchKick : debugConfig.contactSeparation);
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
+    const freshActiveHit = (leftHit && input.left && !state.flipperContacts.left) || (rightHit && input.right && !state.flipperContacts.right);
+    if (freshActiveHit) { b.vy = Math.min(b.vy, -debugConfig.activeEscape); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); }
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');

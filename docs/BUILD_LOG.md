@@ -1304,3 +1304,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - All four preset objects, bumper-only rebound channel, preset synchronization, and Active kick `12` assertions pass.
 - Offline scan and `git diff --check` pass.
 - Source verification does not replace real-device feel testing; compare the four profiles on the hosted build.
+
+## 2026-08-16 — Physics pass: first-contact launch and reach telemetry
+
+### Implemented
+
+- Added preset-specific `activeEscape` upward velocity floors: `2.2`, `2.8`, `3.4`, and `4.0` from Soft through Pop.
+- Full active flipper kick now applies only on the first frame of continuous contact; held contact uses muted separation instead of repeated energy injection.
+- Added Tune telemetry for active profile, highest ball height reached, and last launch speed.
+- Preserved muted passive surfaces, bumper-only rebound, and Active kick `12` in the normal profiles.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Telemetry, escape profiles, first-contact lock, bumper-only rebound, Active kick, offline scan, and `git diff --check` assertions pass.
+- Real-device feel remains the final tuning gate; use the telemetry to compare upper-bumper reach rather than slider position alone.
