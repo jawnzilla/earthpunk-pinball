@@ -1949,4 +1949,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 after node selection: cue `y=489..511`, detail `y=517..555`, both visible; map `444px` scroll content / `190px` viewport; no horizontal overflow.
 - Exact 390×844: map remains `292px`, cue and detail remain visible, card bottom `828px`, no horizontal overflow.
 - `node --check`, `git diff --check`, offline, cue visibility, node-feedback visibility, and responsive-cascade assertions pass.
+- Pages workflow succeeded for `bdbc449`; hosted verification confirmed 320×568 cue/detail visibility, `drain-trough.svg`, `190px` short-phone map viewport, `292px` 390×844 map viewport, and no horizontal overflow.
 - Physical-device feel testing remains pending.
