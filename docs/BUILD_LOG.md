@@ -1530,3 +1530,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - Default POP state, active preset state, POP Active kick `12`, angle helper usage, old upward-only path removal, bounded aim, first-contact lock, held separation, syntax, offline, and `git diff --check` assertions pass.
 - Deterministic active-angle probe: left `(-0.479, -0.878)`, right `(0.479, -0.878)`; lateral components mirror and both vectors point upward.
+
+## 2026-08-16 — Surface Vault identity pass
+
+### Implemented
+
+- Surface Vault now applies a distinct `reward` table kind instead of reusing `free`.
+- Added signal-violet reward-route styling with focus/hover treatment.
+- Added the in-table identity plate `SURFACE VAULT // SIGNAL OPEN`.
+- Preserved the upper-bank or `4 Charge` unlock predicate, doubled salvage, no-threat behavior, POP default, angle-driven launches, and route transaction semantics.
+
+### Verification notes
+
+- Reward kind, reward identity, reward CSS, unlock predicate, route transaction, POP default, angle launch, syntax, offline, and `git diff --check` assertions pass.

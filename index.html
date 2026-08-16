@@ -67,6 +67,9 @@
     .choices button:active { background: #38524e; transform: translateY(1px); }
     .choices button[data-kind="boss"] { border-color: #ef8b45; background: linear-gradient(110deg, #4a3029, #211d20); }
     .choices button[data-kind="free"] { border-color: #67c8d5; background: linear-gradient(110deg, #23464b, #1d2d2e); }
+    .choices button[data-kind="reward"] { border-color: #c6a7ef; background: linear-gradient(110deg, rgba(198,167,239,.2), #1d2d2e 72%); box-shadow: inset 0 1px rgba(255,255,255,.1), 0 0 14px rgba(198,167,239,.12); }
+    .choices button[data-kind="reward"] strong { color: #e5d8ff; }
+    .choices button[data-kind="reward"]:hover, .choices button[data-kind="reward"]:focus-visible { border-color: #e5d8ff; box-shadow: 0 0 20px rgba(198,167,239,.34), inset 0 0 18px rgba(159,212,192,.08); }
     .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
     .route-map { position: relative; display: grid; gap: 8px; padding: 8px 4px; }
     .route-map::before { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(-8deg); }
@@ -176,7 +179,7 @@
     { id: 'flooded-sluice', kind: 'free', element: 'Water', title: 'Flooded sluice', text: 'Free pass: collect resources without stability loss.', apply: s => { s.routeModifier = 'Water'; s.tableKind = 'free'; s.tableLabel = 'FREE PASS'; } },
     { id: 'ember-lift', kind: 'hazard', element: 'Fire', title: 'Ember lift', text: 'Hazard route: hotter launches, richer salvage, no safety net.', apply: s => { s.routeModifier = 'Fire'; s.tableKind = 'hazard'; s.tableLabel = 'HAZARD'; s.salvageBonus += .25; } },
     { id: 'reactor-warden', kind: 'boss', element: 'Earth', title: 'Reactor Warden', text: 'Boss route: break three armor cores before the descent clears.', apply: s => { s.routeModifier = 'Earth'; s.tableKind = 'boss'; s.tableLabel = 'BOSS'; s.bossHits = 0; s.stability = Math.min(s.stabilityMax, s.stability + 1); } },
-    { id: 'surface-vault', kind: 'reward', element: 'Air', title: 'Surface Vault', text: 'Reward route: upper-bank breach or 4 Charge opens the vault. No threat, doubled salvage.', unlock: s => s.topHits > 0 || s.charge >= 4, apply: s => { s.routeModifier = 'Water'; s.tableKind = 'free'; s.tableLabel = 'REWARD'; s.salvageBonus += .5; s.charge += 2; } }
+    { id: 'surface-vault', kind: 'reward', element: 'Air', title: 'Surface Vault', text: 'Reward route: upper-bank breach or 4 Charge opens the vault. No threat, doubled salvage.', unlock: s => s.topHits > 0 || s.charge >= 4, apply: s => { s.routeModifier = 'Water'; s.tableKind = 'reward'; s.tableLabel = 'REWARD'; s.salvageBonus += .5; s.charge += 2; } }
   ];
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
   const W = canvas.width, H = canvas.height;
@@ -440,9 +443,9 @@
     const upper = getUpperBumpers(); if (!upper.length) return; const y = Math.min(...upper.map(item => item.y)); const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'UPPER BANK ONLINE · 1/1' : 'UPPER BANK TARGET · REACH 1', 50, bandTop + 13); ctx.restore();
   }
   function drawTableIdentity() {
-    const color = state.tableKind === 'boss' ? '#ef8b45' : state.tableKind === 'free' ? '#67c8d5' : '#f1b35b';
+    const color = state.tableKind === 'boss' ? '#ef8b45' : state.tableKind === 'reward' ? '#c6a7ef' : state.tableKind === 'free' ? '#67c8d5' : '#f1b35b';
     ctx.save(); ctx.fillStyle = 'rgba(7,13,15,.72)'; ctx.fillRect(92, 112, W - 184, 22); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(92, 112, W - 184, 22);
-    ctx.fillStyle = color; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(state.tableKind === 'boss' ? `REACTOR WARDEN // CORES ${state.bossHits}/3` : state.tableKind === 'free' ? 'FLOODED SLUICE // RESOURCE RECOVERY' : 'GENERATOR NETWORK // ROUTE MAPPING', W / 2, 127); ctx.restore();
+    ctx.fillStyle = color; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(state.tableKind === 'boss' ? `REACTOR WARDEN // CORES ${state.bossHits}/3` : state.tableKind === 'reward' ? 'SURFACE VAULT // SIGNAL OPEN' : state.tableKind === 'free' ? 'FLOODED SLUICE // RESOURCE RECOVERY' : 'GENERATOR NETWORK // ROUTE MAPPING', W / 2, 127); ctx.restore();
   }
   function drawBoss() {
     const boss = state.layout.boss; const color = state.boss.exposed ? '#ef8b45' : '#67c8d5'; const pulse = 2 + Math.sin(state.pulse * 2) * 2;
