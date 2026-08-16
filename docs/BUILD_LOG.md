@@ -1454,3 +1454,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check` passes for the extracted game script.
 - Active styling, accessibility markers, preset toggling, Custom clearing, telemetry, physics preservation, offline scan, and `git diff --check` assertions pass.
+
+## 2026-08-16 — Corrective boss progression pass: consume boss route target
+
+### Implemented
+
+- Reactor Warden is now a one-stage route encounter.
+- `beginNextRoute()` consumes `reactor-warden` after selecting the boss layout and clears `routeTarget`.
+- The following descent uses the normal layout unless the player explicitly chooses Reactor Warden again.
+- Added a `100vh` fallback to the decision card's mobile height constraint.
+- Preserved the transactional route snapshot and physics tuning contracts.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- One-stage boss, target consumption, normal-layout fallback, mobile card fallback, route transaction, physics, offline, and `git diff --check` assertions pass.

@@ -44,3 +44,4 @@
 - Progression pass: upper-bank reach now unlocks Surface Vault; 4 Charge remains the fallback.
 - Corrective progression pass: route effects now commit only after module confirmation; Change route restores the snapshot.
 - Physics UX pass: preset buttons now expose selected state and clear to Custom on slider edits.
+- Corrective boss progression pass: Reactor Warden is consumed after one stage; the next table returns to normal unless reselected.
