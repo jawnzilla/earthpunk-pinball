@@ -1621,3 +1621,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted inline JavaScript passes `node --check`.
 - Static assertions pass for Pulse barrier removal, held-element hinge fill, persistent route strip, non-interactive pre-level map, route-menu removal, and offline safety.
 
+## 2026-08-16 — Loop visual/UX pass: authored route core and compact controls
+
+- Compressed the mobile HUD: removed the prototype subtitle, shortened stage/route labels, and replaced the instructional footer with an icon-led `FLIP · TAP OR HOLD` cue.
+- Reworked touch controls into custom symbol-first buttons with accessible labels, depth shadows, pressed states, and mirrored flipper glyphs.
+- Replaced the flat top reactor rectangle with a procedural route-core panel: layered metal gradient, scanline ribs, rivets, dual bioluminescent conduit traces, indicator lamps, and a custom core title.
+- Added authored bumper detail: rotating elemental teeth, central energy cores, and layered material rings while preserving the existing collision behavior.
+- Rebuilt salvage targets as octagonal industrial plates with cross-braces, inset cores, and elemental edge glow; removed the old square `+1` tokens.
+- Reduced duplicate Canvas HUD copy: the board retains progress bars and combo feedback while DOM owns score/charge/salvage/status labels.
+
+### Verification notes
+
+- Extracted inline JavaScript passes `node --check`.
+- `git diff --check` passes.
+- Offline scan, compact-HUD assertions, icon-control assertions, reactor-detail assertions, and bumper-detail assertions pass.
+- Public gameplay verification and mobile visual review remain required after Pages deployment.
+

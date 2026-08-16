@@ -14,7 +14,9 @@
     header { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
     header > div:first-child { min-width: 0; }
     h1 { margin: 0; color: #f1b35b; font-size: clamp(18px, 5vw, 25px); letter-spacing: .12em; text-transform: uppercase; }
-    .subtitle { margin: 3px 0 0; color: #87a39b; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .brand-mark { display: inline-grid; place-items: center; width: 21px; height: 21px; margin-right: 3px; border: 1px solid #9fd4c0; border-radius: 5px; color: #9fd4c0; font-size: 12px; transform: rotate(45deg); }
+    .brand-mark::first-letter { transform: rotate(-45deg); }
+    .subtitle { display: none; }
     .status { min-width: 0; flex: 0 1 auto; text-align: right; color: #c4d2bd; font-size: 12px; line-height: 1.45; }
     @media (max-width: 360px) {
       main { padding-left: 8px; padding-right: 8px; gap: 7px; }
@@ -42,8 +44,11 @@
       canvas { width: min(100%, calc((100dvh - 142px) * .5625)); height: auto; max-width: 100%; max-height: 100%; }
     }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .touch-control { min-height: 48px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08); }
-    .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(1px); }
+    .touch-control { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
+    .touch-control .flipper-symbol { color: #ffd083; font-size: 21px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
+    .touch-label { color: #9fb5a7; font-size: 10px; font-weight: 900; letter-spacing: .16em; }
+    .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(2px); box-shadow: inset 0 1px rgba(255,255,255,.35), 0 2px 0 #0b1112; }
+    .touch-control.is-pressed .flipper-symbol, .touch-control:active .flipper-symbol, .touch-control.is-pressed .touch-label, .touch-control:active .touch-label { color: #101518; text-shadow: none; }
     button:hover { filter: brightness(1.08); }
     button:focus-visible { outline: 3px solid #9fd4c0; outline-offset: 3px; }
     footer { color: #87a39b; text-align: center; font-size: 12px; letter-spacing: .03em; }
@@ -109,7 +114,7 @@
 <body>
   <main>
     <header>
-      <div><h1>Deadlight</h1><p class="subtitle">Earthpunk pinball // prototype 01</p></div>
+      <div><h1><span class="brand-mark" aria-hidden="true">◈</span> Deadlight</h1><p class="subtitle">Earthpunk pinball // prototype 01</p></div>
       <div class="status"><strong id="stage">BOOT</strong><br><span id="message">Keep the probe alive.</span></div>
     </header>
     <section class="run-hud" aria-label="Run status">
@@ -119,8 +124,8 @@
     </section>
     <section class="route-strip" id="route-strip" aria-label="Branching route structure" hidden></section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
-    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button">◀ Lift left</button><button class="touch-control" id="touch-right" type="button">Lift right ▶</button></div>
-    <footer><b>Touch left/right</b> to work the flippers · keyboard: A / D or ← / →</footer>
+    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span><span class="touch-label">LIFT</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="touch-label">LIFT</span><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
+    <footer><span aria-hidden="true">◀</span> FLIP <span aria-hidden="true">·</span> TAP OR HOLD <span aria-hidden="true">·</span> <span aria-hidden="true">▶</span></footer>
   </main>
   <div class="overlay" id="overlay" hidden>
     <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
@@ -255,9 +260,9 @@
     state.launched = true;
   }
   function updateHud() {
-    stageEl.textContent = state.running ? `DESCENT ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · STABILITY ${state.stability}/${state.stabilityMax}` : (state.stability > 0 ? `DESCENT ${state.stage}/${state.stageCount} · RECOVERED` : 'COLLAPSE');
-    messageEl.textContent = state.message;
-    routeStatus.textContent = `ROUTE ${state.stage}/${state.stageCount} · ${state.layout.name} · ${state.tableLabel}`;
+    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · ${state.stability}/${state.stabilityMax}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
+    messageEl.textContent = state.message.replace('Read the route map, then enter the descent.', 'READY').replace('Descent mapped. Choose a modification.', 'OBJECTIVES CLEAR');
+    routeStatus.textContent = `R${state.stage}/${state.stageCount} · ${state.layout.name}`;
     scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
     const progress = Math.round(((state.stage - 1 + state.targets / targets.length) / state.stageCount) * 100);
     progressFill.style.width = `${Math.max(0, Math.min(100, progress))}%`;
@@ -460,12 +465,12 @@
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawReachBand() {
-    const upper = getUpperBumpers(); if (!upper.length) return; const y = Math.min(...upper.map(item => item.y)); const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'UPPER BANK ONLINE · 1/1' : 'UPPER BANK TARGET · REACH 1', 50, bandTop + 13); ctx.restore();
+    const upper = getUpperBumpers(); if (!upper.length) return; const y = Math.min(...upper.map(item => item.y)); const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'BANK ONLINE' : 'BANK TARGET', 50, bandTop + 13); ctx.restore();
   }
   function drawTableIdentity() {
     const color = state.tableKind === 'boss' ? '#ef8b45' : state.tableKind === 'reward' ? '#c6a7ef' : state.tableKind === 'free' ? '#67c8d5' : '#f1b35b';
     ctx.save(); ctx.fillStyle = 'rgba(7,13,15,.72)'; ctx.fillRect(92, 112, W - 184, 22); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(92, 112, W - 184, 22);
-    ctx.fillStyle = color; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(state.tableKind === 'boss' ? `REACTOR WARDEN // CORES ${state.bossHits}/3` : state.tableKind === 'reward' ? 'SURFACE VAULT // SIGNAL OPEN' : state.tableKind === 'free' ? 'FLOODED SLUICE // RESOURCE RECOVERY' : 'GENERATOR NETWORK // ROUTE MAPPING', W / 2, 127); ctx.restore();
+    ctx.fillStyle = color; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(state.tableKind === 'boss' ? 'WARDEN' : state.tableKind === 'reward' ? 'VAULT' : state.tableKind === 'free' ? 'SLUICE' : 'CORE', W / 2, 127); ctx.restore();
   }
   function drawBoss() {
     const boss = state.layout.boss; const color = state.boss.exposed ? '#ef8b45' : '#67c8d5'; const pulse = 2 + Math.sin(state.pulse * 2) * 2;
@@ -495,21 +500,29 @@
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(42, H - 43); ctx.lineTo(156, H - 43); ctx.moveTo(204, H - 43); ctx.lineTo(W - 42, H - 43); ctx.stroke();
     ctx.restore();
   }
+  function drawRivet(x, y, color = '#789487') { ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fillStyle = '#0b1315'; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.stroke(); }
   function drawReactor() {
-    const reactor = ctx.createLinearGradient(62, 54, 62, 102); reactor.addColorStop(0, '#3a5b52'); reactor.addColorStop(1, '#172827');
-    ctx.fillStyle = reactor; ctx.fillRect(62, 54, W - 124, 48); ctx.strokeStyle = '#8da895'; ctx.lineWidth = 2; ctx.strokeRect(62, 54, W - 124, 48);
-    ctx.fillStyle = '#f1b35b'; ctx.font = 'bold 11px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('SURFACE SIGNAL // MAP THE ROUTE', W / 2, 82);
-    ctx.fillStyle = '#b5d3a1'; [70, W - 70].forEach(x => { ctx.beginPath(); ctx.arc(x, 78, 4, 0, Math.PI * 2); ctx.fill(); });
+    const panelX = 52, panelY = 46, panelW = W - 104, panelH = 66;
+    ctx.save();
+    const panel = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH); panel.addColorStop(0, '#3d6157'); panel.addColorStop(.52, '#203b38'); panel.addColorStop(1, '#111d20');
+    ctx.fillStyle = panel; ctx.beginPath(); ctx.roundRect(panelX, panelY, panelW, panelH, 7); ctx.fill(); ctx.strokeStyle = '#8da895'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = 'rgba(159,212,192,.32)'; ctx.lineWidth = 1; for (let y = panelY + 12; y < panelY + panelH - 5; y += 9) { ctx.beginPath(); ctx.moveTo(panelX + 10, y); ctx.lineTo(panelX + panelW - 10, y); ctx.stroke(); }
+    [panelX + 9, panelX + panelW - 9, W / 2 - 42, W / 2 + 42].forEach(x => drawRivet(x, panelY + 9, '#b5d3a1'));
+    ctx.strokeStyle = '#67c8d5'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(panelX + 22, panelY + 43); ctx.bezierCurveTo(panelX + 58, panelY + 23, panelX + 74, panelY + 57, W / 2 - 18, panelY + 38); ctx.bezierCurveTo(W / 2 + 18, panelY + 19, panelX + panelW - 74, panelY + 58, panelX + panelW - 22, panelY + 39); ctx.stroke();
+    ctx.strokeStyle = '#c6a7ef'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(panelX + 22, panelY + 47); ctx.bezierCurveTo(panelX + 58, panelY + 27, panelX + 74, panelY + 61, W / 2 - 18, panelY + 42); ctx.bezierCurveTo(W / 2 + 18, panelY + 23, panelX + panelW - 74, panelY + 62, panelX + panelW - 22, panelY + 43); ctx.stroke();
+    ctx.fillStyle = '#f1b35b'; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('DEADLIGHT // ROUTE CORE', W / 2, panelY + 23);
+    ctx.fillStyle = '#b5d3a1'; [panelX + 18, panelX + panelW - 18].forEach(x => { ctx.beginPath(); ctx.arc(x, panelY + 23, 4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.restore();
   }
   function drawTargets() {
     targets.forEach(t => {
-      const pulse = 4 + Math.sin(state.pulse + t.x) * 2, color = t.hit ? '#526e63' : elementColors[t.element];
+      const pulse = 3 + Math.sin(state.pulse * 1.4 + t.x) * 2, color = t.hit ? '#526e63' : elementColors[t.element];
       ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(Math.PI / 4);
-      ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(-t.r - 5, -t.r - 3, (t.r + 5) * 2, (t.r + 5) * 2);
-      ctx.fillStyle = color; ctx.fillRect(-t.r - pulse, -t.r - pulse, (t.r + pulse) * 2, (t.r + pulse) * 2);
-      ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fillRect(-t.r, -t.r, t.r * 2, t.r * 2);
-      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.strokeRect(-t.r, -t.r, t.r * 2, t.r * 2);
-      ctx.fillStyle = '#182226'; ctx.rotate(-Math.PI / 4); ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', 0, 3); ctx.restore();
+      ctx.fillStyle = 'rgba(0,0,0,.48)'; ctx.fillRect(-t.r - 6, -t.r - 6, (t.r + 6) * 2, (t.r + 6) * 2);
+      ctx.beginPath(); for (let side = 0; side < 8; side += 1) { const a = side * Math.PI / 4; const radius = side % 2 ? t.r * .9 : t.r * 1.12; const x = Math.cos(a) * (radius + pulse * .25), y = Math.sin(a) * (radius + pulse * .25); side === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fillStyle = color; ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.rotate(-Math.PI / 4); ctx.beginPath(); ctx.moveTo(-t.r * .62, 0); ctx.lineTo(t.r * .62, 0); ctx.moveTo(0, -t.r * .62); ctx.lineTo(0, t.r * .62); ctx.strokeStyle = t.hit ? '#789487' : color; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, 0, Math.max(3, t.r * .24), 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#314f4a' : '#f4f0d5'; ctx.fill(); ctx.strokeStyle = color; ctx.stroke();
+      ctx.restore();
     });
   }
   function drawBumpers() {
@@ -517,7 +530,9 @@
       const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const element = item.element || 'Earth'; const outer = pulse ? elementColors[element] : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.save(); ctx.translate(item.x, item.y); ctx.rotate(state.pulse * .12); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.globalAlpha = .8; for (let tooth = 0; tooth < 8; tooth += 1) { ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(item.r - 2, 0); ctx.lineTo(item.r + 5, 0); ctx.stroke(); } ctx.restore();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * .25); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(item.x, item.y, Math.max(4, item.r * .28), 0, Math.PI * 2); ctx.fillStyle = elementColors[element]; ctx.globalAlpha = .8; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = '#e9f1df'; ctx.lineWidth = 1; ctx.stroke();
       if (armor) { ctx.beginPath(); ctx.arc(item.x, item.y, item.r - 5, 0, Math.PI * 2); ctx.strokeStyle = item.hits ? '#f1b35b' : '#b5d3a1'; ctx.lineWidth = item.hits ? 3 : 1; ctx.stroke(); if (item.hits) { ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); } }
     });
   }
@@ -563,12 +578,9 @@
     ctx.textBaseline = 'alphabetic';
   }
   function drawMeters() {
-    ctx.textAlign = 'left'; ctx.font = 'bold 13px Trebuchet MS'; ctx.fillStyle = '#c4d2bd'; ctx.fillText(`CHARGE ${Math.floor(state.charge)}`, 34, 124); ctx.fillText(`SALVAGE ${state.targets}/${targets.length}`, 220, 124);
-    if (state.combo > 1) { ctx.fillStyle = '#ffd083'; ctx.font = 'bold 11px Trebuchet MS'; ctx.fillText(`CHAIN x${(1 + (state.combo - 1) * .25).toFixed(2)}`, 34, 151); }
-    const imprintText = Object.entries(state.ball.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element.toUpperCase()} ${effect.stacks}`).join(' · ');
-    if (imprintText) { ctx.fillStyle = '#d7e8d0'; ctx.font = 'bold 10px Trebuchet MS'; ctx.fillText(`IMPRINT ${imprintText}`, 34, 166); }
     ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);
     ctx.fillStyle = '#f1b35b'; ctx.fillRect(34, 130, Math.min(130, state.charge * 13), 7); ctx.fillStyle = '#c56d49'; ctx.fillRect(220, 130, 106 * (state.targets / targets.length), 7);
+    if (state.combo > 1) { ctx.fillStyle = '#ffd083'; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(`CHAIN ×${(1 + (state.combo - 1) * .25).toFixed(2)}`, 34, 151); }
   }
   function drawEffects() {
     state.effects.forEach(effect => {
