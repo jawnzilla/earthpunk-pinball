@@ -2164,5 +2164,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Focused swept-contact regression: crossing trajectory detected; crossing contact point found; non-contact trajectory ignored.
 - Live 320×568 smoke test rendered the active table with no console-visible failure, `430px` Canvas, and no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `8204c36`; hosted verification confirmed `sweptSegmentContact`, ball depth cues, five route lanes, map sizes `350px` / `292px`, CTA reachability, and no horizontal overflow.
 - Physical-device tip-contact testing remains pending.
