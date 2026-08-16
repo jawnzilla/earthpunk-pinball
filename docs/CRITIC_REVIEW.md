@@ -52,6 +52,7 @@
 - Loop 15 follow-up: replaced the repeated lower edge/flipper machinery gear-and-line treatment with authored `lower-edge-machinery.svg`; retained drain, stability, dynamic accent lamps, and procedural fallback.
 - Loop 16 route UX pass: reduced the pre-descent surface to a symbol-only portrait map, current-node tooltip, legend, and CTA; removed the legacy route strip from layout and added compact collision-vs-shell HUD symbols.
 - Loop 16 flipper pass: leveled both rest blades and extended the collision-enabled flipper segments to 104 canvas units with width 17 to reduce center-drain misses.
+- Loop 17 visual pass: replaced the flat table identity rectangle with authored `table-identity.svg`, retaining dynamic route-kind color and label while preserving the procedural fallback.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.
