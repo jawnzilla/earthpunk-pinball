@@ -1099,6 +1099,27 @@ A later time-of-impact experiment reintroduced ball rewinding plus remaining-fra
 - No-rewind, center-drain, moving-flipper, and respawn assertions are present.
 - `git diff --check` passes.
 
+## 2026-08-14 — Prototype 53: rollback flipper and impact mechanics
+
+### Player correction
+
+The moving-flipper sweep and layered contact-response revisions continued to produce false drain transitions and visible collision instability. The last simple flipper model was the pre-sweep implementation from `f25ff97`.
+
+### Implemented
+
+- Restored the simple closest-point segment collision solver.
+- Removed moving-blade interpolation and time-of-impact handling.
+- Removed contact-state kick/escape layering from flipper response.
+- Restored fixed flipper restitution and direct active/passive kick values.
+- Reduced bumper restitution to the earlier controlled range.
+- Preserved current layouts, upgrades, elemental reactions, UI, and center-only drain detection.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Sweep, rewind, remaining-frame, and screen-transform assertions pass.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link

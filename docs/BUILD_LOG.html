@@ -13,7 +13,7 @@
 <main class="wrap">
 <header class="hero">
 <div><div class="eyebrow">Meta Horizon Creator Competition // Game Prototype</div><h1>DEADLIGHT</h1><p>An Earthpunk industrial pinball survival roguelike. Launch the probe, route salvage through unstable machinery, buy a build between descents, and reach the surface signal.</p><div class="actions"><a class="button" href="../index.html">Open playable build</a><a class="button alt" href="https://jawnzilla.github.io/earthpunk-pinball/">Open hosted build</a></div></div>
-<div class="hero-card"><strong>Prototype 52</strong><span>Current deployed slice · 2026-08-14</span><hr><span>Genre: Survival &amp; Resource Management</span><br><span>Platform: portrait HTML5 Canvas · single-player · offline-safe</span></div>
+<div class="hero-card"><strong>Prototype 53</strong><span>Current deployed slice · 2026-08-14</span><hr><span>Genre: Survival &amp; Resource Management</span><br><span>Platform: portrait HTML5 Canvas · single-player · offline-safe</span></div>
 </header>
 <section class="grid">
 <article class="card"><div class="metric">3</div><h3>Descent layouts</h3><p>Generator Well, Pulse Manifold, and Split Reactor each have distinct target banks, bumper fields, and relay routing.</p></article>
@@ -40,6 +40,7 @@
 <article class="event"><time>Prototype 48</time><h3>Resolve at the present frame</h3><p>Separated sweep detection from collision resolution, projecting the ball’s current position onto the current blade and recovering invalid trajectories through the normal Stability/respawn path.</p></article>
 <article class="event"><time>Prototype 49</time><h3>Bound the correction</h3><p>Limited positional separation to near-blade contacts so distant swept hits change velocity without teleporting the ball or making the playfield appear to shake.</p></article>
 <article class="event"><time>Prototype 52</time><h3>Remove rewind-based resolution</h3><p>Removed the later time-of-impact rewind experiment, restored center-only drain detection, and made moving flippers resolve velocity without repositioning the ball.</p></article>
+<article class="event"><time>Prototype 53</time><h3>Rollback flipper and impact mechanics</h3><p>Restored the last simple closest-point flipper solver and controlled bumper restitution while preserving the current game content and center-only drain rule.</p></article>
 </section>
 <h2 class="section-title">Hackathon readiness checklist</h2>
 <section class="checklist">
