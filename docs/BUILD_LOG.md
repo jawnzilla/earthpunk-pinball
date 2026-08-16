@@ -1961,5 +1961,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: authored meter marker present, `190px` short-phone route map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
-- Hosted meter asset verification pending deployment.
+- Pages workflow succeeded for `c77cfd3`; hosted verification confirmed `meter-rail.svg`, `drain-trough.svg`, all 18 authored SVG requests, `190px` 320×568 map cap, `292px` 390×844 map, `828px` card bottom, and no horizontal overflow.
 - Physical-device feel testing remains pending.
