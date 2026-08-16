@@ -1726,3 +1726,15 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, offline scan, sprite-reference, cheat, edge-bumper, route-lock, and compact-overlay assertions pass.
 - Hosted 320×568 smoke remains at controls bottom `565.39px` with no horizontal overflow.
 - Published asset requests for Warden and edge pod verified; probe-ball request will be verified after this deployment.
+
+## 2026-08-16 — Loop 4 corrective pass: open table top and slim one-way wall bumpers
+
+- Replaced the opaque `DEADLIGHT // ROUTE CORE` panel with a thin animated conduit rail and small central node. The previous 66px slab no longer blocks the table’s upper playfield.
+- Moved edge bumpers from the flipper funnel to wall-mounted positions around `y=388` and `y=446`.
+- Reduced edge bumper radii to `8–9px`; their render is now a slim vertical wall profile rather than a full circular obstacle.
+- Made the upper left/right edge bumpers one-way: descending contact from above gets bumper rebound; contact from below uses muted wall rebound and does not award bumper effects or score.
+- Kept the maximum safe short-phone Canvas budget and 52px controls unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, offline scan, reactor-rail, bumper-position, one-way-response, slim-render, sprite, and route-lock assertions pass.

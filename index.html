@@ -228,10 +228,10 @@
   ];
   const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: null, barrierNote: 'Upper relay barrier removed; keep the lower approach open.', boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
   const edgeBumpers = () => [
-    { id: 'edge-left-low', x: 42, y: 474, r: 14, type: 'edge', element: 'Water' },
-    { id: 'edge-right-low', x: 318, y: 474, r: 14, type: 'edge', element: 'Fire' },
-    { id: 'edge-left-lower', x: 48, y: 522, r: 13, type: 'edge', element: 'Earth' },
-    { id: 'edge-right-lower', x: 312, y: 522, r: 13, type: 'edge', element: 'Air' }
+    { id: 'edge-left-upper', x: 30, y: 388, r: 9, type: 'edge', element: 'Water', oneWay: true },
+    { id: 'edge-right-upper', x: 330, y: 388, r: 9, type: 'edge', element: 'Fire', oneWay: true },
+    { id: 'edge-left-mid', x: 30, y: 446, r: 8, type: 'edge', element: 'Earth' },
+    { id: 'edge-right-mid', x: 330, y: 446, r: 8, type: 'edge', element: 'Air' }
   ];
   levelLayouts.forEach(layout => layout.bumpers.push(...edgeBumpers()));
   bossLayout.bumpers.push(...edgeBumpers());
@@ -446,7 +446,7 @@
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
-    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; if (circleCollision(b, item, restitution)) { if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
     if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
@@ -540,16 +540,13 @@
   }
   function drawRivet(x, y, color = '#789487') { ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fillStyle = '#0b1315'; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.stroke(); }
   function drawReactor() {
-    const panelX = 52, panelY = 46, panelW = W - 104, panelH = 66;
+    const railY = 34, left = 42, right = W - 42;
     ctx.save();
-    const panel = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH); panel.addColorStop(0, '#3d6157'); panel.addColorStop(.52, '#203b38'); panel.addColorStop(1, '#111d20');
-    ctx.fillStyle = panel; ctx.beginPath(); ctx.roundRect(panelX, panelY, panelW, panelH, 7); ctx.fill(); ctx.strokeStyle = '#8da895'; ctx.lineWidth = 2; ctx.stroke();
-    ctx.strokeStyle = 'rgba(159,212,192,.32)'; ctx.lineWidth = 1; for (let y = panelY + 12; y < panelY + panelH - 5; y += 9) { ctx.beginPath(); ctx.moveTo(panelX + 10, y); ctx.lineTo(panelX + panelW - 10, y); ctx.stroke(); }
-    [panelX + 9, panelX + panelW - 9, W / 2 - 42, W / 2 + 42].forEach(x => drawRivet(x, panelY + 9, '#b5d3a1'));
-    ctx.strokeStyle = '#67c8d5'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(panelX + 22, panelY + 43); ctx.bezierCurveTo(panelX + 58, panelY + 23, panelX + 74, panelY + 57, W / 2 - 18, panelY + 38); ctx.bezierCurveTo(W / 2 + 18, panelY + 19, panelX + panelW - 74, panelY + 58, panelX + panelW - 22, panelY + 39); ctx.stroke();
-    ctx.strokeStyle = '#c6a7ef'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(panelX + 22, panelY + 47); ctx.bezierCurveTo(panelX + 58, panelY + 27, panelX + 74, panelY + 61, W / 2 - 18, panelY + 42); ctx.bezierCurveTo(W / 2 + 18, panelY + 23, panelX + panelW - 74, panelY + 62, panelX + panelW - 22, panelY + 43); ctx.stroke();
-    ctx.fillStyle = '#f1b35b'; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('DEADLIGHT // ROUTE CORE', W / 2, panelY + 23);
-    ctx.fillStyle = '#b5d3a1'; [panelX + 18, panelX + panelW - 18].forEach(x => { ctx.beginPath(); ctx.arc(x, panelY + 23, 4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = 'rgba(159,212,192,.2)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(left, railY); ctx.lineTo(right, railY); ctx.stroke();
+    ctx.strokeStyle = '#67c8d5'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(left + 8, railY); ctx.bezierCurveTo(W / 2 - 48, railY - 8, W / 2 - 30, railY + 8, W / 2, railY); ctx.bezierCurveTo(W / 2 + 30, railY - 8, W / 2 + 48, railY + 8, right - 8, railY); ctx.stroke();
+    ctx.strokeStyle = '#c6a7ef'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(left + 8, railY + 4); ctx.bezierCurveTo(W / 2 - 48, railY - 4, W / 2 - 30, railY + 12, W / 2, railY + 4); ctx.bezierCurveTo(W / 2 + 30, railY - 4, W / 2 + 48, railY + 12, right - 8, railY + 4); ctx.stroke();
+    [left, right].forEach(x => { ctx.beginPath(); ctx.arc(x, railY, 4, 0, Math.PI * 2); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); });
+    ctx.beginPath(); ctx.arc(W / 2, railY, 7 + Math.sin(state.pulse * 1.5) * 1.5, 0, Math.PI * 2); ctx.fillStyle = '#081012'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); ctx.beginPath(); ctx.arc(W / 2 - 2, railY - 2, 3, 0, Math.PI * 2); ctx.fillStyle = '#f1b35b'; ctx.fill();
     ctx.restore();
   }
   function drawTargets() {
@@ -565,6 +562,7 @@
   }
   function drawBumpers() {
     state.layout.bumpers.forEach(item => {
+      if (item.type === 'edge') { ctx.save(); const side = item.x < W / 2 ? 1 : -1; ctx.fillStyle = '#101a1c'; ctx.strokeStyle = elementColors[item.element]; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.roundRect(item.x - 3, item.y - 14, 6, 28, 3); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(item.x - 1, item.y - 8); ctx.lineTo(item.x + side * 4, item.y - 3); ctx.moveTo(item.x - 1, item.y + 8); ctx.lineTo(item.x + side * 4, item.y + 3); ctx.stroke(); if (item.oneWay) { ctx.strokeStyle = '#ffd083'; ctx.beginPath(); ctx.moveTo(item.x - side * 5, item.y); ctx.lineTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y - 3); ctx.moveTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y + 3); ctx.stroke(); } ctx.restore(); return; }
       const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const element = item.element || 'Earth'; const outer = pulse ? elementColors[element] : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
