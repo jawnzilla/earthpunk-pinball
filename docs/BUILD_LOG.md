@@ -1936,5 +1936,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map cue `SWIPE UP · MORE ROUTE`, 5 map depths, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
-- Pages workflow succeeded for `69c9e0a`; hosted 320×568 verification confirmed `drain-trough.svg`, `flipper-blade.svg`, all 17 authored SVG requests, the initial map cue, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 10 follow-up: short-phone map feedback visibility
+
+- Applied a short-phone-only portrait map cap: `#route-map-viewport` is `190px` at heights ≤600px while remaining `292px` at taller devices.
+- Clamped the short-phone route detail footer to `38px` so the map cue and selected-node feedback are visible without requiring outer-card scrolling.
+- Preserved the full `444px` internal route depth and node navigation; only the viewport presentation changes.
+
+### Verification notes
+
+- Exact 320×568 after node selection: cue `y=489..511`, detail `y=517..555`, both visible; map `444px` scroll content / `190px` viewport; no horizontal overflow.
+- Exact 390×844: map remains `292px`, cue and detail remain visible, card bottom `828px`, no horizontal overflow.
+- `node --check`, `git diff --check`, offline, cue visibility, node-feedback visibility, and responsive-cascade assertions pass.
 - Physical-device feel testing remains pending.
