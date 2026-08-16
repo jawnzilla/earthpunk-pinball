@@ -2121,3 +2121,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: `292px` map, CTA `y=428..480`, no horizontal overflow.
 - Hosted verification pending deployment.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 18 user-steered interaction and event flourish pass
+
+- Disabled text selection and the browser context menu on the game canvas so long-presses cannot select the playfield or open a menu over it.
+- Changed the flippers to symmetric 15° downward rest angles: left `+.26rad`, right `π-.26rad`; active angles and relative-contact physics remain unchanged.
+- Added animated `+points` popups that rise and fade at scored target, bumper, relay, armor, upper-bank, reaction, and boss impact locations.
+- Expanded the 320×568 route-map viewport from 190px to 350px because the map is the primary route-decision surface; the CTA remains reachable.
+- The requested entirely new route topology is queued as the next structural map pass rather than being mixed into this physics/UI correction.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: map `350px`, CTA `y=486..538`, no horizontal overflow.
+- Exact 390×844: map `292px`, CTA `y=428..480`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device feel testing remains pending.

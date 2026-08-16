@@ -55,6 +55,7 @@
 - Loop 17 visual pass: replaced the flat table identity rectangle with authored `table-identity.svg`, retaining dynamic route-kind color and label while preserving the procedural fallback.
 - Loop 18 visual pass: added authored `table-identity.svg` integration verification and confirmed the map-only route surface, HUD key, and mobile CTA remain stable.
 - Loop 18 reticle pass: replaced the cradle aim arc/ticks with authored `aim-reticle.svg`, preserving target-directed rotation and procedural fallback.
+- Loop 18 user-steered correction: disabled canvas text selection and context menus, angled mirrored flippers down 15° at rest, expanded the short-phone map viewport to 350px, and added visible score popups for target, bumper, relay, armor, upper-bank, reaction, and boss scoring events.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.

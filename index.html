@@ -9,7 +9,8 @@
     :root { color-scheme: dark; font-family: "Trebuchet MS", system-ui, sans-serif; }
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #101518; color: #e9f1df; }
-    body { display: grid; place-items: center; overflow: hidden; }
+    body { display: grid; place-items: center; overflow: hidden; user-select: none; -webkit-user-select: none; }
+    canvas { user-select: none; -webkit-user-select: none; touch-action: none; }
     main { position: relative; width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
     header { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
     header > div:first-child { min-width: 0; }
@@ -53,7 +54,7 @@
       .route-strip-node { min-width: 60px; padding: 4px 5px; }
       .route-strip-node strong { font-size: 10px; }
       .route-strip-node small { font-size: 8px; }
-      .route-map-viewport { max-height: 190px !important; }
+      .route-map-viewport { max-height: 350px !important; }
       .route-map-cue { font-size: 10px; padding: 5px 4px 3px; }
       .route-map-detail { min-height: 26px; max-height: 38px; overflow: hidden; padding: 6px 7px; font-size: 9px; }
       .card { padding: 12px; max-height: calc(100dvh - 16px); }
@@ -228,7 +229,7 @@
 <script>
 (() => {
   "use strict";
-  const canvas = document.querySelector('#game');
+  const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
   const ctx = canvas.getContext('2d');
   const stageEl = document.querySelector('#stage');
   const messageEl = document.querySelector('#message');
@@ -345,8 +346,8 @@
   ];
   const bumpers = levelLayouts[0].bumpers;
   const flippers = {
-    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: 0, active: -.52, angle: 0, angularVelocity: 0 },
-    right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI, active: Math.PI + .52, angle: Math.PI, angularVelocity: 0 }
+    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: .26, active: -.52, angle: .26, angularVelocity: 0 },
+        right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI - .26, active: Math.PI + .52, angle: Math.PI - .26, angularVelocity: 0 },
   };
   const sideGuards = [
     { x1: table.left + 8, y1: H - 95, x2: 48, y2: H - 82 },
@@ -356,7 +357,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
     cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
@@ -395,9 +396,10 @@
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1) { state.effects.push({ x, y, color, power, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
+  function emitScorePopup(x, y, value, color = '#ffd083') { if (!value || !state?.scorePops) return; state.scorePops.push({ x, y, value: `+${Math.round(value)}`, color, life: 1 }); if (state.scorePops.length > 12) state.scorePops.shift(); }
   function refreshElement(element, source = 'hinge') { const effect = state.ball.elementEffects[element] || { stacks: 0, timer: 0 }; effect.stacks = Math.min(3, effect.stacks + 1); effect.timer = 360; state.ball.elementEffects[element] = effect; state.elementalCharge[element] = Math.min(3, state.elementalCharge[element] + 1); emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15); setMessage(`${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
   function activeElement(element) { const effect = state.ball.elementEffects[element]; return effect && effect.stacks > 0 && effect.timer > 0; }
-  function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
+  function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; emitScorePopup(x, y, 15 * effect.stacks, elementColors[element]); state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
   function hingeCradle(side) { return state.ball?.cradleSide === side && input[side]; }
   function imprintFromHinge(side) { const element = state.hingeElements[side]; if (element) refreshElement(element, `${element} hinge`); }
   function decayElementEffects() { Object.entries(state.ball.elementEffects).forEach(([element, effect]) => { effect.timer -= 1; if (effect.timer <= 0) { effect.timer = 0; effect.stacks = 0; } }); }
@@ -410,13 +412,13 @@
     if (!boss || !circleCollision(ball, boss, state.boss.exposed ? .85 : 1.15)) return;
     const empowered = Object.values(ball.elementEffects).some(effect => effect.stacks > 0 && effect.timer > 0) || state.charge >= 1;
     if (state.boss.exposed && empowered) {
-      state.boss.hp -= 1; state.boss.cooldown = 120; state.boss.exposed = false; state.score += 250; state.charge = Math.min(99, state.charge + 1); state.flash = 5; emitImpact(boss.x, boss.y, '#ef8b45', 1.8); setMessage(state.boss.hp > 0 ? `Warden armor ruptured. ${state.boss.hp} core${state.boss.hp === 1 ? '' : 's'} remain.` : 'Reactor Warden disabled. Finish mapping the core.');
+      state.boss.hp -= 1; state.boss.cooldown = 120; state.boss.exposed = false; state.score += 250; emitScorePopup(boss.x, boss.y, 250, '#ef8b45'); state.charge = Math.min(99, state.charge + 1); state.flash = 5; emitImpact(boss.x, boss.y, '#ef8b45', 1.8); setMessage(state.boss.hp > 0 ? `Warden armor ruptured. ${state.boss.hp} core${state.boss.hp === 1 ? '' : 's'} remain.` : 'Reactor Warden disabled. Finish mapping the core.');
     } else {
       ball.vx *= -1.15; ball.vy = Math.abs(ball.vy) + .8; emitImpact(boss.x, boss.y, state.boss.exposed ? '#f1b35b' : '#67c8d5', .9); setMessage(state.boss.exposed ? 'Exposure wasted. Charge an elemental imprint first.' : 'Warden shield active. Wait for the exposure window.');
     }
   }
   function hitTarget(target) {
-    const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); state.score += Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
+    const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); const points = Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.score += points; emitScorePopup(target.x, target.y, points, reaction ? elementColors[target.element] : '#ffd083'); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? (state.tableKind === 'boss' ? `Armor core ${state.bossHits}/3 exposed.` : 'Descent mapped. Choose a modification.') : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
@@ -527,7 +529,7 @@
   function update() {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.topHitCooldown = Math.max(0, state.topHitCooldown - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
+    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.topHitCooldown = Math.max(0, state.topHitCooldown - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035; pop.y -= .42; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
     updateFlippers();
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = state.routeModifier === 'Water' ? debugConfig.gravity * .72 : state.routeModifier === 'Earth' ? debugConfig.gravity * 1.08 : debugConfig.gravity;
@@ -543,7 +545,7 @@
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
-    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); if (item.type === 'edge') { const segment = edgeSegment(item); if (segmentCollision(b, segment, energetic ? baseRestitution : wallRebound)) { if (item.oneWay && !energetic) return; if (energetic) { b.vx += (item.x < W / 2 ? 1 : -1) * (item.inwardForce || .5); b.vy -= item.upward || .7; capBallSpeed(b); } } return; } const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); if (item.type === 'edge') { const segment = edgeSegment(item); if (segmentCollision(b, segment, energetic ? baseRestitution : wallRebound)) { if (item.oneWay && !energetic) return; if (energetic) { b.vx += (item.x < W / 2 ? 1 : -1) * (item.inwardForce || .5); b.vy -= item.upward || .7; capBallSpeed(b); } } return; } const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitScorePopup(item.x, item.y, 75, '#ffd083'); emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitScorePopup(item.x, item.y, 10, '#f1b35b'); emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
     if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
@@ -589,7 +591,7 @@
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
     drawDeckDetails(); drawReachBand(); drawTableIdentity(); if (state.boss.active) drawBoss();
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
-    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawMeters(); drawEffects(); drawAimReticle(); drawBall();
+    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawMeters(); drawEffects(); drawScorePopups(); drawAimReticle(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawReachBand() {
@@ -729,6 +731,7 @@
       ctx.restore();
     });
   }
+  function drawScorePopups() { state.scorePops.forEach(pop => { ctx.save(); ctx.globalAlpha = Math.min(1, pop.life * 1.5); ctx.font = '900 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#081012'; ctx.strokeText(pop.value, pop.x, pop.y); ctx.fillStyle = pop.color; ctx.fillText(pop.value, pop.x, pop.y); ctx.restore(); }); }
   function drawAimReticle() {
     const b = state.ball; if (!state.running || !b?.cradleSide || !input[b.cradleSide]) return;
     const target = targets.filter(item => !item.hit).sort((a, c) => Math.hypot(a.x - b.x, a.y - b.y) - Math.hypot(c.x - b.x, c.y - b.y))[0]; if (!target) return;
