@@ -1855,4 +1855,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: card `x=16..304`, `y=19..549`; gear `x=264..298`, `y=20..54`; title begins at `y=65`.
 - Route identity now reads `Generator Well` once in the HUD.
 - `node --check`, `git diff --check`, offline, route-deduplication, modal-gear, and overflow assertions pass.
+
+## 2026-08-16 — Loop 8: authored physical route chutes
+
+- Added four local chute-mouth assets: `chute-free.svg`, `chute-hazard.svg`, `chute-boss.svg`, and `chute-reward.svg`.
+- Reworked `drawRouteChutes()` to select a physical mouth by route kind, replacing the dominant arc-plus-rectangle marker during normal asset-loaded rendering.
+- Preserved the old `LEFT/RIGHT/CENTER EXIT` text marker only as a loading fallback and retained the small chute-side label for quick orientation.
+- Kept route collision, chute positions, branch selection, and route-gate logic unchanged.
+
+### Verification notes
+
+- Extracted JavaScript passes `node --check`; `git diff --check` and offline scan pass.
+- All four chute files exist locally and are wired into `spriteImages`.
+- Exact 320×568 remains `241.875×430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
