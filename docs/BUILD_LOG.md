@@ -1899,3 +1899,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 390×844: 5 map depths, 15 nodes, no horizontal overflow; card remains inside the viewport.
 - Blackout Core test-table load shows `WARDEN 3/3 SHIELDED` and the updated objective text; source/runtime marker confirms the 72-frame exposure gate.
 - Physical-device and full manual boss playthrough testing remain pending.
+
+## 2026-08-16 — Loop 9: authored flipper blade
+
+- Added `assets/sprites/flipper-blade.svg`, a plated industrial flipper with bevel highlights, recessed inset, fasteners, and a dark mounting edge.
+- Wired `drawFlipperBlade()` to render the authored blade along the actual rotating flipper segment, preserving active glow and the procedural renderer as a load-time fallback.
+- Kept all flipper endpoints, collision geometry, relative-contact physics, input behavior, and hinge modules unchanged.
+
+### Verification notes
+
+- Extracted JavaScript passes `node --check`; `git diff --check` and offline scan pass.
+- Portrait map remains 5 depths / 15 nodes with `444px` scroll content and `292px` viewport.
+- Exact 320×568 remains `430px` Canvas height, controls bottom `565px`, and no horizontal overflow; 390×844 card remains inside the viewport.
+- Hosted flipper asset request and full SVG inventory verification pending deployment.
+- Physical-device feel testing remains pending.
