@@ -1924,5 +1924,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - Exact 320×568: initial cue visible, map `444px` scroll content / `292px` viewport, no horizontal overflow.
 - Forced end-scroll changes cue to `ROUTE DEPTH REVEALED` with the complete state.
-- `node --check`, `git diff --check`, offline, cue-state, scroll-reset, and pointer-event assertions pass.
+- `node --check`, `git diff --check`, offline, cue-state, scroll-reset, and pointer-event assertions pass; Pages workflow succeeded for `f30c398`; hosted 320×568 verification confirmed the initial cue, end-state cue, `flipper-blade.svg`, 16 authored SVG requests, `430px` Canvas height, and no horizontal overflow.
 - Physical-device feel testing remains pending.
