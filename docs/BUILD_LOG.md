@@ -2196,3 +2196,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: route-console asset loaded, feedback rail visible at `y=323..378`, CTA `y=439..491`, no horizontal overflow.
 - Pages workflow succeeded for `deb93d3`; hosted verification confirmed `route-console.svg` loaded at 320×568 and 390×844, selected-node tooltip updates, persistent legend/detail rail, CTA reachability, and no horizontal overflow.
 - Physical-device touch-scroll testing remains pending.
+
+## 2026-08-16 — Loop 21: authored touch-control panels
+
+- Added `assets/sprites/flipper-control.svg`, a custom industrial control-panel background with raised shell, indicator lamps, divider hardware, and inset rails.
+- Applied it to `#touch-left` and `#touch-right` without changing pointer/touch handlers, labels, pressed-state color feedback, or 52px touch targets.
+- Preserved the 320px active-play composition: `430px` Canvas above controls ending at `565px`.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Local screenshot confirms the authored panel treatment and bright pressed state.
+- Exact 320×568: both controls `52px` high, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device touch testing remains pending.
