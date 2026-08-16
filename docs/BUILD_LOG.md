@@ -1713,3 +1713,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 smoke: pre-descent controls bottom `565.39px`; active controls bottom `566.39px`; no overflow.
 - Cheat toggle, active debug hiding, and route-strip reflow behavior verified in-browser.
 - Pages workflow succeeded for `bb542d3`; hosted source verification confirmed cheat, edge-bumper, route-lock, compact-cost, and sprite markers. Hosted 320×568 smoke reported controls bottom `565.39px` with no horizontal overflow.
+
+## 2026-08-16 — Loop 4: probe-ball sprite and compact upgrade overlay
+
+- Added `assets/sprites/probe-ball.svg`, an authored metal probe shell with seam bands, highlight, and cyan lens detail.
+- Wired the ball sprite into `drawBall()` with a circle fallback during asset loading; trails and elemental rings remain intact.
+- Tightened the short-phone upgrade overlay: 16px card padding, 58px choice rows, smaller icon cells, and compact spacing.
+- Kept the Warden and edge-pod SVGs as reusable local assets; all three sprites remain offline-safe.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, offline scan, sprite-reference, cheat, edge-bumper, route-lock, and compact-overlay assertions pass.
+- Hosted 320×568 smoke remains at controls bottom `565.39px` with no horizontal overflow.
+- Published asset requests for Warden and edge pod verified; probe-ball request will be verified after this deployment.

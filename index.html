@@ -49,6 +49,10 @@
       .route-strip-node { min-width: 60px; padding: 4px 5px; }
       .route-strip-node strong { font-size: 10px; }
       .route-strip-node small { font-size: 8px; }
+      .card { padding: 16px; max-height: calc(100dvh - 16px); }
+      .choices { gap: 6px; margin: 10px 0; }
+      .choices button { grid-template-columns: 42px 1fr; min-height: 58px; padding: 7px 9px; }
+      .choices button .upgrade-icon { width: 36px; height: 36px; }
     }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
@@ -214,7 +218,7 @@
     { id: 'surface-vault', kind: 'reward', element: 'Air', title: 'Surface Vault', text: 'Reward route: upper-bank breach or 4 Charge opens the vault. No threat, doubled salvage.', unlock: s => s.topHits > 0 || s.charge >= 4, apply: s => { s.routeModifier = 'Water'; s.tableKind = 'reward'; s.tableLabel = 'REWARD'; s.salvageBonus += .5; s.charge += 2; } }
   ];
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
-  const spriteImages = { warden: new Image(), edgePod: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg';
+  const spriteImages = { warden: new Image(), edgePod: new Image(), ball: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg'; spriteImages.ball.src = 'assets/sprites/probe-ball.svg';
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
@@ -629,7 +633,7 @@
     activeEffects.forEach(([element, effect], index) => { ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 5 + index * 4, 0, Math.PI * 2); ctx.strokeStyle = elementColors[element]; ctx.globalAlpha = .35 + effect.stacks * .12; ctx.lineWidth = 2 + effect.stacks; ctx.stroke(); }); ctx.globalAlpha = 1;
     b.trail.forEach((point, index) => { const alpha = (index + 1) / b.trail.length * .18; ctx.beginPath(); ctx.arc(point.x, point.y, Math.max(2, b.r * (index + 1) / b.trail.length), 0, Math.PI * 2); ctx.fillStyle = `rgba(241,179,91,${alpha})`; ctx.fill(); });
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill();
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke();
+    if (spriteImages.ball.complete && spriteImages.ball.naturalWidth) { ctx.drawImage(spriteImages.ball, b.x - b.r - 2, b.y - b.r - 2, (b.r + 2) * 2, (b.r + 2) * 2); } else { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
   }
   let previousTime = 0;
   let timeAccumulator = 0;
