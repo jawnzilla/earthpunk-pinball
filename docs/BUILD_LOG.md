@@ -2274,3 +2274,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: legend `13px`, detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
 - Pages workflow succeeded for `f2fd4f5`; hosted verification confirmed `◉ NOW · ◇ OPEN · · FUTURE · × LOCKED`, `aria-label="Route legend"`, CTA reachability, selected-node inspection, and no horizontal overflow.
 - Physical-device legend readability testing remains pending.
+
+## 2026-08-16 — Loop 26: compact modal copy contract
+
+- Compressed route-decision instruction copy to `MAP ABOVE · ENTER DESCENT · OPEN CHUTE COMMITS ROUTE.`.
+- Compressed terminal-state copy to `FINAL CHAMBER · CLEAR TABLE FOR SURFACE SIGNAL.`.
+- Kept the route modal map-first by suppressing duplicate overlay prose during route decisions.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: route card `288×495`, map `236×337`, CTA `y=433..485`, no horizontal overflow.
+- Instruction contract is present in the route state; `#overlay-copy` remains intentionally hidden to avoid redundant text.
+- Hosted verification pending deployment.
+- Physical-device modal readability testing remains pending.
