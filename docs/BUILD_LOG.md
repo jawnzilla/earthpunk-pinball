@@ -2036,5 +2036,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: deck marker present, map `527px / 190px`, modal `921px / 568px`, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Hosted deck asset verification pending deployment.
+- Pages workflow succeeded for `bb17395`; hosted verification confirmed `deck-inset.svg`, `reactor-rail.svg`, `table-shell.svg`, all 22 authored SVG requests, `527px / 190px` 320×568 map, `921px / 568px` modal, `292px` 390×844 map, and no horizontal overflow.
 - Physical-device feel testing remains pending.
