@@ -17,6 +17,7 @@
     .brand-mark { display: inline-grid; place-items: center; width: 21px; height: 21px; margin-right: 3px; border: 1px solid #9fd4c0; border-radius: 5px; color: #9fd4c0; font-size: 12px; transform: rotate(45deg); }
     .brand-mark::first-letter { transform: rotate(-45deg); }
     .subtitle { display: none; }
+    .status br, .status #message { display: none; }
     .status { min-width: 0; flex: 0 1 auto; text-align: right; color: #c4d2bd; font-size: 12px; line-height: 1.45; }
     @media (max-width: 360px) {
       main { padding-left: 8px; padding-right: 8px; gap: 7px; }
@@ -96,7 +97,7 @@
     .route-legend { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
     .route-legend span:last-child { min-width: 0; max-width: 68%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
-    .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
+    .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: 34px; min-height: 34px; padding: 4px; border: 1px solid #789487; border-radius: 50%; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 16px; line-height: 1; }
     .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); max-height: calc(100vh - 66px); max-height: calc(100dvh - 66px); overflow-y: auto; padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
     .debug-panel[hidden] { display: none; }
     .debug-panel h3 { margin: 0 0 5px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
@@ -130,7 +131,7 @@
   <div class="overlay" id="overlay" hidden>
     <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
   </div>
-  <button class="debug-toggle" id="debug-toggle" type="button">Tune</button>
+  <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics tuning">⚙</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
@@ -311,9 +312,9 @@
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
-    renderRouteStrip(); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; overlay.hidden = false;
+    renderRouteStrip(); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
   }
-  function startNextDescent() { overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
+  function startNextDescent() { debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
   function completeStage() {
     if (state.stageComplete) return; if (state.stage >= state.stageCount) { state.running = false; win(); return; }
     const available = routeOptions(); if (!available.length) { state.running = false; win(); return; }
@@ -545,6 +546,15 @@
     ctx.strokeStyle = elementColors[gate.element] || '#f1b35b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke(); ctx.restore();
   }
   function drawHingeModule(flipper, side) { const element = state.hingeElements[side]; const level = state.hingeLevels[side]; const heldCradle = hingeCradle(side); const color = element ? elementColors[element] : '#789487'; ctx.save(); ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 22, 0, Math.PI * 2); ctx.fillStyle = heldCradle && element ? color : '#101a1c'; ctx.globalAlpha = heldCradle && element ? .82 : 1; ctx.fill(); ctx.strokeStyle = color; ctx.globalAlpha = heldCradle && element ? 1 : element ? .95 : .45; ctx.lineWidth = heldCradle && element ? 4 : element ? 3 : 1; ctx.stroke(); ctx.globalAlpha = 1; if (element && elementImages[element]?.complete && !heldCradle) { ctx.globalAlpha = .82; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 14, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(elementImages[element], flipper.pivotX - 14, flipper.pivotY - 14, 28, 28); } ctx.restore(); if (element) { ctx.fillStyle = color; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(`${element[0]}${level}`, flipper.pivotX, flipper.pivotY + 34); } }
+  function drawFlipperBlade(flipper, end, active, moving) {
+    const dx = end.x2 - end.x1, dy = end.y2 - end.y1, length = Math.hypot(dx, dy) || 1, nx = -dy / length, ny = dx / length, width = flipper.width;
+    const tipWidth = width * .42, inset = 3, gradient = ctx.createLinearGradient(end.x1, end.y1, end.x2, end.y2); gradient.addColorStop(0, active ? '#fff0ba' : '#f1b35b'); gradient.addColorStop(.42, active ? '#ffd083' : '#c88748'); gradient.addColorStop(1, '#6b4932');
+    ctx.save(); ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2;
+    ctx.beginPath(); ctx.moveTo(end.x1 + nx * width * .62, end.y1 + ny * width * .62); ctx.lineTo(end.x2 + nx * tipWidth, end.y2 + ny * tipWidth); ctx.quadraticCurveTo(end.x2, end.y2, end.x2 - nx * tipWidth, end.y2 - ny * tipWidth); ctx.lineTo(end.x1 - nx * width * .62, end.y1 - ny * width * .62); ctx.closePath(); ctx.fillStyle = gradient; ctx.fill(); ctx.strokeStyle = '#ffe8a5'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(end.x1 + nx * (width * .28), end.y1 + ny * (width * .28)); ctx.lineTo(end.x2 + nx * (tipWidth * .35), end.y2 + ny * (tipWidth * .35)); ctx.lineTo(end.x2 - nx * (tipWidth * .35), end.y2 - ny * (tipWidth * .35)); ctx.lineTo(end.x1 - nx * (width * .28), end.y1 - ny * (width * .28)); ctx.closePath(); ctx.fillStyle = '#263c3a'; ctx.globalAlpha = .72; ctx.fill(); ctx.globalAlpha = 1;
+    for (const fraction of [.18, .5, .82]) { const x = end.x1 + dx * fraction, y = end.y1 + dy * fraction; ctx.beginPath(); ctx.arc(x, y, Math.max(2, width * .1), 0, Math.PI * 2); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); }
+    ctx.restore();
+  }
   function drawFlippers() {
     sideGuards.forEach(guard => {
       ctx.beginPath(); ctx.moveTo(guard.x1, guard.y1); ctx.lineTo(guard.x2, guard.y2);
@@ -555,14 +565,9 @@
       const end = flipperEndpoints(flipper);
       const active = flipper === flippers.left ? input.left : input.right;
       const moving = Math.abs(flipper.angularVelocity) > .04;
-      ctx.save(); ctx.shadowColor = active ? '#f1b35b' : 'transparent'; ctx.shadowBlur = active ? (moving ? 14 : 5) : 0;
-      ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
-      ctx.strokeStyle = active ? (moving ? '#fff0ba' : '#ffd083') : '#f1b35b';
-      ctx.lineWidth = flipper.width; ctx.lineCap = 'round'; ctx.stroke();
-      ctx.restore();
-      ctx.beginPath(); ctx.moveTo(end.x1, end.y1); ctx.lineTo(end.x2, end.y2);
-      ctx.strokeStyle = '#fff0ba'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
+      drawFlipperBlade(flipper, end, active, moving);
+      ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 11, 0, Math.PI * 2); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 5, 0, Math.PI * 2); ctx.fillStyle = active ? '#ffd083' : '#526e63'; ctx.fill();
       drawHingeModule(flipper, flipper === flippers.left ? 'left' : 'right');
     });
   }

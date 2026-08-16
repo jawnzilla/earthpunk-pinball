@@ -1650,3 +1650,13 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Assert no layout contains a horizontal gate segment above the flippers.
 - Re-run extracted JavaScript syntax, offline scan, `git diff --check`, Pages deployment, and hosted smoke verification.
 
+## 2026-08-16 — Loop 2: hide developer surface and author flipper assembly
+
+- Hid the persistent message line during play; stage/status remains in the compact header without a second `READY` line.
+- Replaced the visible `Tune` label with an accessible gear icon and hide the developer control while a descent is active, preventing overlap with the mobile flipper controls.
+- Replaced the orange flipper strokes with tapered plated blades, inset dark cores, edge rails, hinge collars, and three visible fasteners per blade while preserving the existing collision segment geometry.
+- Kept route preview contextual: the route strip is visible before a descent and when exits open, but hidden during ordinary active play.
+
+### Verification target
+
+- `node --check`, `git diff --check`, offline scan, flipper-render assertions, hidden-debug assertions, Pages deployment, and live DOM verification.
