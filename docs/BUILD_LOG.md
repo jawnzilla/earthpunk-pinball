@@ -1869,4 +1869,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - All four chute files exist locally and are wired into `spriteImages`.
 - Exact 320×568 remains `241.875×430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
-- Pages workflow succeeded for `2a036b3`; hosted browser verification confirmed all four chute SVG requests plus the existing 11 authored assets, with `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 8 follow-up: modal utility reparenting
+
+- Moved `#debug-toggle` into `#modal-utility-slot` inside the pre-descent card instead of positioning it over the viewport.
+- Restored the control to `document.body` and hid it before active descent.
+- At 320×568 the gear no longer intersects the CTA: gear `x=259..293, y=30..64`; CTA `y=475..523`.
+- Preserved debug-panel behavior, modal route preview, and active-play HUD.
+
+### Verification notes
+
+- Modal DOM parent is `#modal-utility-slot`; active-play parent is `BODY` with `hidden=true`.
+- `node --check`, `git diff --check`, offline, parent-state, CTA-intersection, and overflow assertions pass.
+- Physical-device feel testing remains pending.
