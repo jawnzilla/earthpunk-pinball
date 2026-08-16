@@ -2134,6 +2134,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map `350px`, CTA `y=486..538`, no horizontal overflow.
-- Exact 390×844: map `292px`, CTA `y=428..480`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `d002d0c`; hosted verification confirmed canvas context-menu guards, score-popup wiring, 350px map at 320×568, 292px map at 390×844, CTA reachability, and no horizontal overflow.
 - Physical-device feel testing remains pending.
