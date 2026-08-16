@@ -300,6 +300,7 @@
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
+  function allRouteEdges() { return routeGraph[state.currentNode] || []; }
   function renderRouteStrip() {
     const edges = allRouteEdges(); if (!routeStrip) return; routeStrip.hidden = false; const current = nodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: nodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const selected = state.nextNode ? nodeTitle(state.nextNode) : null; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>Visible route structure</span><span>${state.routeGateOpen ? 'EXITS OPEN' : 'OBJECTIVES → EXITS'}</span></div><div class="route-strip-graph">${node(current, 'CURRENT TABLE', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} EXIT · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'RUN COMPLETE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
   }
