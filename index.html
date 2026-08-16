@@ -102,7 +102,7 @@
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
     <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.16" step="0.01" value="0.08"><span class="debug-value" data-value="gravity">0.08</span></label>
-    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0" max="2.4" step="0.05" value="1.2"><span class="debug-value" data-value="activeKick">1.20</span></label>
+    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0" max="24" step="0.5" value="12"><span class="debug-value" data-value="activeKick">12.00</span></label>
     <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
     <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0" max="0.9" step="0.01" value="0.24"><span class="debug-value" data-value="movingRestitution">0.24</span></label>
     <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail. Zero is a true cradle catch.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0" max="0.6" step="0.01" value="0"><span class="debug-value" data-value="passiveRestitution">0.00</span></label>
@@ -132,7 +132,7 @@
   const touchButtons = { left: document.querySelector('#touch-left'), right: document.querySelector('#touch-right') };
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .08, activeKick: 1.2, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .18 };
+  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .18 };
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);

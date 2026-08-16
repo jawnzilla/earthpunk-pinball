@@ -1227,3 +1227,9 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Offline scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
 - `git diff --check` passes.
 - Remaining gate: real 320x568 screenshot and touch-flow verification on a physical phone.
+
+## 2026-08-16 — Tuning correction: active kick contract
+
+- Corrected the requested Active kick default from `1.2` to `12`.
+- Centered the slider at `12` using a `0–24` range with `0.5` increments.
+- UI value, runtime config, and deployed HTML assertions now agree at `12.00`.
