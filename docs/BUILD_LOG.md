@@ -2315,3 +2315,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 390×844 fixture: card bottom `836.8px`, choices `252px` viewport / `377px` scroll content, buttons `79px`, no horizontal overflow.
 - Pages workflow succeeded for `db8a66d`; hosted verification confirmed the narrow containment rule is live, route detail/legend unchanged, CTA `52px`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device upgrade-modal testing remains pending.
+
+## 2026-08-16 — Loop 27: upgrade scroll cue separation
+
+- Repositioned the `SWIPE FOR MORE` pseudo-element from `bottom: -22px` with a negative margin to `bottom: 0` with normal flow spacing and a reserved sticky cue row.
+- This keeps the cue inside the upgrade scroller instead of overlaying a visible choice description.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- 320×568 fixture: card remains bounded at `568px`; choices remain scrollable at `220px` with `464px` content; no horizontal overflow.
+- Cue computed style: sticky, `bottom: 0px`, normal margin, dedicated padding row.
+- Hosted verification pending deployment.
+- Physical-device cue readability remains pending.
