@@ -1586,3 +1586,25 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Real extracted-function harness passes left/right contacts at `.2/.5/.8/1.0`, fresh versus held contact, finite-value checks, contact-factor bounds, and speed-cap checks.
 - Fresh mirrored samples remain upward: left tip `(-4.297, -9.030)`, right tip `(4.297, -9.030)` under the controlled rolling fixture.
 - Physical-device playtesting remains required; this pass is not AAA signoff.
+
+## 2026-08-16 — Hinge cradle and gameplay-gated route exits
+
+### Implemented
+
+- Added explicit held-hinge cradle state instead of treating hinge proximity as a visual boolean.
+- Slow relative contact near the hinge can capture only while the corresponding flipper is held.
+- Captured balls settle directly into a stable hinge pose and remain damped against the rotating surface.
+- Releasing the flipper clears the cradle and permits the ball to roll out.
+- Unheld near-hinge contacts receive a small tangent/downhill slide bias to prevent sticky hinge rest states.
+- Added live `Cradle capture speed` and `Passive hinge slide` tuning controls.
+- Replaced post-stage route menu selection with a persistent route graph and gameplay-gated chute exits.
+- Completing the table arms only the reachable route chutes; the player must physically send the ball through one.
+- Added reconnecting and forced single-exit graph segments.
+- Added a read-only route map before every descent; it shows current node, outgoing branches, chute side, and destination node without selecting the route for the player.
+- Route effects commit only after the physical chute is entered and module confirmation completes.
+
+### Verification notes
+
+- Extracted cradle harness passes slow held capture, persistent held cradle, direct release roll-out, fast-contact rejection, unheld hinge slide, finite outputs, and no first-frame cradle snap.
+- Route graph, chute collision gate, pre-level route map, four-stage progression, and removal of the old route-choice menu pass static assertions.
+- Local browser navigation was blocked by the browser harness's private-address policy; public hosted verification remains the authoritative UI check.

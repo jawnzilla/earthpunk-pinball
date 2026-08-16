@@ -52,3 +52,5 @@
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.
 - Surface Vault identity pass: reward route now has distinct signal-violet styling and `SURFACE VAULT // SIGNAL OPEN` table identity.
 - Corrective angle response pass: early/late flipper activation now produces a materially different launch vector.
+- Hinge cradle pass: slow held hinge contact settles into a persistent cradle; releasing the flipper rolls the ball out instead of leaving a sticky hinge state.
+- Gameplay route pass: post-stage route menu selection removed; reachable exits are physically chosen through opened chutes, with a read-only pre-level branching map.
