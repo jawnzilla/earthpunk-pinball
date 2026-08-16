@@ -1661,3 +1661,13 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, offline scan, flipper-render assertions, hidden-debug assertions, Pages deployment, and live DOM verification.
 - Pages workflow succeeded for `32c9b85`; live verification confirmed route preview visible before descent, route strip hidden during active play, gear hidden during active play, and symbol-only flipper controls.
+
+## 2026-08-16 — Loop 2 follow-up: touch affordance and compact route names
+
+- Added a visible `HOLD` hint to both symbol-first touch controls without restoring long instructional labels.
+- Enforced developer-control hiding centrally in `updateHud()` so active play cannot expose the gear or debug panel after a transition.
+- Shortened route-preview node names for narrow mobile layouts: `Generator`, `Pulse`, `Split`, `Warden`, and `Vault`.
+
+### Verification notes
+
+- Extracted JavaScript syntax, diff hygiene, offline scan, touch-hint, debug-enforcement, short-route, and flipper-render assertions pass.

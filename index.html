@@ -47,7 +47,7 @@
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
     .touch-control .flipper-symbol { color: #ffd083; font-size: 25px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
-    .touch-label { display: none; }
+    .touch-label { display: block; color: #9fb5a7; font-size: 9px; font-weight: 900; letter-spacing: .14em; }
     .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(2px); box-shadow: inset 0 1px rgba(255,255,255,.35), 0 2px 0 #0b1112; }
     .touch-control.is-pressed .flipper-symbol, .touch-control:active .flipper-symbol, .touch-control.is-pressed .touch-label, .touch-control:active .touch-label { color: #101518; text-shadow: none; }
     button:hover { filter: brightness(1.08); }
@@ -125,7 +125,7 @@
     </section>
     <section class="route-strip" id="route-strip" aria-label="Branching route structure" hidden></section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
-    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
+    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span><span class="touch-label">HOLD</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="touch-label">HOLD</span><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
     <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
@@ -275,6 +275,8 @@
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
     elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
     renderRouteStrip();
+    debugToggle.hidden = state.running;
+    if (state.running) debugPanel.hidden = true;
     if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Solver: relative contact · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
@@ -306,9 +308,10 @@
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
+  function shortNodeTitle(id) { return ({ 'generator-well': 'Generator', 'pulse-manifold': 'Pulse', 'split-reactor': 'Split', 'blackout-core': 'Warden', 'surface-vault': 'Vault' })[id] || nodeTitle(id); }
   function allRouteEdges() { return routeGraph[state.currentNode] || []; }
   function renderRouteStrip() {
-    const edges = allRouteEdges(); if (!routeStrip) return; const visible = !state.running || state.routeGateOpen; routeStrip.hidden = !visible; if (!visible) return; const current = nodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: nodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>ROUTE</span><span>${state.routeGateOpen ? 'OPEN' : 'NEXT'}</span></div><div class="route-strip-graph">${node(current, 'NOW', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'DONE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
+    const edges = allRouteEdges(); if (!routeStrip) return; const visible = !state.running || state.routeGateOpen; routeStrip.hidden = !visible; if (!visible) return; const current = shortNodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: shortNodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>ROUTE</span><span>${state.routeGateOpen ? 'OPEN' : 'NEXT'}</span></div><div class="route-strip-graph">${node(current, 'NOW', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'DONE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
