@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #101518; color: #e9f1df; }
     body { display: grid; place-items: center; overflow: hidden; }
-    main { width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
+    main { width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
     header { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
     header > div:first-child { min-width: 0; }
     h1 { margin: 0; color: #f1b35b; font-size: clamp(18px, 5vw, 25px); letter-spacing: .12em; text-transform: uppercase; }
@@ -25,12 +25,27 @@
       footer { font-size: 10px; }
     }
     .status strong { color: #f1b35b; }
+    .run-hud { display: grid; gap: 6px; padding: 9px 11px; border: 1px solid #38524e; border-radius: 12px; background: linear-gradient(110deg, rgba(31,53,51,.92), rgba(13,22,25,.92)); box-shadow: inset 0 1px rgba(255,255,255,.08); }
+    .run-hud-top, .resource-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+    .hud-label { color: #9fb5a7; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .hud-value { color: #ffd083; font-size: 12px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
+    .progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #0b1315; box-shadow: inset 0 1px 2px rgba(0,0,0,.7); }
+    .progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #9fd4c0, #f1b35b); transition: width .2s ease-out; }
+    .stability-pips { display: inline-flex; gap: 4px; margin-left: 5px; vertical-align: middle; }
+    .stability-pip { width: 10px; height: 10px; border: 1px solid #789487; border-radius: 50%; background: #263c3a; }
+    .stability-pip.is-live { border-color: #f1b35b; background: #f1b35b; box-shadow: 0 0 8px rgba(241,179,91,.45); }
+    .element-status { min-width: 0; overflow: hidden; color: #c4d2bd; font-size: 10px; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
     .table-wrap { min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; }
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
     @media (max-height: 760px) {
       main { gap: 6px; }
       canvas { width: min(100%, calc((100dvh - 142px) * .5625)); height: auto; max-width: 100%; max-height: 100%; }
     }
+    .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .touch-control { min-height: 48px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08); }
+    .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(1px); }
+    button:hover { filter: brightness(1.08); }
+    button:focus-visible { outline: 3px solid #9fd4c0; outline-offset: 3px; }
     footer { color: #87a39b; text-align: center; font-size: 12px; letter-spacing: .03em; }
     footer b { color: #e9f1df; }
     .overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; background: radial-gradient(circle at 50% 42%, rgba(41,76,66,.38), rgba(5,8,9,.92) 68%); backdrop-filter: blur(4px); overflow: auto; }
@@ -39,16 +54,17 @@
     .card::before { content: ''; position: absolute; inset: 8px; pointer-events: none; border: 1px solid rgba(241,179,91,.28); border-radius: 5px; background: repeating-linear-gradient(135deg, transparent 0 12px, rgba(241,179,91,.025) 12px 14px); }
     .card h2, .card p, .choices, .card > button { position: relative; z-index: 1; }
     .card h2 { margin: 0 0 8px; color: #ffd083; text-shadow: 0 0 18px rgba(241,179,91,.28); text-transform: uppercase; letter-spacing: .1em; }
+    .decision-kicker { margin: 0 0 5px; color: #9fd4c0; font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
     .card p { color: #c4d2bd; line-height: 1.5; }
     .choices { display: grid; gap: 8px; margin: 16px 0; }
     .choices button { display: grid; grid-template-columns: 48px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 70px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
-    .choices button:hover { border-color: #f1b35b; box-shadow: 0 0 18px rgba(241,179,91,.16); }
+    .choices button:hover, .choices button:focus-visible { border-color: #f1b35b; box-shadow: 0 0 18px rgba(241,179,91,.16); }
     .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
     .choices button small { display: block; margin-top: 3px; color: #b8cbbb; line-height: 1.3; }
     .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
     .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
-    .choices button:active { background: #38524e; }
+    .choices button:active { background: #38524e; transform: translateY(1px); }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
     .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
@@ -66,11 +82,17 @@
       <div><h1>Deadlight</h1><p class="subtitle">Earthpunk pinball // prototype 01</p></div>
       <div class="status"><strong id="stage">BOOT</strong><br><span id="message">Keep the probe alive.</span></div>
     </header>
+    <section class="run-hud" aria-label="Run status">
+      <div class="run-hud-top"><span class="hud-label" id="route-status">Route 1 / 3 · Generator Well</span><span class="hud-value" id="score-status">0 SCORE</span></div>
+      <div class="progress-track" role="progressbar" aria-label="Descent progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="progress-fill" id="progress-fill"></span></div>
+      <div class="resource-row"><span class="hud-label">Stability <span class="stability-pips" id="stability-pips" aria-label="3 stability remaining"></span></span><span class="element-status" id="element-status">Hinges uninstalled · No imprint</span></div>
+    </section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
+    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button">◀ Lift left</button><button class="touch-control" id="touch-right" type="button">Lift right ▶</button></div>
     <footer><b>Touch left/right</b> to work the flippers · keyboard: A / D or ← / →</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
-    <section class="card"><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset">Start another descent</button></section>
+    <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
   </div>
   <button class="debug-toggle" id="debug-toggle" type="button">Tune</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
@@ -95,8 +117,16 @@
   const overlay = document.querySelector('#overlay');
   const overlayTitle = document.querySelector('#overlay-title');
   const overlayCopy = document.querySelector('#overlay-copy');
+  const overlayKicker = document.querySelector('#overlay-kicker');
   const choices = document.querySelector('#choices');
   const resetButton = document.querySelector('#reset');
+  const routeStatus = document.querySelector('#route-status');
+  const scoreStatus = document.querySelector('#score-status');
+  const progressFill = document.querySelector('#progress-fill');
+  const progressTrack = document.querySelector('.progress-track');
+  const stabilityPips = document.querySelector('#stability-pips');
+  const elementStatus = document.querySelector('#element-status');
+  const touchButtons = { left: document.querySelector('#touch-left'), right: document.querySelector('#touch-right') };
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
   const debugConfig = { gravity: .08, activeKick: 1.2, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .18 };
@@ -105,12 +135,18 @@
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
   }));
   const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
+  const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
   function installHingeElement(stateRef, element) { const slot = stateRef.hingeElements.left === null ? 'left' : stateRef.hingeElements.right === null ? 'right' : (stateRef.hingeLevels.left <= stateRef.hingeLevels.right ? 'left' : 'right'); if (stateRef.hingeElements[slot] === element) stateRef.hingeLevels[slot] = Math.min(3, stateRef.hingeLevels[slot] + 1); else { stateRef.hingeElements[slot] = element; stateRef.hingeLevels[slot] = 1; } return slot; }
   const upgradePool = [
     { id: 'fire', element: 'Fire', image: 'assets/elements/fire.png', title: 'Ember hinge module', text: 'Attune a cradle point to apply stacking Fire imprints to the ball.', cost: 3, apply: s => installHingeElement(s, 'Fire') },
     { id: 'water', element: 'Water', image: 'assets/elements/water.png', title: 'Tidal hinge module', text: 'Attune a cradle point to apply stacking Water imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Water') },
     { id: 'earth', element: 'Earth', image: 'assets/elements/earth.png', title: 'Bedrock hinge module', text: 'Attune a cradle point to apply stacking Earth imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Earth') },
     { id: 'air', element: 'Air', image: 'assets/elements/air.png', title: 'Slipstream hinge module', text: 'Attune a cradle point to apply stacking Air imprints to the ball.', cost: 2, apply: s => installHingeElement(s, 'Air') }
+  ];
+  const routePool = [
+    { id: 'flooded-sluice', element: 'Water', title: 'Flooded sluice', text: 'Dampens the next descent for safer control.', apply: s => { s.routeModifier = 'Water'; } },
+    { id: 'ember-lift', element: 'Fire', title: 'Ember lift', text: 'Adds heat to every launch and reaction.', apply: s => { s.routeModifier = 'Fire'; s.salvageBonus += .25; } },
+    { id: 'bedrock-shortcut', element: 'Earth', title: 'Bedrock shortcut', text: 'Reinforces the hull before the next descent.', apply: s => { s.routeModifier = 'Earth'; s.stability = Math.min(s.stabilityMax, s.stability + 1); } }
   ];
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
   const W = canvas.width, H = canvas.height;
@@ -123,6 +159,7 @@
   function resetLayoutDamage() { levelLayouts.forEach(layout => layout.bumpers.forEach(item => { item.hits = 0; })); }
   function applyTargetLayout() { const targetElements = ['Fire', 'Water', 'Earth', 'Air', 'Fire', 'Water']; state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.element = targetElements[index]; target.hit = false; }); }
   let input = { left: false, right: false };
+  const touchInput = { left: false, right: false };
   let activePointerId = null;
   let activePointerSide = null;
   let state;
@@ -143,8 +180,8 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
-    input.left = false; input.right = false; activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
     applyTargetLayout();
@@ -161,11 +198,21 @@
   function updateHud() {
     stageEl.textContent = state.running ? `DESCENT ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · STABILITY ${state.stability}/${state.stabilityMax}` : (state.stability > 0 ? `DESCENT ${state.stage}/${state.stageCount} · RECOVERED` : 'COLLAPSE');
     messageEl.textContent = state.message;
+    routeStatus.textContent = `ROUTE ${state.stage}/${state.stageCount} · ${state.layout.name}`;
+    scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
+    const progress = Math.round(((state.stage - 1 + state.targets / targets.length) / state.stageCount) * 100);
+    progressFill.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+    progressTrack.setAttribute('aria-valuenow', String(progress));
+    stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
+    stabilityPips.setAttribute('aria-label', `${state.stability} of ${state.stabilityMax} stability remaining`);
+    const hinges = ['left', 'right'].map(side => state.hingeElements[side] ? `${side[0].toUpperCase()}:${state.hingeElements[side]} ${state.hingeLevels[side]}` : `${side[0].toUpperCase()}:—`).join(' · ');
+    const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
+    elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1) { state.effects.push({ x, y, color, power, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
-  function refreshElement(element, source = 'hinge') { const effect = state.ball.elementEffects[element] || { stacks: 0, timer: 0 }; effect.stacks = Math.min(3, effect.stacks + 1); effect.timer = 360; state.ball.elementEffects[element] = effect; emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15); setMessage(`${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
+  function refreshElement(element, source = 'hinge') { const effect = state.ball.elementEffects[element] || { stacks: 0, timer: 0 }; effect.stacks = Math.min(3, effect.stacks + 1); effect.timer = 360; state.ball.elementEffects[element] = effect; state.elementalCharge[element] = Math.min(3, state.elementalCharge[element] + 1); emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15); setMessage(`${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
   function activeElement(element) { const effect = state.ball.elementEffects[element]; return effect && effect.stacks > 0 && effect.timer > 0; }
   function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
   function hingeCradle(side) { const flipper = flippers[side], b = state.ball; const distance = Math.hypot(b.x - flipper.pivotX, b.y - flipper.pivotY); return input[side] && distance < 30 && b.y < flipper.pivotY + 18; }
@@ -179,19 +226,24 @@
   function completeStage() {
     state.running = false;
     if (state.stage >= state.stageCount) { win(); return; }
+    overlayKicker.textContent = 'Between-descent decision';
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
-    overlayCopy.textContent = `Choose one modification before the probe drops deeper. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
-    choices.replaceChildren(...upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean((upgrade.cost && state.charge < upgrade.cost) || (upgrade.id === 'repair' && state.stability >= state.stabilityMax)); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }));
+    overlayCopy.textContent = `Route mapped ${state.targets}/${targets.length}. Choose one attunement before ${levelLayouts[state.stage].name} comes online. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
+    const routeChoices = routePool.map(route => { const button = document.createElement('button'); button.type = 'button'; button.dataset.route = route.id; button.innerHTML = `<span class="upgrade-icon">⌁</span><span><small class="element-label">${route.element} route</small><strong>${route.title}</strong><small>${route.text} · FREE PASS</small></span>`; button.addEventListener('click', () => chooseRoute(route)); return button; });
+    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; });
+    choices.replaceChildren(...routeChoices, ...moduleChoices);
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
+  function beginNextRoute() { state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud(); }
+  function chooseRoute(route) { route.apply(state); state.routeTarget = route.id; state.message = `${route.title} selected. ${state.layout.name} route online.`; beginNextRoute(); }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return;
     if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return;
     if (upgrade.cost) state.charge -= upgrade.cost;
-    upgrade.apply(state); state.attunements.push(upgrade.element); state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.message = `${upgrade.element} attunement installed. ${state.layout.name} online.`; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud();
+    upgrade.apply(state); state.attunements.push(upgrade.element); state.message = `${upgrade.element} attunement installed.`; beginNextRoute();
   }
-  function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
-  function lose() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; state.running = false; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
+  function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayKicker.textContent = 'Route complete'; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
+  function lose() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; state.running = false; overlayKicker.textContent = 'Run ended'; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
   function circleCollision(ball, item, restitution = 1) {
     const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
     const dist = Math.hypot(dx, dy);
@@ -248,7 +300,8 @@
     state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(); state.effects.forEach(effect => effect.life -= .08); state.effects = state.effects.filter(effect => effect.life > 0);
     updateFlippers();
     b.prevX = b.x; b.prevY = b.y;
-    b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
+    const routeGravity = state.routeModifier === 'Water' ? debugConfig.gravity * .72 : state.routeModifier === 'Earth' ? debugConfig.gravity * 1.08 : debugConfig.gravity;
+    b.vy += routeGravity; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
     const wallRebound = Math.max(0, Math.min(1, debugConfig.surfaceRebound));
@@ -263,8 +316,9 @@
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right');
     const leftRestitution = input.left ? (Math.abs(flippers.left.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const rightRestitution = input.right ? (Math.abs(flippers.right.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? debugConfig.activeKick : debugConfig.contactSeparation);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? debugConfig.activeKick : debugConfig.contactSeparation);
+    const launchKick = debugConfig.activeKick * (state.routeModifier === 'Fire' ? 1.28 : state.routeModifier === 'Air' ? 1.12 : 1);
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? launchKick : debugConfig.contactSeparation);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? launchKick : debugConfig.contactSeparation);
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');
@@ -282,9 +336,9 @@
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    const deck = ctx.createLinearGradient(0, 0, W, H); deck.addColorStop(0, '#253b3a'); deck.addColorStop(.5, '#182326'); deck.addColorStop(1, '#0c1215');
+    const deck = ctx.createLinearGradient(0, 0, W, H); deck.addColorStop(0, '#304943'); deck.addColorStop(.32, '#1b2a2b'); deck.addColorStop(.7, '#152023'); deck.addColorStop(1, '#080e11');
     ctx.fillStyle = deck; ctx.fillRect(0, 0, W, H);
-    const coreGlow = ctx.createRadialGradient(W / 2, 290, 20, W / 2, 290, 260); coreGlow.addColorStop(0, 'rgba(91,166,125,.16)'); coreGlow.addColorStop(1, 'rgba(10,18,20,0)'); ctx.fillStyle = coreGlow; ctx.fillRect(20, 20, W - 40, H - 40);
+    const coreGlow = ctx.createRadialGradient(W / 2, 290, 20, W / 2, 290, 260); coreGlow.addColorStop(0, 'rgba(91,166,125,.18)'); coreGlow.addColorStop(.58, 'rgba(33,93,72,.07)'); coreGlow.addColorStop(1, 'rgba(10,18,20,0)'); ctx.fillStyle = coreGlow; ctx.fillRect(20, 20, W - 40, H - 40);
     ctx.fillStyle = 'rgba(7,13,15,.55)'; ctx.fillRect(24, 28, 11, H - 68); ctx.fillRect(W - 35, 28, 11, H - 68);
     ctx.save(); ctx.strokeStyle = 'rgba(141,168,149,.18)'; ctx.lineWidth = 2;
     for (let y = 30; y < H - 20; y += 26) { ctx.beginPath(); ctx.moveTo(24, y); ctx.lineTo(W - 24, y); ctx.stroke(); }
@@ -293,9 +347,17 @@
     ctx.restore();
     ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
+    drawDeckDetails();
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
     drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawFlippers(); drawMeters(); drawEffects(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
+  }
+  function drawDeckDetails() {
+    ctx.save(); ctx.globalAlpha = .8; ctx.fillStyle = '#0a1315';
+    [[44, 112, 8, 88], [W - 52, 112, 8, 88], [44, 390, 8, 112], [W - 52, 390, 8, 112]].forEach(([x, y, w, h]) => { ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#45645a'; ctx.strokeRect(x, y, w, h); });
+    ctx.strokeStyle = 'rgba(159,212,192,.18)'; ctx.lineWidth = 1;
+    for (let x = 54; x < W - 54; x += 44) { ctx.beginPath(); ctx.moveTo(x, 108); ctx.lineTo(x - 10, 190); ctx.stroke(); }
+    ctx.restore();
   }
   function drawEdgeMachinery() {
     ctx.save();
@@ -317,7 +379,15 @@
     ctx.fillStyle = '#b5d3a1'; [70, W - 70].forEach(x => { ctx.beginPath(); ctx.arc(x, 78, 4, 0, Math.PI * 2); ctx.fill(); });
   }
   function drawTargets() {
-    targets.forEach(t => { ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 4 + Math.sin(state.pulse + t.x) * 2, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#344743' : elementColors[t.element]; ctx.fill(); ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fill(); ctx.strokeStyle = t.hit ? '#6b8172' : elementColors[t.element]; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#182226'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', t.x, t.y + 3); });
+    targets.forEach(t => {
+      const pulse = 4 + Math.sin(state.pulse + t.x) * 2, color = t.hit ? '#526e63' : elementColors[t.element];
+      ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(-t.r - 5, -t.r - 3, (t.r + 5) * 2, (t.r + 5) * 2);
+      ctx.fillStyle = color; ctx.fillRect(-t.r - pulse, -t.r - pulse, (t.r + pulse) * 2, (t.r + pulse) * 2);
+      ctx.fillStyle = t.hit ? '#6b8172' : '#efba6a'; ctx.fillRect(-t.r, -t.r, t.r * 2, t.r * 2);
+      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.strokeRect(-t.r, -t.r, t.r * 2, t.r * 2);
+      ctx.fillStyle = '#182226'; ctx.rotate(-Math.PI / 4); ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.hit ? '✓' : '+1', 0, 3); ctx.restore();
+    });
   }
   function drawBumpers() {
     state.layout.bumpers.forEach(item => {
@@ -400,8 +470,13 @@
     while (timeAccumulator >= 1) { update(); timeAccumulator -= 1; }
     draw(); requestAnimationFrame(loop);
   }
-  function setControl(side, value) { input[side] = value; }
-  function syncInput() { input.left = keys.a || keys.ArrowLeft || activePointerSide === 'left'; input.right = keys.d || keys.ArrowRight || activePointerSide === 'right'; }
+  function setControl(side, value) { touchInput[side] = value; syncInput(); }
+  Object.entries(touchButtons).forEach(([side, button]) => {
+    const press = event => { event.preventDefault(); setControl(side, true); button.classList.add('is-pressed'); try { button.setPointerCapture(event.pointerId); } catch (_) {} };
+    const release = event => { event.preventDefault(); setControl(side, false); button.classList.remove('is-pressed'); };
+    button.addEventListener('pointerdown', press); button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release); button.addEventListener('lostpointercapture', release); button.addEventListener('pointerleave', event => { if (event.buttons === 0) release(event); });
+  });
+  function syncInput() { input.left = keys.a || keys.ArrowLeft || touchInput.left || activePointerSide === 'left'; input.right = keys.d || keys.ArrowRight || touchInput.right || activePointerSide === 'right'; }
   function clearPointerControl(pointerId = null) { if (pointerId !== null && pointerId !== activePointerId) return; activePointerId = null; activePointerSide = null; syncInput(); }
   function isGameplayPointer(event) { return state?.running && !event.target.closest('button, .card, .debug-panel, .debug-toggle'); }
   window.addEventListener('pointerdown', event => { if (!isGameplayPointer(event)) return; clearPointerControl(); activePointerId = event.pointerId; activePointerSide = event.clientX < window.innerWidth / 2 ? 'left' : 'right'; syncInput(); if (event.target === canvas) { try { canvas.setPointerCapture(event.pointerId); } catch (_) {} } });

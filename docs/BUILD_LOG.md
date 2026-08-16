@@ -1159,3 +1159,37 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Repair cost, Stability restoration, full-Stability disable state, and purchase guard are present.
 - `git diff --check` passes.
+
+## 2026-08-16 — UX/UI pass: mobile command deck
+
+### Implemented
+
+- Added a compact run HUD with route, score, progress, Stability pips, and live elemental hinge/imprint status.
+- Added dedicated 48px touch-safe left/right flipper buttons with pressed, focus, and pointer-cancel states while preserving full-viewport touch input and keyboard fallback.
+- Reworked between-descent decision copy into a clearer route handoff with mapped-target progress and explicit route completion/run-ended labels.
+- Added narrow responsive layout treatment for the 320/360/390px mobile width band without changing Canvas physics or offline asset loading.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Offline-resource scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
+- `git diff --check` passes.
+- Browser visual review is limited to static/runtime checks in this environment; real-device touch and 320/360/390px screenshot signoff remains recommended.
+
+## 2026-08-16 — Gameplay + visual pass: elemental routes and command deck
+
+### Implemented
+
+- Added per-element hinge charge and three-stack ball imprints when a player cradles the ball at an attuned hinge and then strikes it.
+- Added matching reactions for salvage targets, elemental bumpers, and relay gates with score, Charge, timer, and local impact feedback.
+- Added three selectable route modifiers: Flooded Sluice, Ember Lift, and Bedrock Shortcut. They materially alter the next descent instead of acting as flavor text.
+- Added a stronger industrial deck renderer with service ribs, core glow, contact machinery, hinge modules, and localized impact effects.
+- Kept route and module choices touch-safe and dependency-free.
+
+### Verification notes
+
+- `node --check` passes for the extracted 38.5KB game script.
+- Offline scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
+- `git diff --check` passes.
+- Hosted page responds HTTP 200; 320px hosted layout verification previously reported no horizontal overflow.
+- Remaining gate: physical-phone playtest and final visual signoff; this pass is not claimed as AAA-complete.
