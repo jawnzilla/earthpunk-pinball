@@ -1755,3 +1755,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Route visibility transition: Canvas delta `[0, 0]`.
 - Deterministic rail probe: top contact `vy -3.63`; underside contact `vy +0.36`.
 - JavaScript syntax, diff hygiene, offline, rail-angle, one-way, and max-table assertions pass.
+
+## 2026-08-16 — Loop 4 follow-up: move stability into the drain and enlarge table
+
+- Removed the DOM imprint/stability resource row from the player-facing HUD. Element state is now communicated by the hinge, bumper, target, and ball visuals.
+- Moved the live stability number into the lower drain trapezoid; infinite test mode displays `∞` there.
+- Removed stability and layout-name repetition from the active header; the route line remains the single route identity location.
+- Enlarged the 320×568 Canvas to `241.9×430px` while keeping 52px touch controls fully inside the viewport.
+- Confirmed the 390×844 Canvas remains `366×650.7px` with no horizontal overflow.
+
+### Verification notes
+
+- 320×568 controls bottom `565px`; document height `568px`; overflow false.
+- HUD resource row hidden; drain stability renderer present; route strip remains non-reflowing.
+- `node --check`, `git diff --check`, offline, HUD-relocation, drain-counter, and maximum-table assertions pass.

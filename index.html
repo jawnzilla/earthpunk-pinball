@@ -37,12 +37,13 @@
     .stability-pips { display: inline-flex; gap: 4px; margin-left: 5px; vertical-align: middle; }
     .stability-pip { width: 10px; height: 10px; border: 1px solid #789487; border-radius: 50%; background: #263c3a; }
     .stability-pip.is-live { border-color: #f1b35b; background: #f1b35b; box-shadow: 0 0 8px rgba(241,179,91,.45); }
-    .element-status { min-width: 0; overflow: hidden; color: #c4d2bd; font-size: 10px; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
+    .resource-row { display: none; }
+    .element-status { display: none; }
     .table-wrap { min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; }
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
     @media (max-height: 600px) {
       main { gap: 4px; padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
-      canvas { width: min(100%, calc((100dvh - 158px) * .5625)); height: auto; }
+      canvas { width: min(100%, calc((100dvh - 138px) * .5625)); height: auto; }
       .run-hud { padding: 6px 9px; gap: 4px; }
       .touch-control { min-height: 52px; }
       .route-strip { padding: 5px 7px; }
@@ -286,7 +287,7 @@
     state.launched = true;
   }
   function updateHud() {
-    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.immortal ? '∞' : `${state.stability}/${state.stabilityMax}`}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
+    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount}` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
     messageEl.textContent = state.message.replace('Read the route map, then enter the descent.', 'READY').replace('Descent mapped. Choose a modification.', 'OBJECTIVES CLEAR');
     routeStatus.textContent = `R${state.stage}/${state.stageCount} · ${state.layout.name}`;
     scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
@@ -528,6 +529,7 @@
     ctx.fillStyle = '#080e10'; ctx.beginPath(); ctx.moveTo(151, H - 38); ctx.lineTo(209, H - 38); ctx.lineTo(191, H - 62); ctx.lineTo(169, H - 62); ctx.closePath(); ctx.fill();
 
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = '#ffd083'; ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(state.immortal ? '∞' : `${state.stability}`, W / 2, H - 49); ctx.textBaseline = 'alphabetic';
     [[64, H - 75], [296, H - 75]].forEach(([x, y], index) => {
       const spin = state.pulse * (index ? -.12 : .12); ctx.save(); ctx.translate(x, y); ctx.rotate(spin);
       ctx.beginPath(); for (let side = 0; side < 8; side += 1) { const angle = side * Math.PI / 4; const radius = side % 2 ? 18 : 22; side === 0 ? ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius) : ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius); } ctx.closePath(); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 3; ctx.stroke();
