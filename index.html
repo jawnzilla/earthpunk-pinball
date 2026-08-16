@@ -148,12 +148,12 @@
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
   const physicsReadout = document.querySelector('#physics-readout');
-  const debugConfig = { gravity: .08, activeKick: 12, activeEscape: 2.8, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82, profile: 'CUSTOM' };
+  const debugConfig = { gravity: .08, activeKick: 12, activeEscape: 2.8, launchAngle: 0, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82, profile: 'CUSTOM' };
   const physicsPresets = {
-    soft: { gravity: .075, activeKick: 12, activeEscape: 2.2, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
-    balanced: { gravity: .09, activeKick: 12, activeEscape: 2.8, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
-    reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
-    pop: { gravity: .115, activeKick: 14, activeEscape: 4, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
+    soft: { gravity: .075, activeKick: 12, activeEscape: 2.2, launchAngle: 0, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
+    balanced: { gravity: .09, activeKick: 12, activeEscape: 2.8, launchAngle: 6, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
+    reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
+    pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
   function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Last launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
@@ -239,7 +239,7 @@
     const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
     elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
-    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
+    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Angle: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
@@ -380,7 +380,7 @@
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
     const freshActiveHit = (leftHit && input.left && !state.flipperContacts.left) || (rightHit && input.right && !state.flipperContacts.right);
-    if (freshActiveHit) { b.vy = Math.min(b.vy, -debugConfig.activeEscape); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); }
+    if (freshActiveHit) { const inward = leftHit && input.left ? 1 : -1; b.vy = Math.min(b.vy, -debugConfig.activeEscape); b.vx += inward * Math.min(1.8, Math.abs(b.vy) * Math.tan(debugConfig.launchAngle * Math.PI / 180)); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, '#ffd083', .45); }
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');

@@ -1337,3 +1337,23 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Upper-bank state, cooldown, visual band, telemetry, preserved physics channels, Active kick `12`, and offline assertions pass.
 - `git diff --check` passes.
 - Real-device comparison remains required for final reach-feel signoff.
+
+## 2026-08-16 — Physics pass: controlled launch angle
+
+### Implemented
+
+- Added a first-contact-only inward launch-angle assist after active flipper hits.
+- Preset angles are deliberately restrained:
+  - **Soft:** `0°`
+  - **Balanced:** `6°`
+  - **High Reach:** `12°`
+  - **Pop:** `18°`
+- Horizontal assist is capped at `1.8` velocity units per hit.
+- Passive rails, walls, gates, bumpers, and held flipper contact do not receive angle assistance.
+- Tune telemetry now reports the active launch angle alongside peak height, top-bank reach, and launch speed.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Four angle profiles, angle math, first-contact-only behavior, assist cap, telemetry, Active kick `12`, offline scan, and `git diff --check` assertions pass.
+- Real-device feel remains the final tuning gate.

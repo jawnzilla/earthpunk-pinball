@@ -37,3 +37,4 @@
 - Physics pass: added four test presets and separated muted surface rebound from bumper rebound.
 - Physics reach pass: added first-contact upward escape, repeat-kick lock, and live peak/launch telemetry.
 - Upper-bank pass: added a measurable top-bumper reach objective, target band, score reward, and cooldown.
+- Launch-angle pass: added a bounded inward assist on fresh active flipper hits and angle telemetry.
