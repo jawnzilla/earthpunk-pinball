@@ -29,3 +29,5 @@
 - Added route-specific gravity and flipper-kick modifiers.
 - Deepened Canvas table rendering with machinery silhouettes, localized glows, and impact cues.
 - Kept the build offline-safe with no CDN, remote fonts, fetch/XHR, or WebSocket dependencies.
+- Pass 25: added FREE PASS / HAZARD / BOSS route identities and the Active kick tuning contract.
+- Pass 26: split route risk and elemental module selection into a reversible two-step mobile flow.

@@ -1210,3 +1210,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Active kick UI/runtime defaults both assert `1.20`; slider midpoint is mathematically `1.20`.
 - `git diff --check` passes.
 - Remaining gate: physical-phone boss/free-pass playtest and final visual signoff.
+
+## 2026-08-16 — Pass 26: route-first progression flow
+
+### Implemented
+
+- Split the between-descent decision into two mobile-safe steps: choose route risk first, then tune one elemental hinge module.
+- Added a back action so route selection can be reconsidered before spending Charge.
+- Added route-specific visual treatment for boss and free-pass choices.
+- Preserved the `1.20` Active kick default and centered tuning slider contract.
+
+### Verification notes
+
+- `node --check` passes for the extracted 41.9KB game script.
+- Two-step, back action, boss/free-pass, and tuning-default assertions pass.
+- Offline scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
+- `git diff --check` passes.
+- Remaining gate: real 320x568 screenshot and touch-flow verification on a physical phone.

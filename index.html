@@ -65,6 +65,9 @@
     .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
     .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
     .choices button:active { background: #38524e; transform: translateY(1px); }
+    .choices button[data-kind="boss"] { border-color: #ef8b45; background: linear-gradient(110deg, #4a3029, #211d20); }
+    .choices button[data-kind="free"] { border-color: #67c8d5; background: linear-gradient(110deg, #23464b, #1d2d2e); }
+    .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
     .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
@@ -226,16 +229,26 @@
   function completeStage() {
     state.running = false;
     if (state.stage >= state.stageCount) { win(); return; }
-    overlayKicker.textContent = 'Between-descent decision';
+    overlayKicker.textContent = 'Step 1 of 2 · Choose route';
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
-    overlayCopy.textContent = `Route mapped ${state.targets}/${targets.length}. Choose one attunement before ${levelLayouts[state.stage].name} comes online. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
-    const routeChoices = routePool.map(route => { const button = document.createElement('button'); button.type = 'button'; button.dataset.route = route.id; button.innerHTML = `<span class="upgrade-icon">⌁</span><span><small class="element-label">${route.element} route</small><strong>${route.title}</strong><small>${route.text} · FREE PASS</small></span>`; button.addEventListener('click', () => chooseRoute(route)); return button; });
-    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; });
-    choices.replaceChildren(...routeChoices, ...moduleChoices);
+    overlayCopy.textContent = `Route mapped ${state.targets}/${targets.length}. Pick the risk profile for ${levelLayouts[state.stage].name}. Your module choice comes next. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
+    showRouteChoices();
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
+  function showRouteChoices() {
+    const routeChoices = routePool.map(route => { const button = document.createElement('button'); button.type = 'button'; button.dataset.route = route.id; button.dataset.kind = route.kind; button.innerHTML = `<span class="upgrade-icon">${route.kind === 'boss' ? '⚠' : route.kind === 'free' ? '＋' : '⌁'}</span><span><small class="element-label">${route.kind.toUpperCase()} · ${route.element}</small><strong>${route.title}</strong><small>${route.text}</small></span>`; button.addEventListener('click', () => chooseRoute(route)); return button; });
+    choices.replaceChildren(...routeChoices);
+  }
+  function showModuleChoices() {
+    overlayKicker.textContent = 'Step 2 of 2 · Tune hinge';
+    overlayTitle.textContent = `${state.tableLabel} route selected`;
+    overlayCopy.textContent = `Choose one elemental hinge module before ${levelLayouts[state.stage].name} comes online. Charge available: ${Math.floor(state.charge)}.`;
+    const back = document.createElement('button'); back.type = 'button'; back.className = 'choice-back'; back.textContent = '← Change route'; back.addEventListener('click', () => { overlayKicker.textContent = 'Step 1 of 2 · Choose route'; overlayTitle.textContent = `Descent ${state.stage} stabilized`; showRouteChoices(); });
+    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; });
+    choices.replaceChildren(back, ...moduleChoices);
+  }
   function beginNextRoute() { state.stage += 1; state.layout = levelLayouts[state.stage - 1]; state.targets = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud(); }
-  function chooseRoute(route) { route.apply(state); state.routeTarget = route.id; state.message = `${route.title} selected. ${state.layout.name} route online.`; beginNextRoute(); }
+  function chooseRoute(route) { route.apply(state); state.routeTarget = route.id; state.message = `${route.title} selected. Now tune the hinge.`; showModuleChoices(); updateHud(); }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return;
     if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return;
