@@ -2340,5 +2340,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
 - Endpoint regression: left and right tip crossings detected; center-drain trajectory ignored.
 - Exact 320×568: map content `255px`, five bands span `y=119..374`, detail begins at `y=376`, CTA `y=486..538`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `4d90588`; hosted verification confirmed bottom-to-top depth order D4→D0, late-drain guard live, detail/CTA separation, Canvas geometry, and no horizontal overflow.
 - Physical-device end-flipper behavior remains pending.
