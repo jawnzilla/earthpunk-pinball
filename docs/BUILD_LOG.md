@@ -1514,3 +1514,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Cradle-entry guards and release/re-entry behavior pass static assertions.
 - Held-imprint paths are absent.
 - Contact power, reticle, physics preservation, syntax, offline scan, and `git diff --check` pass.
+
+## 2026-08-16 — POP baseline and angle-driven flipper launch pass
+
+### Implemented
+
+- New runs now start with the `POP` profile selected and visibly active.
+- POP keeps Active kick at the required default `12` while using its stronger gravity, escape, rebound, speed cap, and `18°` max-turn settings.
+- Fresh active flipper launches now derive their base direction from the actual left/right flipper angle.
+- Left and right launch vectors mirror laterally and travel upward instead of being forced straight up.
+- Target-directed assist remains a bounded rotation layered on top of the flipper-angle vector.
+- Held contacts retain separation-only behavior and do not receive the angle launch path.
+
+### Verification notes
+
+- Default POP state, active preset state, POP Active kick `12`, angle helper usage, old upward-only path removal, bounded aim, first-contact lock, held separation, syntax, offline, and `git diff --check` assertions pass.
+- Deterministic active-angle probe: left `(-0.479, -0.878)`, right `(0.479, -0.878)`; lateral components mirror and both vectors point upward.

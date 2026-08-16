@@ -48,3 +48,4 @@
 - Flipper contact-power pass: hinge-side active hits are weak dislodges; tip-side hits provide full launch power.
 - Aim-assist readability pass: Tune copy now explains target-directed max-turn behavior; cradle-only reticle points toward the nearest unhit salvage target.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
+- POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.

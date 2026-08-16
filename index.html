@@ -150,12 +150,12 @@
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
   const physicsReadout = document.querySelector('#physics-readout');
-  const debugConfig = { gravity: .08, activeKick: 12, activeEscape: 2.8, launchAngle: 0, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82, profile: 'CUSTOM' };
+  const debugConfig = { gravity: .115, activeKick: 12, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96, profile: 'POP' };
   const physicsPresets = {
     soft: { gravity: .075, activeKick: 12, activeEscape: 2.2, launchAngle: 0, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
     balanced: { gravity: .09, activeKick: 12, activeEscape: 2.8, launchAngle: 6, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
     reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
-    pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
+    pop: { gravity: .115, activeKick: 12, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
   function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak height: ${Math.max(0, H - state.peakY).toFixed(0)} px · Upper bank: ${getUpperBumpers().length ? `${state.topHits}/1` : '—'} · Aim assist: ${debugConfig.launchAngle.toFixed(0)}° max turn · Last launch speed: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.toggle('is-active', presetButton === button); presetButton.setAttribute('aria-pressed', presetButton === button ? 'true' : 'false'); }); Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
@@ -347,6 +347,11 @@
     capBallSpeed(ball);
     return true;
   }
+  function applyFlipperAngleLaunch(ball, flipper, side) {
+    const normal = side === 'left' ? { x: -Math.sin(flipper.angle), y: Math.cos(flipper.angle) } : { x: Math.sin(flipper.angle), y: -Math.cos(flipper.angle) };
+    if (normal.y > -.05) { normal.x *= -1; normal.y *= -1; }
+    const length = Math.hypot(normal.x, normal.y) || 1; const speed = Math.max(Math.hypot(ball.vx, ball.vy), .001); ball.vx = normal.x / length * speed; ball.vy = normal.y / length * speed;
+  }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function rotateTowardUpperTarget(ball, maxTurnDegrees) {
     const target = getUpperBumpers().sort((a, b) => Math.hypot(a.x - ball.x, a.y - ball.y) - Math.hypot(b.x - ball.x, b.y - ball.y))[0];
@@ -396,7 +401,7 @@
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation, Boolean(input.left && !state.flipperContacts.left));
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation, Boolean(input.right && !state.flipperContacts.right));
     const freshActiveHit = (leftHit && input.left && !state.flipperContacts.left) || (rightHit && input.right && !state.flipperContacts.right);
-    if (freshActiveHit) { const launchFactor = Number.isFinite(b.lastFlipperLaunchFactor) ? b.lastFlipperLaunchFactor : .18; const escape = debugConfig.activeEscape * (.35 + launchFactor * .65); b.vy = Math.min(b.vy, -escape); const aimed = rotateTowardUpperTarget(b, debugConfig.launchAngle * launchFactor); b.vy = Math.min(b.vy, -escape); capBallSpeed(b); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, aimed ? '#67c8d5' : '#ffd083', .35 + launchFactor * .25); }
+    if (freshActiveHit) { const launchSide = leftHit && input.left && !state.flipperContacts.left ? 'left' : 'right'; const launchFlipper = flippers[launchSide]; const launchFactor = Number.isFinite(b.lastFlipperLaunchFactor) ? b.lastFlipperLaunchFactor : .18; const escape = debugConfig.activeEscape * (.35 + launchFactor * .65); applyFlipperAngleLaunch(b, launchFlipper, launchSide); b.vy = Math.min(b.vy, -escape); const aimed = rotateTowardUpperTarget(b, debugConfig.launchAngle * launchFactor); capBallSpeed(b); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, aimed ? '#67c8d5' : '#ffd083', .35 + launchFactor * .25); }
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftEnteredCradle) imprintFromHinge('left');
     if (rightHit && rightEnteredCradle) imprintFromHinge('right');
@@ -585,7 +590,7 @@
   window.addEventListener('blur', () => clearPointerControl());
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
-  resetButton.addEventListener('click', reset);
+  const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.addEventListener('click', reset);
   reset(); loop();
 })();
 </script>
