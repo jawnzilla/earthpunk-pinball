@@ -1800,3 +1800,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Objective dismissal key is scoped by `deadlight-objective-tip:<tableKind>`.
 - Route graph `clientWidth === scrollWidth` at 320px.
 - Extracted JavaScript passes `node --check`; `git diff --check` and offline scan pass.
+
+## 2026-08-16 — Loop 6 follow-up: higher vertical edge rails
+
+- Moved the thin edge rails higher: upper pair centered at `y=246`, mid pair at `y=304`, keeping them outside the flipper funnel.
+- Reoriented the rails to vertical-biased segments with mirrored inward lean instead of shallow horizontal bars.
+- Added a bounded energetic deflection for top-side contacts: upward plus inward, mirrored left/right. Underside one-way contacts remain on muted wall rebound and receive no deflection impulse.
+- Deterministic top-contact gate passes for both sides: left `vx +2.45 / vy -0.34`, right `vx -2.45 / vy -0.34`.
+- Target SVG work remains in the same working shipment: Fire, Water, Earth, and Air target bodies now have authored silhouettes with procedural fallback.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, offline, vertical-rail, higher-position, target-asset, one-way, and mirrored-direction assertions pass.
+- Exact 320×568 geometry remains touch-safe; physical-device feel testing is still pending.
