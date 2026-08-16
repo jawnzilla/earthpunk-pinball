@@ -1193,3 +1193,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `git diff --check` passes.
 - Hosted page responds HTTP 200; 320px hosted layout verification previously reported no horizontal overflow.
 - Remaining gate: physical-phone playtest and final visual signoff; this pass is not claimed as AAA-complete.
+
+## 2026-08-16 — Pass 25: table identity and tuning contract
+
+### Implemented
+
+- Added explicit route identities: **FREE PASS**, **HAZARD**, and **BOSS**.
+- Flooded Sluice now permits resource recovery without Stability loss.
+- Reactor Warden requires three exposed armor cores and applies boss-specific backlash messaging.
+- Added an in-table identity plate so route risk is visible during play, not only in the overlay.
+- Restored the Active kick tuning contract to `1.20` and centered its slider at the default using a `0.00–2.40` range.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Active kick UI/runtime defaults both assert `1.20`; slider midpoint is mathematically `1.20`.
+- `git diff --check` passes.
+- Remaining gate: physical-phone boss/free-pass playtest and final visual signoff.
