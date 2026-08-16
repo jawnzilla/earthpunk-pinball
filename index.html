@@ -477,11 +477,16 @@
     ctx.fillStyle = color; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(state.tableKind === 'boss' ? 'WARDEN' : state.tableKind === 'reward' ? 'VAULT' : state.tableKind === 'free' ? 'SLUICE' : 'CORE', W / 2, 127); ctx.restore();
   }
   function drawBoss() {
-    const boss = state.layout.boss; const color = state.boss.exposed ? '#ef8b45' : '#67c8d5'; const pulse = 2 + Math.sin(state.pulse * 2) * 2;
-    ctx.save(); ctx.translate(boss.x, boss.y); ctx.globalAlpha = .9; ctx.beginPath(); ctx.arc(0, 0, boss.r + 10 + pulse, 0, Math.PI * 2); ctx.fillStyle = 'rgba(7,13,15,.9)'; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = state.boss.exposed ? 4 : 2; ctx.stroke();
-    ctx.beginPath(); ctx.arc(0, 0, boss.r, 0, Math.PI * 2); ctx.fillStyle = state.boss.exposed ? '#5a3428' : '#263f43'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = color; ctx.fillRect(-16, -5, 32, 10); ctx.fillStyle = '#101518'; ctx.fillRect(-10, -2, 20, 4);
-    for (let i = 0; i < state.boss.maxHp; i += 1) { ctx.beginPath(); ctx.arc(-18 + i * 18, boss.r + 14, 5, 0, Math.PI * 2); ctx.fillStyle = i < state.boss.hp ? color : '#526e63'; ctx.fill(); }
+    const boss = state.layout.boss; const exposed = state.boss.exposed; const color = exposed ? '#ef8b45' : '#67c8d5'; const pulse = 2 + Math.sin(state.pulse * 2) * 2, shellRadius = boss.r + 2;
+    ctx.save(); ctx.translate(boss.x, boss.y); ctx.globalAlpha = .96;
+    ctx.shadowColor = color; ctx.shadowBlur = exposed ? 18 : 8;
+    ctx.beginPath(); ctx.arc(0, 0, shellRadius + 13 + pulse, 0, Math.PI * 2); ctx.fillStyle = 'rgba(7,13,15,.92)'; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = exposed ? 4 : 2; ctx.stroke();
+    ctx.shadowBlur = 0; ctx.beginPath(); ctx.arc(0, 0, shellRadius, 0, Math.PI * 2); const shell = ctx.createRadialGradient(-8, -10, 2, 0, 0, shellRadius); shell.addColorStop(0, exposed ? '#6b3a28' : '#3b5c5f'); shell.addColorStop(.55, exposed ? '#3e2927' : '#263f43'); shell.addColorStop(1, '#10191c'); ctx.fillStyle = shell; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.save(); ctx.rotate(state.pulse * .04); for (let i = 0; i < 6; i += 1) { const angle = i * Math.PI / 3; ctx.save(); ctx.rotate(angle); ctx.beginPath(); ctx.moveTo(-8, -shellRadius + 3); ctx.lineTo(8, -shellRadius + 3); ctx.lineTo(12, -shellRadius - 8); ctx.lineTo(-12, -shellRadius - 8); ctx.closePath(); ctx.fillStyle = exposed ? '#70402d' : '#486b68'; ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.fill(); ctx.stroke(); ctx.restore(); } ctx.restore();
+    ctx.globalAlpha = exposed ? .95 : .62; ctx.strokeStyle = color; ctx.lineWidth = 2; for (let i = 0; i < 6; i += 1) { const angle = -Math.PI / 2 + i * Math.PI / 3; ctx.beginPath(); ctx.moveTo(Math.cos(angle) * 8, Math.sin(angle) * 8); ctx.lineTo(Math.cos(angle) * (shellRadius - 3), Math.sin(angle) * (shellRadius - 3)); ctx.stroke(); }
+    ctx.globalAlpha = 1; ctx.fillStyle = '#081012'; ctx.beginPath(); ctx.arc(0, 0, shellRadius * .48, 0, Math.PI * 2); ctx.fill(); const eye = ctx.createRadialGradient(-4, -5, 1, 0, 0, shellRadius * .48); eye.addColorStop(0, '#fff0ba'); eye.addColorStop(.22, color); eye.addColorStop(1, '#111d20'); ctx.fillStyle = eye; ctx.beginPath(); ctx.arc(0, 0, shellRadius * .4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1; ctx.stroke();
+    if (exposed) { ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-12, -18); ctx.lineTo(-3, -6); ctx.lineTo(-10, 5); ctx.lineTo(2, 18); ctx.moveTo(15, -10); ctx.lineTo(7, 0); ctx.lineTo(14, 12); ctx.stroke(); }
+    for (let i = 0; i < state.boss.maxHp; i += 1) { const angle = -Math.PI / 2 + i * Math.PI / 3; const x = Math.cos(angle) * (shellRadius + 17), y = Math.sin(angle) * (shellRadius + 17); ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = i < state.boss.hp ? color : '#526e63'; ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1; ctx.stroke(); }
     ctx.restore();
   }
   function drawDeckDetails() {
@@ -496,10 +501,12 @@
     ctx.fillStyle = '#080e10'; ctx.beginPath(); ctx.moveTo(151, H - 38); ctx.lineTo(209, H - 38); ctx.lineTo(191, H - 62); ctx.lineTo(169, H - 62); ctx.closePath(); ctx.fill();
 
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 3; ctx.stroke();
-    [[64, H - 75], [296, H - 75]].forEach(([x, y]) => {
-      ctx.beginPath(); ctx.arc(x, y, 19, 0, Math.PI * 2); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 3; ctx.stroke();
-      ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke();
-      ctx.fillStyle = '#f1b35b'; ctx.fillRect(x - 27, y - 3, 12, 6); ctx.fillRect(x + 15, y - 3, 12, 6);
+    [[64, H - 75], [296, H - 75]].forEach(([x, y], index) => {
+      const spin = state.pulse * (index ? -.12 : .12); ctx.save(); ctx.translate(x, y); ctx.rotate(spin);
+      ctx.beginPath(); for (let side = 0; side < 8; side += 1) { const angle = side * Math.PI / 4; const radius = side % 2 ? 18 : 22; side === 0 ? ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius) : ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius); } ctx.closePath(); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 3; ctx.stroke();
+      ctx.strokeStyle = index ? '#67c8d5' : '#ef8b45'; ctx.lineWidth = 2; for (let tooth = 0; tooth < 6; tooth += 1) { ctx.rotate(Math.PI / 3); ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(20, 0); ctx.stroke(); }
+      ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fillStyle = index ? '#67c8d5' : '#ef8b45'; ctx.fill(); ctx.restore();
+      drawRivet(x - 25, y - 22, '#789487'); drawRivet(x + 25, y + 22, '#789487');
     });
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(42, H - 43); ctx.lineTo(156, H - 43); ctx.moveTo(204, H - 43); ctx.lineTo(W - 42, H - 43); ctx.stroke();
     ctx.restore();

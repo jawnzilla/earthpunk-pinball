@@ -1671,3 +1671,15 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification notes
 
 - Extracted JavaScript syntax, diff hygiene, offline scan, touch-hint, debug-enforcement, short-route, and flipper-render assertions pass.
+
+## 2026-08-16 — Loop 3: authored Warden shell and edge machinery
+
+- Rebuilt the Reactor Warden renderer as a segmented armor shell with six rotating armor petals, radial panel seams, a layered reactor eye, orbiting HP cores, and exposed-state crack lines. Collision radius and boss state are unchanged.
+- Rebuilt the lower edge machinery as mirrored rotating octagonal pods with elemental conduits, inset cores, and rivets instead of plain circles and rectangular bars.
+- Kept the work render-only and dependency-free; no route, physics, or collision geometry changed.
+
+### Verification notes
+
+- Extracted JavaScript passes `node --check`.
+- Offline scan and `git diff --check` pass.
+- Boss-shell, edge-pod, flipper, touch-hint, debug-enforcement, and compact-route assertions pass.
