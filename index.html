@@ -50,7 +50,9 @@
       .route-strip-node { min-width: 60px; padding: 4px 5px; }
       .route-strip-node strong { font-size: 10px; }
       .route-strip-node small { font-size: 8px; }
-      .card { padding: 16px; max-height: calc(100dvh - 16px); }
+      .card { padding: 12px; max-height: calc(100dvh - 16px); }
+      .route-strip.route-in-card { margin: 6px 0 8px; }
+      .objective-tip { margin: 8px 0; padding: 7px 8px; }
       .choices { gap: 6px; margin: 10px 0; }
       .choices button { grid-template-columns: 42px 1fr; min-height: 58px; padding: 7px 9px; }
       .choices button .upgrade-icon { width: 36px; height: 36px; }
@@ -114,6 +116,8 @@
     .route-legend span:last-child { min-width: 0; max-width: 68%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: 34px; min-height: 34px; padding: 4px; border: 1px solid #789487; border-radius: 50%; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 16px; line-height: 1; }
+    #overlay:not([hidden]) ~ .debug-toggle { top: 20px; right: 22px; bottom: auto; }
+    .overlay .card h2 { padding-right: 34px; }
     .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); max-height: calc(100vh - 66px); max-height: calc(100dvh - 66px); overflow-y: auto; padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
     .debug-panel[hidden] { display: none; }
     .debug-panel h3 { margin: 0 0 5px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
@@ -322,7 +326,7 @@
   function updateHud() {
     stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount}` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
     messageEl.textContent = state.message.replace('Read the route map, then enter the descent.', 'READY').replace('Descent mapped. Choose a modification.', 'OBJECTIVES CLEAR');
-    routeStatus.textContent = `R${state.stage}/${state.stageCount} · ${state.layout.name}`;
+    routeStatus.textContent = state.layout.name;
     scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
     const progress = Math.round(((state.stage - 1 + state.targets / targets.length) / state.stageCount) * 100);
     progressFill.style.width = `${Math.max(0, Math.min(100, progress))}%`;

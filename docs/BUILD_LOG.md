@@ -1842,3 +1842,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 remains `241.875×430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
 - Pages workflow succeeded for `566b23c`; hosted browser verification confirmed `hinge-housing.svg` plus all existing target, bumper, Warden, edge-pod, and probe-ball assets, with `241.875×430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+
+## 2026-08-16 — Loop 7 follow-up: simplify route HUD and modal utility placement
+
+- Removed the duplicated `R1/4 ·` prefix from `#route-status`; the header owns run progression and the route bar owns table identity.
+- Repositioned the debug gear into a deliberate top-right modal utility zone while the pre-descent card is open.
+- Added title padding so the gear cannot cover the modal heading; on 320×568 the title begins 11px below the gear.
+- Preserved selector access, objective tips, in-card route preview, and active-play restoration.
+
+### Verification notes
+
+- Exact 320×568: card `x=16..304`, `y=19..549`; gear `x=264..298`, `y=20..54`; title begins at `y=65`.
+- Route identity now reads `Generator Well` once in the HUD.
+- `node --check`, `git diff --check`, offline, route-deduplication, modal-gear, and overflow assertions pass.
+- Physical-device feel testing remains pending.
