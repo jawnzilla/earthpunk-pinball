@@ -1357,3 +1357,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Four angle profiles, angle math, first-contact-only behavior, assist cap, telemetry, Active kick `12`, offline scan, and `git diff --check` assertions pass.
 - Real-device feel remains the final tuning gate.
+
+## 2026-08-16 — Physics UX follow-up: visible angle and mobile-safe Tune
+
+### Implemented
+
+- Added a dedicated `Launch angle` readout to the Tune panel instead of hiding the value only in telemetry.
+- Preset selection updates the visible degree value and telemetry together.
+- Bounded the Tune panel to the viewport with scroll fallback for true 320x568 screens.
+- Preserved the four angle profiles, first-contact assist cap, muted contacts, and Active kick `12`.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Angle row, bounded panel, synchronized preset value, four profiles, first-contact lock, offline scan, and `git diff --check` assertions pass.
+- The hosted build still requires real-device touch/feel signoff.

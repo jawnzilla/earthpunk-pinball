@@ -78,7 +78,7 @@
     .route-legend span:last-child { min-width: 0; max-width: 68%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
     button { width: 100%; min-height: 48px; border: 0; border-radius: 10px; color: #101518; background: #f1b35b; font: inherit; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: auto; min-height: 34px; padding: 6px 10px; border: 1px solid #789487; border-radius: 6px; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 11px; }
-    .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+    .debug-panel { position: fixed; right: 12px; bottom: max(54px, calc(env(safe-area-inset-bottom) + 42px)); z-index: 5; width: min(260px, calc(100vw - 24px)); max-height: calc(100vh - 66px); max-height: calc(100dvh - 66px); overflow-y: auto; padding: 12px; border: 1px solid #789487; border-radius: 8px; background: rgba(9,17,19,.96); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
     .debug-panel[hidden] { display: none; }
     .debug-panel h3 { margin: 0 0 5px; color: #ffd083; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
     .debug-panel p { margin: 0 0 8px; color: #9fb5a7; font-size: 10px; line-height: 1.3; }
@@ -122,8 +122,9 @@
     <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
     <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
+    <div class="debug-row" title="Inward bias added only on the first active flipper launch.">Launch angle <span class="debug-value" data-angle-value="launchAngle">0°</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft">SOFT</button><button type="button" data-preset="balanced">BALANCED</button><button type="button" data-preset="reach">HIGH REACH</button><button type="button" data-preset="pop">POP</button></div>
-    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Last launch: —</div>
+    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Top: 0/1 · Angle: 0° · Launch: —</div>
   </section>
 <script>
 (() => {
@@ -155,7 +156,7 @@
     reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
     pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Last launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}°`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Angle: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
