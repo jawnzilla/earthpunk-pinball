@@ -1783,3 +1783,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted JavaScript passes `node --check`.
 - `git diff --check`, offline scan, bumper asset dispatch, HUD relocation, maximum-table, and angled one-way rail assertions pass.
 - SVG files exist locally and remain dependency-free.
+- Pages workflow succeeded for `7009900`; hosted source and browser verification confirmed all six sprite requests (`warden`, `edge-pod`, `probe-ball`, standard/pulse/armor bumpers), hidden resource row, `241.875×430px` Canvas, `565px` control clearance, and no horizontal overflow.
