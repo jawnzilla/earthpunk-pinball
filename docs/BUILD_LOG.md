@@ -1233,3 +1233,22 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Corrected the requested Active kick default from `1.2` to `12`.
 - Centered the slider at `12` using a `0–24` range with `0.5` increments.
 - UI value, runtime config, and deployed HTML assertions now agree at `12.00`.
+
+## 2026-08-16 — Pass 27: Reactor Warden boss table
+
+### Implemented
+
+- Added the dedicated `Blackout Core` boss layout with a large Warden shell, armor cores, and an Air relay gate.
+- Added a shield/exposure cycle: the Warden exposes for the final 36 frames of a 120-frame cycle.
+- Elemental imprints are required to damage the exposed Warden; shield collisions rebound the ball and explain the failure.
+- Added boss HP to the mobile HUD and visible Canvas armor pips.
+- Boss descent completion now requires all targets plus all three Warden cores defeated.
+- Preserved Active kick default `12` and the centered `0–24` tuning range.
+
+### Verification notes
+
+- `node --check` passes for the extracted 45.0KB game script.
+- Boss layout, shield cycle, elemental damage gate, boss renderer, two-step route flow, and Active kick `12` assertions pass.
+- Offline scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
+- `git diff --check` passes.
+- Remaining gate: live boss playthrough and physical-phone touch verification.
