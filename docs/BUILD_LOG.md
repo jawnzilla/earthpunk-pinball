@@ -2166,3 +2166,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Live 320×568 smoke test rendered the active table with no console-visible failure, `430px` Canvas, and no horizontal overflow.
 - Pages workflow succeeded for `8204c36`; hosted verification confirmed `sweptSegmentContact`, ball depth cues, five route lanes, map sizes `350px` / `292px`, CTA reachability, and no horizontal overflow.
 - Physical-device tip-contact testing remains pending.
+
+## 2026-08-16 — Loop 20: persistent route feedback rail
+
+- Added `#route-map-scroll` as the single inner scroll owner for the five-lane route console.
+- Moved `#route-map-detail` and `.route-map-legend` into a persistent feedback rail below the map scroll area.
+- Updated route cue/reset logic to listen to and reset the inner map rail instead of the outer panel.
+- The selected-node tooltip and route legend now remain visible before the CTA at short-phone dimensions.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: inner map scroll `232px`, feedback rail visible at `y=323..378`, CTA `y=439..491`, outer modal scroll `0`, no horizontal overflow.
+- Exact 390×844: feedback rail visible at `y=309..367`, CTA `y=428..480`, no horizontal overflow.
+- Selecting a reachable node updates the tooltip without committing a route.
+- Hosted verification pending deployment.
+- Physical-device touch-scroll testing remains pending.
