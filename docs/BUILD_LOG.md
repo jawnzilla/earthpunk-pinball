@@ -1543,3 +1543,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification notes
 
 - Reward kind, reward identity, reward CSS, unlock predicate, route transaction, POP default, angle launch, syntax, offline, and `git diff --check` assertions pass.
+
+## 2026-08-16 — Corrective angle response pass: amplify flipper timing control
+
+### Implemented
+
+- Fresh launch direction now uses the angular delta from each flipper's rest position to its actual contact position.
+- The delta is amplified `1.8×` so early and late activation produce materially different trajectories.
+- Early contacts remain high/upward; late contacts produce a visibly stronger outward vector.
+- Left/right behavior remains mirrored, target aim remains bounded, and post-launch speed remains capped.
+
+### Verification notes
+
+- Deterministic probe: left early `(0.159, -0.987)` → late `(-0.856, -0.517)`; right early `(-0.159, -0.987)` → late `(0.856, -0.517)`.
+- Lateral change is approximately `1.015` per side, with both early and late vectors finite and upward.
+- POP default, Active kick `12`, contact power, first-contact lock, syntax, offline scan, and `git diff --check` remain passing.

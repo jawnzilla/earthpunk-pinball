@@ -351,9 +351,9 @@
     return true;
   }
   function applyFlipperAngleLaunch(ball, flipper, side) {
-    const normal = side === 'left' ? { x: -Math.sin(flipper.angle), y: Math.cos(flipper.angle) } : { x: Math.sin(flipper.angle), y: -Math.cos(flipper.angle) };
-    if (normal.y > -.05) { normal.x *= -1; normal.y *= -1; }
-    const length = Math.hypot(normal.x, normal.y) || 1; const speed = Math.max(Math.hypot(ball.vx, ball.vy), .001); ball.vx = normal.x / length * speed; ball.vy = normal.y / length * speed;
+    const directionOffset = side === 'left' ? -Math.PI / 2 : Math.PI / 2; const restDirection = flipper.rest + directionOffset; const angleDelta = flipper.angle - flipper.rest; const launchDirection = restDirection + angleDelta * 1.8;
+    const normal = { x: Math.cos(launchDirection), y: Math.sin(launchDirection) }; if (normal.y > -.05) { normal.x *= -1; normal.y *= -1; }
+    const speed = Math.max(Math.hypot(ball.vx, ball.vy), .001); ball.vx = normal.x * speed; ball.vy = normal.y * speed;
   }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function rotateTowardUpperTarget(ball, maxTurnDegrees) {
