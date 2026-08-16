@@ -40,9 +40,15 @@
     .element-status { min-width: 0; overflow: hidden; color: #c4d2bd; font-size: 10px; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
     .table-wrap { min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; }
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
-    @media (max-height: 760px) {
-      main { gap: 6px; }
-      canvas { width: min(100%, calc((100dvh - 142px) * .5625)); height: auto; max-width: 100%; max-height: 100%; }
+    @media (max-height: 600px) {
+      main { gap: 4px; padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+      canvas { width: min(100%, calc((100dvh - 221px) * .5625)); height: auto; }
+      .run-hud { padding: 6px 9px; gap: 4px; }
+      .touch-control { min-height: 52px; }
+      .route-strip { padding: 5px 7px; }
+      .route-strip-node { min-width: 60px; padding: 4px 5px; }
+      .route-strip-node strong { font-size: 10px; }
+      .route-strip-node small { font-size: 8px; }
     }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
@@ -68,6 +74,7 @@
     .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
     .choices button small { display: block; margin-top: 3px; color: #b8cbbb; line-height: 1.3; }
+    .upgrade-cost { color: #ffd083 !important; font-weight: 900; letter-spacing: .08em; }
     .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
     .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
     .choices button:active { background: #38524e; transform: translateY(1px); }
@@ -78,7 +85,7 @@
     .choices button[data-kind="reward"]:hover, .choices button[data-kind="reward"]:focus-visible { border-color: #e5d8ff; box-shadow: 0 0 20px rgba(198,167,239,.34), inset 0 0 18px rgba(159,212,192,.08); }
     .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
     .route-strip { display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: linear-gradient(110deg, rgba(31,53,51,.92), rgba(13,22,25,.92)); }
-    .route-strip[hidden] { display: none; }
+    .route-strip[hidden] { display: grid; visibility: hidden; pointer-events: none; }
     .route-strip-title { display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
     .route-strip-graph { display: grid; grid-template-columns: minmax(84px, 1fr) 18px minmax(84px, 1fr) 18px minmax(84px, 1fr); align-items: center; gap: 3px; overflow-x: auto; }
     .route-strip-node { min-width: 0; padding: 5px 6px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
@@ -110,7 +117,8 @@
     .preset-row button.is-active { border-color: #ffd083; color: #101518; background: #ffd083; box-shadow: 0 0 0 2px rgba(255,208,131,.22); }
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
     .physics-readout { margin-top: 8px; padding: 6px 7px; border-left: 2px solid #f1b35b; color: #b5d3a1; background: rgba(241,179,91,.06); font-size: 10px; line-height: 1.35; font-variant-numeric: tabular-nums; }
-  </style>
+    .cheat-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; padding: 7px; border: 1px solid #70402d; border-radius: 6px; color: #ffd083; background: rgba(239,139,69,.08); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .cheat-row input { accent-color: #ef8b45; }  </style>
 </head>
 <body>
   <main>
@@ -148,6 +156,7 @@
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
     <div class="debug-row" title="Flipper contacts use ball velocity relative to the rotating flipper surface. The rolling component is preserved while fresh activation adds contact-scaled normal impulse.">Flipper solver — relative contact <span class="debug-value" data-solver-value="relative-contact">rolling + surface velocity</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
+    <label class="cheat-row"><input id="cheat-infinite" type="checkbox"><span>∞ Stability / lives</span></label>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
 <script>
@@ -174,6 +183,7 @@
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
   const physicsReadout = document.querySelector('#physics-readout');
+  const cheatInfinite = document.querySelector('#cheat-infinite');
   const debugConfig = { gravity: .115, activeKick: 12, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96, profile: 'POP' };
   const physicsPresets = {
     soft: { gravity: .075, activeKick: 12, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
@@ -187,6 +197,7 @@
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.remove('is-active'); presetButton.setAttribute('aria-pressed', 'false'); }); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
   }));
+  cheatInfinite.addEventListener('change', () => { if (state) state.immortal = cheatInfinite.checked; updateHud(); });
   const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
   const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
   function installHingeElement(stateRef, element) { const slot = stateRef.hingeElements.left === null ? 'left' : stateRef.hingeElements.right === null ? 'right' : (stateRef.hingeLevels.left <= stateRef.hingeLevels.right ? 'left' : 'right'); if (stateRef.hingeElements[slot] === element) stateRef.hingeLevels[slot] = Math.min(3, stateRef.hingeLevels[slot] + 1); else { stateRef.hingeElements[slot] = element; stateRef.hingeLevels[slot] = 1; } return slot; }
@@ -203,6 +214,7 @@
     { id: 'surface-vault', kind: 'reward', element: 'Air', title: 'Surface Vault', text: 'Reward route: upper-bank breach or 4 Charge opens the vault. No threat, doubled salvage.', unlock: s => s.topHits > 0 || s.charge >= 4, apply: s => { s.routeModifier = 'Water'; s.tableKind = 'reward'; s.tableLabel = 'REWARD'; s.salvageBonus += .5; s.charge += 2; } }
   ];
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
+  const spriteImages = { warden: new Image(), edgePod: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg';
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
@@ -211,6 +223,14 @@
     { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ id: 'split-upper-left', x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0, upper: true }, { id: 'split-upper-right', x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0, upper: true }, { id: 'split-lower-left', x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { id: 'split-lower-right', x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
   ];
   const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: null, barrierNote: 'Upper relay barrier removed; keep the lower approach open.', boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
+  const edgeBumpers = () => [
+    { id: 'edge-left-low', x: 42, y: 474, r: 14, type: 'edge', element: 'Water' },
+    { id: 'edge-right-low', x: 318, y: 474, r: 14, type: 'edge', element: 'Fire' },
+    { id: 'edge-left-lower', x: 48, y: 522, r: 13, type: 'edge', element: 'Earth' },
+    { id: 'edge-right-lower', x: 312, y: 522, r: 13, type: 'edge', element: 'Air' }
+  ];
+  levelLayouts.forEach(layout => layout.bumpers.push(...edgeBumpers()));
+  bossLayout.bumpers.push(...edgeBumpers());
   const routeGraph = {
     'generator-well': [{ routeId: 'flooded-sluice', nextNode: 'pulse-manifold', chute: 'left' }, { routeId: 'ember-lift', nextNode: 'split-reactor', chute: 'right' }],
     'pulse-manifold': [{ routeId: 'ember-lift', nextNode: 'split-reactor', chute: 'left' }, { routeId: 'reactor-warden', nextNode: 'blackout-core', chute: 'right' }],
@@ -244,7 +264,8 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Read the route map, then enter the descent.' };
+    cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -261,15 +282,15 @@
     state.launched = true;
   }
   function updateHud() {
-    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · ${state.stability}/${state.stabilityMax}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
+    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · ${state.immortal ? '∞' : `${state.stability}/${state.stabilityMax}`}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
     messageEl.textContent = state.message.replace('Read the route map, then enter the descent.', 'READY').replace('Descent mapped. Choose a modification.', 'OBJECTIVES CLEAR');
     routeStatus.textContent = `R${state.stage}/${state.stageCount} · ${state.layout.name}`;
     scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
     const progress = Math.round(((state.stage - 1 + state.targets / targets.length) / state.stageCount) * 100);
     progressFill.style.width = `${Math.max(0, Math.min(100, progress))}%`;
     progressTrack.setAttribute('aria-valuenow', String(progress));
-    stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
-    stabilityPips.setAttribute('aria-label', `${state.stability} of ${state.stabilityMax} stability remaining`);
+    stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${state.immortal || index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
+    stabilityPips.setAttribute('aria-label', state.immortal ? 'Infinite stability enabled' : `${state.stability} of ${state.stabilityMax} stability remaining`);
     const hinges = ['left', 'right'].map(side => state.hingeElements[side] ? `${side[0].toUpperCase()}:${state.hingeElements[side]} ${state.hingeLevels[side]}` : `${side[0].toUpperCase()}:—`).join(' · ');
     const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
@@ -327,8 +348,8 @@
     const match = routeOptions().find(({ edge: candidate }) => candidate.routeId === edge.routeId && candidate.nextNode === edge.nextNode); if (!match) return; const route = match.route; state.running = false; state.routeTarget = route.id; state.nextNode = edge.nextNode; route.apply(state); state.pendingRoute = route.id; state.message = `${route.title} chute entered. Tune the hinge before the next descent.`; showModuleChoices(); updateHud();
   }
   function showModuleChoices() {
-    overlayKicker.textContent = 'Route chute confirmed · Hinge tune'; overlayTitle.textContent = `${state.tableLabel} route`; overlayCopy.textContent = `The probe entered the ${state.routeTarget.replaceAll('-', ' ')} chute. Choose one elemental hinge module before ${nodeTitle(state.nextNode)} comes online. Charge available: ${Math.floor(state.charge)}.`;
-    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
+    overlayKicker.textContent = 'Route chute confirmed · Hinge tune'; overlayTitle.textContent = `${state.tableLabel} route`; overlayCopy.textContent = `Choose a module for ${shortNodeTitle(state.nextNode)} · Charge ${Math.floor(state.charge)}`;
+    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? `◈ ${upgrade.cost}` : 'FREE'; button.title = `${upgrade.title} · ${price}`; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element}</small><strong>${upgrade.title.replace(' hinge module', '')}</strong><small class="upgrade-cost" aria-label="Cost ${upgrade.cost || 0} charge">${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
   }
   function beginNextRoute() {
     state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
@@ -440,11 +461,12 @@
     state.flipperContacts.right = Boolean(rightHit);
     if (state.routeGateOpen) { const chute = state.routeChutes.find(edge => { const point = chutePosition(edge.chute); return Math.hypot(b.x - point.x, b.y - point.y) < 28; }); if (chute) { chooseRouteFromChute(chute); return; } }
     if (state.flipperEffectCooldown === 0 && (leftHit || rightHit) && (input.left || input.right)) { const flipper = leftHit ? flippers.left : flippers.right; emitImpact(flipper.pivotX, flipper.pivotY, '#ffd083', .55); state.flipperEffectCooldown = 5; }
-    if (![b.x, b.y, b.vx, b.vy].every(Number.isFinite) || Math.abs(b.x) > W * 2 || Math.abs(b.y) > H * 2) { state.stability -= 1; if (state.stability <= 0) { lose(); return; } setMessage('Probe recovered from a bad collision. Stability lost.'); spawnBall(); return; }
+    if (![b.x, b.y, b.vx, b.vy].every(Number.isFinite) || Math.abs(b.x) > W * 2 || Math.abs(b.y) > H * 2) { if (!state.immortal) state.stability -= 1; if (state.stability <= 0 && !state.immortal) { lose(); return; } setMessage(state.immortal ? '∞ Stability held the probe in the run.' : 'Probe recovered from a bad collision. Stability lost.'); spawnBall(); return; }
     capBallSpeed(b);
     const drainOpening = b.x > 156 && b.x < 204;
     if (b.y > H - 35 && drainOpening) {
       if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
+      if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
       state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
       if (state.stability <= 0) { lose(); return; }
       setMessage(state.tableKind === 'boss' ? 'Warden backlash. Stability lost.' : 'Probe recovered. Stability lost.'); spawnBall(); return;    }
@@ -486,6 +508,7 @@
     ctx.globalAlpha = exposed ? .95 : .62; ctx.strokeStyle = color; ctx.lineWidth = 2; for (let i = 0; i < 6; i += 1) { const angle = -Math.PI / 2 + i * Math.PI / 3; ctx.beginPath(); ctx.moveTo(Math.cos(angle) * 8, Math.sin(angle) * 8); ctx.lineTo(Math.cos(angle) * (shellRadius - 3), Math.sin(angle) * (shellRadius - 3)); ctx.stroke(); }
     ctx.globalAlpha = 1; ctx.fillStyle = '#081012'; ctx.beginPath(); ctx.arc(0, 0, shellRadius * .48, 0, Math.PI * 2); ctx.fill(); const eye = ctx.createRadialGradient(-4, -5, 1, 0, 0, shellRadius * .48); eye.addColorStop(0, '#fff0ba'); eye.addColorStop(.22, color); eye.addColorStop(1, '#111d20'); ctx.fillStyle = eye; ctx.beginPath(); ctx.arc(0, 0, shellRadius * .4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1; ctx.stroke();
     if (exposed) { ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-12, -18); ctx.lineTo(-3, -6); ctx.lineTo(-10, 5); ctx.lineTo(2, 18); ctx.moveTo(15, -10); ctx.lineTo(7, 0); ctx.lineTo(14, 12); ctx.stroke(); }
+    if (spriteImages.warden.complete && spriteImages.warden.naturalWidth) { ctx.globalAlpha = exposed ? .82 : .52; ctx.drawImage(spriteImages.warden, -48, -48, 96, 96); ctx.globalAlpha = 1; }
     for (let i = 0; i < state.boss.maxHp; i += 1) { const angle = -Math.PI / 2 + i * Math.PI / 3; const x = Math.cos(angle) * (shellRadius + 17), y = Math.sin(angle) * (shellRadius + 17); ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = i < state.boss.hp ? color : '#526e63'; ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1; ctx.stroke(); }
     ctx.restore();
   }
@@ -505,7 +528,7 @@
       const spin = state.pulse * (index ? -.12 : .12); ctx.save(); ctx.translate(x, y); ctx.rotate(spin);
       ctx.beginPath(); for (let side = 0; side < 8; side += 1) { const angle = side * Math.PI / 4; const radius = side % 2 ? 18 : 22; side === 0 ? ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius) : ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius); } ctx.closePath(); ctx.fillStyle = '#101a1c'; ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 3; ctx.stroke();
       ctx.strokeStyle = index ? '#67c8d5' : '#ef8b45'; ctx.lineWidth = 2; for (let tooth = 0; tooth < 6; tooth += 1) { ctx.rotate(Math.PI / 3); ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(20, 0); ctx.stroke(); }
-      ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fillStyle = index ? '#67c8d5' : '#ef8b45'; ctx.fill(); ctx.restore();
+      ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fillStyle = index ? '#67c8d5' : '#ef8b45'; ctx.fill(); if (spriteImages.edgePod.complete && spriteImages.edgePod.naturalWidth) { ctx.globalAlpha = .42; ctx.drawImage(spriteImages.edgePod, -28, -28, 56, 56); ctx.globalAlpha = 1; } ctx.restore();
       drawRivet(x - 25, y - 22, '#789487'); drawRivet(x + 25, y + 22, '#789487');
     });
     ctx.strokeStyle = '#526e63'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(42, H - 43); ctx.lineTo(156, H - 43); ctx.moveTo(204, H - 43); ctx.lineTo(W - 42, H - 43); ctx.stroke();

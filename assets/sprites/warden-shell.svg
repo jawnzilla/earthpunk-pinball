@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+<defs><radialGradient id="s"><stop stop-color="#6b8e88"/><stop offset=".58" stop-color="#263f43"/><stop offset="1" stop-color="#0b1315"/></radialGradient><radialGradient id="e"><stop stop-color="#fff0ba"/><stop offset=".25" stop-color="#67c8d5"/><stop offset="1" stop-color="#111d20"/></radialGradient></defs>
+<circle cx="48" cy="48" r="43" fill="#071012" stroke="#67c8d5" stroke-width="2"/>
+<path d="M39 9h18l5 13-8 5H42l-8-5zM74 22l13 13-5 16-10-2-5-10 2-10zM87 57l-10 16-15 4-5-10 7-9 12-4zM57 87H39l-7-12 8-8h16l8 8zM22 74 9 60l5-15 12 1 5 10-4 10zM9 35l12-13 15 4 4 10-8 8-12-3z" fill="url(#s)" stroke="#9fd4c0" stroke-width="1.5"/>
+<path d="M48 19v18M67 29 56 41M74 48H58M65 68 54 55M48 77V59M29 68l12-13M22 48h17M30 29l12 12" fill="none" stroke="#67c8d5" stroke-width="2" opacity=".7"/>
+<circle cx="48" cy="48" r="17" fill="#081012" stroke="#d7e8d0"/><circle cx="43" cy="42" r="12" fill="url(#e)"/><circle cx="43" cy="41" r="3" fill="#fff0ba"/>
+<path d="M27 19 36 30M69 19 59 31M78 77 62 63M18 77l16-14" stroke="#f1b35b" stroke-width="2" opacity=".7"/>
+</svg>

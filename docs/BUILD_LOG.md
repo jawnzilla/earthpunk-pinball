@@ -1684,3 +1684,31 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Offline scan and `git diff --check` pass.
 - Boss-shell, edge-pod, flipper, touch-hint, debug-enforcement, and compact-route assertions pass.
 - Pages workflow succeeded for `5a92fac`; hosted HTTP 200 and live DOM verification confirmed the compact route preview and `◀ HOLD / HOLD ▶` controls.
+
+## 2026-08-16 — Loop 3 corrective pass: short-phone control clearance
+
+- Added a dedicated `@media (max-height: 600px)` layout mode after exact 320×568 testing found the flipper row clipped below the viewport.
+- Reduced only the short-phone canvas budget to `349px` at 320×568, tightened HUD/route-strip padding, and preserved 52px touch targets.
+- Verified both pre-descent and active states: controls clear the viewport, active route strip is hidden, and no horizontal overflow occurs.
+- Verified the 390×844 layout retains its larger canvas scale.
+
+### Verification notes
+
+- Exact CSS viewport checks: 320×568 and 390×844.
+- 320×568 pre-descent controls bottom at `567px`; active controls bottom at `556px`.
+- Extracted JavaScript, offline, and diff checks pass.
+
+## 2026-08-16 — Loop 3 steering pass: testing tools, edge recovery, and asset start
+
+- Added a developer-only `∞ Stability / lives` cheat in the physics panel. It protects both invalid-state recovery and drain recovery while exposing the state in the HUD and accessibility label.
+- Added four mirrored lower-edge bumpers to every table layout, preserving the existing bumper collision path while reducing repetitive center-drain loops near the flippers.
+- Reserved the route-strip grid slot while hidden so opening physical exits cannot reflow or resize the playfield. Browser measurement reported zero canvas delta before/after route-strip visibility toggling.
+- Compressed hinge-module choices: short destination copy, element-only labels, icon-led costs (`◈ N`), and tooltip titles replace the previous explanatory paragraphs.
+- Started the reusable local sprite layer with authored offline SVGs for the Warden shell and edge pod; Canvas rendering remains the fallback while the sprites load.
+- Short-phone mode now uses a `221px` layout reserve at `max-height: 600px`, retaining 52px touch targets.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, offline scan, cheat, edge-bumper, route-lock, upgrade-cost, sprite, and short-phone assertions pass.
+- Exact 320×568 smoke: pre-descent controls bottom `565.39px`; active controls bottom `566.39px`; no overflow.
+- Cheat toggle, active debug hiding, and route-strip reflow behavior verified in-browser.
