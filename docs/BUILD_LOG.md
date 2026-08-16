@@ -2299,5 +2299,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Focused regression: rotating-tip crossing detected, sampled contact segment returned, non-contact trajectory ignored.
 - Active kick remains `12`; flipper dimensions and relative-contact solver remain unchanged.
 - Exact 320×568 browser smoke: Canvas `430px`, controls bottom `565px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `89cd59f`; hosted verification confirmed `sweptFlipperContact()` is live, active kick remains `12`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical tip-contact feel remains pending.
