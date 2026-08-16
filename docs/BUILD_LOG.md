@@ -1869,3 +1869,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - All four chute files exist locally and are wired into `spriteImages`.
 - Exact 320×568 remains `241.875×430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
+- Pages workflow succeeded for `2a036b3`; hosted browser verification confirmed all four chute SVG requests plus the existing 11 authored assets, with `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
