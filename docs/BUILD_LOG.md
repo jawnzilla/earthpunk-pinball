@@ -1558,3 +1558,31 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Deterministic probe: left early `(0.159, -0.987)` → late `(-0.856, -0.517)`; right early `(-0.159, -0.987)` → late `(0.856, -0.517)`.
 - Lateral change is approximately `1.015` per side, with both early and late vectors finite and upward.
 - POP default, Active kick `12`, contact power, first-contact lock, syntax, offline scan, and `git diff --check` remain passing.
+
+## 2026-08-16 — Relative-contact flipper physics reset
+
+### Research basis
+
+- Reviewed Visual Pinball's open-source `src/physics/hitflipper.cpp` and `src/physics/hitball.cpp`.
+- The reference model treats the flipper as a rotating body with angular velocity, computes contact-point surface velocity, resolves ball/flipper relative normal velocity, and applies friction/impulses in contact space.
+- Reference: https://github.com/vpinball/vpinball/blob/master/src/physics/hitflipper.cpp
+- Reference: https://github.com/vpinball/vpinball/blob/master/src/physics/hitball.cpp
+
+### Implemented
+
+- Replaced the old flipper-specific angle launch, target steering, and escape correction path with `resolveFlipperCollision()`.
+- Collision now computes the closest contact point and normalized contact position on the actual rotating flipper segment.
+- Contact uses the flipper's angular surface velocity: `v_surface = omega × r`.
+- The ball is resolved in relative velocity space, so its rolling/tangential component is not overwritten by a synthetic launch vector.
+- Fresh activation adds only a contact-scaled normal impulse: hinge-side `.18`, tip-side `1.0` of Active kick `12`.
+- Held contact has no fresh impulse; it only receives the relative collision response and separation.
+- Removed obsolete target-directed rotation, angle-delta amplification, and `activeEscape` configuration.
+- Tune now reports `Solver: relative contact` rather than claiming target aim.
+
+### Verification notes
+
+- Extracted script passes `node --check`.
+- Static contracts, offline scan, and `git diff --check` pass.
+- Real extracted-function harness passes left/right contacts at `.2/.5/.8/1.0`, fresh versus held contact, finite-value checks, contact-factor bounds, and speed-cap checks.
+- Fresh mirrored samples remain upward: left tip `(-4.297, -9.030)`, right tip `(4.297, -9.030)` under the controlled rolling fixture.
+- Physical-device playtesting remains required; this pass is not AAA signoff.
