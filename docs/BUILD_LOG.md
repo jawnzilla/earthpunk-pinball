@@ -2208,5 +2208,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Local screenshot confirms the authored panel treatment and bright pressed state.
 - Exact 320×568: both controls `52px` high, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `117a969`; hosted verification confirmed `flipper-control.svg` is present, both controls remain `52px`, Canvas remains `430px`, controls end at `565px`, and no horizontal overflow.
 - Physical-device touch testing remains pending.
