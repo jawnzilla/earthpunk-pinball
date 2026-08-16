@@ -73,6 +73,8 @@
       .choices button { min-height: 52px; padding: 6px 8px; grid-template-columns: 36px 1fr; }
       .choices button .upgrade-icon { width: 30px; height: 30px; }
       .choices button small { line-height: 1.15; }
+      #overlay:not(.route-decision) .card { max-height: calc(100dvh - 16px); overflow-y: auto; }
+      #overlay:not(.route-decision) .choices.upgrade-scroll { max-height: 220px; }
     }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: #1c2b2d url('assets/sprites/flipper-control.svg') center / 100% 100% no-repeat; box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }

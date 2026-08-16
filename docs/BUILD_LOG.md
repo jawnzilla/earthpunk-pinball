@@ -2301,3 +2301,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 browser smoke: Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `89cd59f`; hosted verification confirmed `sweptFlipperContact()` is live, active kick remains `12`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical tip-contact feel remains pending.
+
+## 2026-08-16 — Loop 27: narrow upgrade-modal containment
+
+- Added a ≤360px non-route decision-card containment rule: `#overlay:not(.route-decision) .card` now scrolls within `100dvh - 16px`.
+- Reduced `.choices.upgrade-scroll` to a 220px viewport on narrow phones while preserving all four choices and 52px minimum button sizing.
+- The route-decision map remains excluded, preserving its existing map scroll and CTA geometry.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- 320×568 fixture: card bottom `568px`, choices `220px` viewport / `446px` scroll content, buttons `96px`, no horizontal overflow.
+- 390×844 fixture: card bottom `836.8px`, choices `252px` viewport / `377px` scroll content, buttons `79px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device upgrade-modal testing remains pending.
