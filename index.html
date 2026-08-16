@@ -150,6 +150,8 @@
     .debug-toggle { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; width: 34px; min-height: 34px; padding: 4px; border: 1px solid #789487; border-radius: 50%; color: #c4d2bd; background: rgba(9,17,19,.9); font-size: 16px; line-height: 1; }
     #overlay:not([hidden]) ~ .debug-toggle { top: 20px; right: 22px; bottom: auto; }
     .card { position: relative; }
+    #overlay { align-items: start; }
+    #overlay .card { max-height: none; overflow: visible; margin: 0 auto; }
     #modal-utility-slot { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; }
     .card .debug-toggle { position: static; width: 34px; min-height: 34px; }
     .overlay .card h2 { padding-right: 0; }

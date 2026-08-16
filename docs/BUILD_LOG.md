@@ -1961,5 +1961,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: authored meter marker present, `190px` short-phone route map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
-- Pages workflow succeeded for `c77cfd3`; hosted verification confirmed `meter-rail.svg`, `drain-trough.svg`, all 18 authored SVG requests, `190px` 320×568 map cap, `292px` 390×844 map, `828px` card bottom, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 11 follow-up: route modal outer scrolling
+
+- Fixed the route modal scroll hierarchy by making `#overlay` the outer scroll surface and allowing `#overlay .card` to grow naturally instead of trapping overflow in the card.
+- Preserved `#route-map-viewport` as the nested map-only scroll surface with its existing `overscroll-behavior: contain`.
+- Objective tips and the primary `#reset` CTA are now reachable by scrolling the modal on short and tall phones.
+
+### Verification notes
+
+- Exact 320×568: `#overlay` reports `1004px` scroll height / `568px` client height; after scrolling, objective is `y=352..446` and CTA is `y=478..526`.
+- Exact 390×844: `#overlay` reports `1098px` scroll height / `844px` client height; CTA is reachable and horizontal overflow remains false.
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- CDP touch injection timed out in the browser harness; no physical-device touch claim is made.
 - Physical-device feel testing remains pending.
