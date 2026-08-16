@@ -1880,6 +1880,6 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 ### Verification notes
 
-- Modal DOM parent is `#modal-utility-slot`; active-play parent is `BODY` with `hidden=true`.
 - `node --check`, `git diff --check`, offline, parent-state, CTA-intersection, and overflow assertions pass.
+- Pages workflow succeeded for `cb1b85d`; hosted 320×568 verification confirmed the modal parent, non-overlapping CTA, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
