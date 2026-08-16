@@ -2221,5 +2221,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Local active-play screenshot confirms route and score remain legible over the authored HUD rail.
 - Exact 320×568: HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `7c0bdba`; hosted verification confirmed `hud-rail.svg` active, route/score text intact, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device HUD readability testing remains pending.
