@@ -44,14 +44,14 @@
       canvas { width: min(100%, calc((100dvh - 142px) * .5625)); height: auto; max-width: 100%; max-height: 100%; }
     }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .touch-control { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
-    .touch-control .flipper-symbol { color: #ffd083; font-size: 21px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
-    .touch-label { color: #9fb5a7; font-size: 10px; font-weight: 900; letter-spacing: .16em; }
+    .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: linear-gradient(180deg, #314e49, #1c2b2d); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
+    .touch-control .flipper-symbol { color: #ffd083; font-size: 25px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
+    .touch-label { display: none; }
     .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(2px); box-shadow: inset 0 1px rgba(255,255,255,.35), 0 2px 0 #0b1112; }
     .touch-control.is-pressed .flipper-symbol, .touch-control:active .flipper-symbol, .touch-control.is-pressed .touch-label, .touch-control:active .touch-label { color: #101518; text-shadow: none; }
     button:hover { filter: brightness(1.08); }
     button:focus-visible { outline: 3px solid #9fd4c0; outline-offset: 3px; }
-    footer { color: #87a39b; text-align: center; font-size: 12px; letter-spacing: .03em; }
+    footer { display: none; }
     footer b { color: #e9f1df; }
     .overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; background: radial-gradient(circle at 50% 42%, rgba(41,76,66,.38), rgba(5,8,9,.92) 68%); backdrop-filter: blur(4px); overflow: auto; }
     .overlay[hidden] { display: none; }
@@ -124,8 +124,8 @@
     </section>
     <section class="route-strip" id="route-strip" aria-label="Branching route structure" hidden></section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
-    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span><span class="touch-label">LIFT</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="touch-label">LIFT</span><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
-    <footer><span aria-hidden="true">◀</span> FLIP <span aria-hidden="true">·</span> TAP OR HOLD <span aria-hidden="true">·</span> <span aria-hidden="true">▶</span></footer>
+    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
+    <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
     <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
@@ -209,7 +209,7 @@
     { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ id: 'pulse-upper-left', x: 92, y: 332, r: 21, type: 'pulse', element: 'Air', upper: true }, { id: 'pulse-upper-right', x: 268, y: 332, r: 21, type: 'pulse', element: 'Water', upper: true }, { id: 'pulse-lower-center', x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: null, barrierNote: 'Relay barrier removed to open the flipper approach.' },
     { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ id: 'split-upper-left', x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0, upper: true }, { id: 'split-upper-right', x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0, upper: true }, { id: 'split-lower-left', x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { id: 'split-lower-right', x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
   ];
-  const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: { x1: 104, y1: 474, x2: 256, y2: 474, width: 9, element: 'Air' }, boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
+  const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: null, barrierNote: 'Upper relay barrier removed; keep the lower approach open.', boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
   const routeGraph = {
     'generator-well': [{ routeId: 'flooded-sluice', nextNode: 'pulse-manifold', chute: 'left' }, { routeId: 'ember-lift', nextNode: 'split-reactor', chute: 'right' }],
     'pulse-manifold': [{ routeId: 'ember-lift', nextNode: 'split-reactor', chute: 'left' }, { routeId: 'reactor-warden', nextNode: 'blackout-core', chute: 'right' }],
@@ -307,7 +307,7 @@
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
   function allRouteEdges() { return routeGraph[state.currentNode] || []; }
   function renderRouteStrip() {
-    const edges = allRouteEdges(); if (!routeStrip) return; routeStrip.hidden = false; const current = nodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: nodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const selected = state.nextNode ? nodeTitle(state.nextNode) : null; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>Visible route structure</span><span>${state.routeGateOpen ? 'EXITS OPEN' : 'OBJECTIVES → EXITS'}</span></div><div class="route-strip-graph">${node(current, 'CURRENT TABLE', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} EXIT · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'RUN COMPLETE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
+    const edges = allRouteEdges(); if (!routeStrip) return; const visible = !state.running || state.routeGateOpen; routeStrip.hidden = !visible; if (!visible) return; const current = nodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: nodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>ROUTE</span><span>${state.routeGateOpen ? 'OPEN' : 'NEXT'}</span></div><div class="route-strip-graph">${node(current, 'NOW', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'DONE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
@@ -565,17 +565,6 @@
       ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 9, 0, Math.PI * 2); ctx.fillStyle = '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.stroke();
       drawHingeModule(flipper, flipper === flippers.left ? 'left' : 'right');
     });
-    const displayScale = canvas.getBoundingClientRect().width / W || 1;
-    const labelFont = Math.max(13, Math.min(19, 14 / displayScale));
-    ctx.font = `bold ${labelFont}px Trebuchet MS`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    [['LIFT L', 76], ['LIFT R', 284]].forEach(([label, x]) => {
-      const width = ctx.measureText(label).width + 14;
-      ctx.fillStyle = 'rgba(7,13,15,.82)'; ctx.fillRect(x - width / 2, H - 118, width, 22);
-      ctx.strokeStyle = 'rgba(141,168,149,.72)'; ctx.lineWidth = 1; ctx.strokeRect(x - width / 2, H - 118, width, 22);
-      ctx.strokeStyle = '#0b1112'; ctx.lineWidth = 3; ctx.strokeText(label, x, H - 107);
-      ctx.fillStyle = 'rgba(229,241,223,.94)'; ctx.fillText(label, x, H - 107);
-    });
-    ctx.textBaseline = 'alphabetic';
   }
   function drawMeters() {
     ctx.fillStyle = '#253c39'; ctx.fillRect(34, 130, 130, 7); ctx.fillRect(220, 130, 106, 7);

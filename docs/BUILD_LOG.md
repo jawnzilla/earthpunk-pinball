@@ -1638,3 +1638,15 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Public gameplay verification and mobile visual review remain required after Pages deployment.
 - Pages workflow succeeded for `69f600b`; hosted HTTP 200 and live DOM verification confirmed the compact `RUN 1/4` HUD, icon-led flipper controls, persistent route strip, and initialized game overlay.
 
+## 2026-08-16 — Remove remaining horizontal flipper choke point
+
+- Audited every layout gate after the reported remaining blocker.
+- Removed the full-width Blackout Core gate at `y=474`, directly above the flippers.
+- Pulse Manifold remains open; Split Reactor retains only its vertical center divider, which is not the reported horizontal rail.
+- Added explicit layout notes so future geometry changes distinguish visual rails from collision barriers.
+
+### Verification target
+
+- Assert no layout contains a horizontal gate segment above the flippers.
+- Re-run extracted JavaScript syntax, offline scan, `git diff --check`, Pages deployment, and hosted smoke verification.
+
