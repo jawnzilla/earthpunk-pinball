@@ -1268,3 +1268,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Route map, locked node, Blackout Core, two-step flow, and Active kick `12` assertions pass.
 - Offline scan and `git diff --check` pass.
 - Remaining gate: real 320x568 screenshot/touch verification; the map is not claimed AAA-complete until that evidence exists.
+
+## 2026-08-16 — Pass 29: persistent route graph
+
+### Implemented
+
+- Added persistent `routeHistory` so the route map records the path taken across descents.
+- Converted Surface Vault from a decorative locked card into a real route node unlocked at `4 Charge`.
+- Surface Vault grants a reward-route table identity, extra Charge, and increased salvage while retaining free-pass safety.
+- Added path labels and responsive truncation so route history remains readable on narrow screens.
+- Preserved the boss table, route→module flow, and Active kick `12` tuning contract.
+
+### Verification notes
+
+- `node --check` passes for the extracted 46.1KB game script.
+- Route history, Charge unlock predicate, path label, boss table, and Active kick assertions pass.
+- Offline scan and `git diff --check` pass.
+- Remaining gate: real multi-stage route selection on a 320x568 phone.

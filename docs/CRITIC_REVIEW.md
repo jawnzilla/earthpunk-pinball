@@ -33,3 +33,4 @@
 - Pass 26: split route risk and elemental module selection into a reversible two-step mobile flow.
 - Pass 27: added the dedicated Blackout Core / Reactor Warden boss table with shield exposure, elemental damage gating, and visible HP pips.
 - Pass 28: replaced the flat route list with a compact risk-coded route map and locked high-reward node.
+- Pass 29: made route history persistent and Surface Vault a real Charge-gated reward branch.
