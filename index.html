@@ -71,7 +71,18 @@
     .choices button[data-kind="reward"] strong { color: #e5d8ff; }
     .choices button[data-kind="reward"]:hover, .choices button[data-kind="reward"]:focus-visible { border-color: #e5d8ff; box-shadow: 0 0 20px rgba(198,167,239,.34), inset 0 0 18px rgba(159,212,192,.08); }
     .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
-    .route-map { position: relative; display: grid; gap: 8px; padding: 8px 4px; }
+    .route-strip { display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: linear-gradient(110deg, rgba(31,53,51,.92), rgba(13,22,25,.92)); }
+    .route-strip[hidden] { display: none; }
+    .route-strip-title { display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .route-strip-graph { display: grid; grid-template-columns: minmax(84px, 1fr) 18px minmax(84px, 1fr) 18px minmax(84px, 1fr); align-items: center; gap: 3px; overflow-x: auto; }
+    .route-strip-node { min-width: 0; padding: 5px 6px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
+    .route-strip-node.current { border-color: #ffd083; box-shadow: 0 0 10px rgba(241,179,91,.2); }
+    .route-strip-node.open { border-color: #9fd4c0; }
+    .route-strip-node.locked { opacity: .45; filter: saturate(.4); }
+    .route-strip-node strong, .route-strip-node small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .route-strip-node strong { color: #ffd083; font-size: 9px; text-transform: uppercase; letter-spacing: .05em; }
+    .route-strip-node small { margin-top: 2px; color: #b8cbbb; font-size: 8px; }
+    .route-strip-branch { color: #789487; font-size: 14px; text-align: center; }
     .route-map::before { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(-8deg); }
     .route-map::after { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(8deg); }
     .route-node { position: relative; z-index: 1; display: grid !important; grid-template-columns: 42px 1fr !important; min-height: 62px !important; }
@@ -106,6 +117,7 @@
       <div class="progress-track" role="progressbar" aria-label="Descent progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="progress-fill" id="progress-fill"></span></div>
       <div class="resource-row"><span class="hud-label">Stability <span class="stability-pips" id="stability-pips" aria-label="3 stability remaining"></span></span><span class="element-status" id="element-status">Hinges uninstalled · No imprint</span></div>
     </section>
+    <section class="route-strip" id="route-strip" aria-label="Branching route structure" hidden></section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
     <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button">◀ Lift left</button><button class="touch-control" id="touch-right" type="button">Lift right ▶</button></div>
     <footer><b>Touch left/right</b> to work the flippers · keyboard: A / D or ← / →</footer>
@@ -146,6 +158,7 @@
   const choices = document.querySelector('#choices');
   const resetButton = document.querySelector('#reset');
   const routeStatus = document.querySelector('#route-status');
+  const routeStrip = document.querySelector('#route-strip');
   const scoreStatus = document.querySelector('#score-status');
   const progressFill = document.querySelector('#progress-fill');
   const progressTrack = document.querySelector('.progress-track');
@@ -188,7 +201,7 @@
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
     { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ id: 'generator-upper-left', x: 112, y: 350, r: 25, type: 'standard', element: 'Fire', upper: true }, { id: 'generator-upper-right', x: 248, y: 350, r: 25, type: 'standard', element: 'Earth', upper: true }], gate: null },
-    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ id: 'pulse-upper-left', x: 92, y: 332, r: 21, type: 'pulse', element: 'Air', upper: true }, { id: 'pulse-upper-right', x: 268, y: 332, r: 21, type: 'pulse', element: 'Water', upper: true }, { id: 'pulse-lower-center', x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9, element: 'Water' } },
+    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ id: 'pulse-upper-left', x: 92, y: 332, r: 21, type: 'pulse', element: 'Air', upper: true }, { id: 'pulse-upper-right', x: 268, y: 332, r: 21, type: 'pulse', element: 'Water', upper: true }, { id: 'pulse-lower-center', x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: null, barrierNote: 'Relay barrier removed to open the flipper approach.' },
     { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ id: 'split-upper-left', x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0, upper: true }, { id: 'split-upper-right', x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0, upper: true }, { id: 'split-lower-left', x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { id: 'split-lower-right', x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
   ];
   const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: { x1: 104, y1: 474, x2: 256, y2: 474, width: 9, element: 'Air' }, boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
@@ -255,6 +268,7 @@
     const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
     elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
+    renderRouteStrip();
     if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Solver: relative contact · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
@@ -286,13 +300,12 @@
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
-  function allRouteEdges() { return routeGraph[state.currentNode] || []; }
+  function renderRouteStrip() {
+    const edges = allRouteEdges(); if (!routeStrip) return; routeStrip.hidden = false; const current = nodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: nodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const selected = state.nextNode ? nodeTitle(state.nextNode) : null; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>Visible route structure</span><span>${state.routeGateOpen ? 'EXITS OPEN' : 'OBJECTIVES → EXITS'}</span></div><div class="route-strip-graph">${node(current, 'CURRENT TABLE', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} EXIT · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'RUN COMPLETE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
+  }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
-    overlayKicker.textContent = `Route map // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'Study the next branches. The route is not chosen here: clear the table, then send the probe through an opened chute.' : 'Final chamber. Clear the table to acquire the surface signal.';
-    const map = document.createElement('div'); map.className = 'route-map'; const legend = document.createElement('div'); legend.className = 'route-legend'; legend.innerHTML = `<span>NOW: ${nodeTitle(state.currentNode)}</span><span>${state.routeHistory.length ? `PATH ${state.routeHistory.length}` : 'START NODE'}</span>`; const current = document.createElement('div'); current.className = 'route-node route-current'; current.innerHTML = `<span class="upgrade-icon">●</span><span><small class="element-label">CURRENT TABLE</small><strong>${nodeTitle(state.currentNode)}</strong><small>${state.tableLabel} · clear objectives to arm exits</small></span>`; map.append(legend, current);
-    allRouteEdges().forEach(edge => { const route = routePool.find(item => item.id === edge.routeId); const unlocked = !route?.unlock || route.unlock(state); const node = document.createElement('button'); node.type = 'button'; node.disabled = true; node.className = `route-node${unlocked ? '' : ' route-locked'}`; node.dataset.kind = route?.kind || 'standard'; const chute = edge.chute.toUpperCase(); node.innerHTML = `<span class="upgrade-icon">${unlocked ? chute[0] : '?'}</span><span><small class="element-label">${unlocked ? `EXIT ${chute} · ${route.kind.toUpperCase()}` : 'LOCKED EXIT'}</small><strong>${route?.title || edge.routeId}</strong><small>${unlocked ? `→ ${nodeTitle(edge.nextNode)}` : 'Fulfil this descent requirement first.'}</small></span>`; map.append(node); });
-    choices.replaceChildren(map); choices.hidden = false; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; overlay.hidden = false;
+    renderRouteStrip(); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; overlay.hidden = false;
   }
   function startNextDescent() { overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
   function completeStage() {
@@ -515,7 +528,7 @@
     ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = state.relayCooldown ? '#ffd083' : '#526e63'; ctx.lineWidth = gate.width + 5; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke();
     ctx.strokeStyle = elementColors[gate.element] || '#f1b35b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gate.x1, gate.y1); ctx.lineTo(gate.x2, gate.y2); ctx.stroke(); ctx.restore();
   }
-  function drawHingeModule(flipper, side) { const element = state.hingeElements[side]; const level = state.hingeLevels[side]; const color = element ? elementColors[element] : '#789487'; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 22, 0, Math.PI * 2); ctx.strokeStyle = color; ctx.globalAlpha = element ? .95 : .45; ctx.lineWidth = element ? 3 : 1; ctx.stroke(); ctx.globalAlpha = 1; if (element && elementImages[element]?.complete) { ctx.save(); ctx.globalAlpha = .82; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 14, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(elementImages[element], flipper.pivotX - 14, flipper.pivotY - 14, 28, 28); ctx.restore(); } if (element) { ctx.fillStyle = color; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(`${element[0]}${level}`, flipper.pivotX, flipper.pivotY + 34); } }
+  function drawHingeModule(flipper, side) { const element = state.hingeElements[side]; const level = state.hingeLevels[side]; const heldCradle = hingeCradle(side); const color = element ? elementColors[element] : '#789487'; ctx.save(); ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 22, 0, Math.PI * 2); ctx.fillStyle = heldCradle && element ? color : '#101a1c'; ctx.globalAlpha = heldCradle && element ? .82 : 1; ctx.fill(); ctx.strokeStyle = color; ctx.globalAlpha = heldCradle && element ? 1 : element ? .95 : .45; ctx.lineWidth = heldCradle && element ? 4 : element ? 3 : 1; ctx.stroke(); ctx.globalAlpha = 1; if (element && elementImages[element]?.complete && !heldCradle) { ctx.globalAlpha = .82; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 14, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(elementImages[element], flipper.pivotX - 14, flipper.pivotY - 14, 28, 28); } ctx.restore(); if (element) { ctx.fillStyle = color; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(`${element[0]}${level}`, flipper.pivotX, flipper.pivotY + 34); } }
   function drawFlippers() {
     sideGuards.forEach(guard => {
       ctx.beginPath(); ctx.moveTo(guard.x1, guard.y1); ctx.lineTo(guard.x2, guard.y2);

@@ -1608,3 +1608,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted cradle harness passes slow held capture, persistent held cradle, direct release roll-out, fast-contact rejection, unheld hinge slide, finite outputs, and no first-frame cradle snap.
 - Route graph, chute collision gate, pre-level route map, four-stage progression, and removal of the old route-choice menu pass static assertions.
 - Local browser navigation was blocked by the browser harness's private-address policy; public hosted verification remains the authoritative UI check.
+
+## 2026-08-16 — Open Pulse Manifold approach and visible route strip
+
+- Removed the full-width Pulse Manifold relay barrier at `y=470`, which was positioned directly above the flippers and blocked legitimate approaches. The layout now uses `gate: null` for an open flipper approach.
+- Held elemental hinge cradles now fill the hinge circle with the linked element color, with a stronger ring while the ball is captured.
+- Moved the branching structure into a persistent, non-interactive HUD route strip. The player sees the current table, outgoing branches, exit side, destination, and `EXITS OPEN` state during play instead of receiving disabled route cards as a menu.
+- The pre-level overlay now only explains the visible route structure and starts the descent; it no longer presents route nodes as menu choices.
+
+### Verification notes
+
+- Extracted inline JavaScript passes `node --check`.
+- Static assertions pass for Pulse barrier removal, held-element hinge fill, persistent route strip, non-interactive pre-level map, route-menu removal, and offline safety.
+
