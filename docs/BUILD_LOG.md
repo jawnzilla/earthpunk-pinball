@@ -2287,3 +2287,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: route card `288×495`, map `236×337`, CTA `y=433..485`, no horizontal overflow.
 - Pages workflow succeeded for `a3881b3`; hosted verification confirmed compact modal instruction copy, intentional hidden duplicate overlay prose, symbol legend, route-map geometry, CTA reachability, and no horizontal overflow.
 - Physical-device modal readability testing remains pending.
+
+## 2026-08-16 — Flipper rotating-tip contact correction
+
+- Added `sweptFlipperContact()`, sampling the ball trajectory and the actual flipper angle sweep from `previousAngle` to `angle`.
+- The solver now resolves a detected moving-tip crossing against the sampled capsule segment; no blade enlargement, artificial drain barrier, or repeated held-contact energy was added.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- Focused regression: rotating-tip crossing detected, sampled contact segment returned, non-contact trajectory ignored.
+- Active kick remains `12`; flipper dimensions and relative-contact solver remain unchanged.
+- Exact 320×568 browser smoke: Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical tip-contact feel remains pending.

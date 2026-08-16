@@ -65,6 +65,15 @@
       .choices button { grid-template-columns: 42px 1fr; min-height: 58px; padding: 7px 9px; }
       .choices button .upgrade-icon { width: 36px; height: 36px; }
     }
+    @media (max-width: 360px) {
+      .objective-tip { margin: 6px 0 8px; padding: 6px 8px; }
+      .objective-tip p { margin: 3px 0 4px; font-size: 10px; line-height: 1.2; }
+      .objective-dismiss { gap: 4px; font-size: 8px; }
+      .choices { gap: 5px; margin: 8px 0; }
+      .choices button { min-height: 52px; padding: 6px 8px; grid-template-columns: 36px 1fr; }
+      .choices button .upgrade-icon { width: 30px; height: 30px; }
+      .choices button small { line-height: 1.15; }
+    }
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: #1c2b2d url('assets/sprites/flipper-control.svg') center / 100% 100% no-repeat; box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
     .touch-control .flipper-symbol { color: #ffd083; font-size: 25px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
@@ -514,9 +523,15 @@
     for (let index = 1; index <= steps; index += 1) { const ratio = index / steps; const sampleX = startX + (ball.x - startX) * ratio, sampleY = startY + (ball.y - startY) * ratio; const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY }; }
     return null;
   }
+  function sweptFlipperContact(ball, flipper, radius) {
+    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const ballTravel = Math.hypot(ball.x - startX, ball.y - startY); const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle; const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + (state?.flipperLengthBonus || 0)); const travel = Math.max(ballTravel, tipTravel); if (travel < .01) return null;
+    const steps = Math.min(18, Math.max(3, Math.ceil(travel / Math.max(2, radius * .45))));
+    for (let index = 1; index <= steps; index += 1) { const ratio = index / steps; const sampleX = startX + (ball.x - startX) * ratio, sampleY = startY + (ball.y - startY) * ratio, angle = previousAngle + (flipper.angle - previousAngle) * ratio, segment = { ...flipperEndpointsAt(flipper, angle), width: flipper.width }; const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1; const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY, segment }; }
+    return null;
+  }
   function resolveFlipperCollision(ball, flipper, side, restitution, activeFresh, activeKick, held) {
-    const segment = { ...flipperEndpoints(flipper), width: flipper.width }; const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1; const lengthSquared = dx * dx + dy * dy || 1; let projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); let closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; let nx = ball.x - closestX, ny = ball.y - closestY; let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
-    if (distance >= radius && ball.cradleSide !== side) { const swept = sweptSegmentContact(ball, segment, radius); if (!swept) return false; ball.x = swept.x; ball.y = swept.y; projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); closestX = segment.x1 + projection * dx; closestY = segment.y1 + projection * dy; nx = ball.x - closestX; ny = ball.y - closestY; distance = Math.hypot(nx, ny); }
+    let segment = { ...flipperEndpoints(flipper), width: flipper.width }; let dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1; let lengthSquared = dx * dx + dy * dy || 1; let projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); let closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; let nx = ball.x - closestX, ny = ball.y - closestY; let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
+    if (distance >= radius && ball.cradleSide !== side) { const swept = sweptFlipperContact(ball, flipper, radius); if (!swept) return false; ball.x = swept.x; ball.y = swept.y; segment = swept.segment; dx = segment.x2 - segment.x1; dy = segment.y2 - segment.y1; lengthSquared = dx * dx + dy * dy || 1; projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); closestX = segment.x1 + projection * dx; closestY = segment.y1 + projection * dy; nx = ball.x - closestX; ny = ball.y - closestY; distance = Math.hypot(nx, ny); }
     const tangentLength = Math.hypot(dx, dy) || 1; const tx = dx / tangentLength, ty = dy / tangentLength; if (distance < .001) { nx = side === 'left' ? -Math.sin(flipper.angle) : Math.sin(flipper.angle); ny = side === 'left' ? Math.cos(flipper.angle) : -Math.cos(flipper.angle); } const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
     const rx = closestX - flipper.pivotX, ry = closestY - flipper.pivotY; const surfaceVx = -flipper.angularVelocity * ry, surfaceVy = flipper.angularVelocity * rx; const relativeVx = ball.vx - surfaceVx, relativeVy = ball.vy - surfaceVy; const relativeSpeed = Math.hypot(relativeVx, relativeVy); const nearHinge = projection <= .34;
     if (held && ball.cradleSide === side) { const cradleProjection = .14; const cradleX = segment.x1 + tx * tangentLength * cradleProjection; const cradleY = segment.y1 + ty * tangentLength * cradleProjection; ball.x = cradleX + nx * radius; ball.y = cradleY + ny * radius; ball.vx = surfaceVx; ball.vy = surfaceVy; ball.lastFlipperLaunchFactor = 0; return true; }

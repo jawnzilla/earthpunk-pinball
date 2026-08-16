@@ -67,6 +67,7 @@
 - Loop 24 feedback copy pass: compressed the route detail rail from dense prose to short status/affordance lines (`NOW · GENERATOR · TAP OPEN NODE`, `FLOODED SLUICE · LEFT CHUTE`, `FUTURE · VAULT`) while preserving inspection-only map behavior.
 - Loop 25 legend pass: replaced the route legend's tiny generic dots with symbol-led status marks (`◉ NOW`, `◇ OPEN`, `· FUTURE`, `× LOCKED`) and added an accessible legend label without changing route behavior.
 - Loop 26 modal-copy pass: compressed the route-decision instruction contract to `MAP ABOVE · ENTER DESCENT · OPEN CHUTE COMMITS ROUTE.` and the terminal-state line to `FINAL CHAMBER · CLEAR TABLE FOR SURFACE SIGNAL.`; the map-first route modal continues to suppress duplicate prose.
+- Flipper rotating-sweep correction: added bounded continuous-angle contact sampling between `previousAngle` and `angle`, so fast tip crossings are resolved against the actual moving flipper capsule while preserving relative-contact physics, active kick `12`, contact locks, and visual geometry.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.
