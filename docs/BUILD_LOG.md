@@ -2078,5 +2078,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: lower asset marker present; sticky CTA `y=492..544`; map `190px`; Canvas `430px`; controls bottom `565px`; no horizontal overflow.
 - Exact 390×844: sticky CTA `y=768..820`; map `292px`; no horizontal overflow.
-- Pages workflow succeeded for `70a9f7a`; hosted verification confirmed `lower-edge-machinery.svg`, `reach-band.svg`, `relay-gate.svg`, 25 authored SVG requests, sticky CTA `y=492..544` at 320×568 and `y=768..820` at 390×844, `527px / 190px` and `292px` map geometry, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 16: map-only route surface and level flippers
+
+- Reduced the pre-descent route surface to the portrait map, compact symbol nodes, current-node tooltip, legend, and sticky Enter descent CTA.
+- Node symbols now communicate route identity without repeated titles: `◉` current, `◇` free, `!` hazard, `♜` boss, and `✦` reward; selecting an available node reveals its route detail and physical chute.
+- Removed the legacy route strip from layout so it cannot block table or modal content.
+- Added compact HUD key symbols: bright `◉` for collision-enabled gameplay objects and muted `·` for decorative shell machinery.
+- Leveled both flippers at rest and extended their collision/render segments from 78 to 104 canvas units, with width increased from 15 to 17; pivots remain symmetric and the relative-contact solver is unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: map-only modal `568px` viewport/content, 15 nodes at `42px`, selected tooltip update, CTA `y=326..378`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Exact 390×844: 42px nodes, `292px` map, CTA `y=428..480`, no horizontal overflow.
+- Hosted verification pending deployment.
 - Physical-device feel testing remains pending.
