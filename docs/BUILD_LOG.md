@@ -1738,3 +1738,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification notes
 
 - `node --check`, `git diff --check`, offline scan, reactor-rail, bumper-position, one-way-response, slim-render, sprite, and route-lock assertions pass.
+- Pages workflow succeeded for `096fa87`; hosted source verification confirmed the Route Core panel removal, thin rail, one-way bumper logic, slim wall render, and all three sprite references. Hosted 320×568 smoke confirmed controls bottom `565.39px`, no overflow, and requests for `warden-shell.svg`, `edge-pod.svg`, and `probe-ball.svg`.
