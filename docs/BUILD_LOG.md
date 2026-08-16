@@ -1924,5 +1924,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - Exact 320×568: initial cue visible, map `444px` scroll content / `292px` viewport, no horizontal overflow.
 - Forced end-scroll changes cue to `ROUTE DEPTH REVEALED` with the complete state.
-- `node --check`, `git diff --check`, offline, cue-state, scroll-reset, and pointer-event assertions pass; Pages workflow succeeded for `f30c398`; hosted 320×568 verification confirmed the initial cue, end-state cue, `flipper-blade.svg`, 16 authored SVG requests, `430px` Canvas height, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 10: authored drain trough
+
+- Added `assets/sprites/drain-trough.svg`, a recessed lower-table metal trough with bevel, vents, indicator lamps, and a central stability well.
+- Wired `drawEdgeMachinery()` to use the authored trough as its primary lower-drain surface while preserving the live stability value, edge pods, rivets, and procedural fallback.
+- Kept drain geometry, stability semantics, ball recovery, and physics unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: map cue `SWIPE UP · MORE ROUTE`, 5 map depths, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
+- Hosted drain asset verification pending deployment.
 - Physical-device feel testing remains pending.
