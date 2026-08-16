@@ -1883,3 +1883,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, offline, parent-state, CTA-intersection, and overflow assertions pass.
 - Pages workflow succeeded for `cb1b85d`; hosted 320×568 verification confirmed the modal parent, non-overlapping CTA, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Portrait route map and Blackout Core defeatability
+
+- Replaced the compact three-node route preview with a full portrait map panel inside the pre-descent card.
+- Added vertically stacked depth layers, dashed progression connectors, current/open/future/locked node states, route-kind accents, a compact legend, internal scrolling, and selected-node detail text.
+- The map now walks the route graph up to four future depths; tapping a reachable or future node inspects it without bypassing physical chute selection.
+- Preserved the compact route strip for active play and kept physical chute entry authoritative for committing branches.
+- Fixed Blackout Core gating: exposure now lasts 72 frames instead of 36, earned Charge can satisfy the empowerment gate, and every successful armor hit resets the exposure cycle so all three cores can be damaged distinctly.
+
+### Verification notes
+
+- `node --check` and `git diff --check` pass; offline scan remains clean.
+- 320×568: 5 map depths, 15 nodes, `444px` scroll content inside a `292px` viewport, no horizontal overflow.
+- 390×844: 5 map depths, 15 nodes, no horizontal overflow; card remains inside the viewport.
+- Blackout Core test-table load shows `WARDEN 3/3 SHIELDED` and the updated objective text; source/runtime marker confirms the 72-frame exposure gate.
+- Physical-device and full manual boss playthrough testing remain pending.

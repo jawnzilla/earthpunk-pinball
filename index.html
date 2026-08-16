@@ -97,8 +97,33 @@
     .route-strip[hidden] { display: grid; visibility: hidden; pointer-events: none; }
     .route-strip.route-in-card { position: static; inset: auto; width: auto; margin: 10px 0 12px; z-index: auto; box-shadow: none; }
     .route-strip.route-in-card .route-strip-graph { overflow: hidden; }
-    .route-strip.route-in-card .route-strip-title { font-size: 8px; }
-    .route-strip-graph { display: grid; grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr) 12px minmax(0, 1fr); align-items: center; gap: 2px; overflow: hidden; }
+    .route-map-panel { position: relative; z-index: 1; margin: 12px 0 14px; padding: 10px; border: 1px solid #526e63; border-radius: 10px; background: linear-gradient(180deg, rgba(8,16,18,.92), rgba(18,31,31,.95)); }
+    .route-map-panel[hidden] { display: none; }
+    .route-map-head { display: flex; justify-content: space-between; color: #9fd4c0; font-size: 9px; font-weight: 900; letter-spacing: .16em; }
+    .route-map-viewport { max-height: 292px; overflow-y: auto; overscroll-behavior: contain; margin: 8px -2px 6px; padding: 8px 8px 14px; background: repeating-linear-gradient(90deg, transparent 0 46px, rgba(159,212,192,.035) 46px 47px); }
+    .route-map-depth { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; min-height: 74px; }
+    .route-map-depth + .route-map-depth { margin-top: 13px; }
+    .route-map-depth + .route-map-depth::before { content: ''; position: absolute; left: 12%; right: 12%; top: -14px; border-top: 1px dashed #526e63; opacity: .9; }
+    .route-map-depth + .route-map-depth::after { content: ''; position: absolute; left: 50%; top: -14px; height: 14px; border-left: 1px dashed #526e63; opacity: .9; }
+    .route-map-node { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 3px; min-width: 0; min-height: 64px; padding: 6px 3px; border: 1px solid #38524e; border-radius: 50%; color: #9fb5a7; background: radial-gradient(circle, #29423d, #111b1e 68%); font: inherit; cursor: pointer; }
+    .route-map-node::after { content: ''; position: absolute; width: 7px; height: 7px; right: 3px; top: 5px; border-radius: 50%; background: #526e63; }
+    .route-map-node strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #c4d2bd; font-size: 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .route-map-node small { color: #789487; font-size: 7px; text-transform: uppercase; }
+    .route-map-node.current { border: 2px solid #ffd083; box-shadow: 0 0 16px rgba(241,179,91,.28); color: #ffd083; }
+    .route-map-node.current::after { background: #ffd083; box-shadow: 0 0 8px #ffd083; }
+    .route-map-node.available { border-color: #9fd4c0; box-shadow: 0 0 12px rgba(159,212,192,.2); }
+    .route-map-node.available::after { background: #9fd4c0; }
+    .route-map-node.selected { border-color: #fff0ba; box-shadow: 0 0 18px rgba(255,240,186,.38); transform: scale(1.04); }
+    .route-map-node.future { border-color: #648274; }
+    .route-map-node.locked { opacity: .42; filter: saturate(.35); cursor: default; }
+    .route-map-node.boss { border-color: #ef8b45; }
+    .route-map-node.reward { border-color: #c6a7ef; }
+    .route-map-node:focus-visible { outline: 2px solid #fff0ba; outline-offset: 2px; }
+    .route-map-detail { min-height: 28px; padding: 7px 8px; border-left: 2px solid #f1b35b; color: #c4d2bd; background: rgba(241,179,91,.06); font-size: 10px; line-height: 1.35; }
+    .route-map-legend { display: flex; flex-wrap: wrap; gap: 7px 10px; margin-top: 8px; color: #789487; font-size: 7px; font-weight: 900; letter-spacing: .08em; }
+    .map-dot { display: inline-block; width: 7px; height: 7px; margin-right: 3px; border: 1px solid #648274; border-radius: 50%; vertical-align: -1px; }
+    .map-dot.current { border-color: #ffd083; background: #ffd083; }.map-dot.available { border-color: #9fd4c0; background: #9fd4c0; }.map-dot.future { background: #38524e; }.map-dot.locked { opacity: .45; }
+
     .route-strip-node { min-width: 0; padding: 5px 5px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
     .route-strip-node.current { border-color: #ffd083; box-shadow: 0 0 10px rgba(241,179,91,.2); }
     .route-strip-node.open { border-color: #9fd4c0; }
@@ -163,7 +188,7 @@
     <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
-    <section class="card"><div id="modal-utility-slot"></div><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div id="route-preview-slot"></div><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
+    <section class="card"><div id="modal-utility-slot"></div><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div id="route-preview-slot"><section id="route-map-panel" class="route-map-panel" hidden aria-label="Portrait route map"><div class="route-map-head"><span>DESCENT MAP</span><span id="route-map-depth">DEPTH 1/4</span></div><div id="route-map-viewport" class="route-map-viewport"></div><div id="route-map-detail" class="route-map-detail" aria-live="polite"></div><div class="route-map-legend"><span><i class="map-dot current"></i>NOW</span><span><i class="map-dot available"></i>OPEN</span><span><i class="map-dot future"></i>FUTURE</span><span><i class="map-dot locked"></i>LOCKED</span></div></section></div><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
   </div>
   <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics tuning">⚙</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
@@ -202,6 +227,10 @@
   const routeStatus = document.querySelector('#route-status');
   const routeStrip = document.querySelector('#route-strip');
   const routePreviewSlot = document.querySelector('#route-preview-slot');
+  const routeMapPanel = document.querySelector('#route-map-panel');
+  const routeMapViewport = document.querySelector('#route-map-viewport');
+  const routeMapDetail = document.querySelector('#route-map-detail');
+  const routeMapDepth = document.querySelector('#route-map-depth');
   const scoreStatus = document.querySelector('#score-status');
   const progressFill = document.querySelector('#progress-fill');
   const progressTrack = document.querySelector('.progress-track');
@@ -359,12 +388,12 @@
     if (!state.boss.active || state.boss.hp <= 0) return;
     state.boss.cooldown -= 1;
     if (state.boss.cooldown <= 0) state.boss.cooldown = 120;
-    state.boss.exposed = state.boss.cooldown < 36;
+    state.boss.exposed = state.boss.cooldown < 72;
     const boss = state.layout.boss;
     if (!boss || !circleCollision(ball, boss, state.boss.exposed ? .85 : 1.15)) return;
-    const empowered = Object.values(ball.elementEffects).some(effect => effect.stacks > 0 && effect.timer > 0);
+    const empowered = Object.values(ball.elementEffects).some(effect => effect.stacks > 0 && effect.timer > 0) || state.charge >= 1;
     if (state.boss.exposed && empowered) {
-      state.boss.hp -= 1; state.score += 250; state.charge = Math.min(99, state.charge + 1); state.flash = 5; emitImpact(boss.x, boss.y, '#ef8b45', 1.8); setMessage(state.boss.hp > 0 ? `Warden armor ruptured. ${state.boss.hp} core${state.boss.hp === 1 ? '' : 's'} remain.` : 'Reactor Warden disabled. Finish mapping the core.');
+      state.boss.hp -= 1; state.boss.cooldown = 120; state.boss.exposed = false; state.score += 250; state.charge = Math.min(99, state.charge + 1); state.flash = 5; emitImpact(boss.x, boss.y, '#ef8b45', 1.8); setMessage(state.boss.hp > 0 ? `Warden armor ruptured. ${state.boss.hp} core${state.boss.hp === 1 ? '' : 's'} remain.` : 'Reactor Warden disabled. Finish mapping the core.');
     } else {
       ball.vx *= -1.15; ball.vy = Math.abs(ball.vy) + .8; emitImpact(boss.x, boss.y, state.boss.exposed ? '#f1b35b' : '#67c8d5', .9); setMessage(state.boss.exposed ? 'Exposure wasted. Charge an elemental imprint first.' : 'Warden shield active. Wait for the exposure window.');
     }
@@ -377,16 +406,19 @@
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
   function shortNodeTitle(id) { return ({ 'generator-well': 'Generator', 'pulse-manifold': 'Pulse', 'split-reactor': 'Split', 'blackout-core': 'Warden', 'surface-vault': 'Vault' })[id] || nodeTitle(id); }
   function allRouteEdges() { return routeGraph[state.currentNode] || []; }
+  function renderRouteMap() {
+    if (!routeMapPanel || !routeMapViewport) return; const layers = [[{ id: state.currentNode, edge: null, route: null }]]; const seen = new Set([state.currentNode]); for (let depth = 1; depth < 5; depth += 1) { const next = []; layers[depth - 1].forEach(node => { (routeGraph[node.id] || []).forEach(edge => { const route = routePool.find(item => item.id === edge.routeId); if (!route || next.some(item => item.id === edge.nextNode)) return; next.push({ id: edge.nextNode, edge, route }); }); }); if (!next.length) break; layers.push(next); }
+    const available = new Set(routeOptions().map(({ edge }) => edge.nextNode)); const kindClass = route => route?.kind ? ` ${route.kind}` : ''; routeMapViewport.innerHTML = layers.map((layer, depth) => `<div class="route-map-depth" data-depth="${depth}">${layer.map(node => { const isCurrent = node.id === state.currentNode; const isAvailable = depth === 1 && available.has(node.id); const locked = depth === 1 && !isAvailable; const stateClass = isCurrent ? 'current' : isAvailable ? 'available' : locked ? 'locked' : 'future'; const title = shortNodeTitle(node.id); const label = isCurrent ? 'NOW' : node.route?.kind?.toUpperCase() || 'FUTURE'; return `<button class="route-map-node ${stateClass}${kindClass(node.route)}" type="button" data-route-node="${node.id}" data-route-depth="${depth}" ${locked ? 'disabled' : ''} aria-label="${title}, ${label}"><strong>${title}</strong><small>${label}</small></button>`; }).join('')}</div>`).join(''); routeMapDepth.textContent = `DEPTH 1/${Math.max(1, layers.length)}`; routeMapDetail.textContent = `Current chamber: ${nodeTitle(state.currentNode)}. Tap a reachable node to inspect the route ahead; enter an opened physical chute to commit it.`; routeMapViewport.querySelectorAll('[data-route-node]').forEach(button => button.addEventListener('click', () => { const nodeId = button.dataset.routeNode; const edge = (routeGraph[state.currentNode] || []).find(item => item.nextNode === nodeId); const route = edge && routePool.find(item => item.id === edge.routeId); routeMapDetail.textContent = route ? `${route.title}: ${route.text} Physical chute: ${edge.chute.toUpperCase()}.` : `Future chamber: ${nodeTitle(nodeId)}. Its approach remains visible, but the next physical chute controls the run.`; routeMapViewport.querySelectorAll('.route-map-node').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); }));
+  }
   function renderRouteStrip() {
     const edges = allRouteEdges(); if (!routeStrip) return; const visible = !state.running || state.routeGateOpen; routeStrip.hidden = !visible; if (!visible) return; const current = shortNodeTitle(state.currentNode); const nextNodes = edges.map(edge => ({ edge, route: routePool.find(item => item.id === edge.routeId), title: shortNodeTitle(edge.nextNode) })); const future = nextNodes.length ? nextNodes : [{ edge: null, route: null, title: 'Surface signal' }]; const node = (title, label, className = '') => `<div class="route-strip-node ${className}"><strong>${title}</strong><small>${label}</small></div>`; const branchText = future.length > 1 ? '⑂' : '→'; routeStrip.innerHTML = `<div class="route-strip-title"><span>ROUTE</span><span>${state.routeGateOpen ? 'OPEN' : 'NEXT'}</span></div><div class="route-strip-graph">${node(current, 'NOW', 'current')}<span class="route-strip-branch">${branchText}</span>${future.map(({ route, title, edge }) => node(title, edge ? `${edge.chute.toUpperCase()} · ${route?.kind?.toUpperCase() || 'ROUTE'}` : 'DONE', edge && state.routeGateOpen ? 'open' : '')).join(`<span class="route-strip-branch">${branchText}</span>`)}</div>`;
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
     if (routePreviewSlot && routeStrip.parentElement !== routePreviewSlot) { routePreviewSlot.append(routeStrip); routeStrip.classList.add('route-in-card'); }
-    if (modalUtilitySlot && debugToggle.parentElement !== modalUtilitySlot) modalUtilitySlot.append(debugToggle);
-    renderRouteStrip(); showObjectiveTip(); choices.classList.remove('upgrade-scroll'); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
+    if (routeMapPanel) routeMapPanel.hidden = false; if (routeStrip) routeStrip.hidden = true; if (modalUtilitySlot && debugToggle.parentElement !== modalUtilitySlot) modalUtilitySlot.append(debugToggle); renderRouteMap(); showObjectiveTip(); choices.classList.remove('upgrade-scroll'); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
   }
-  function startNextDescent() { if (routeStrip.parentElement !== document.querySelector('main')) { document.querySelector('main').insertBefore(routeStrip, document.querySelector('.table-wrap')); routeStrip.classList.remove('route-in-card'); } if (debugToggle.parentElement !== document.body) document.body.append(debugToggle); debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
+  function startNextDescent() { if (routeStrip.parentElement !== document.querySelector('main')) { document.querySelector('main').insertBefore(routeStrip, document.querySelector('.table-wrap')); routeStrip.classList.remove('route-in-card'); } if (routeMapPanel) routeMapPanel.hidden = true; if (debugToggle.parentElement !== document.body) document.body.append(debugToggle); debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
   function completeStage() {
     if (state.stageComplete) return; if (state.stage >= state.stageCount) { state.running = false; win(); return; }
     const available = routeOptions(); if (!available.length) { state.running = false; win(); return; }
