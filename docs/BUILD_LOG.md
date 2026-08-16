@@ -2093,5 +2093,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map-only modal `568px` viewport/content, 15 nodes at `42px`, selected tooltip update, CTA `y=326..378`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Exact 390×844: 42px nodes, `292px` map, CTA `y=428..480`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `0e6d30d`; hosted verification confirmed map-only route surface, hidden route strip, 15 symbol nodes at `42px`, selected tooltip update, `lower-edge-machinery.svg`, `reach-band.svg`, 25 authored SVG requests, CTA `y=326..378` at 320×568 and `y=428..480` at 390×844, `190px` / `292px` map viewports, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
