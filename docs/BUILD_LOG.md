@@ -2024,5 +2024,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map `527px` content / `190px` viewport; cue visible at `y=307..329`; cue/detail/legend all parented by `#route-map-viewport`; 5 depths / 15 nodes; no horizontal overflow.
 - End scroll plus scroll event changes cue to `ROUTE DEPTH REVEALED`; node selection remains functional and outer modal scroll stays at `0` during map scrolling.
-- Hosted one-scroll map verification pending deployment.
+- Pages workflow succeeded for `1791bbe`; hosted verification confirmed 5 depths / 15 nodes, `527px / 190px` 320×568 map content, cue/detail/legend ownership by `#route-map-viewport`, initial and end cue states, `reactor-rail.svg`, 21 authored SVG requests, `292px` 390×844 map, and no horizontal overflow.
 - Physical-device feel testing remains pending.
