@@ -2051,3 +2051,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: relay marker present; outer cue visible before scroll; modal `954px / 568px`; cue hidden at outer max scroll; `190px` map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `218f421`; hosted verification confirmed `relay-gate.svg`, `deck-inset.svg`, `SWIPE UP · OBJECTIVE BELOW`, `954px / 568px` 320×568 modal, cue completion behavior, `527px / 190px` map, `292px` 390×844 map, and no horizontal overflow.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 15: upper-bank frame and sticky route CTA
+
+- Added `assets/sprites/reach-band.svg`, an authored upper-bank objective frame with recessed rails, service spine, indicator lamps, and dynamic accent path.
+- Wired `drawReachBand()` to use the authored frame while retaining `BANK TARGET` / `BANK ONLINE` state text and procedural fallback.
+- Added `.route-decision` state styling so `#reset` is a 52px sticky bottom action during pre-descent route selection.
+- Preserved `#route-map-viewport` as the independent nested scroll owner and left active-play flipper controls unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: CTA visible at `y=492..544` with outer scroll `0`; map viewport `190px`; Canvas `430px`; controls bottom `565px`; no horizontal overflow.
+- Exact 390×844: CTA visible at `y=768..820`; map viewport `292px`; no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device feel testing remains pending.
