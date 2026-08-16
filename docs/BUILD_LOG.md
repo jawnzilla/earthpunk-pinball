@@ -2194,6 +2194,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Local screenshot confirms authored route chassis reads behind the five-lane symbols.
 - Exact 320×568: route-console asset loaded, feedback rail visible at `y=323..378`, CTA `y=439..491`, no horizontal overflow.
-- Selected-node tooltip remains functional.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `deb93d3`; hosted verification confirmed `route-console.svg` loaded at 320×568 and 390×844, selected-node tooltip updates, persistent legend/detail rail, CTA reachability, and no horizontal overflow.
 - Physical-device touch-scroll testing remains pending.
