@@ -1469,3 +1469,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check` passes for the extracted game script.
 - One-stage boss, target consumption, normal-layout fallback, mobile card fallback, route transaction, physics, offline, and `git diff --check` assertions pass.
+
+## 2026-08-16 — Flipper contact-power pass: hinge cradle versus tip launch
+
+### Implemented
+
+- Active flipper impulse now scales from the collision position along the flipper.
+- Hinge-side contact receives `18%` of the configured active kick and a reduced upward escape.
+- Tip-side contact receives full active kick, escape, and bounded target-aim assistance.
+- Held contacts continue using muted separation rather than repeated launch energy.
+- Ball spawn resets contact-power telemetry state.
+- Upper-bank eligibility is now explicit per bumper ID; Blackout Core has no upper-bank objective band.
+
+### Verification notes
+
+- Direct impulse check: hinge `2.16` versus tip `12.0` with Active kick `12`.
+- Tip weighting, active-only gating, escape scaling, aim scaling, spawn reset, explicit upper IDs, boss objective inactivity, held-contact separation, physics preservation, syntax, offline, and `git diff --check` assertions pass.

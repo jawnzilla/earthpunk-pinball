@@ -157,7 +157,7 @@
     reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
     pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${getUpperBumpers().length ? `${state.topHits}/1` : '—'} · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.toggle('is-active', presetButton === button); presetButton.setAttribute('aria-pressed', presetButton === button ? 'true' : 'false'); }); Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
@@ -182,11 +182,11 @@
   const W = canvas.width, H = canvas.height;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
-    { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ x: 112, y: 350, r: 25, type: 'standard', element: 'Fire' }, { x: 248, y: 350, r: 25, type: 'standard', element: 'Earth' }], gate: null },
-    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ x: 92, y: 332, r: 21, type: 'pulse', element: 'Air' }, { x: 268, y: 332, r: 21, type: 'pulse', element: 'Water' }, { x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9, element: 'Water' } },
-    { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0 }, { x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0 }, { x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
+    { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ id: 'generator-upper-left', x: 112, y: 350, r: 25, type: 'standard', element: 'Fire', upper: true }, { id: 'generator-upper-right', x: 248, y: 350, r: 25, type: 'standard', element: 'Earth', upper: true }], gate: null },
+    { name: 'Pulse Manifold', targetPositions: [[70, 150, 15], [180, 184, 15], [290, 150, 15], [96, 260, 17], [264, 260, 17], [180, 298, 14]], bumpers: [{ id: 'pulse-upper-left', x: 92, y: 332, r: 21, type: 'pulse', element: 'Air', upper: true }, { id: 'pulse-upper-right', x: 268, y: 332, r: 21, type: 'pulse', element: 'Water', upper: true }, { id: 'pulse-lower-center', x: 180, y: 390, r: 18, type: 'pulse', element: 'Air' }], gate: { x1: 102, y1: 470, x2: 258, y2: 470, width: 9, element: 'Water' } },
+    { name: 'Split Reactor', targetPositions: [[58, 170, 15], [302, 170, 15], [180, 196, 16], [72, 276, 17], [288, 276, 17], [155, 330, 14]], bumpers: [{ id: 'split-upper-left', x: 78, y: 318, r: 18, type: 'armor', element: 'Earth', hits: 0, upper: true }, { id: 'split-upper-right', x: 282, y: 318, r: 18, type: 'armor', element: 'Fire', hits: 0, upper: true }, { id: 'split-lower-left', x: 118, y: 408, r: 18, type: 'standard', element: 'Water' }, { id: 'split-lower-right', x: 242, y: 408, r: 18, type: 'standard', element: 'Air' }], gate: { x1: 180, y1: 300, x2: 180, y2: 470, width: 8, element: 'Earth' } }
   ];
-  const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: { x1: 104, y1: 474, x2: 256, y2: 474, width: 9, element: 'Air' }, boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
+  const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: { x1: 104, y1: 474, x2: 256, y2: 474, width: 9, element: 'Air' }, boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
   function resetLayoutDamage() { levelLayouts.forEach(layout => layout.bumpers.forEach(item => { item.hits = 0; })); }
   function applyTargetLayout() { const targetElements = ['Fire', 'Water', 'Earth', 'Air', 'Fire', 'Water']; state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.element = targetElements[index]; target.hit = false; }); }
   let input = { left: false, right: false };
@@ -223,7 +223,7 @@
   function spawnBall() {
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
-    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108, cradleSide: null, elementEffects: {} };
+    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {} };
     state.peakY = state.ball.y; state.lastLaunchSpeed = Math.hypot(state.ball.vx, state.ball.vy);
     state.launched = true;
   }
@@ -328,7 +328,7 @@
   function flipperEndpointsAt(flipper, angle) {
     return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
   }
-  function segmentCollision(ball, segment, restitution = .82, kick = 0) {
+  function segmentCollision(ball, segment, restitution = .82, kick = 0, tipWeighted = false) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
     const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
@@ -341,11 +341,13 @@
     ball.x = closestX + nx * radius; ball.y = closestY + ny * radius;
     const incoming = ball.vx * nx + ball.vy * ny;
     if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
-    ball.vx += nx * kick; ball.vy += ny * kick;
+    const launchFactor = tipWeighted ? .18 + projection * .82 : 1;
+    if (tipWeighted) ball.lastFlipperLaunchFactor = launchFactor;
+    ball.vx += nx * kick * launchFactor; ball.vy += ny * kick * launchFactor;
     capBallSpeed(ball);
     return true;
   }
-  function getUpperBumpers() { const minY = Math.min(...state.layout.bumpers.map(item => item.y)); return state.layout.bumpers.filter(item => item.y <= minY + 2); }
+  function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function rotateTowardUpperTarget(ball, maxTurnDegrees) {
     const target = getUpperBumpers().sort((a, b) => Math.hypot(a.x - ball.x, a.y - ball.y) - Math.hypot(b.x - ball.x, b.y - ball.y))[0];
     const speed = Math.hypot(ball.vx, ball.vy); if (!target || !Number.isFinite(speed) || speed < .001) return false;
@@ -391,10 +393,10 @@
     const leftRestitution = input.left ? (Math.abs(flippers.left.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const rightRestitution = input.right ? (Math.abs(flippers.right.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
     const launchKick = debugConfig.activeKick * (state.routeModifier === 'Fire' ? 1.28 : state.routeModifier === 'Air' ? 1.12 : 1);
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation, Boolean(input.left && !state.flipperContacts.left));
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation, Boolean(input.right && !state.flipperContacts.right));
     const freshActiveHit = (leftHit && input.left && !state.flipperContacts.left) || (rightHit && input.right && !state.flipperContacts.right);
-    if (freshActiveHit) { b.vy = Math.min(b.vy, -debugConfig.activeEscape); const aimed = rotateTowardUpperTarget(b, debugConfig.launchAngle); b.vy = Math.min(b.vy, -debugConfig.activeEscape); capBallSpeed(b); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, aimed ? '#67c8d5' : '#ffd083', aimed ? .6 : .45); }
+    if (freshActiveHit) { const launchFactor = Number.isFinite(b.lastFlipperLaunchFactor) ? b.lastFlipperLaunchFactor : .18; const escape = debugConfig.activeEscape * (.35 + launchFactor * .65); b.vy = Math.min(b.vy, -escape); const aimed = rotateTowardUpperTarget(b, debugConfig.launchAngle * launchFactor); b.vy = Math.min(b.vy, -escape); capBallSpeed(b); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, aimed ? '#67c8d5' : '#ffd083', .35 + launchFactor * .25); }
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');
@@ -430,7 +432,7 @@
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawReachBand() {
-    const upper = getUpperBumpers(); const y = upper.length ? Math.min(...upper.map(item => item.y)) : 300; const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'UPPER BANK ONLINE · 1/1' : 'UPPER BANK TARGET · REACH 1', 50, bandTop + 13); ctx.restore();
+    const upper = getUpperBumpers(); if (!upper.length) return; const y = Math.min(...upper.map(item => item.y)); const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'UPPER BANK ONLINE · 1/1' : 'UPPER BANK TARGET · REACH 1', 50, bandTop + 13); ctx.restore();
   }
   function drawTableIdentity() {
     const color = state.tableKind === 'boss' ? '#ef8b45' : state.tableKind === 'free' ? '#67c8d5' : '#f1b35b';
