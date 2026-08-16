@@ -2246,6 +2246,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: CTA `y=439..491`, feedback detail `y=323..361`, no horizontal overflow.
-- Selected-node tooltip remains functional after action-plate styling.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `4c1e618`; hosted verification confirmed `action-plate.svg` active on the route CTA, selected-node tooltip updates, CTA `52px`, and no horizontal overflow.
 - Physical-device CTA testing remains pending.
