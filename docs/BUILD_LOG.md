@@ -2248,3 +2248,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: CTA `y=439..491`, feedback detail `y=323..361`, no horizontal overflow.
 - Pages workflow succeeded for `4c1e618`; hosted verification confirmed `action-plate.svg` active on the route CTA, selected-node tooltip updates, CTA `52px`, and no horizontal overflow.
 - Physical-device CTA testing remains pending.
+
+## 2026-08-16 — Loop 24: compact route feedback copy
+
+- Replaced dense route-detail prose with concise status/affordance lines: `NOW · GENERATOR · TAP OPEN NODE`, selected `ROUTE · LEFT CHUTE`, and future `FUTURE · VAULT`.
+- Preserved selected-node inspection, physical-chute-only route commitment, inner map scrolling, feedback rail placement, and CTA geometry.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: detail rail `28px`, CTA `y=429..481`, no horizontal overflow.
+- Exact 390×844: detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
+- Selected-node tooltip updates to `FLOODED SLUICE · LEFT CHUTE` without committing a route.
+- Hosted verification pending deployment.
+- Physical-device route UX testing remains pending.
