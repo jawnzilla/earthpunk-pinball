@@ -1975,4 +1975,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: `#overlay` reports `1098px` scroll height / `844px` client height; CTA is reachable and horizontal overflow remains false.
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - CDP touch injection timed out in the browser harness; no physical-device touch claim is made.
+- Pages workflow succeeded for `b28824b`; hosted verification confirmed `1004px / 568px` route-modal scroll at 320×568, CTA visibility at `y=478..526` after scroll, objective visibility at `y=352..446`, `1098px / 844px` scroll at 390×844, authored meter/drain assets, and no horizontal overflow.
 - Physical-device feel testing remains pending.
