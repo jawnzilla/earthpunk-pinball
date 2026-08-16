@@ -2011,5 +2011,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: reactor marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Pages workflow succeeded for `4525dc4`; hosted verification confirmed `reactor-rail.svg`, `table-shell.svg`, `side-guard.svg`, all 21 authored SVG requests, `1004px / 568px` 320×568 modal scroll, `1098px / 844px` 390×844 modal scroll, responsive map caps, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 13 follow-up: consolidate route-map feedback
+
+- Moved the route-map cue, selected-node detail, and legend inside `#route-map-viewport`, alongside a dedicated `#route-map-depth-content` layer.
+- Made the cue sticky at the top of the map scroller so `SWIPE UP · MORE ROUTE` is visible on first view while remaining owned by the same scroll surface.
+- Preserved nested-map isolation from `#overlay`, node selection, five-depth topology, completion cue, and physical-chute-only route commitment.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: map `527px` content / `190px` viewport; cue visible at `y=307..329`; cue/detail/legend all parented by `#route-map-viewport`; 5 depths / 15 nodes; no horizontal overflow.
+- End scroll plus scroll event changes cue to `ROUTE DEPTH REVEALED`; node selection remains functional and outer modal scroll stays at `0` during map scrolling.
+- Hosted one-scroll map verification pending deployment.
 - Physical-device feel testing remains pending.
