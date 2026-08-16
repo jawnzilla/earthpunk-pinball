@@ -2223,3 +2223,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `7c0bdba`; hosted verification confirmed `hud-rail.svg` active, route/score text intact, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device HUD readability testing remains pending.
+
+## 2026-08-16 — Loop 23: authored masthead rail
+
+- Added `assets/sprites/masthead-rail.svg`, a custom compact header rail with socket terminals, conduit accents, and a restrained central instrument line.
+- Applied it as a background treatment to `header` without changing title/status text, header height, HUD position, Canvas size, or touch controls.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Local screenshot confirms the masthead treatment reads behind the compact title/status line.
+- Exact 320×568: header `y=8..32`, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device header readability testing remains pending.

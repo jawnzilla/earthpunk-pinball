@@ -62,6 +62,7 @@
 - Loop 20 authored route-console pass: added `assets/sprites/route-console.svg` as a recessed five-lane chassis behind the dynamic route nodes, replacing the flat CSS-only map backdrop with custom rails, sockets, conduit waves, and perimeter hardware.
 - Loop 21 control pass: replaced the generic CSS touch-flipper rectangles with authored `assets/sprites/flipper-control.svg` panels while preserving 52px hit targets, bright pressed-state feedback, pointer handlers, and active-play layout.
 - Loop 22 HUD pass: replaced the flat `.run-hud` gradient with authored `assets/sprites/hud-rail.svg`, a recessed instrument rail with fasteners, segmented conduits, and restrained emissive accents while preserving route, key, score, and geometry.
+- Loop 23 masthead pass: added authored `assets/sprites/masthead-rail.svg` behind the compact header, adding socket rails and conduit accents without increasing header height or changing the HUD/table layout.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.
