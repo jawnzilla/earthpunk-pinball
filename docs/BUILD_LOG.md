@@ -1827,3 +1827,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Route graph `216/216px`; no clipping or horizontal overflow.
 - Test selector top `104px` while debug panel is open.
 - `node --check`, `git diff --check`, offline, modal-parent, route-restore, and selector-order assertions pass.
+
+## 2026-08-16 — Loop 7: authored hinge assembly
+
+- Added `assets/sprites/hinge-housing.svg`, an industrial pivot housing with shell, recessed well, latch spokes, and central actuator.
+- Wired `drawHingeModule()` to use the authored housing as the primary render with the old circle retained only as a load-time fallback.
+- Kept elemental module imagery layered inside the housing for Fire, Water, Earth, and Air attunements.
+- Replaced tiny `L1/L2` hinge text with three readable visual level pips beneath each pivot; held cradle state still uses the active elemental glow.
+
+### Verification notes
+
+- Extracted JavaScript passes `node --check`; `git diff --check` passes.
+- Hinge asset and pip markers verified in the local browser.
+- Exact 320×568 remains `241.875×430px`, controls bottom `565px`, and no horizontal overflow.
+- Physical-device feel testing remains pending.
