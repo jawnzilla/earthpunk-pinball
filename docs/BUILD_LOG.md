@@ -1406,3 +1406,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Regression assertions confirm the dead threshold is absent and target selection, collision credit, and visual band all use actual bumper tiers.
 - Offline scan and `git diff --check` pass.
 - The hosted build must be rechecked after Pages deployment; prior critic evidence correctly identified the old hosted/source mismatch.
+
+## 2026-08-16 — Progression pass: upper-bank branch unlock
+
+### Implemented
+
+- Surface Vault now unlocks when the player reaches the active table's upper bumper tier (`topHits > 0`).
+- The existing `4 Charge` path remains available as a fallback.
+- Locked route copy now tells the player exactly what is needed: `Reach the upper bank or collect 4 Charge`.
+- Reward-route copy explains the upper-bank breach and no-threat salvage identity.
+- Unlock state remains run-local and resets with the normal run state; physics behavior is unchanged.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Reach unlock, Charge fallback, lock copy, reward copy, top-hit reset, and preserved physics assertions pass.
+- Offline scan and `git diff --check` pass.
+- Real route selection and touch verification remain required on a 320x568 device.
