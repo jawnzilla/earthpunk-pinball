@@ -2066,3 +2066,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: CTA visible at `y=768..820`; map viewport `292px`; no horizontal overflow.
 - Pages workflow succeeded for `c80767a`; hosted verification confirmed `reach-band.svg`, `relay-gate.svg`, 24 authored SVG requests, sticky CTA visibility at `y=492..544` (320×568) and `y=768..820` (390×844), `527px / 190px` map, `292px` map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 15 follow-up: authored lower edge machinery
+
+- Added `assets/sprites/lower-edge-machinery.svg`, a mirrored industrial lower-table assembly with gear housings, rail termination plates, cable channel, hub lamps, and a quiet center drain channel.
+- Wired `drawEdgeMachinery()` to use the authored base while preserving the drain trough, stability readout, dynamic accent lamps, and procedural fallback.
+- Collision geometry, flipper/hinge behavior, side rails, drain handling, and route behavior remain unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: lower asset marker present; sticky CTA `y=492..544`; map `190px`; Canvas `430px`; controls bottom `565px`; no horizontal overflow.
+- Exact 390×844: sticky CTA `y=768..820`; map `292px`; no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device feel testing remains pending.

@@ -49,6 +49,7 @@
 - Aim-assist readability pass: Tune copy now explains target-directed max-turn behavior; cradle-only reticle points toward the nearest unhit salvage target.
 - Loop 14 visual pass: authored deck inset hardware and relay gate assets replaced flat interior/gate strokes; outer modal gained a scroll affordance.
 - Loop 15: authored the upper-bank reach frame and made the route-decision CTA sticky and visible at mobile viewport entry without changing map scroll isolation or gameplay controls.
+- Loop 15 follow-up: replaced the repeated lower edge/flipper machinery gear-and-line treatment with authored `lower-edge-machinery.svg`; retained drain, stability, dynamic accent lamps, and procedural fallback.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.
