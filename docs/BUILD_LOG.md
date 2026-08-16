@@ -2064,5 +2064,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: CTA visible at `y=492..544` with outer scroll `0`; map viewport `190px`; Canvas `430px`; controls bottom `565px`; no horizontal overflow.
 - Exact 390×844: CTA visible at `y=768..820`; map viewport `292px`; no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `c80767a`; hosted verification confirmed `reach-band.svg`, `relay-gate.svg`, 24 authored SVG requests, sticky CTA visibility at `y=492..544` (320×568) and `y=768..820` (390×844), `527px / 190px` map, `292px` map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
