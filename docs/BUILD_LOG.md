@@ -1439,3 +1439,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Snapshot, deferred history commit, back restoration, Surface Vault predicate, physics preservation, offline scan, and `git diff --check` assertions pass.
 - Real two-step route/module touch flow remains required on a 320x568 device.
+
+## 2026-08-16 — Physics UX pass: explicit preset selection state
+
+### Implemented
+
+- Added an amber selected state to the active physics preset button.
+- Added `aria-pressed` markers for all four preset buttons.
+- Selecting a preset updates the selected state and telemetry together.
+- Editing any slider clears the selected preset and switches the profile to `CUSTOM`.
+- Preserved the target-directed launch, route transaction, muted surfaces, bumper pop, and Active kick `12` contracts.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Active styling, accessibility markers, preset toggling, Custom clearing, telemetry, physics preservation, offline scan, and `git diff --check` assertions pass.

@@ -87,6 +87,7 @@
     .preset-row { display: grid; grid-template-columns: 1fr repeat(4, auto); gap: 5px; align-items: center; margin-top: 10px; color: #9fb5a7; font-size: 10px; }
     .preset-row button { min-height: 30px; padding: 4px 6px; border: 1px solid #648274; border-radius: 6px; color: #dce8d4; background: #1d2d2e; font-size: 9px; letter-spacing: .04em; }
     .preset-row button:hover, .preset-row button:focus-visible { border-color: #f1b35b; color: #ffd083; }
+    .preset-row button.is-active { border-color: #ffd083; color: #101518; background: #ffd083; box-shadow: 0 0 0 2px rgba(255,208,131,.22); }
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
     .physics-readout { margin-top: 8px; padding: 6px 7px; border-left: 2px solid #f1b35b; color: #b5d3a1; background: rgba(241,179,91,.06); font-size: 10px; line-height: 1.35; font-variant-numeric: tabular-nums; }
   </style>
@@ -123,7 +124,7 @@
     <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
     <div class="debug-row" title="Inward bias added only on the first active flipper launch.">Launch angle <span class="debug-value" data-angle-value="launchAngle">0° max turn</span></div>
-    <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft">SOFT</button><button type="button" data-preset="balanced">BALANCED</button><button type="button" data-preset="reach">HIGH REACH</button><button type="button" data-preset="pop">POP</button></div>
+    <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Top: 0/1 · Aim max: 0° · Launch: —</div>
   </section>
 <script>
@@ -157,10 +158,10 @@
     pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
   function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
-  debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
+  debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.toggle('is-active', presetButton === button); presetButton.setAttribute('aria-pressed', presetButton === button ? 'true' : 'false'); }); Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
-    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
+    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.remove('is-active'); presetButton.setAttribute('aria-pressed', 'false'); }); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
   }));
   const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
   const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
