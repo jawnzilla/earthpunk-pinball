@@ -1252,3 +1252,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Offline scan passes: no external URLs, fetch/XHR, WebSocket, CDN, or remote font references.
 - `git diff --check` passes.
 - Remaining gate: live boss playthrough and physical-phone touch verification.
+
+## 2026-08-16 — Pass 28: route map topology
+
+### Implemented
+
+- Replaced the flat route card list with a compact route map: three reachable nodes, connecting rails, and a locked high-reward Surface Vault signal.
+- Preserved the route-first → elemental-module second flow.
+- Added distinct map treatment for FREE PASS, HAZARD, and BOSS nodes.
+- Kept the map dependency-free and bounded for narrow mobile overlays.
+
+### Verification notes
+
+- `node --check` passes for the extracted 45.6KB game script.
+- Route map, locked node, Blackout Core, two-step flow, and Active kick `12` assertions pass.
+- Offline scan and `git diff --check` pass.
+- Remaining gate: real 320x568 screenshot/touch verification; the map is not claimed AAA-complete until that evidence exists.
