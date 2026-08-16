@@ -1784,3 +1784,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `git diff --check`, offline scan, bumper asset dispatch, HUD relocation, maximum-table, and angled one-way rail assertions pass.
 - SVG files exist locally and remain dependency-free.
 - Pages workflow succeeded for `7009900`; hosted source and browser verification confirmed all six sprite requests (`warden`, `edge-pod`, `probe-ball`, standard/pulse/armor bumpers), hidden resource row, `241.875×430px` Canvas, `565px` control clearance, and no horizontal overflow.
+
+## 2026-08-16 — Loop 5 follow-up: test-table selector and objective tips
+
+- Added a pre-descent `Test table` selector in the existing debug panel for Generator Well, Pulse Manifold, Split Reactor, Blackout Core, and Surface Vault.
+- Loading a test table resets the run, applies the selected layout, initializes boss state when applicable, and returns to the pre-descent overlay without entering gameplay.
+- Added concise table-specific objective tips to the pre-descent card, including the Warden exposure/core condition.
+- Added a per-table-kind “Don’t show this tip again” checkbox backed by browser-local storage; dismissing one table kind does not suppress tips for another.
+- Constrained upgrade choices to a bounded scroll region with a visible `SWIPE FOR MORE` affordance.
+- Converted the floating route preview to fractional columns so all branches fit the 276px mobile container without horizontal clipping.
+
+### Verification notes
+
+- Exact 320×568: five test-table options, Blackout Core direct load, Warden objective text, no document overflow.
+- Objective dismissal key is scoped by `deadlight-objective-tip:<tableKind>`.
+- Route graph `clientWidth === scrollWidth` at 320px.
+- Extracted JavaScript passes `node --check`; `git diff --check` and offline scan pass.

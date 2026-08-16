@@ -75,6 +75,8 @@
     .card p { color: #c4d2bd; line-height: 1.5; }
     .choices { display: grid; gap: 8px; margin: 16px 0; }
     .choices button { display: grid; grid-template-columns: 48px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 70px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
+    .choices.upgrade-scroll { max-height: 252px; overflow-y: auto; overscroll-behavior: contain; padding: 2px 4px 28px 0; position: relative; }
+    .choices.upgrade-scroll::after { content: 'SWIPE FOR MORE'; position: sticky; bottom: -22px; display: block; grid-column: 1 / -1; margin: -22px 0 0; padding: 5px 0 2px; color: #ffd083; background: linear-gradient(180deg, transparent, #18282a 42%); font-size: 9px; font-weight: 900; letter-spacing: .16em; text-align: center; pointer-events: none; }
     .choices button:hover, .choices button:focus-visible { border-color: #f1b35b; box-shadow: 0 0 18px rgba(241,179,91,.16); }
     .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
@@ -92,13 +94,13 @@
     .route-strip { position: absolute; z-index: 3; top: 94px; left: 12px; right: 12px; display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: rgba(13,22,25,.94); box-shadow: 0 8px 18px rgba(0,0,0,.28); }
     .route-strip[hidden] { display: grid; visibility: hidden; pointer-events: none; }
     .route-strip-title { display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-    .route-strip-graph { display: grid; grid-template-columns: minmax(84px, 1fr) 18px minmax(84px, 1fr) 18px minmax(84px, 1fr); align-items: center; gap: 3px; overflow-x: auto; }
-    .route-strip-node { min-width: 0; padding: 5px 6px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
+    .route-strip-graph { display: grid; grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr) 12px minmax(0, 1fr); align-items: center; gap: 2px; overflow: hidden; }
+    .route-strip-node { min-width: 0; padding: 5px 5px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
     .route-strip-node.current { border-color: #ffd083; box-shadow: 0 0 10px rgba(241,179,91,.2); }
     .route-strip-node.open { border-color: #9fd4c0; }
     .route-strip-node.locked { opacity: .45; filter: saturate(.4); }
     .route-strip-node strong, .route-strip-node small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .route-strip-node strong { color: #ffd083; font-size: 9px; text-transform: uppercase; letter-spacing: .05em; }
+    .route-strip-node strong { color: #ffd083; font-size: 9px; text-transform: uppercase; letter-spacing: .03em; }
     .route-strip-node small { margin-top: 2px; color: #b8cbbb; font-size: 8px; }
     .route-strip-branch { color: #789487; font-size: 14px; text-align: center; }
     .route-map::before { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(-8deg); }
@@ -123,7 +125,17 @@
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
     .physics-readout { margin-top: 8px; padding: 6px 7px; border-left: 2px solid #f1b35b; color: #b5d3a1; background: rgba(241,179,91,.06); font-size: 10px; line-height: 1.35; font-variant-numeric: tabular-nums; }
     .cheat-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; padding: 7px; border: 1px solid #70402d; border-radius: 6px; color: #ffd083; background: rgba(239,139,69,.08); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-    .cheat-row input { accent-color: #ef8b45; }  </style>
+    .cheat-row input { accent-color: #ef8b45; }
+    .test-level { display: grid; gap: 5px; margin-top: 10px; padding: 8px; border: 1px solid #526e63; border-radius: 6px; background: rgba(159,212,192,.05); }
+    .test-level label { color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .test-level select { width: 100%; min-height: 32px; padding: 4px 6px; border: 1px solid #789487; border-radius: 5px; color: #e9f1df; background: #1d2d2e; font: inherit; font-size: 10px; }
+    .test-level button { min-height: 34px; padding: 5px; border-radius: 6px; font-size: 10px; }
+    .objective-tip { margin: 12px 0 14px; padding: 10px 11px; border: 1px solid #648274; border-left: 3px solid #ffd083; border-radius: 7px; background: rgba(159,212,192,.07); }
+    .objective-tip[hidden] { display: none; }
+    .objective-tip strong { display: block; color: #ffd083; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .objective-tip p { margin: 4px 0 8px; color: #d5e2d0; font-size: 11px; line-height: 1.35; }
+    .objective-dismiss { display: flex; align-items: center; gap: 6px; color: #9fb5a7; font-size: 9px; }
+    .objective-dismiss input { accent-color: #f1b35b; }  </style>
 </head>
 <body>
   <main>
@@ -142,7 +154,7 @@
     <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
-    <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
+    <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
   </div>
   <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics tuning">⚙</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
@@ -162,6 +174,7 @@
     <div class="debug-row" title="Flipper contacts use ball velocity relative to the rotating flipper surface. The rolling component is preserved while fresh activation adds contact-scaled normal impulse.">Flipper solver — relative contact <span class="debug-value" data-solver-value="relative-contact">rolling + surface velocity</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
     <label class="cheat-row"><input id="cheat-infinite" type="checkbox"><span>∞ Stability / lives</span></label>
+    <div class="test-level"><label for="test-level-select">Test table</label><select id="test-level-select"><option value="generator-well">Generator Well</option><option value="pulse-manifold">Pulse Manifold</option><option value="split-reactor">Split Reactor</option><option value="blackout-core">Blackout Core</option><option value="surface-vault">Surface Vault</option></select><button id="test-level-button" type="button">Load selected table</button></div>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
 <script>
@@ -189,6 +202,12 @@
   const debugPanel = document.querySelector('#debug-panel');
   const physicsReadout = document.querySelector('#physics-readout');
   const cheatInfinite = document.querySelector('#cheat-infinite');
+  const testLevelSelect = document.querySelector('#test-level-select');
+  const testLevelButton = document.querySelector('#test-level-button');
+  const objectiveTip = document.querySelector('#objective-tip');
+  const objectiveTipTitle = document.querySelector('#objective-tip-title');
+  const objectiveTipCopy = document.querySelector('#objective-tip-copy');
+  const objectiveTipDismiss = document.querySelector('#objective-tip-dismiss');
   const debugConfig = { gravity: .115, activeKick: 12, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96, profile: 'POP' };
   const physicsPresets = {
     soft: { gravity: .075, activeKick: 12, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
@@ -203,6 +222,8 @@
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.remove('is-active'); presetButton.setAttribute('aria-pressed', 'false'); }); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
   }));
   cheatInfinite.addEventListener('change', () => { if (state) state.immortal = cheatInfinite.checked; updateHud(); });
+  testLevelButton.addEventListener('click', () => loadTestLevel(testLevelSelect.value));
+  objectiveTipDismiss.addEventListener('change', () => { if (!state) return; try { if (objectiveTipDismiss.checked) localStorage.setItem(`deadlight-objective-tip:${state.tableKind}`, 'dismissed'); else localStorage.removeItem(`deadlight-objective-tip:${state.tableKind}`); } catch (error) { /* private browsing may deny storage */ } });
   const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
   const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
   function installHingeElement(stateRef, element) { const slot = stateRef.hingeElements.left === null ? 'left' : stateRef.hingeElements.right === null ? 'right' : (stateRef.hingeLevels.left <= stateRef.hingeLevels.right ? 'left' : 'right'); if (stateRef.hingeElements[slot] === element) stateRef.hingeLevels[slot] = Math.min(3, stateRef.hingeLevels[slot] + 1); else { stateRef.hingeElements[slot] = element; stateRef.hingeLevels[slot] = 1; } return slot; }
@@ -245,6 +266,15 @@
   };
   const routeNodeLayouts = { 'generator-well': levelLayouts[0], 'pulse-manifold': levelLayouts[1], 'split-reactor': levelLayouts[2], 'blackout-core': bossLayout, 'surface-vault': levelLayouts[1] };
   function routeOptions() { return (routeGraph[state.currentNode] || []).map(edge => ({ edge, route: routePool.find(route => route.id === edge.routeId) })).filter(({ route }) => route && (!route.unlock || route.unlock(state))); }
+  const objectiveCopy = {
+    standard: ['STANDARD TABLE', 'Hit every salvage target. The descent clears when all six targets are lit.'],
+    free: ['FREE PASS', 'Hit every salvage target. This route is forgiving and does not add a stability penalty.'],
+    hazard: ['HAZARD TABLE', 'Hit every target, then survive the hotter route. Salvage is richer, but the table is less forgiving.'],
+    boss: ['WARDEN CORE', 'Charge an elemental imprint, wait for the Warden to expose, then break all three armor cores and finish the targets.'],
+    reward: ['SURFACE VAULT', 'Reach the upper bank or build 4 Charge to unlock the vault reward, then clear the table.']
+  };
+  function showObjectiveTip() { const kind = state.tableKind || 'standard'; const [title, copy] = objectiveCopy[kind] || objectiveCopy.standard; let dismissed = false; try { dismissed = localStorage.getItem(`deadlight-objective-tip:${kind}`) === 'dismissed'; } catch (error) { /* private browsing may deny storage */ } objectiveTipTitle.textContent = title; objectiveTipCopy.textContent = copy; objectiveTipDismiss.checked = dismissed; objectiveTip.hidden = dismissed; }
+  function loadTestLevel(levelId) { reset(); const layout = routeNodeLayouts[levelId] || levelLayouts[0]; state.stage = 1; state.stageCount = 1; state.currentNode = levelId; state.layout = layout; state.tableKind = levelId === 'blackout-core' ? 'boss' : levelId === 'surface-vault' ? 'reward' : 'standard'; state.tableLabel = state.tableKind.toUpperCase(); state.boss = layout.boss ? { active: true, exposed: false, hp: layout.boss.maxHp, maxHp: layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; applyTargetLayout(); resetLayoutDamage(); spawnBall(); testLevelSelect.value = levelId; debugPanel.hidden = true; showPreLevelMap(); updateHud(); }
   function resetLayoutDamage() { levelLayouts.forEach(layout => layout.bumpers.forEach(item => { item.hits = 0; })); }
   function applyTargetLayout() { const targetElements = ['Fire', 'Water', 'Earth', 'Air', 'Fire', 'Water']; state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.element = targetElements[index]; target.hit = false; }); }
   let input = { left: false, right: false };
@@ -341,7 +371,7 @@
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
-    renderRouteStrip(); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
+    renderRouteStrip(); showObjectiveTip(); choices.classList.remove('upgrade-scroll'); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
   }
   function startNextDescent() { debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
   function completeStage() {
@@ -353,8 +383,8 @@
     const match = routeOptions().find(({ edge: candidate }) => candidate.routeId === edge.routeId && candidate.nextNode === edge.nextNode); if (!match) return; const route = match.route; state.running = false; state.routeTarget = route.id; state.nextNode = edge.nextNode; route.apply(state); state.pendingRoute = route.id; state.message = `${route.title} chute entered. Tune the hinge before the next descent.`; showModuleChoices(); updateHud();
   }
   function showModuleChoices() {
-    overlayKicker.textContent = 'Route chute confirmed · Hinge tune'; overlayTitle.textContent = `${state.tableLabel} route`; overlayCopy.textContent = `Choose a module for ${shortNodeTitle(state.nextNode)} · Charge ${Math.floor(state.charge)}`;
-    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? `◈ ${upgrade.cost}` : 'FREE'; button.title = `${upgrade.title} · ${price}`; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element}</small><strong>${upgrade.title.replace(' hinge module', '')}</strong><small class="upgrade-cost" aria-label="Cost ${upgrade.cost || 0} charge">${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
+    objectiveTip.hidden = true; overlayKicker.textContent = 'Route chute confirmed · Hinge tune'; overlayTitle.textContent = `${state.tableLabel} route`; overlayCopy.textContent = `Choose a module for ${shortNodeTitle(state.nextNode)} · Charge ${Math.floor(state.charge)}`;
+    const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? `◈ ${upgrade.cost}` : 'FREE'; button.title = `${upgrade.title} · ${price}`; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element}</small><strong>${upgrade.title.replace(' hinge module', '')}</strong><small class="upgrade-cost" aria-label="Cost ${upgrade.cost || 0} charge">${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.classList.add('upgrade-scroll'); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
   }
   function beginNextRoute() {
     state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
