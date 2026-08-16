@@ -1936,5 +1936,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map cue `SWIPE UP · MORE ROUTE`, 5 map depths, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
-- Hosted drain asset verification pending deployment.
+- Pages workflow succeeded for `69c9e0a`; hosted 320×568 verification confirmed `drain-trough.svg`, `flipper-blade.svg`, all 17 authored SVG requests, the initial map cue, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
