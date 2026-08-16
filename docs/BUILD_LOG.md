@@ -1975,5 +1975,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: `#overlay` reports `1098px` scroll height / `844px` client height; CTA is reachable and horizontal overflow remains false.
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - CDP touch injection timed out in the browser harness; no physical-device touch claim is made.
-- Pages workflow succeeded for `b28824b`; hosted verification confirmed `1004px / 568px` route-modal scroll at 320×568, CTA visibility at `y=478..526` after scroll, objective visibility at `y=352..446`, `1098px / 844px` scroll at 390×844, authored meter/drain assets, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 12: authored side guards
+
+- Added `assets/sprites/side-guard.svg`, a beveled industrial guard segment with shell thickness, inset metal channel, mounting ribs, and opposing indicator lamps.
+- Wired `drawFlippers()` to render the authored guard along the existing side-guard collision segment, with procedural stroke fallback while loading.
+- Preserved guard collision geometry, flipper funnel behavior, input, and physics.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: side-guard marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Hosted side-guard asset verification pending deployment.
 - Physical-device feel testing remains pending.
