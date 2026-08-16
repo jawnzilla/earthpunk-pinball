@@ -1372,3 +1372,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Angle row, bounded panel, synchronized preset value, four profiles, first-contact lock, offline scan, and `git diff --check` assertions pass.
 - The hosted build still requires real-device touch/feel signoff.
+
+## 2026-08-16 — Physics pass: target-directed launch rotation
+
+### Implemented
+
+- Replaced fixed inward launch bias with deterministic rotation toward the nearest upper bumper (`y <= 220`).
+- Preset values now act as maximum turn limits: `0°`, `6°`, `12°`, and `18°`.
+- Rotation preserves the outgoing velocity magnitude before the existing speed cap.
+- Invalid/near-zero vectors and tables without upper targets leave velocity unchanged.
+- Assist remains first-contact-only; passive contacts and held flipper frames are untouched.
+- Tune copy now labels the value `Aim max` / `max turn` to avoid promising a forced trajectory.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Target helper, upper-target filter, speed preservation, finite guard, first-contact lock, UI copy, Active kick `12`, offline scan, and `git diff --check` assertions pass.
+- Real-device comparison remains required for final upper-bank feel signoff.

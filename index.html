@@ -122,9 +122,9 @@
     <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
     <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
-    <div class="debug-row" title="Inward bias added only on the first active flipper launch.">Launch angle <span class="debug-value" data-angle-value="launchAngle">0°</span></div>
+    <div class="debug-row" title="Inward bias added only on the first active flipper launch.">Launch angle <span class="debug-value" data-angle-value="launchAngle">0° max turn</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft">SOFT</button><button type="button" data-preset="balanced">BALANCED</button><button type="button" data-preset="reach">HIGH REACH</button><button type="button" data-preset="pop">POP</button></div>
-    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Top: 0/1 · Angle: 0° · Launch: —</div>
+    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Top: 0/1 · Aim max: 0° · Launch: —</div>
   </section>
 <script>
 (() => {
@@ -156,7 +156,7 @@
     reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
     pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}°`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Angle: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
@@ -240,7 +240,7 @@
     const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
     const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
     elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
-    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Angle: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
+    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
@@ -342,6 +342,14 @@
     capBallSpeed(ball);
     return true;
   }
+  function rotateTowardUpperTarget(ball, maxTurnDegrees) {
+    const target = state.layout.bumpers.filter(item => item.y <= 220).sort((a, b) => Math.hypot(a.x - ball.x, a.y - ball.y) - Math.hypot(b.x - ball.x, b.y - ball.y))[0];
+    const speed = Math.hypot(ball.vx, ball.vy); if (!target || !Number.isFinite(speed) || speed < .001) return false;
+    const currentAngle = Math.atan2(ball.vy, ball.vx); const targetAngle = Math.atan2(target.y - ball.y, target.x - ball.x); let delta = targetAngle - currentAngle;
+    while (delta > Math.PI) delta -= Math.PI * 2; while (delta < -Math.PI) delta += Math.PI * 2;
+    const maxTurn = Math.max(0, maxTurnDegrees) * Math.PI / 180; const turn = Math.max(-maxTurn, Math.min(maxTurn, delta)); const nextAngle = currentAngle + turn;
+    ball.vx = Math.cos(nextAngle) * speed; ball.vy = Math.sin(nextAngle) * speed; return true;
+  }
   function updateFlippers() {
     const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
     const rightTarget = input.right ? flippers.right.active : flippers.right.rest;
@@ -381,7 +389,7 @@
     const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? (state.flipperContacts.left ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
     const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? (state.flipperContacts.right ? debugConfig.contactSeparation : launchKick) : debugConfig.contactSeparation);
     const freshActiveHit = (leftHit && input.left && !state.flipperContacts.left) || (rightHit && input.right && !state.flipperContacts.right);
-    if (freshActiveHit) { const inward = leftHit && input.left ? 1 : -1; b.vy = Math.min(b.vy, -debugConfig.activeEscape); b.vx += inward * Math.min(1.8, Math.abs(b.vy) * Math.tan(debugConfig.launchAngle * Math.PI / 180)); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, '#ffd083', .45); }
+    if (freshActiveHit) { b.vy = Math.min(b.vy, -debugConfig.activeEscape); const aimed = rotateTowardUpperTarget(b, debugConfig.launchAngle); b.vy = Math.min(b.vy, -debugConfig.activeEscape); capBallSpeed(b); state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, aimed ? '#67c8d5' : '#ffd083', aimed ? .6 : .45); }
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');

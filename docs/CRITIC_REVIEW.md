@@ -39,3 +39,4 @@
 - Upper-bank pass: added a measurable top-bumper reach objective, target band, score reward, and cooldown.
 - Launch-angle pass: added a bounded inward assist on fresh active flipper hits and angle telemetry.
 - Physics UX follow-up: exposed launch angle in Tune and bounded the panel for 320x568 screens.
+- Target-directed pass: rotates fresh flipper launches toward the nearest upper bumper while preserving speed magnitude.
