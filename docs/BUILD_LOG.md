@@ -2342,3 +2342,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: map content `255px`, five bands span `y=119..374`, detail begins at `y=376`, CTA `y=486..538`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `4d90588`; hosted verification confirmed bottom-to-top depth order D4→D0, late-drain guard live, detail/CTA separation, Canvas geometry, and no horizontal overflow.
 - Physical-device end-flipper behavior remains pending.
+
+## 2026-08-16 — Loop 28: full-height route map and flipper posture rollback
+
+- Made `#overlay.route-decision .card` fill the overlay height and allowed `#route-map-panel`, viewport, and scroll region to flex into the previously unused vertical space.
+- Restored the pre-flattened extended-blade rest posture: left `.16`, right `π-.16`; retained 104×17 blades, pivots `60/300`, swept contact, and late-drain guard.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: route card `288×536`, map panel `238×370`, CTA `y=466..518`, no horizontal overflow.
+- Exact 390×844: route card `358×812`, map panel `306×646`, CTA `y=742..794`, no horizontal overflow.
+- Active-play screenshot confirms extended flippers render with the restored slight downward rest posture.
+- Hosted verification pending deployment.
+- Physical-device flipper/drain behavior remains pending.

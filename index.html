@@ -164,11 +164,25 @@
     .route-strip-node small { margin-top: 2px; color: #b8cbbb; font-size: 8px; }
     .route-strip-branch { color: #789487; font-size: 14px; text-align: center; }
     .route-map::before, .route-map::after { display: none; }
+    @media (max-height: 900px) {
+      .route-map-depth-content { min-height: 214px; gap: 1px; }
+      .route-map-depth { min-height: 42px; padding: 0; }
+      .route-map-depth::before { top: 50%; left: 5px; transform: translateY(-50%); font-size: 7px; }
+      .route-console-art { height: 214px; }
+      .route-map-cue { display: none !important; }
+    }
     @media (max-height: 600px) {
-      .route-map-depth-content { min-height: 255px; gap: 1px; }
-      .route-map-depth { min-height: 49px; padding: 8px 0 0; }
+      .route-map-depth-content { min-height: 255px; }
+      .route-map-depth { min-height: 49px; }
       .route-console-art { height: 255px; }
     }
+    #overlay.route-decision .card { height: calc(100dvh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; display: flex; flex-direction: column; }
+    #overlay.route-decision #route-preview-slot { flex: 1 1 auto; min-height: 0; display: flex; }
+    #overlay.route-decision #route-map-panel { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; margin: 10px 0; }
+    #overlay.route-decision #route-map-viewport { flex: 1 1 auto; min-height: 0; max-height: none !important; display: flex; }
+    #overlay.route-decision #route-map-scroll { flex: 1 1 auto; height: auto; min-height: 0; }
+    #overlay.route-decision #route-map-depth-content { height: 100%; min-height: 0; }
+    #overlay.route-decision .route-console-art { height: 100%; }
     .route-node { position: relative; z-index: 1; display: grid !important; grid-template-columns: 42px 1fr !important; min-height: 62px !important; }
     .route-node .upgrade-icon { border-radius: 50%; }
     .route-locked { opacity: .45; filter: saturate(.35); cursor: not-allowed; }
@@ -369,8 +383,8 @@
   ];
   const bumpers = levelLayouts[0].bumpers;
   const flippers = {
-    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: .26, active: -.52, angle: .26, angularVelocity: 0 },
-        right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI - .26, active: Math.PI + .52, angle: Math.PI - .26, angularVelocity: 0 },
+    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: .16, active: -.5, angle: .16, angularVelocity: 0 },
+        right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0 },
   };
   const sideGuards = [
     { x1: table.left + 8, y1: H - 95, x2: 48, y2: H - 82 },
