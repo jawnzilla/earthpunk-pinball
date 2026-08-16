@@ -1949,5 +1949,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 after node selection: cue `y=489..511`, detail `y=517..555`, both visible; map `444px` scroll content / `190px` viewport; no horizontal overflow.
 - Exact 390×844: map remains `292px`, cue and detail remain visible, card bottom `828px`, no horizontal overflow.
 - `node --check`, `git diff --check`, offline, cue visibility, node-feedback visibility, and responsive-cascade assertions pass.
-- Pages workflow succeeded for `bdbc449`; hosted verification confirmed 320×568 cue/detail visibility, `drain-trough.svg`, `190px` short-phone map viewport, `292px` 390×844 map viewport, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 11: authored meter rails
+
+- Added `assets/sprites/meter-rail.svg`, an industrial recessed meter frame with bevels, inset channel, guide rails, and indicator lamps.
+- Wired `drawMeters()` to use authored rails for Charge and salvage progress while retaining dynamic fills, combo feedback, and a procedural fallback.
+- Kept meter positions, values, progress semantics, and gameplay unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: authored meter marker present, `190px` short-phone route map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
+- Hosted meter asset verification pending deployment.
 - Physical-device feel testing remains pending.
