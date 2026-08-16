@@ -2106,5 +2106,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: identity marker present, 15 route nodes, route strip hidden, CTA `y=326..378`, `190px` map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
 - Exact 390×844: `292px` map, CTA `y=428..480`, no horizontal overflow.
-- Pages workflow succeeded for `f867b9e`; hosted verification confirmed `table-identity.svg`, `lower-edge-machinery.svg`, `reach-band.svg`, 26 authored SVG requests, hidden route strip, 15 symbol nodes at `42px`, `190px` / `292px` map viewports, CTA `y=326..378` at 320×568 and `y=428..480` at 390×844, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 18: authored cradle aim reticle
+
+- Added `assets/sprites/aim-reticle.svg`, a manufactured directional cradle indicator with segmented arc, ticks, center node, and cyan alignment crosshair.
+- Wired `drawAimReticle()` to rotate the authored reticle toward the nearest unhit target while preserving the existing cradle-only visibility gate and procedural fallback.
+- No ball physics, input, target selection, or collision behavior changed.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: reticle marker present, HUD key present, 15 route nodes, route strip hidden, CTA `y=326..378`, `190px` map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
+- Exact 390×844: `292px` map, CTA `y=428..480`, no horizontal overflow.
+- Hosted verification pending deployment.
 - Physical-device feel testing remains pending.
