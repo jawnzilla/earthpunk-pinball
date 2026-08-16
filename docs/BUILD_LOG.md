@@ -2210,3 +2210,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: both controls `52px` high, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `117a969`; hosted verification confirmed `flipper-control.svg` is present, both controls remain `52px`, Canvas remains `430px`, controls end at `565px`, and no horizontal overflow.
 - Physical-device touch testing remains pending.
+
+## 2026-08-16 — Loop 22: authored HUD instrument rail
+
+- Added `assets/sprites/hud-rail.svg`, a custom recessed HUD shell with fasteners, segmented conduit accents, and a restrained instrument-panel treatment.
+- Applied it to `.run-hud` without changing route status, functional/decorative key, score updates, progress state, or active-play geometry.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Local active-play screenshot confirms route and score remain legible over the authored HUD rail.
+- Exact 320×568: HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device HUD readability testing remains pending.
