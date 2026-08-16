@@ -1911,5 +1911,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted JavaScript passes `node --check`; `git diff --check` and offline scan pass.
 - Portrait map remains 5 depths / 15 nodes with `444px` scroll content and `292px` viewport.
 - Exact 320×568 remains `430px` Canvas height, controls bottom `565px`, and no horizontal overflow; 390×844 card remains inside the viewport.
-- Pages workflow succeeded for `65e55ff`; hosted browser verification confirmed `flipper-blade.svg` plus all 15 prior authored SVG assets, with 5 map depths / 15 nodes, `430px` Canvas height, controls bottom `565px`, and no horizontal overflow at 320×568 or 390×844.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 9 follow-up: portrait map scroll affordance
+
+- Added a dedicated `#route-map-cue` below the portrait map viewport so the map no longer relies on a thin scrollbar to communicate hidden route depth.
+- Initial state reads `SWIPE UP · MORE ROUTE`; after the final depth is reached it changes to `ROUTE DEPTH REVEALED`.
+- Cue is 10px high-contrast text with `pointer-events: none`, and map scroll resets to the top whenever a new pre-descent map opens.
+- Added a zero-size measurement guard for the hidden overlay transition so the cue cannot initialize in its completed state.
+
+### Verification notes
+
+- Exact 320×568: initial cue visible, map `444px` scroll content / `292px` viewport, no horizontal overflow.
+- Forced end-scroll changes cue to `ROUTE DEPTH REVEALED` with the complete state.
+- `node --check`, `git diff --check`, offline, cue-state, scroll-reset, and pointer-event assertions pass.
 - Physical-device feel testing remains pending.
