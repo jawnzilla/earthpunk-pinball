@@ -77,12 +77,13 @@
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
     <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.16" step="0.01" value="0.08"><span class="debug-value" data-value="gravity">0.08</span></label>
-    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0.5" max="14" step="0.1" value="12"><span class="debug-value" data-value="activeKick">12.00</span></label>
+    <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0" max="4" step="0.05" value="1.2"><span class="debug-value" data-value="activeKick">1.20</span></label>
     <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
-    <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0.1" max="0.9" step="0.01" value="0.1"><span class="debug-value" data-value="movingRestitution">0.10</span></label>
+    <label class="debug-row" title="Energy retained when the flipper is moving during contact.">Moving rebound <input data-tune="movingRestitution" type="range" min="0" max="0.9" step="0.01" value="0.24"><span class="debug-value" data-value="movingRestitution">0.24</span></label>
     <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail. Zero is a true cradle catch.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0" max="0.6" step="0.01" value="0"><span class="debug-value" data-value="passiveRestitution">0.00</span></label>
-    <label class="debug-row" title="Small outward/upward push applied while an active contact remains locked.">Contact separation <input data-tune="contactSeparation" type="range" min="0.1" max="2" step="0.05" value="2"><span class="debug-value" data-value="contactSeparation">2.00</span></label>
-    <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="8"><span class="debug-value" data-value="maxSpeed">8.00</span></label>
+    <label class="debug-row" title="Small outward push applied by a released flipper contact.">Contact separation <input data-tune="contactSeparation" type="range" min="0" max="1" step="0.01" value="0.15"><span class="debug-value" data-value="contactSeparation">0.15</span></label>
+    <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
+    <label class="debug-row" title="Energy retained by bumpers, rails, gates, and walls. Lower values make the table calmer.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.18"><span class="debug-value" data-value="surfaceRebound">0.18</span></label>
   </section>
 <script>
 (() => {
@@ -98,7 +99,7 @@
   const resetButton = document.querySelector('#reset');
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .1, passiveRestitution: 0, contactSeparation: 2, maxSpeed: 8 };
+  const debugConfig = { gravity: .08, activeKick: 1.2, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .18 };
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
@@ -250,17 +251,20 @@
     b.vy += debugConfig.gravity; b.vx *= .999; b.vy *= .999;
     b.x += b.vx; b.y += b.vy;
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
-    if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * .78; }
-    if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * .78; }
-    if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * .72; }
+    const wallRebound = Math.max(0, Math.min(1, debugConfig.surfaceRebound));
+    if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * wallRebound; }
+    if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * wallRebound; }
+    if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * wallRebound; }
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     if (!state.running) return;
-    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? 1.2 : 1.18; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
-    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, .95, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
-    sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, .58));
+    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? Math.min(1, wallRebound + .12) : wallRebound; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
+    sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right');
-    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, .9, input.left ? 1.2 : .15);
-    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, .9, input.right ? 1.2 : .15);
+    const leftRestitution = input.left ? (Math.abs(flippers.left.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
+    const rightRestitution = input.right ? (Math.abs(flippers.right.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
+    const leftHit = segmentCollision(b, { ...flipperEndpoints(flippers.left), width: flippers.left.width }, leftRestitution, input.left ? debugConfig.activeKick : debugConfig.contactSeparation);
+    const rightHit = segmentCollision(b, { ...flipperEndpoints(flippers.right), width: flippers.right.width }, rightRestitution, input.right ? debugConfig.activeKick : debugConfig.contactSeparation);
     b.cradleSide = leftWasCradled ? 'left' : rightWasCradled ? 'right' : null;
     if (leftHit && leftWasCradled) imprintFromHinge('left');
     if (rightHit && rightWasCradled) imprintFromHinge('right');

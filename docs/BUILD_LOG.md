@@ -1120,6 +1120,27 @@ The moving-flipper sweep and layered contact-response revisions continued to pro
 - Sweep, rewind, remaining-frame, and screen-transform assertions pass.
 - `git diff --check` passes.
 
+## 2026-08-15 — Prototype 54: make physics tuning authoritative
+
+### Player correction
+
+The tuning panel displayed values that the collision paths did not actually consume. Gravity and speed cap were live, but flippers, bumpers, walls, rails, and gates still used hard-coded rebound and kick values.
+
+### Implemented
+
+- Wired active kick, catch rebound, moving rebound, passive rebound, and contact separation into the simple flipper solver.
+- Added a live Surface rebound slider for bumpers, rails, gates, and table walls.
+- Lowered the default active kick and global speed cap to the calmer pre-regression range.
+- Lowered default surface rebound so bumper contacts do not keep re-energizing the ball.
+- Updated slider ranges and labels to match the current simple solver.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Static tuning-wiring assertions pass for every physics control.
+- Offline-resource scan passes.
+- `git diff --check` passes.
+
 ## 2026-08-14 — Prototype 39: Charge-funded repair station
 
 ### Economy link
