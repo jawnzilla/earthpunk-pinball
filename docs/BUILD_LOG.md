@@ -2236,3 +2236,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: header `y=8..32`, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
 - Pages workflow succeeded for `5f9eb53`; hosted verification confirmed `masthead-rail.svg` active, header `y=8..32`, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device header readability testing remains pending.
+
+## 2026-08-16 — Loop 24: authored route action plate
+
+- Added `assets/sprites/action-plate.svg`, a custom amber industrial action plate with inset shell, fasteners, highlight rails, and dark side channels.
+- Applied it only to `#overlay.route-decision #reset`, preserving the sticky 52px CTA, route-node inspection, and physical-chute-only route commitment.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: CTA `y=439..491`, feedback detail `y=323..361`, no horizontal overflow.
+- Selected-node tooltip remains functional after action-plate styling.
+- Hosted verification pending deployment.
+- Physical-device CTA testing remains pending.
