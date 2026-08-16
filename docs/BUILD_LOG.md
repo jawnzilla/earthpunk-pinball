@@ -2180,5 +2180,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: inner map scroll `232px`, feedback rail visible at `y=323..378`, CTA `y=439..491`, outer modal scroll `0`, no horizontal overflow.
 - Exact 390×844: feedback rail visible at `y=309..367`, CTA `y=428..480`, no horizontal overflow.
 - Selecting a reachable node updates the tooltip without committing a route.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `93fc219`; hosted verification confirmed the persistent feedback rail at 320×568, 360×640, and 390×844, inner-only map scrolling, CTA reachability, selected-node updates, hidden route strip, and no horizontal overflow.
 - Physical-device touch-scroll testing remains pending.
