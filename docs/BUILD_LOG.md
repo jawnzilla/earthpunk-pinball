@@ -1660,3 +1660,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification target
 
 - `node --check`, `git diff --check`, offline scan, flipper-render assertions, hidden-debug assertions, Pages deployment, and live DOM verification.
+- Pages workflow succeeded for `32c9b85`; live verification confirmed route preview visible before descent, route strip hidden during active play, gear hidden during active play, and symbol-only flipper controls.
