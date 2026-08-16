@@ -74,6 +74,7 @@
 - Loop 28 map-fit pass: compacted the vertical bands at both mobile heights, hid the obsolete swipe cue when all five depths fit, and preserved the authored console chassis/detail/legend hierarchy.
 - Loop 28 full-map composition pass: made the route-decision card fill the overlay height and allowed the route panel/viewport to flex into the unused space instead of remaining a half-height panel.
 - Flipper posture rollback: restored the pre-flattened extended-blade rest posture (`.16` / `π-.16`, active `.5`) while retaining current 104×17 blades, pivots, swept contact, and late-drain guard.
+- Loop 28 audit correction: short-phone `main` now clamps to `100dvh` with no document spill, and the route-map cue is validated against actual scroll range rather than shown by default.
 - Late-drain flipper correction: added a final shared swept-capsule check immediately before drain resolution, so a genuine end-of-flipper crossing is resolved instead of losing stability.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
