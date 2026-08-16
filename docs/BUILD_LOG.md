@@ -2078,5 +2078,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: lower asset marker present; sticky CTA `y=492..544`; map `190px`; Canvas `430px`; controls bottom `565px`; no horizontal overflow.
 - Exact 390×844: sticky CTA `y=768..820`; map `292px`; no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `70a9f7a`; hosted verification confirmed `lower-edge-machinery.svg`, `reach-band.svg`, `relay-gate.svg`, 25 authored SVG requests, sticky CTA `y=492..544` at 320×568 and `y=768..820` at 390×844, `527px / 190px` and `292px` map geometry, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
 - Physical-device feel testing remains pending.
