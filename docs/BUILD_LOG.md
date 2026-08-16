@@ -2234,5 +2234,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Local screenshot confirms the masthead treatment reads behind the compact title/status line.
 - Exact 320×568: header `y=8..32`, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `5f9eb53`; hosted verification confirmed `masthead-rail.svg` active, header `y=8..32`, HUD `y=36..75`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device header readability testing remains pending.
