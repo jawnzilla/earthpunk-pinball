@@ -42,3 +42,4 @@
 - Target-directed pass: rotates fresh flipper launches toward the nearest upper bumper while preserving speed magnitude.
 - Corrective geometry pass: replaced unreachable `y <= 220` logic with actual highest-bumper tier selection and aligned the visual band.
 - Progression pass: upper-bank reach now unlocks Surface Vault; 4 Charge remains the fallback.
+- Corrective progression pass: route effects now commit only after module confirmation; Change route restores the snapshot.

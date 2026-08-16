@@ -210,7 +210,7 @@
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 3, score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
+    state = { stage: 1, stageCount: 3, score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: true, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], message: 'Map the first descent.' };
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
@@ -276,6 +276,7 @@
     overlayKicker.textContent = 'Step 1 of 2 · Choose route';
     overlayTitle.textContent = `Descent ${state.stage} stabilized`;
     overlayCopy.textContent = `Route mapped ${state.targets}/${targets.length}. Pick the risk profile for ${levelLayouts[state.stage].name}. Your module choice comes next. Charge: ${Math.floor(state.charge)} · Score: ${state.score}.`;
+    state.routeDecisionBase = { routeModifier: state.routeModifier, tableKind: state.tableKind, tableLabel: state.tableLabel, salvageBonus: state.salvageBonus, stability: state.stability, charge: state.charge, bossHits: state.bossHits }; state.pendingRoute = null;
     showRouteChoices();
     choices.hidden = false; resetButton.hidden = true; overlay.hidden = false; updateHud();
   }
@@ -289,17 +290,18 @@
     overlayKicker.textContent = 'Step 2 of 2 · Tune hinge';
     overlayTitle.textContent = `${state.tableLabel} route selected`;
     overlayCopy.textContent = `Choose one elemental hinge module before ${levelLayouts[state.stage].name} comes online. Charge available: ${Math.floor(state.charge)}.`;
-    const back = document.createElement('button'); back.type = 'button'; back.className = 'choice-back'; back.textContent = '← Change route'; back.addEventListener('click', () => { overlayKicker.textContent = 'Step 1 of 2 · Choose route'; overlayTitle.textContent = `Descent ${state.stage} stabilized`; showRouteChoices(); });
+    const back = document.createElement('button'); back.type = 'button'; back.className = 'choice-back'; back.textContent = '← Change route'; back.addEventListener('click', () => { restoreRouteDecision(); overlayKicker.textContent = 'Step 1 of 2 · Choose route'; overlayTitle.textContent = `Descent ${state.stage} stabilized`; showRouteChoices(); });
     const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? ` · COST ${upgrade.cost} CHARGE` : ' · FREE'; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element} attunement</small><strong>${upgrade.title}</strong><small>${upgrade.text}${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; });
     choices.replaceChildren(back, ...moduleChoices);
   }
   function beginNextRoute() { state.stage += 1; state.layout = state.tableKind === 'boss' ? bossLayout : levelLayouts[state.stage - 1]; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlay.hidden = true; state.running = true; spawnBall(); updateHud(); }
-  function chooseRoute(route) { route.apply(state); state.routeTarget = route.id; state.routeHistory.push(route.id); state.message = `${route.title} selected. Now tune the hinge.`; showModuleChoices(); updateHud(); }
+  function restoreRouteDecision() { if (!state.routeDecisionBase) return; Object.assign(state, state.routeDecisionBase); state.pendingRoute = null; state.routeTarget = null; }
+  function chooseRoute(route) { restoreRouteDecision(); route.apply(state); state.routeTarget = route.id; state.pendingRoute = route.id; state.message = `${route.title} selected. Now tune the hinge.`; showModuleChoices(); updateHud(); }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return;
     if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return;
     if (upgrade.cost) state.charge -= upgrade.cost;
-    upgrade.apply(state); state.attunements.push(upgrade.element); state.message = `${upgrade.element} attunement installed.`; beginNextRoute();
+    upgrade.apply(state); if (state.pendingRoute) state.routeHistory.push(state.pendingRoute); state.attunements.push(upgrade.element); state.routeDecisionBase = null; state.pendingRoute = null; state.message = `${upgrade.element} attunement installed.`; beginNextRoute();
   }
   function win() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; overlayKicker.textContent = 'Route complete'; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = `The probe found a route through the buried machine. Descent complete. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }
   function lose() { choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; state.running = false; overlayKicker.textContent = 'Run ended'; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = `The tunnel collapsed before the route was mapped. Salvage: ${state.charge} · Score: ${state.score}.`; overlay.hidden = false; updateHud(); }

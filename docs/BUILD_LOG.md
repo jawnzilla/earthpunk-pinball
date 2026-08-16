@@ -1423,3 +1423,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Reach unlock, Charge fallback, lock copy, reward copy, top-hit reset, and preserved physics assertions pass.
 - Offline scan and `git diff --check` pass.
 - Real route selection and touch verification remain required on a 320x568 device.
+
+## 2026-08-16 — Corrective progression pass: transactional route selection
+
+### Implemented
+
+- Added a route-decision snapshot at the start of the route map.
+- Route effects are previewed during Step 2 but are not committed to route history until the elemental module is confirmed.
+- `← Change route` restores route modifier, table identity, salvage bonus, Stability, Charge, and boss-hit state before reopening the map.
+- Surface Vault's upper-bank/Charge unlock remains compatible with the transactional flow.
+- Added explicit `pendingRoute` and `routeDecisionBase` state fields for reset clarity.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Snapshot, deferred history commit, back restoration, Surface Vault predicate, physics preservation, offline scan, and `git diff --check` assertions pass.
+- Real two-step route/module touch flow remains required on a 320x568 device.
