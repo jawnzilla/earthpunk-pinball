@@ -1285,3 +1285,22 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Route history, Charge unlock predicate, path label, boss table, and Active kick assertions pass.
 - Offline scan and `git diff --check` pass.
 - Remaining gate: real multi-stage route selection on a 320x568 phone.
+
+## 2026-08-16 — Physics tuning pass: four energy profiles
+
+### Implemented
+
+- Split `surfaceRebound` from `bumperRebound`: walls, rails, and gates can stay muted while bumpers retain pop.
+- Added four live test presets:
+  - **Soft:** gravity `.075`, active kick `12`, surface `.06`, bumper `.70`, cap `7.8`.
+  - **Balanced:** gravity `.09`, active kick `12`, surface `.08`, bumper `.82`, cap `8.8`.
+  - **High Reach:** gravity `.105`, active kick `12`, surface `.10`, bumper `.90`, cap `9.5`.
+  - **Pop:** gravity `.115`, active kick `14`, surface `.12`, bumper `.96`, cap `10`.
+- Presets synchronize every visible slider and preserve the Active kick contract.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- All four preset objects, bumper-only rebound channel, preset synchronization, and Active kick `12` assertions pass.
+- Offline scan and `git diff --check` pass.
+- Source verification does not replace real-device feel testing; compare the four profiles on the hosted build.

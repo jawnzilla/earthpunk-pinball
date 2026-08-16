@@ -84,6 +84,9 @@
     .debug-panel p { margin: 0 0 8px; color: #9fb5a7; font-size: 10px; line-height: 1.3; }
     .debug-row { display: grid; grid-template-columns: 1fr 54px; gap: 8px; align-items: center; margin: 7px 0; color: #c4d2bd; font-size: 11px; }
     .debug-row input { width: 100%; accent-color: #f1b35b; }
+    .preset-row { display: grid; grid-template-columns: 1fr repeat(4, auto); gap: 5px; align-items: center; margin-top: 10px; color: #9fb5a7; font-size: 10px; }
+    .preset-row button { min-height: 30px; padding: 4px 6px; border: 1px solid #648274; border-radius: 6px; color: #dce8d4; background: #1d2d2e; font-size: 9px; letter-spacing: .04em; }
+    .preset-row button:hover, .preset-row button:focus-visible { border-color: #f1b35b; color: #ffd083; }
     .debug-value { color: #f1b35b; text-align: right; font-variant-numeric: tabular-nums; }
   </style>
 </head>
@@ -116,7 +119,9 @@
     <label class="debug-row" title="Energy retained when the flipper is released and acts as a passive rail. Zero is a true cradle catch.">Passive rebound <input data-tune="passiveRestitution" type="range" min="0" max="0.6" step="0.01" value="0"><span class="debug-value" data-value="passiveRestitution">0.00</span></label>
     <label class="debug-row" title="Small outward push applied by a released flipper contact.">Contact separation <input data-tune="contactSeparation" type="range" min="0" max="1" step="0.01" value="0.15"><span class="debug-value" data-value="contactSeparation">0.15</span></label>
     <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
-    <label class="debug-row" title="Energy retained by bumpers, rails, gates, and walls. Lower values make the table calmer.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.18"><span class="debug-value" data-value="surfaceRebound">0.18</span></label>
+    <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
+    <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
+    <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft">SOFT</button><button type="button" data-preset="balanced">BALANCED</button><button type="button" data-preset="reach">HIGH REACH</button><button type="button" data-preset="pop">POP</button></div>
   </section>
 <script>
 (() => {
@@ -140,7 +145,15 @@
   const touchButtons = { left: document.querySelector('#touch-left'), right: document.querySelector('#touch-right') };
   const debugToggle = document.querySelector('#debug-toggle');
   const debugPanel = document.querySelector('#debug-panel');
-  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .18 };
+  const debugConfig = { gravity: .08, activeKick: 12, catchRestitution: 0, movingRestitution: .24, passiveRestitution: 0, contactSeparation: .15, maxSpeed: 6.4, surfaceRebound: .1, bumperRebound: .82 };
+  const physicsPresets = {
+    soft: { gravity: .075, activeKick: 12, catchRestitution: .04, movingRestitution: .28, passiveRestitution: .04, contactSeparation: .1, maxSpeed: 7.8, surfaceRebound: .06, bumperRebound: .7 },
+    balanced: { gravity: .09, activeKick: 12, catchRestitution: .06, movingRestitution: .36, passiveRestitution: .06, contactSeparation: .12, maxSpeed: 8.8, surfaceRebound: .08, bumperRebound: .82 },
+    reach: { gravity: .105, activeKick: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
+    pop: { gravity: .115, activeKick: 14, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
+  };
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); if (state) state.maxSpeed = debugConfig.maxSpeed; }
+  debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(debugConfig, physicsPresets[button.dataset.preset]); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
     const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2);
@@ -351,7 +364,7 @@
     resolveBoss(b);
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     if (!state.running) return;
-    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? Math.min(1, wallRebound + .12) : wallRebound; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    state.layout.bumpers.forEach(item => { const restitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; if (circleCollision(b, item, restitution)) { if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
     if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right');
