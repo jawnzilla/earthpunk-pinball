@@ -2036,5 +2036,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: deck marker present, map `527px / 190px`, modal `921px / 568px`, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Pages workflow succeeded for `bb17395`; hosted verification confirmed `deck-inset.svg`, `reactor-rail.svg`, `table-shell.svg`, all 22 authored SVG requests, `527px / 190px` 320×568 map, `921px / 568px` modal, `292px` 390×844 map, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 14 follow-up: relay gate and outer-scroll cue
+
+- Added `assets/sprites/relay-gate.svg`, a vertical Split Reactor relay housing with brackets, charge spine, indicator wells, and layered metal depth.
+- Wired `drawRelayGate()` to use the authored gate while retaining the cooldown flash and procedural fallback; collision, charge rewards, score, combo, and timing remain unchanged.
+- Added `#overlay-scroll-cue` with `SWIPE UP · OBJECTIVE BELOW` so the outer modal’s below-map objective/CTA content is discoverable.
+- The outer cue hides when the modal reaches its bottom; it does not intercept pointer input and does not affect the map’s independent scroll.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: relay marker present; outer cue visible before scroll; modal `954px / 568px`; cue hidden at outer max scroll; `190px` map, `430px` Canvas, controls bottom `565px`, no horizontal overflow.
+- Hosted relay/cue verification pending deployment.
 - Physical-device feel testing remains pending.
