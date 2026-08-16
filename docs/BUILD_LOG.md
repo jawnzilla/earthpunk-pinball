@@ -1499,3 +1499,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification notes
 
 - Aim copy, telemetry labels, cradle-only reticle, target selection, mobile safety, physics preservation, syntax, offline, and `git diff --check` assertions pass.
+
+## 2026-08-16 — Corrective hinge gameplay pass: imprint on cradle entry only
+
+### Implemented
+
+- Hinge elemental imprint now fires only when the ball enters a cradle.
+- Holding a flipper against a cradled ball no longer refreshes the imprint every frame.
+- Releasing and re-entering the cradle permits one new imprint, preserving intentional hinge charging.
+- Contact-position launch scaling, cradle reticle, target-directed aim copy, muted held-contact separation, and Active kick `12` remain intact.
+
+### Verification notes
+
+- Cradle-entry guards and release/re-entry behavior pass static assertions.
+- Held-imprint paths are absent.
+- Contact power, reticle, physics preservation, syntax, offline scan, and `git diff --check` pass.
