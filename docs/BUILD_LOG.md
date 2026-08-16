@@ -2024,5 +2024,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: map `527px` content / `190px` viewport; cue visible at `y=307..329`; cue/detail/legend all parented by `#route-map-viewport`; 5 depths / 15 nodes; no horizontal overflow.
 - End scroll plus scroll event changes cue to `ROUTE DEPTH REVEALED`; node selection remains functional and outer modal scroll stays at `0` during map scrolling.
-- Pages workflow succeeded for `1791bbe`; hosted verification confirmed 5 depths / 15 nodes, `527px / 190px` 320×568 map content, cue/detail/legend ownership by `#route-map-viewport`, initial and end cue states, `reactor-rail.svg`, 21 authored SVG requests, `292px` 390×844 map, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 14: authored deck inset hardware
+
+- Added `assets/sprites/deck-inset.svg`, an interior hardware family with recessed side panels, mounting lamps, ribs, conduit diagonals, and cross-table service rails.
+- Wired `drawDeckDetails()` to use the authored inset over the procedural rectangle/stroke treatment, with fallback while loading.
+- Preserved deck placement, target/bumper visibility, table dimensions, collision geometry, and gameplay order.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: deck marker present, map `527px / 190px`, modal `921px / 568px`, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Hosted deck asset verification pending deployment.
 - Physical-device feel testing remains pending.
