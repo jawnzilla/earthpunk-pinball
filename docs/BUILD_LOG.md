@@ -1987,5 +1987,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: side-guard marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Pages workflow succeeded for `50d1d46`; hosted verification confirmed `side-guard.svg`, `meter-rail.svg`, `drain-trough.svg`, all 19 authored SVG requests, `1004px / 568px` 320×568 modal scroll, `1098px / 844px` 390×844 modal scroll, responsive map caps, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 12 follow-up: authored table shell
+
+- Added `assets/sprites/table-shell.svg`, a transparent manufactured perimeter overlay with recessed lip, corner plates, mounting lamps, segmented perimeter lighting, and shell-depth shading.
+- Wired the shell after the deck/grid layer and before gameplay objects so it adds material depth without obscuring the ball, targets, flippers, or drain machinery.
+- Preserved table dimensions, collision geometry, camera framing, and gameplay rendering fallback.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: shell marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Hosted shell asset verification pending deployment.
 - Physical-device feel testing remains pending.
