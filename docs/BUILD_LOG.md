@@ -2272,6 +2272,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: legend `13px`, detail rail `28px`, CTA `y=433..485`, no horizontal overflow.
 - Exact 390×844: legend `13px`, detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
-- Selected-node tooltip remains functional and still reports `FLOODED SLUICE · LEFT CHUTE` without committing a route.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `f2fd4f5`; hosted verification confirmed `◉ NOW · ◇ OPEN · · FUTURE · × LOCKED`, `aria-label="Route legend"`, CTA reachability, selected-node inspection, and no horizontal overflow.
 - Physical-device legend readability testing remains pending.
