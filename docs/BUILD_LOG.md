@@ -2313,5 +2313,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
 - 320×568 fixture: card bottom `568px`, choices `220px` viewport / `446px` scroll content, buttons `96px`, no horizontal overflow.
 - 390×844 fixture: card bottom `836.8px`, choices `252px` viewport / `377px` scroll content, buttons `79px`, no horizontal overflow.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `db8a66d`; hosted verification confirmed the narrow containment rule is live, route detail/legend unchanged, CTA `52px`, Canvas `430px`, controls bottom `565px`, and no horizontal overflow.
 - Physical-device upgrade-modal testing remains pending.
