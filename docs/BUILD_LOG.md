@@ -2328,3 +2328,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Cue computed style: sticky, `bottom: 0px`, normal margin, dedicated padding row.
 - Hosted verification pending deployment.
 - Physical-device cue readability remains pending.
+
+## 2026-08-16 — Loop 27: vertical route map and late-drain contact
+
+- Reoriented route-map depth from five left-to-right columns into five bottom-to-top horizontal bands using `flex-direction: column-reverse`.
+- D0/current now sits at the bottom; D4/final depth sits at the top.
+- Added a final `sweptFlipperContact()` check before drain resolution so a real end-of-flipper crossing is resolved before stability loss.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- Endpoint regression: left and right tip crossings detected; center-drain trajectory ignored.
+- Exact 320×568: map content `255px`, five bands span `y=119..374`, detail begins at `y=376`, CTA `y=486..538`, Canvas `430px`, controls bottom `565px`, no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device end-flipper behavior remains pending.

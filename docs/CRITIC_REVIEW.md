@@ -70,6 +70,8 @@
 - Flipper rotating-sweep correction: added bounded continuous-angle contact sampling between `previousAngle` and `angle`, so fast tip crossings are resolved against the actual moving flipper capsule while preserving relative-contact physics, active kick `12`, contact locks, and visual geometry.
 - Loop 27 narrow upgrade-modal pass: constrained non-route decision cards to the mobile viewport and reduced the upgrade-choice scroll window at ≤360px, preserving all four choices, 52px minimum button sizing, and leaving the map-first route modal untouched.
 - Loop 27 cue pass: moved `SWIPE FOR MORE` from a negative-offset overlay into a dedicated sticky bottom row inside `.choices.upgrade-scroll`, preventing it from crossing visible choice descriptions.
+- Loop 27 vertical route-map pass: changed the five-lane map to bottom-to-top depth bands with `column-reverse`, placing D0/current at the bottom and the final depth at the top; narrow-phone bands now fit the available map viewport.
+- Late-drain flipper correction: added a final shared swept-capsule check immediately before drain resolution, so a genuine end-of-flipper crossing is resolved instead of losing stability.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
 - POP baseline / angle-driven launch pass: default profile is POP; fresh hits inherit the active flipper angle instead of forcing vertical launches.

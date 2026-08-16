@@ -56,6 +56,9 @@
       .route-strip-node small { font-size: 8px; }
       .route-map-viewport { max-height: 350px !important; }
       .route-map-scroll { height: 290px; }
+      .route-map-depth-content { min-height: 255px; gap: 1px; }
+      .route-map-depth { min-height: 49px; padding: 8px 0 0; }
+      .route-console-art { height: 255px; }
       .route-map-cue { font-size: 10px; padding: 5px 4px 3px; }
       .route-map-detail { min-height: 26px; max-height: 38px; overflow: hidden; padding: 6px 7px; font-size: 9px; }
       .card { padding: 12px; max-height: calc(100dvh - 16px); }
@@ -122,17 +125,17 @@
     .route-map-panel[hidden] { display: none; }
     .route-map-head { display: flex; justify-content: space-between; color: #9fd4c0; font-size: 9px; font-weight: 900; letter-spacing: .16em; }
     .route-map-viewport { max-height: 292px; overflow: hidden; overscroll-behavior: contain; margin: 8px -2px 0; padding: 8px 8px 8px; background: repeating-linear-gradient(90deg, transparent 0 46px, rgba(159,212,192,.035) 46px 47px); display: flex; flex-direction: column; }
-    .route-map-scroll { position: relative; min-height: 0; height: 232px; overflow-y: auto; overscroll-behavior: contain; }
+    .route-map-scroll { position: relative; min-height: 0; height: 292px; overflow-y: auto; overscroll-behavior: contain; }
     .route-console-art { position: absolute; z-index: 0; inset: 0; width: 100%; height: 422px; pointer-events: none; opacity: .72; }
     .route-map-cue { position: sticky; top: 0; z-index: 2; display: none; margin: 0 0 6px; padding: 6px 4px 4px; border-bottom: 1px solid rgba(255,208,131,.32); color: #ffd083; background: linear-gradient(180deg, rgba(8,16,18,.98), rgba(8,16,18,.82)); font-size: 10px; font-weight: 900; letter-spacing: .14em; text-align: center; animation: mapCuePulse 1.8s ease-in-out infinite; pointer-events: none; }
     .route-map-cue.visible { display: block; }
     .route-map-cue.complete { color: #9fd4c0; animation: none; }
     @keyframes mapCuePulse { 50% { opacity: .55; } }
-    .route-map-depth-content { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; min-height: 422px; align-items: stretch; }
-    .route-map-depth { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-around; gap: 10px; min-height: 400px; padding: 26px 0 10px; }
-    .route-map-depth::before { content: 'D' attr(data-depth); position: absolute; top: 4px; left: 50%; transform: translateX(-50%); color: #6f9988; font-size: 8px; font-weight: 900; letter-spacing: .16em; }
-    .route-map-depth + .route-map-depth { margin-top: 0; border-left: 1px dashed rgba(159,212,192,.28); }
-    .route-map-depth + .route-map-depth::after { content: ''; position: absolute; left: -5px; top: 20%; bottom: 20%; border-left: 1px solid rgba(255,208,131,.22); opacity: .9; }
+    .route-map-depth-content { position: relative; z-index: 1; display: flex; flex-direction: column-reverse; gap: 4px; min-height: 422px; padding: 0 6px; }
+    .route-map-depth { position: relative; display: flex; flex: 1 1 0; flex-direction: row; align-items: center; justify-content: space-around; gap: 8px; min-height: 72px; padding: 22px 0 4px; }
+    .route-map-depth::before { content: 'D' attr(data-depth); position: absolute; top: 4px; left: 6px; transform: none; color: #6f9988; font-size: 8px; font-weight: 900; letter-spacing: .16em; }
+    .route-map-depth + .route-map-depth { margin-top: 0; border-left: 0; border-top: 1px dashed rgba(159,212,192,.28); }
+    .route-map-depth + .route-map-depth::after { content: ''; position: absolute; left: 20%; right: 20%; top: -3px; bottom: auto; border-left: 0; border-top: 1px solid rgba(255,208,131,.22); opacity: .9; }
     .route-map-node { position: relative; z-index: 1; display: grid; place-items: center; width: 42px; height: 42px; min-width: 42px; min-height: 42px; padding: 0; border: 1px solid #38524e; border-radius: 50%; color: #9fb5a7; background: radial-gradient(circle, #29423d, #111b1e 68%); font: inherit; cursor: pointer; }
     .route-map-node::after { content: ''; position: absolute; width: 6px; height: 6px; right: 2px; top: 2px; border-radius: 50%; background: #526e63; }
     .route-map-node strong { display: block; color: #dce8d4; font-size: 18px; line-height: 1; }
@@ -160,8 +163,12 @@
     .route-strip-node strong { color: #ffd083; font-size: 9px; text-transform: uppercase; letter-spacing: .03em; }
     .route-strip-node small { margin-top: 2px; color: #b8cbbb; font-size: 8px; }
     .route-strip-branch { color: #789487; font-size: 14px; text-align: center; }
-    .route-map::before { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(-8deg); }
-    .route-map::after { content: ''; position: absolute; left: 22%; right: 22%; top: 48%; border-top: 1px dashed #789487; opacity: .7; transform: rotate(8deg); }
+    .route-map::before, .route-map::after { display: none; }
+    @media (max-height: 600px) {
+      .route-map-depth-content { min-height: 255px; gap: 1px; }
+      .route-map-depth { min-height: 49px; padding: 8px 0 0; }
+      .route-console-art { height: 255px; }
+    }
     .route-node { position: relative; z-index: 1; display: grid !important; grid-template-columns: 42px 1fr !important; min-height: 62px !important; }
     .route-node .upgrade-icon { border-radius: 50%; }
     .route-locked { opacity: .45; filter: saturate(.35); cursor: not-allowed; }
@@ -597,6 +604,8 @@
     capBallSpeed(b);
     const drainOpening = b.x > 156 && b.x < 204;
     if (b.y > H - 35 && drainOpening) {
+      const lateFlipper = [flippers.left, flippers.right].find(flipper => sweptFlipperContact(b, flipper, b.r + flipper.width / 2));
+      if (lateFlipper) { const side = lateFlipper === flippers.left ? 'left' : 'right'; const held = side === 'left' ? input.left : input.right; const restitution = held ? (Math.abs(lateFlipper.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution; resolveFlipperCollision(b, lateFlipper, side, restitution, false, 0, held); state.flipperContacts[side] = true; updateHud(); return; }
       if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
       if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
       state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
