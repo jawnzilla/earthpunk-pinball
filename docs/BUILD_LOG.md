@@ -1769,3 +1769,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 320×568 controls bottom `565px`; document height `568px`; overflow false.
 - HUD resource row hidden; drain stability renderer present; route strip remains non-reflowing.
 - `node --check`, `git diff --check`, offline, HUD-relocation, drain-counter, and maximum-table assertions pass.
+- Pages workflow succeeded for `28ece34`; hosted 320×568 verification confirmed the resource row is hidden, route identity remains in `#route-status`, Canvas is `241.875×430px`, controls bottom at `565px`, and horizontal overflow is false.
