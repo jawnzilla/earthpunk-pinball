@@ -1814,3 +1814,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, offline, vertical-rail, higher-position, target-asset, one-way, and mirrored-direction assertions pass.
 - Exact 320×568 geometry remains touch-safe; physical-device feel testing is still pending.
 - Pages workflow succeeded for `55fb569`; hosted browser verification confirmed all four target SVG requests, corrected rail markers, `241.875×430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+
+## 2026-08-16 — Loop 6 follow-up: route modal hierarchy and test-panel access
+
+- Moved the real route strip into `#route-preview-slot` inside the pre-descent card, eliminating the fixed-strip overlap that obscured the table title at 320×568.
+- Restored the strip to `main` before the Canvas when descent begins, preserving the floating active-play route indicator without modal competition.
+- Moved the test-table selector to the top of the debug panel, before the physics sliders, so it is reachable without scrolling through the full tuning panel.
+
+### Verification notes
+
+- Exact 320×568: card `y=72..496`, route preview inside the card, CTA bottom `470px`.
+- Route graph `216/216px`; no clipping or horizontal overflow.
+- Test selector top `104px` while debug panel is open.
+- `node --check`, `git diff --check`, offline, modal-parent, route-restore, and selector-order assertions pass.

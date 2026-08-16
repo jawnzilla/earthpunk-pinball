@@ -93,7 +93,9 @@
     .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
     .route-strip { position: absolute; z-index: 3; top: 94px; left: 12px; right: 12px; display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: rgba(13,22,25,.94); box-shadow: 0 8px 18px rgba(0,0,0,.28); }
     .route-strip[hidden] { display: grid; visibility: hidden; pointer-events: none; }
-    .route-strip-title { display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .route-strip.route-in-card { position: static; inset: auto; width: auto; margin: 10px 0 12px; z-index: auto; box-shadow: none; }
+    .route-strip.route-in-card .route-strip-graph { overflow: hidden; }
+    .route-strip.route-in-card .route-strip-title { font-size: 8px; }
     .route-strip-graph { display: grid; grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr) 12px minmax(0, 1fr); align-items: center; gap: 2px; overflow: hidden; }
     .route-strip-node { min-width: 0; padding: 5px 5px; border: 1px solid #648274; border-radius: 7px; background: #1d2d2e; }
     .route-strip-node.current { border-color: #ffd083; box-shadow: 0 0 10px rgba(241,179,91,.2); }
@@ -154,12 +156,13 @@
     <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
-    <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
+    <section class="card"><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div id="route-preview-slot"></div><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button">Start another descent</button></section>
   </div>
   <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics tuning">⚙</button>
   <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
     <h3>Live physics tuning</h3>
     <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
+    <div class="test-level"><label for="test-level-select">Test table</label><select id="test-level-select"><option value="generator-well">Generator Well</option><option value="pulse-manifold">Pulse Manifold</option><option value="split-reactor">Split Reactor</option><option value="blackout-core">Blackout Core</option><option value="surface-vault">Surface Vault</option></select><button id="test-level-button" type="button">Load selected table</button></div>
     <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.16" step="0.01" value="0.08"><span class="debug-value" data-value="gravity">0.08</span></label>
     <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0" max="24" step="0.5" value="12"><span class="debug-value" data-value="activeKick">12.00</span></label>
     <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
@@ -174,7 +177,6 @@
     <div class="debug-row" title="Flipper contacts use ball velocity relative to the rotating flipper surface. The rolling component is preserved while fresh activation adds contact-scaled normal impulse.">Flipper solver — relative contact <span class="debug-value" data-solver-value="relative-contact">rolling + surface velocity</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
     <label class="cheat-row"><input id="cheat-infinite" type="checkbox"><span>∞ Stability / lives</span></label>
-    <div class="test-level"><label for="test-level-select">Test table</label><select id="test-level-select"><option value="generator-well">Generator Well</option><option value="pulse-manifold">Pulse Manifold</option><option value="split-reactor">Split Reactor</option><option value="blackout-core">Blackout Core</option><option value="surface-vault">Surface Vault</option></select><button id="test-level-button" type="button">Load selected table</button></div>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
 <script>
@@ -192,6 +194,7 @@
   const resetButton = document.querySelector('#reset');
   const routeStatus = document.querySelector('#route-status');
   const routeStrip = document.querySelector('#route-strip');
+  const routePreviewSlot = document.querySelector('#route-preview-slot');
   const scoreStatus = document.querySelector('#score-status');
   const progressFill = document.querySelector('#progress-fill');
   const progressTrack = document.querySelector('.progress-track');
@@ -371,9 +374,10 @@
   }
   function chutePosition(chute) { return chute === 'left' ? { x: 48, y: 214 } : chute === 'right' ? { x: W - 48, y: 214 } : { x: W / 2, y: 214 }; }
   function showPreLevelMap() {
+    if (routePreviewSlot && routeStrip.parentElement !== routePreviewSlot) { routePreviewSlot.append(routeStrip); routeStrip.classList.add('route-in-card'); }
     renderRouteStrip(); showObjectiveTip(); choices.classList.remove('upgrade-scroll'); overlayKicker.textContent = `Route structure // Descent ${state.stage}/${state.stageCount}`; overlayTitle.textContent = `${state.layout.name} online`; overlayCopy.textContent = allRouteEdges().length ? 'The branching structure is shown above the table. Enter the descent, fulfil the objectives, then physically route the ball through an opened exit.' : 'Final chamber. Clear the table to acquire the surface signal.'; choices.replaceChildren(); choices.hidden = true; resetButton.textContent = 'Enter descent'; resetButton.hidden = false; resetButton.onclick = startNextDescent; debugToggle.hidden = false; overlay.hidden = false;
   }
-  function startNextDescent() { debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
+  function startNextDescent() { if (routeStrip.parentElement !== document.querySelector('main')) { document.querySelector('main').insertBefore(routeStrip, document.querySelector('.table-wrap')); routeStrip.classList.remove('route-in-card'); } debugToggle.hidden = true; overlay.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.textContent = 'Start another descent'; state.running = true; state.message = `Descent ${state.stage} active. Clear the table, then find an open route chute.`; spawnBall(); updateHud(); }
   function completeStage() {
     if (state.stageComplete) return; if (state.stage >= state.stageCount) { state.running = false; win(); return; }
     const available = routeOptions(); if (!available.length) { state.running = false; win(); return; }
