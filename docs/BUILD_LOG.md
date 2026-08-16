@@ -2152,3 +2152,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Selecting an available node updates the tooltip without committing a route.
 - Hosted verification pending deployment.
 - Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 19: swept flipper contact and ball depth cues
+
+- Added `sweptSegmentContact()` to sample the ball's previous-to-current path against the live flipper capsule, catching tip-only crossings that a current-position-only test can miss.
+- Preserved existing segment dimensions, mirrored 15° rest angles, relative surface velocity, one-shot activation energy, cradle capture, and contact locks.
+- Added render-only depth cues to `drawBall()`: contact shadow, recessed well halo, velocity-oriented highlight, and a richer procedural metal fallback. No collision geometry changed.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Focused swept-contact regression: crossing trajectory detected; crossing contact point found; non-contact trajectory ignored.
+- Live 320×568 smoke test rendered the active table with no console-visible failure, `430px` Canvas, and no horizontal overflow.
+- Hosted verification pending deployment.
+- Physical-device tip-contact testing remains pending.
