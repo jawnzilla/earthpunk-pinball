@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #101518; color: #e9f1df; }
     body { display: grid; place-items: center; overflow: hidden; }
-    main { width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
+    main { position: relative; width: min(100vw, 520px); min-height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; padding: max(12px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); gap: 10px; }
     header { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
     header > div:first-child { min-width: 0; }
     h1 { margin: 0; color: #f1b35b; font-size: clamp(18px, 5vw, 25px); letter-spacing: .12em; text-transform: uppercase; }
@@ -42,7 +42,7 @@
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
     @media (max-height: 600px) {
       main { gap: 4px; padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
-      canvas { width: min(100%, calc((100dvh - 221px) * .5625)); height: auto; }
+      canvas { width: min(100%, calc((100dvh - 158px) * .5625)); height: auto; }
       .run-hud { padding: 6px 9px; gap: 4px; }
       .touch-control { min-height: 52px; }
       .route-strip { padding: 5px 7px; }
@@ -88,7 +88,7 @@
     .choices button[data-kind="reward"] strong { color: #e5d8ff; }
     .choices button[data-kind="reward"]:hover, .choices button[data-kind="reward"]:focus-visible { border-color: #e5d8ff; box-shadow: 0 0 20px rgba(198,167,239,.34), inset 0 0 18px rgba(159,212,192,.08); }
     .choice-back { min-height: 38px !important; padding: 7px 12px !important; color: #b8cbbb !important; background: transparent !important; border: 1px solid #526e63 !important; font-size: 11px; text-align: center !important; }
-    .route-strip { display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: linear-gradient(110deg, rgba(31,53,51,.92), rgba(13,22,25,.92)); }
+    .route-strip { position: absolute; z-index: 3; top: 94px; left: 12px; right: 12px; display: grid; gap: 4px; padding: 7px 9px; border: 1px solid #38524e; border-radius: 10px; background: rgba(13,22,25,.94); box-shadow: 0 8px 18px rgba(0,0,0,.28); }
     .route-strip[hidden] { display: grid; visibility: hidden; pointer-events: none; }
     .route-strip-title { display: flex; justify-content: space-between; gap: 8px; color: #9fb5a7; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
     .route-strip-graph { display: grid; grid-template-columns: minmax(84px, 1fr) 18px minmax(84px, 1fr) 18px minmax(84px, 1fr); align-items: center; gap: 3px; overflow-x: auto; }
@@ -228,10 +228,10 @@
   ];
   const bossLayout = { name: 'Blackout Core', targetPositions: [[78, 178, 15], [180, 150, 16], [282, 178, 15], [96, 270, 16], [264, 270, 16], [180, 328, 14]], bumpers: [{ id: 'blackout-armor-left', x: 96, y: 404, r: 20, type: 'armor', element: 'Earth', hits: 0 }, { id: 'blackout-armor-right', x: 264, y: 404, r: 20, type: 'armor', element: 'Fire', hits: 0 }], gate: null, barrierNote: 'Upper relay barrier removed; keep the lower approach open.', boss: { x: 180, y: 106, r: 32, element: 'Air', maxHp: 3 } };
   const edgeBumpers = () => [
-    { id: 'edge-left-upper', x: 30, y: 388, r: 9, type: 'edge', element: 'Water', oneWay: true },
-    { id: 'edge-right-upper', x: 330, y: 388, r: 9, type: 'edge', element: 'Fire', oneWay: true },
-    { id: 'edge-left-mid', x: 30, y: 446, r: 8, type: 'edge', element: 'Earth' },
-    { id: 'edge-right-mid', x: 330, y: 446, r: 8, type: 'edge', element: 'Air' }
+    { id: 'edge-left-upper', x: 30, y: 332, r: 6, length: 24, width: 6, angle: .16, type: 'edge', element: 'Water', oneWay: true },
+    { id: 'edge-right-upper', x: 330, y: 332, r: 6, length: 24, width: 6, angle: -.16, type: 'edge', element: 'Fire', oneWay: true },
+    { id: 'edge-left-mid', x: 30, y: 392, r: 6, length: 22, width: 6, angle: .12, type: 'edge', element: 'Earth' },
+    { id: 'edge-right-mid', x: 330, y: 392, r: 6, length: 22, width: 6, angle: -.12, type: 'edge', element: 'Air' }
   ];
   levelLayouts.forEach(layout => layout.bumpers.push(...edgeBumpers()));
   bossLayout.bumpers.push(...edgeBumpers());
@@ -286,7 +286,7 @@
     state.launched = true;
   }
   function updateHud() {
-    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.layout.name.toUpperCase()} · ${state.immortal ? '∞' : `${state.stability}/${state.stabilityMax}`}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
+    stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount} · ${state.immortal ? '∞' : `${state.stability}/${state.stabilityMax}`}✦` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
     messageEl.textContent = state.message.replace('Read the route map, then enter the descent.', 'READY').replace('Descent mapped. Choose a modification.', 'OBJECTIVES CLEAR');
     routeStatus.textContent = `R${state.stage}/${state.stageCount} · ${state.layout.name}`;
     scoreStatus.textContent = `${state.score.toLocaleString()} SCORE`;
@@ -446,7 +446,7 @@
     targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
-    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
+    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); if (item.type === 'edge') { const half = item.length / 2, rise = Math.tan(item.angle) * half, segment = { x1: item.x - half, y1: item.y - rise, x2: item.x + half, y2: item.y + rise, width: item.width }; if (segmentCollision(b, segment, energetic ? baseRestitution : wallRebound)) { if (item.oneWay && !energetic) return; } return; } const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); state.score += Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
     if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
@@ -562,7 +562,7 @@
   }
   function drawBumpers() {
     state.layout.bumpers.forEach(item => {
-      if (item.type === 'edge') { ctx.save(); const side = item.x < W / 2 ? 1 : -1; ctx.fillStyle = '#101a1c'; ctx.strokeStyle = elementColors[item.element]; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.roundRect(item.x - 3, item.y - 14, 6, 28, 3); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(item.x - 1, item.y - 8); ctx.lineTo(item.x + side * 4, item.y - 3); ctx.moveTo(item.x - 1, item.y + 8); ctx.lineTo(item.x + side * 4, item.y + 3); ctx.stroke(); if (item.oneWay) { ctx.strokeStyle = '#ffd083'; ctx.beginPath(); ctx.moveTo(item.x - side * 5, item.y); ctx.lineTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y - 3); ctx.moveTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y + 3); ctx.stroke(); } ctx.restore(); return; }
+      if (item.type === 'edge') { ctx.save(); const half = item.length / 2, rise = Math.tan(item.angle) * half, side = item.x < W / 2 ? 1 : -1; ctx.lineCap = 'round'; ctx.strokeStyle = '#101a1c'; ctx.lineWidth = item.width + 4; ctx.beginPath(); ctx.moveTo(item.x - half, item.y - rise); ctx.lineTo(item.x + half, item.y + rise); ctx.stroke(); ctx.strokeStyle = elementColors[item.element]; ctx.lineWidth = item.width; ctx.beginPath(); ctx.moveTo(item.x - half, item.y - rise); ctx.lineTo(item.x + half, item.y + rise); ctx.stroke(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(item.x - half + 3, item.y - rise); ctx.lineTo(item.x + half - 3, item.y + rise); ctx.stroke(); if (item.oneWay) { ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(item.x - side * 5, item.y); ctx.lineTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y - 3); ctx.moveTo(item.x + side * 2, item.y); ctx.lineTo(item.x - side * 2, item.y + 3); ctx.stroke(); } ctx.restore(); return; }
       const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const element = item.element || 'Earth'; const outer = pulse ? elementColors[element] : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
       ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();

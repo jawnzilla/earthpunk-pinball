@@ -1739,3 +1739,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, offline scan, reactor-rail, bumper-position, one-way-response, slim-render, sprite, and route-lock assertions pass.
 - Pages workflow succeeded for `096fa87`; hosted source verification confirmed the Route Core panel removal, thin rail, one-way bumper logic, slim wall render, and all three sprite references. Hosted 320×568 smoke confirmed controls bottom `565.39px`, no overflow, and requests for `warden-shell.svg`, `edge-pod.svg`, and `probe-ball.svg`.
+
+## 2026-08-16 — Loop 4 follow-up: maximize table and angle wall rails
+
+- Removed the hidden route-strip grid reservation. The route indicator now floats above the playfield and visibility toggling produces zero Canvas position/size delta.
+- Removed the duplicate active route name from the stage header; route identity remains in the single `#route-status` line.
+- Expanded the short-phone Canvas budget from `347px` to `410px` at 320×568 while keeping the 52px flipper controls fully reachable.
+- Moved edge rails higher again to `y=332` and `y=392`, reduced them to 6px collision width, and gave them shallow mirrored angles.
+- Replaced circular edge contacts with angled `segmentCollision` rails to prevent the ball nesting against round bumpers.
+- One-way behavior remains: top-side descent uses bumper restitution; underside contact uses muted wall restitution.
+
+### Verification notes
+
+- Exact 320×568: Canvas `230.6×410px`; controls bottom `560.39px`; no overflow.
+- Route visibility transition: Canvas delta `[0, 0]`.
+- Deterministic rail probe: top contact `vy -3.63`; underside contact `vy +0.36`.
+- JavaScript syntax, diff hygiene, offline, rail-angle, one-way, and max-table assertions pass.
