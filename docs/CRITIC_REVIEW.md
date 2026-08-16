@@ -46,3 +46,4 @@
 - Physics UX pass: preset buttons now expose selected state and clear to Custom on slider edits.
 - Corrective boss progression pass: Reactor Warden is consumed after one stage; the next table returns to normal unless reselected.
 - Flipper contact-power pass: hinge-side active hits are weak dislodges; tip-side hits provide full launch power.
+- Aim-assist readability pass: Tune copy now explains target-directed max-turn behavior; cradle-only reticle points toward the nearest unhit salvage target.

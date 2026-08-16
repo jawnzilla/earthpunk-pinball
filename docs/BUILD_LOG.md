@@ -1485,3 +1485,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - Direct impulse check: hinge `2.16` versus tip `12.0` with Active kick `12`.
 - Tip weighting, active-only gating, escape scaling, aim scaling, spawn reset, explicit upper IDs, boss objective inactivity, held-contact separation, physics preservation, syntax, offline, and `git diff --check` assertions pass.
+
+## 2026-08-16 — Aim-assist readability pass: cradle reticle and truthful Tune copy
+
+### Implemented
+
+- Replaced the obsolete `Inward bias` Tune description with explicit target-directed aim-assist copy.
+- Telemetry now says `Peak height`, `Upper bank`, `Aim assist`, and `Last launch speed`.
+- Added a compact dashed amber reticle while the ball is actively cradled and an unhit salvage target remains.
+- The reticle points toward the nearest unhit salvage target, renders behind the ball, and disappears on release or target completion.
+- Preserved contact-position power scaling, first-contact locking, muted passive contacts, explicit upper IDs, and the `12` Active kick contract.
+
+### Verification notes
+
+- Aim copy, telemetry labels, cradle-only reticle, target selection, mobile safety, physics preservation, syntax, offline, and `git diff --check` assertions pass.

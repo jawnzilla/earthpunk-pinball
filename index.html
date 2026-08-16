@@ -123,9 +123,9 @@
     <label class="debug-row" title="Hard maximum ball speed after collisions and tuning.">Speed cap <input data-tune="maxSpeed" type="range" min="3" max="10" step="0.1" value="6.4"><span class="debug-value" data-value="maxSpeed">6.40</span></label>
     <label class="debug-row" title="Energy retained by rails, gates, and walls. Keep this low for muted table contact.">Surface rebound <input data-tune="surfaceRebound" type="range" min="0" max="1" step="0.01" value="0.10"><span class="debug-value" data-value="surfaceRebound">0.10</span></label>
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
-    <div class="debug-row" title="Inward bias added only on the first active flipper launch.">Launch angle <span class="debug-value" data-angle-value="launchAngle">0° max turn</span></div>
+    <div class="debug-row" title="Aim assist turns the ball toward the nearest upper-bank bumper on the first active flipper hit. The maximum turn is a limit, not a fixed launch angle; 0° disables it.">Aim assist — target-directed <span class="debug-value" data-angle-value="launchAngle">0° max turn</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
-    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak: — · Top: 0/1 · Aim max: 0° · Launch: —</div>
+    <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: CUSTOM · Peak height: — px · Upper bank: 0/1 · Aim assist: 0° max turn · Last launch speed: —</div>
   </section>
 <script>
 (() => {
@@ -157,7 +157,7 @@
     reach: { gravity: .105, activeKick: 12, activeEscape: 3.4, launchAngle: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
     pop: { gravity: .115, activeKick: 14, activeEscape: 4, launchAngle: 18, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${getUpperBumpers().length ? `${state.topHits}/1` : '—'} · Aim max: ${debugConfig.launchAngle.toFixed(0)}° · Launch: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-angle-value="launchAngle"]'); if (angleEl) angleEl.textContent = `${debugConfig.launchAngle.toFixed(0)}° max turn`; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak height: ${Math.max(0, H - state.peakY).toFixed(0)} px · Upper bank: ${getUpperBumpers().length ? `${state.topHits}/1` : '—'} · Aim assist: ${debugConfig.launchAngle.toFixed(0)}° max turn · Last launch speed: ${state.lastLaunchSpeed.toFixed(2)}`; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.toggle('is-active', presetButton === button); presetButton.setAttribute('aria-pressed', presetButton === button ? 'true' : 'false'); }); Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
@@ -428,7 +428,7 @@
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
     drawDeckDetails(); drawReachBand(); drawTableIdentity(); if (state.boss.active) drawBoss();
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
-    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawFlippers(); drawMeters(); drawEffects(); drawBall();
+    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawFlippers(); drawMeters(); drawEffects(); drawAimReticle(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
   }
   function drawReachBand() {
@@ -547,6 +547,11 @@
       for (let i = 0; i < 6; i += 1) { const angle = state.pulse * .4 + i * Math.PI / 3; const distance = radius + 4; ctx.beginPath(); ctx.arc(effect.x + Math.cos(angle) * distance, effect.y + Math.sin(angle) * distance, 2 * effect.power, 0, Math.PI * 2); ctx.fill(); }
       ctx.restore();
     });
+  }
+  function drawAimReticle() {
+    const b = state.ball; if (!state.running || !b?.cradleSide || !input[b.cradleSide]) return;
+    const target = targets.filter(item => !item.hit).sort((a, c) => Math.hypot(a.x - b.x, a.y - b.y) - Math.hypot(c.x - b.x, c.y - b.y))[0]; if (!target) return;
+    const angle = Math.atan2(target.y - b.y, target.x - b.x); const span = .58; ctx.save(); ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 2; ctx.globalAlpha = .82; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(b.x, b.y, 24, angle - span, angle + span); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = .55; for (const side of [-1, 1]) { const tick = angle + side * span; ctx.beginPath(); ctx.moveTo(b.x + Math.cos(tick) * 20, b.y + Math.sin(tick) * 20); ctx.lineTo(b.x + Math.cos(tick) * 28, b.y + Math.sin(tick) * 28); ctx.stroke(); } ctx.restore();
   }
   function drawBall() {
     const b = state.ball;
