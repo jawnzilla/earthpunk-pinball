@@ -2285,6 +2285,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: route card `288×495`, map `236×337`, CTA `y=433..485`, no horizontal overflow.
-- Instruction contract is present in the route state; `#overlay-copy` remains intentionally hidden to avoid redundant text.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `a3881b3`; hosted verification confirmed compact modal instruction copy, intentional hidden duplicate overlay prose, symbol legend, route-map geometry, CTA reachability, and no horizontal overflow.
 - Physical-device modal readability testing remains pending.
