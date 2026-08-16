@@ -2353,6 +2353,5 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: route card `288×536`, map panel `238×370`, CTA `y=466..518`, no horizontal overflow.
 - Exact 390×844: route card `358×812`, map panel `306×646`, CTA `y=742..794`, no horizontal overflow.
-- Active-play screenshot confirms extended flippers render with the restored slight downward rest posture.
-- Hosted verification pending deployment.
+- Pages workflow succeeded for `5f7c5b9`; hosted verification confirmed full-height route panel, bottom-to-top map order, restored `.16 / π-.16` flipper source contract, late-drain guard, and no horizontal overflow.
 - Physical-device flipper/drain behavior remains pending.
