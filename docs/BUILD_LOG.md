@@ -1712,3 +1712,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check`, `git diff --check`, offline scan, cheat, edge-bumper, route-lock, upgrade-cost, sprite, and short-phone assertions pass.
 - Exact 320×568 smoke: pre-descent controls bottom `565.39px`; active controls bottom `566.39px`; no overflow.
 - Cheat toggle, active debug hiding, and route-strip reflow behavior verified in-browser.
+- Pages workflow succeeded for `bb542d3`; hosted source verification confirmed cheat, edge-bumper, route-lock, compact-cost, and sprite markers. Hosted 320×568 smoke reported controls bottom `565.39px` with no horizontal overflow.
