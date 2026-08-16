@@ -2261,3 +2261,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
 - Pages workflow succeeded for `74ddd68`; hosted verification confirmed compact `NOW · GENERATOR · TAP OPEN NODE` copy, selected `FLOODED SLUICE · LEFT CHUTE` copy, 28px detail rail, CTA reachability, and no horizontal overflow.
 - Physical-device route UX testing remains pending.
+
+## 2026-08-16 — Loop 25: symbol-led route legend
+
+- Replaced the route legend's generic 7px dots with readable symbol marks: `◉ NOW`, `◇ OPEN`, `· FUTURE`, `× LOCKED`.
+- Added `aria-label="Route legend"`; map selection and physical route commitment remain unchanged.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: legend `13px`, detail rail `28px`, CTA `y=433..485`, no horizontal overflow.
+- Exact 390×844: legend `13px`, detail rail `28px`, CTA `y=428..480`, no horizontal overflow.
+- Selected-node tooltip remains functional and still reports `FLOODED SLUICE · LEFT CHUTE` without committing a route.
+- Hosted verification pending deployment.
+- Physical-device legend readability testing remains pending.
