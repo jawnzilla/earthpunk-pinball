@@ -1319,3 +1319,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Telemetry, escape profiles, first-contact lock, bumper-only rebound, Active kick, offline scan, and `git diff --check` assertions pass.
 - Real-device feel remains the final tuning gate; use the telemetry to compare upper-bumper reach rather than slider position alone.
+
+## 2026-08-16 — Physics pass: upper-bank reach objective
+
+### Implemented
+
+- Added a per-table upper-bank reach objective: the first bumper at `y <= 220` counts as a successful reach.
+- Added an 18-frame contact cooldown so one bumper overlap cannot award repeated reach credit.
+- Added `+75` score and a clear message when the upper bank is reached.
+- Added Tune telemetry: `Top: 0/1` or `Top: 1/1`.
+- Added a Canvas target band that changes from cyan `UPPER BANK TARGET · REACH 1` to amber `UPPER BANK ONLINE · 1/1`.
+- Reset the objective on ball reset and route transition; collision physics and four presets remain unchanged.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Upper-bank state, cooldown, visual band, telemetry, preserved physics channels, Active kick `12`, and offline assertions pass.
+- `git diff --check` passes.
+- Real-device comparison remains required for final reach-feel signoff.
