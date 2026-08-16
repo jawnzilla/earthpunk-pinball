@@ -1999,5 +1999,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 
 - `node --check`, `git diff --check`, and offline dependency scan pass.
 - Exact 320×568: shell marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
-- Pages workflow succeeded for `e4acf37`; hosted verification confirmed `table-shell.svg`, `side-guard.svg`, `meter-rail.svg`, `drain-trough.svg`, all 20 authored SVG requests, `1004px / 568px` 320×568 modal scroll, `1098px / 844px` 390×844 modal scroll, responsive map caps, and no horizontal overflow.
+- Physical-device feel testing remains pending.
+
+## 2026-08-16 — Loop 13: authored reactor rail
+
+- Added `assets/sprites/reactor-rail.svg`, a conduit assembly with manufactured endpoint housings, segmented power paths, emissive center well, and layered metal depth.
+- Wired `drawReactor()` to use the authored rail while retaining the live pulsing center node and a procedural fallback.
+- Preserved reactor placement, pulse timing, table dimensions, and gameplay rendering order.
+
+### Verification notes
+
+- `node --check`, `git diff --check`, and offline dependency scan pass.
+- Exact 320×568: reactor marker present, modal `1004px / 568px` scroll contract intact, `190px` route map, `430px` Canvas, controls bottom `565px`, and no horizontal overflow.
+- Hosted reactor asset verification pending deployment.
 - Physical-device feel testing remains pending.
