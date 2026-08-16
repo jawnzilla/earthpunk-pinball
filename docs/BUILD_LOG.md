@@ -1389,3 +1389,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `node --check` passes for the extracted game script.
 - Target helper, upper-target filter, speed preservation, finite guard, first-contact lock, UI copy, Active kick `12`, offline scan, and `git diff --check` assertions pass.
 - Real-device comparison remains required for final upper-bank feel signoff.
+
+## 2026-08-16 — Corrective physics pass: reachable upper-bank geometry
+
+### Implemented
+
+- Replaced the unreachable hard-coded `y <= 220` upper-bank test with `getUpperBumpers()`, which selects the highest bumper tier from the active table layout.
+- Target-directed launch rotation now aims at real bumpers on every table, including alternate and boss layouts.
+- Upper-bank collision credit now uses actual bumper identity and remains cooldown-protected.
+- Moved the Canvas target band to the active table's real upper bumper tier.
+- Preserved speed-conserving target rotation, first-contact locking, muted surfaces, bumper pop, four presets, and Active kick `12`.
+
+### Verification notes
+
+- `node --check` passes for the extracted game script.
+- Regression assertions confirm the dead threshold is absent and target selection, collision credit, and visual band all use actual bumper tiers.
+- Offline scan and `git diff --check` pass.
+- The hosted build must be rechecked after Pages deployment; prior critic evidence correctly identified the old hosted/source mismatch.

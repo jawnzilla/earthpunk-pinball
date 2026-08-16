@@ -40,3 +40,4 @@
 - Launch-angle pass: added a bounded inward assist on fresh active flipper hits and angle telemetry.
 - Physics UX follow-up: exposed launch angle in Tune and bounded the panel for 320x568 screens.
 - Target-directed pass: rotates fresh flipper launches toward the nearest upper bumper while preserving speed magnitude.
+- Corrective geometry pass: replaced unreachable `y <= 220` logic with actual highest-bumper tier selection and aligned the visual band.
