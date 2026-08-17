@@ -108,3 +108,4 @@
 - Loop 47 upper-manifold pass: added side housing depth, a central launch/intake lane, and a foreground gate/rail layer with localized amber/cyan cues.
 - Loop 48 intake-throat pass: added a recessed upper intake silhouette, guide brackets, contact-shadow framing, and localized terminal cues while preserving the ball corridor.
 - Loop 49 crown pass: added a local authored upper-crown service insert with side housings, ceiling brackets, central launch corridor, socket indicators, and lower contact rails.
+- Loop 50 lower-transfer pass: added a local authored lower-middle panel with left/right service bays, central transfer core, junction lamps, and conduit rails while preserving the ball corridor.

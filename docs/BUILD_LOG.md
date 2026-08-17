@@ -2623,6 +2623,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 50: lower transfer service panel
+
+- Added and wired `assets/sprites/lower-mid-transfer-panel.svg` as a render-only lower-middle service module within the existing transfer gap.
+- Added left/right service bays, a central transfer core, junction lamps, and lower conduit/rail details.
+- Preserved an open central ball corridor and made no changes to collision, scoring, route behavior, input, targets, bumpers, or controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

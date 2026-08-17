@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 304 97" fill="none" role="img" aria-label="Lower mid transfer panel">
+<defs>
+ <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#294943"/><stop offset=".4" stop-color="#112528"/><stop offset="1" stop-color="#050e11"/></linearGradient>
+ <linearGradient id="metal"><stop stop-color="#d7e8d0"/><stop offset=".5" stop-color="#526e63"/><stop offset="1" stop-color="#102324"/></linearGradient>
+ <radialGradient id="core"><stop stop-color="#fff0ba"/><stop offset=".2" stop-color="#67c8d5"/><stop offset="1" stop-color="#071416"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M5 8h294v81l-6 5H11l-6-5z" fill="url(#shell)" stroke="url(#metal)" stroke-width="2"/>
+<!-- left and right service bays -->
+<path d="M14 21h78v54H14z" fill="#081719" stroke="#526e63" stroke-width="2"/><path d="M212 21h78v54h-78z" fill="#081719" stroke="#526e63" stroke-width="2"/>
+<path d="M23 29h58v6H23zM23 42h42v6H23zM23 55h52v6H23z" fill="#244542"/><path d="M221 29h58v6h-58zM239 42h40v6h-40zM229 55h50v6h-50z" fill="#244542"/>
+<path d="M29 27v36M45 27v36M61 27v36M77 27v36M227 27v36M243 27v36M259 27v36M275 27v36" stroke="#67c8d5" stroke-opacity=".35" stroke-width="2"/>
+<circle cx="78" cy="69" r="5" fill="#ef8b45" filter="url(#glow)"/><circle cx="226" cy="69" r="5" fill="#67c8d5" filter="url(#glow)"/>
+<!-- central transfer core, corridor stays open -->
+<path d="M102 15h100v68H102z" fill="#030b0e" stroke="#304f49" stroke-width="2"/><path d="M112 24h80v50h-80z" fill="#0a1d20" stroke="#789487" stroke-opacity=".7"/>
+<path d="M122 32h60v34h-60z" fill="#071416" stroke="#67c8d5" stroke-opacity=".5" stroke-dasharray="4 5"/>
+<path d="M102 30l14 8M202 30l-14 8M102 66l14-8M202 66l-14-8" stroke="#ffd083" stroke-width="3"/><circle cx="102" cy="30" r="3" fill="#ffd083"/><circle cx="202" cy="30" r="3" fill="#ffd083"/>
+<circle cx="152" cy="49" r="10" fill="url(#core)" filter="url(#glow)"/><circle cx="152" cy="49" r="3" fill="#fff0ba"/>
+<!-- lower conduit and clamps -->
+<path d="M17 82h72M215 82h72" stroke="#67c8d5" stroke-width="3"/><path d="M25 87h56M223 87h56" stroke="#ef8b45" stroke-opacity=".6" stroke-width="2"/><g fill="#071416" stroke="#d7e8d0"><circle cx="10" cy="14" r="3"/><circle cx="294" cy="14" r="3"/><circle cx="10" cy="83" r="3"/><circle cx="294" cy="83" r="3"/></g>
+</svg>
