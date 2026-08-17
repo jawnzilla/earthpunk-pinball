@@ -3081,3 +3081,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Rendered 320px screenshot visibly confirms separated `CHG` and `AIM` telemetry plates above the target bank and below the objective cue.
 - No new runtime assets or requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 89: authored descent launch CTA
+
+- Converted the pre-descent action plate from text-only treatment to an icon-first launch control with a circular `ϟ` glyph and short `ENTER DESCENT` label.
+- Preserved dynamic state labels through the existing reset handler: `Enter descent` before play and `Start another descent` after a run.
+- Preserved CTA geometry, action-plate asset, click transition, route topology, debug gating, and active-play controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, CTA source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: CTA rectangles unchanged, click transition enters active play, zero overflow, unchanged canvas/control bounds, no page errors.
+- Rendered 320px route screenshot visibly confirms the launch glyph and short label fit inside the authored CTA without clipping.
+- No new runtime assets or requests were added.
+- Physical-device touch behavior remains pending.
