@@ -2971,6 +2971,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: HUD 366×83, resource row 342×16, imprint capsule 120.08×16, canvas 354.375×630, controls 179×52, no overflow.
 - Source update path already communicates hinge, active-imprint, and boss state changes through `updateHud()`; physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 81: authored canvas meter assembly
+
+- Reworked the dual in-table meter rail inside the existing logical `x=30–330`, `y=124–151` footprint.
+- Added distinct Charge and Target icon plates, explicit micro-labels, six segmented state cells, inactive-state tint, and a bright leading-cell cue.
+- Preserved the existing meter sprite rails, combo feedback, state values, target accounting, physics, scoring, route behavior, canvas sizing, and touch controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, meter-assembly source assertion, and `git diff --check` pass.
+- Renderer-only change; no CSS/layout or gameplay-state code changed.
+- Browser capture was unavailable due to the persistent Browser Use daemon timeout; hosted canvas geometry therefore remains pending a fresh live capture.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
