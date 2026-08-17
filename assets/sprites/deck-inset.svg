@@ -1,1 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420"><defs><linearGradient id="d" x2="1" y2="0"><stop stop-color="#0a1315"/><stop offset=".5" stop-color="#304b46"/><stop offset="1" stop-color="#0a1315"/></linearGradient></defs><g fill="url(#d)" stroke="#45645a" stroke-width="2"><path d="M40 22h34v90H40z"/><path d="M286 22h34v90h-34z"/><path d="M40 274h34v122H40z"/><path d="M286 274h34v122h-34z"/></g><g fill="none" stroke="#789487" stroke-width="2"><path d="M48 32h18v70H48zM294 32h18v70h-18zM48 284h18v102H48zM294 284h18v102h-18z"/><path d="M88 30l-24 82M128 30l-24 82M168 30l-24 82M208 30l-24 82M248 30l-24 82M88 274l-24 112M128 274l-24 112M168 274l-24 112M208 274l-24 112M248 274l-24 112" stroke="#67c8d5" stroke-opacity=".35"/></g><g fill="#101a1c" stroke="#b5d3a1" stroke-width="1"><circle cx="48" cy="30" r="4"/><circle cx="312" cy="30" r="4"/><circle cx="48" cy="386" r="4"/><circle cx="312" cy="386" r="4"/></g><g fill="#f1b35b"><circle cx="48" cy="30" r="2"/><circle cx="312" cy="30" r="2"/><circle cx="48" cy="386" r="2"/><circle cx="312" cy="386" r="2"/></g><path d="M82 118h196M82 266h196" stroke="#c6a7ef" stroke-opacity=".28" stroke-width="2" stroke-dasharray="8 8"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" fill="none" role="img" aria-label="Recessed middle deck environmental scaffold">
+<defs><linearGradient id="deck" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#27423e"/><stop offset=".32" stop-color="#14282a"/><stop offset=".72" stop-color="#0c1c1f"/><stop offset="1" stop-color="#071315"/></linearGradient><linearGradient id="bay"><stop stop-color="#395b51"/><stop offset=".5" stop-color="#14292b"/><stop offset="1" stop-color="#081416"/></linearGradient><linearGradient id="rail"><stop stop-color="#9fd4c0"/><stop offset=".45" stop-color="#526e63"/><stop offset="1" stop-color="#112527"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M18 12h324v396H18z" fill="url(#deck)" stroke="#526e63" stroke-width="2"/>
+<!-- upper side manifolds -->
+<path d="M32 25h62v94H32zM266 25h62v94h-62z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M44 38h38v8H44zM44 57h28v36H44zM278 38h38v8h-38zM288 57h28v36h-28z" fill="#0b1b1d" stroke="#67c8d5" stroke-opacity=".55"/>
+<path d="M51 61v26M63 61v26M75 61v26M285 61v26M297 61v26M309 61v26" stroke="#ef8b45" stroke-opacity=".6" stroke-width="3"/>
+<circle cx="82" cy="108" r="6" fill="#ffd083" filter="url(#glow)"/><circle cx="278" cy="108" r="6" fill="#67c8d5" filter="url(#glow)"/>
+<!-- mid transfer bays -->
+<path d="M26 142h92v82H26zM242 142h92v82h-92z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M40 158h64v10H40zM40 180h48v24H40zM256 158h64v10h-64zM272 180h48v24h-48z" fill="#09181a" stroke="#789487"/>
+<path d="M48 163h46M48 187h30M264 163h46M280 187h30" stroke="#9fd4c0" stroke-width="3" opacity=".68"/>
+<circle cx="108" cy="184" r="7" fill="#ef8b45" filter="url(#glow)"/><circle cx="252" cy="184" r="7" fill="#67c8d5" filter="url(#glow)"/>
+<!-- lower collector assemblies -->
+<path d="M32 278h78v112H32zM250 278h78v112h-78z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M45 294v72M58 294v72M71 294v72M84 294v72M263 294v72M276 294v72M289 294v72M302 294v72" stroke="#67c8d5" stroke-opacity=".45" stroke-width="4"/>
+<path d="M40 286h62M258 286h62" stroke="#ffd083" stroke-opacity=".62" stroke-width="3"/>
+<circle cx="104" cy="370" r="6" fill="#ffd083" filter="url(#glow)"/><circle cx="256" cy="370" r="6" fill="#ef8b45" filter="url(#glow)"/>
+<!-- restrained central structural rails -->
+<path d="M122 18v384M238 18v384" stroke="#526e63" stroke-opacity=".45" stroke-width="2"/>
+<path d="M134 20v380M226 20v380" stroke="#67c8d5" stroke-opacity=".18" stroke-width="2" stroke-dasharray="7 9"/>
+<path d="M22 132h316M22 252h316M22 400h316" stroke="#ffd083" stroke-opacity=".22" stroke-width="2"/>
+<path d="M22 136h316M22 256h316M22 404h316" stroke="#67c8d5" stroke-opacity=".2"/>
+<!-- junctions -->
+<g fill="#071416" stroke="#d7e8d0"><circle cx="22" cy="18" r="4"/><circle cx="338" cy="18" r="4"/><circle cx="22" cy="402" r="4"/><circle cx="338" cy="402" r="4"/><circle cx="122" cy="132" r="4"/><circle cx="238" cy="252" r="4"/></g>
+<g fill="#ffd083"><rect x="42" y="16" width="28" height="3"/><rect x="290" y="16" width="28" height="3"/><rect x="42" y="405" width="28" height="3"/><rect x="290" y="405" width="28" height="3"/></g>
+</svg>

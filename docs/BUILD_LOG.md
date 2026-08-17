@@ -2540,6 +2540,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 42: enriched deck-inset scaffold
+
+- Rebuilt `assets/sprites/deck-inset.svg` within its existing `360×420` bounds as a richer middle-deck environmental field.
+- Added six authored zones: upper side manifolds, mid transfer bays, lower collector assemblies, central structural rails, junction hardware, and segmented conduit rails.
+- Preserved the intentional central ball corridor, existing draw order, all gameplay geometry, dynamic objects, target/bumpers, route behavior, and controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 
