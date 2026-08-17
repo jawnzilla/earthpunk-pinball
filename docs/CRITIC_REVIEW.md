@@ -127,3 +127,4 @@
 - Loop 66 route-depth pass: added three staggered non-interactive future-layer service seals, color-coded to the cyan/amber/green continuation language.
 - Loop 67 route-depth pass: added a continuous cyan descent spine, four illuminated checkpoints, and four amber branch taps connecting the lower route landmarks.
 - Loop 68 route-depth pass: added side collector claws, a central lock halo, and a lower return bridge to densify the final termination band.
+- Loop 69 route-depth pass: added left-fork, center-crown, and right-fork end-stop modules anchored to the existing terminal assembly.

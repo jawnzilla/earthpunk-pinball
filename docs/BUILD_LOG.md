@@ -2841,6 +2841,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 69: terminal end-stop modules
+
+- Added three compact terminal end-stop modules—left fork, center crown, and right fork—anchored to the existing lock halo and return bridge.
+- Closed the final route-depth tail with symbol-led mechanical detail without changing route topology, node positions, scrolling, status rail, legend, CTA geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

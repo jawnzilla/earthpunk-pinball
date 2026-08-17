@@ -97,4 +97,8 @@
 <path d="M54 524h28M266 524h28" stroke="#ffd083" stroke-width="3"/><circle cx="92" cy="526" r="4" fill="#67c8d5" filter="url(#glow)"/><circle cx="268" cy="526" r="4" fill="#ef8b45" filter="url(#glow)"/>
 <ellipse cx="180" cy="522" rx="28" ry="13" fill="none" stroke="#fff0ba" stroke-opacity=".7" stroke-width="2"/><ellipse cx="180" cy="522" rx="19" ry="8" fill="none" stroke="#67c8d5" stroke-opacity=".8" stroke-width="2"/>
 <path d="M100 538h160" stroke="#ffd083" stroke-width="3"/><path d="M116 538v-6M148 538v-6M212 538v-6M244 538v-6" stroke="#9fd4c0" stroke-width="2"/>
+<!-- terminal end-stop modules -->
+<path d="M44 534h34l10 6H44zM316 534h-34l-10 6h44z" fill="#0a181a" stroke="#ffd083" stroke-width="2"/>
+<path d="M52 536h18M268 536h18" stroke="#67c8d5" stroke-width="2"/><circle cx="82" cy="537" r="3" fill="#fff0ba" filter="url(#glow)"/><circle cx="278" cy="537" r="3" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M164 532h32v8h-32z" fill="#102d30" stroke="#67c8d5" stroke-width="2"/><path d="M172 536h16" stroke="#ef8b45" stroke-width="2"/><circle cx="180" cy="536" r="3" fill="#fff0ba" filter="url(#glow)"/>
 </svg>
