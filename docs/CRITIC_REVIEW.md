@@ -153,3 +153,4 @@
 - Loop 93 route-tail pass: added an authored three-module terminal bridge above the status rail and reinforced the route-depth termination band without changing route topology or interaction geometry.
 - Loop 94 reaction pass: added distinct Fire, Water, Earth, and Air canvas motifs at reaction coordinates while preserving impact rings, score popups, physics, and mobile geometry.
 - Loop 95 microcopy pass: replaced cryptic active-table `CHG`/`AIM` labels with icon-led `FUEL`/`TARGET` labels without changing meter geometry or gameplay behavior.
+- Loop 96 identity pass: paired larger authored state symbols with one-word table labels inside the existing identity plate without changing active-play geometry.

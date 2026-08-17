@@ -3182,3 +3182,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 320px active screenshot confirms `FUEL` and `TARGET` fit inside their plates without clipping and remain subordinate to the playfield.
 - No new assets or network requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 96: icon-first table identity plate
+
+- Reworked the in-table identity plate to pair a larger authored state symbol with a one-word label: `ϟ CORE`, `≋ SLUICE`, `◈ WARDEN`, or `✦ VAULT`.
+- Preserved the existing identity plate bounds, table state mapping, canvas geometry, route behavior, HUD, physics, and touch controls.
+- Kept the treatment icon-first so the table state reads at 320px without adding explanatory prose.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, identity source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: route CTA, active canvas, controls, and hidden debug contracts unchanged; zero overflow; no page errors.
+- 320px active screenshot confirms the identity plate remains centered and unclipped while FUEL/TARGET remain visible.
+- No new assets or network requests were added.
+- Physical-device touch behavior remains pending.
