@@ -140,3 +140,4 @@
 - Loop 80 HUD pass: exposed the hidden elemental hinge/imprint state as a compact cyan-cued capsule within the existing 16px resource row; no gameplay or layout geometry changed.
 - Loop 81 canvas pass: replaced the visually similar dual meter bars with labeled Charge/Target icon plates, six segmented cells, inactive tint, and a bright leading-cell cue inside the existing logical footprint.
 - Loop 82 responsive pass: raised the fixed debug utility and panel above the 52px touch rail, preserving modal placement and preventing utility/control overlap.
+- Loop 83 UX pass: hid the developer physics tuner by default and added an explicit `?debug=1` gate while preserving the tuning panel and active-game suppression.

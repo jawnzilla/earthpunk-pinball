@@ -2997,6 +2997,22 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Browser capture remained unavailable due to the persistent Browser Use daemon timeout; hosted computed overlap verification remains pending.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 83: demote developer physics tuner
+
+- Hid the physics tuner utility by default from player-facing route and active surfaces.
+- Added an explicit `?debug=1` query gate for developers who need the existing tuning panel and presets.
+- Kept active gameplay suppression intact even when the developer gate is enabled; no tuning controls or persistence logic were removed.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, explicit-gate source assertion, and `git diff --check` pass.
+- Debug button now has an initial hidden state and is only revealed when `debug=1` and the run is not active.
+- Route, HUD, canvas, meter, touch-control, physics, and scoring code remain unchanged outside the visibility gate.
+- Browser capture remained unavailable due to the persistent Browser Use daemon timeout; hosted computed visibility verification remains pending.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
