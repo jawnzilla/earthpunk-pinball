@@ -2775,6 +2775,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 63: destination lock endpoint
+
+- Added a final destination-lock assembly to the bottom of `route-depth-field.svg`: twin lock jaws, amber lock bar, white core lamp, and cyan return clamps.
+- Made the final route tail read as an intentional terminal endpoint without changing SVG height, route topology, node hit targets, scrolling, status rail, legend, CTA geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

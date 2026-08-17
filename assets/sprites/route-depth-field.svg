@@ -71,4 +71,9 @@
 <path d="M48 506h264" stroke="#ffd083" stroke-opacity=".65" stroke-width="3"/><circle cx="48" cy="506" r="5" fill="#ef8b45" filter="url(#glow)"/><circle cx="312" cy="506" r="5" fill="#67c8d5" filter="url(#glow)"/>
 <!-- lower tail conduit termination -->
 <path d="M72 526h216" stroke="#67c8d5" stroke-opacity=".55" stroke-width="4" stroke-dasharray="14 8"/><path d="M116 518v18M180 518v18M244 518v18" stroke="#9fd4c0" stroke-width="2"/>
+<!-- destination lock endpoint -->
+<path d="M136 506h88v31h-88z" fill="#0a181a" stroke="#ffd083" stroke-width="2"/>
+<path d="M148 513h20v18h-20zM192 513h20v18h-20z" fill="#102d30" stroke="#789487"/>
+<path d="M168 522h24" stroke="#ef8b45" stroke-width="3"/><circle cx="180" cy="522" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M128 512h8M224 512h8M128 531h8M224 531h8" stroke="#67c8d5" stroke-width="2"/>
 </svg>
