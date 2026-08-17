@@ -103,3 +103,4 @@
 - Loop 41 transfer-spine pass: added an authored central transfer corridor with left/right bays, conduit spine, socket details, and junction lamps; preserved target and bumper geometry.
 - Loop 42 deck-inset pass: enriched the existing 360×420 middle-deck scaffold with six authored environmental zones while preserving the central ball corridor and gameplay geometry.
 - Loop 43 upper-lane pass: enriched the upper approach’s central corridor with static transit rails, telemetry cues, sockets, and a central lamp while preserving the clear ball path.
+- Loop 45 lower-return pass: increased lower return-channel information density with rail, socket, conduit, and terminal details while preserving the gameplay-clear corridor.
