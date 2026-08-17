@@ -3011,6 +3011,23 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Browser capture remained unavailable due to the persistent Browser Use daemon timeout; hosted computed visibility verification remains pending.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 84: symbol-led touch affordances
+
+- Restored concise visible labels to the authored flipper plates: `HOLD · LEFT` and `HOLD · RIGHT`.
+- Increased the glyph hierarchy within each plate while retaining the custom SVG assets and fixed 52px touch targets.
+- Preserved pointer handlers, pressed-state styling, canvas geometry, route CTA, and debug gating.
+
+### Verification notes
+
+- Real Chrome/Playwright exact-viewport check passes at 320×568 and 390×844.
+- 320×568: controls `(8,508,148,52)` and `(164,508,148,52)`; canvas `226.125×402`; zero overflow.
+- 390×844: controls `(12,782.39,179,52)` and `(199,782.39,179,52)`; canvas `354.375×630`; zero overflow.
+- Pointer-down adds `is-pressed`; pointer-up clears it at both viewports.
+- Default debug toggle remains hidden; zero broken image elements observed in the Playwright check.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
