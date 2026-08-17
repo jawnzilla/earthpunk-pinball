@@ -2786,6 +2786,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 64: route depth contrast lift
+
+- Increased `.route-depth-art` opacity from `.58` to `.74` and added a restrained `contrast(1.12) saturate(1.08)` treatment.
+- Improved legibility of the existing lower route machinery without adding geometry, changing route topology, or affecting interaction surfaces.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, route presentation assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
