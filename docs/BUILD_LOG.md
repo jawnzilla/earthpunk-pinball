@@ -2409,3 +2409,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: Canvas `366×650.656`, controls gap `10.48px`, no horizontal overflow.
 - Active-play screenshot confirms the authored cassette replaces the procedural empty band without obscuring the bank or flippers.
 - Physical-device material readability and flipper/drain behavior remain pending.
+
+## 2026-08-16 — Loop 32: score, upgrade, route-flow, and flipper correction
+
+- Enforced integer-only visible score formatting with `Math.round` before HUD output and integer score values in terminal outcome copy.
+- Made upgrade choices use the full modal viewport: the route-only preview slot is hidden during module selection, the four choices share an explicit grid, the swipe cue is removed, and every choice retains at least a 48px tap target.
+- Added explicit SVG route-flow connectors between graph nodes and highlighted open first-step branches. Selected nodes now show the chute and consequence, such as `FREE PASS`, `HOT LAUNCH`, `DOUBLE SALVAGE`, or `3 CORE BOSS`.
+- Corrected the flipper sweep solver: it now tests the complete ball segment against sampled positions of the actual rotating flipper capsule instead of synchronizing ball travel and flipper-angle progress, which could miss asynchronous tip crossings.
+- Locked the underlying game page to the viewport while overlays are open to prevent background document scroll.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline dependency scan pass.
+- Synthetic regression found an asynchronous fast-ball/rotating-tip case missed by the previous synchronized sweep and detected by the new solver without enlarging geometry or adding a drain barrier.
+- Exact 320×568, 360×640, and 390×844: route map rendered 7 deduplicated connector paths with 2 open branch highlights; no horizontal overflow.
+- Upgrade fixture: four visible choices, no internal scrolling, no swipe cue, buttons measured 90px/108px/159px at the three target widths, and no document overflow.
+- Physical-device flipper feel, real high-speed play, and full Blackout Core defeat remain pending.

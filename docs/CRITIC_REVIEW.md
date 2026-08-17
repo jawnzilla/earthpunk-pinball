@@ -88,3 +88,7 @@
 - Corrective angle response pass: early/late flipper activation now produces a materially different launch vector.
 - Hinge cradle pass: slow held hinge contact settles into a persistent cradle; releasing the flipper rolls the ball out instead of leaving a sticky hinge state.
 - Gameplay route pass: post-stage route menu selection removed; reachable exits are physically chosen through opened chutes, with a read-only pre-level branching map.
+- Loop 32 corrective clarity pass: added visible graph connectors and consequence labels so each open node communicates its actual route effect before the physical chute commit.
+- Loop 32 upgrade composition pass: hid route-only preview content during module selection, expanded the four-choice grid to the full modal viewport, removed obsolete scrolling/cue behavior, and retained 48px minimum taps.
+- Loop 32 score contract: all visible score output is rounded to integers before display.
+- Loop 32 flipper solver correction: sampled rotating flipper angles against the complete ball segment to catch asynchronous fast-ball tip crossings without artificial geometry or drain barriers.
