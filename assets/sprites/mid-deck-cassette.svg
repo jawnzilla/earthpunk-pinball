@@ -20,6 +20,12 @@
 <path d="M229 53h83v6h-83zM229 65h66v6h-66zM229 77h76v6h-76zM229 89h48v6h-48z" fill="#304f49"/>
 <path d="M235 53v42M254 53v42M273 53v42M292 53v42" stroke="#ef8b45" stroke-opacity=".22"/>
 <circle cx="299" cy="101" r="7" fill="#081416" stroke="#67c8d5" stroke-width="2"/><circle cx="299" cy="101" r="2.5" fill="#b5f1ed" filter="url(#glow)"/>
+<!-- asymmetric feed couplers -->
+<path d="M47 43h34v-8h28v8h21v8H47z" fill="#102629" stroke="#d7e8d0" stroke-opacity=".55"/>
+<circle cx="66" cy="39" r="5" fill="#ef8b45"/><circle cx="113" cy="39" r="5" fill="#67c8d5"/>
+<path d="M220 43h20v-8h30v8h51v8H220z" fill="#102629" stroke="#d7e8d0" stroke-opacity=".55"/>
+<circle cx="247" cy="39" r="5" fill="#ffd083"/><circle cx="302" cy="39" r="5" fill="#ef8b45"/>
+<path d="M39 109h101M220 109h101" stroke="#ffd083" stroke-opacity=".7" stroke-width="3"/>
 <!-- central reactor spine -->
 <path d="M146 39h68v76h-68z" fill="#0a1b1e" stroke="url(#metal)" stroke-width="3"/>
 <path d="M154 47h52v60h-52z" fill="#102e31" stroke="#67c8d5" stroke-opacity=".7"/>

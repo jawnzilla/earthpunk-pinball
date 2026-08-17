@@ -104,3 +104,4 @@
 - Loop 42 deck-inset pass: enriched the existing 360×420 middle-deck scaffold with six authored environmental zones while preserving the central ball corridor and gameplay geometry.
 - Loop 43 upper-lane pass: enriched the upper approach’s central corridor with static transit rails, telemetry cues, sockets, and a central lamp while preserving the clear ball path.
 - Loop 45 lower-return pass: increased lower return-channel information density with rail, socket, conduit, and terminal details while preserving the gameplay-clear corridor.
+- Loop 46 cassette pass: differentiated the mid-deck service manifold with asymmetric feed couplers, service sockets, stronger rails, and distinct side-bay silhouettes around the reactor spine.

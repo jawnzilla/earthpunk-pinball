@@ -2576,6 +2576,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 46: differentiated mid-deck cassette
+
+- Enriched the existing `mid-deck-cassette.svg` within its unchanged `360×160` source bounds and `304×142` render bounds.
+- Added asymmetric feed couplers, amber/cyan service sockets, stronger top feed rails, and distinct left/right bay silhouettes around the central reactor spine.
+- Preserved the gameplay corridor, target/bank visibility, ball path, collision geometry, scoring, route behavior, and controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 
