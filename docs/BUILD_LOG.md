@@ -2370,3 +2370,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: score badge `92×28`, Canvas `366×650.656`, controls gap `11.67px`, document height `844`, no horizontal overflow.
 - Active-play screenshot confirms the authored score module is visible in the HUD and the full custom table remains readable.
 - Physical-device flipper/drain behavior remains pending.
+
+## 2026-08-16 — Loop 30: symbol-first flipper controls
+
+- Removed the duplicate visible `HOLD` labels from the touch-control DOM and enlarged the directional symbols to `30px`.
+- Preserved `aria-label="Lift left/right flipper"`, pointer hold behavior, authored `flipper-control.svg`, and 52px touch targets.
+- The control pair now reads as two custom hardware actuators rather than text buttons.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568: controls `148×52` each at `y=508..560`, labels hidden, symbols `30px`, document height `568`, no horizontal overflow.
+- Exact 390×844: controls `179×52` each at `y=782..834`, labels hidden, symbols `30px`, document height `844`, no horizontal overflow.
+- Physical-device press/hold feel and flipper/drain behavior remain pending.

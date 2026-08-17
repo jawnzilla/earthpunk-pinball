@@ -77,6 +77,7 @@
 - Loop 28 audit correction: short-phone `main` now clamps to `100dvh` with no document spill, and the route-map cue is validated against actual scroll range rather than shown by default.
 - Loop 29 authored score pass: replaced the plain text score badge with local `score-core.svg`, reduced the live value to a compact number with accessible labeling, and tuned the narrow-phone badge/canvas relationship without changing gameplay physics.
 - Loop 29 delayed-audit correction: the active HUD now uses an explicit route-left/score-right two-zone grid; the cryptic decorative/collision key is hidden from the visual layer while its accessible source markup remains.
+- Loop 30 symbol-first controls: removed duplicate `HOLD` copy from the visible touch actuators and enlarged directional symbols to `30px`, preserving the authored control plate, 52px targets, and accessible labels.
 - Late-drain flipper correction: added a final shared swept-capsule check immediately before drain resolution, so a genuine end-of-flipper crossing is resolved instead of losing stability.
 - Corrective hinge gameplay pass: elemental imprint triggers on cradle entry only, preventing held-flipper refresh farming.
 - Relative-contact physics pass: replaced angle/target/escape launch overrides with ball-versus-rotating-flipper contact resolution; rolling velocity and flipper surface velocity now remain in the same solver.
