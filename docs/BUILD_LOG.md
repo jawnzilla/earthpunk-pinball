@@ -2512,6 +2512,7 @@ Charge now supports a second between-level decision besides flipper hardware: re
 ### Verification notes
 
 - Extracted JavaScript `node --check` and `git diff --check` pass.
+- The manifold is explicitly assigned to `spriteImages.upperApproachManifold.src`; hosted verification must include its direct request.
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
