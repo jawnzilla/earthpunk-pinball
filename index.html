@@ -45,8 +45,11 @@
     .stability-pip { width: 10px; height: 10px; border: 1px solid #789487; border-radius: 50%; background: #263c3a; }
     .stability-pip.is-live { border-color: #f1b35b; background: #f1b35b; box-shadow: 0 0 8px rgba(241,179,91,.45); }
     .resource-row { display: flex; align-items: center; justify-content: space-between; min-height: 16px; }
-    .element-status { display: inline-flex; align-items: center; gap: 3px; box-sizing: border-box; height: 16px; max-width: 58%; min-width: 90px; overflow: hidden; white-space: nowrap; color: #c4ddcf; border: 1px solid rgba(103,200,213,.42); border-radius: 5px; padding: 0 5px; background: linear-gradient(90deg, rgba(20,45,46,.9), rgba(22,31,34,.78)); font-size: 7px; line-height: 14px; letter-spacing: .03em; text-overflow: ellipsis; }
-    .element-status::before { content: '◇'; color: #67c8d5; font-size: 9px; line-height: 14px; text-shadow: 0 0 6px rgba(103,200,213,.75); }
+    .element-status { display: inline-flex; align-items: center; gap: 3px; box-sizing: border-box; height: 16px; max-width: 64%; min-width: 130px; overflow: hidden; white-space: nowrap; color: #c4ddcf; border: 1px solid rgba(103,200,213,.42); border-radius: 5px; padding: 0 4px; background: linear-gradient(90deg, rgba(20,45,46,.9), rgba(22,31,34,.78)); font-size: 10px; line-height: 14px; letter-spacing: .01em; text-overflow: ellipsis; }
+    .element-status::before { content: '◇'; color: #67c8d5; font-size: 10px; line-height: 14px; text-shadow: 0 0 6px rgba(103,200,213,.75); }
+    .status-chip { display: inline-block; flex: 0 0 auto; color: #c4ddcf; }
+    .status-chip + .status-chip { padding-left: 3px; border-left: 1px solid rgba(103,200,213,.35); }
+    .status-chip.imprint { color: #ffd083; }
     .table-wrap { min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; }
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
     @media (min-height: 601px) {
@@ -468,10 +471,10 @@
     progressTrack.setAttribute('aria-valuenow', String(progress));
     stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${state.immortal || index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
     stabilityPips.setAttribute('aria-label', state.immortal ? 'Infinite stability enabled' : `${state.stability} of ${state.stabilityMax} stability remaining`);
-    const hinges = ['left', 'right'].map(side => state.hingeElements[side] ? `${side[0].toUpperCase()}:${state.hingeElements[side]} ${state.hingeLevels[side]}` : `${side[0].toUpperCase()}:—`).join(' · ');
-    const imprints = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `${element} ${effect.stacks}/3`).join(' · ');
-    const bossStatus = state.boss.active ? ` · WARDEN ${state.boss.hp}/${state.boss.maxHp} ${state.boss.exposed ? 'EXPOSED' : 'SHIELDED'}` : '';
-    elementStatus.textContent = `${hinges} · ${imprints || 'No active imprint'}${bossStatus}`;
+    const hingeParts = ['left', 'right'].map(side => `<span class="status-chip">${side.toUpperCase()}:${state.hingeElements[side] ? `${state.hingeElements[side]} ${state.hingeLevels[side]}` : '—'}</span>`).join('');
+    const imprintParts = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `<span class="status-chip imprint">${element.toUpperCase()} ${effect.stacks}/3</span>`).join('');
+    const bossStatus = state.boss.active ? `<span class="status-chip imprint">WARDEN ${state.boss.hp}/${state.boss.maxHp}</span>` : '';
+    elementStatus.innerHTML = `${hingeParts}${imprintParts || '<span class="status-chip">NO IMPRINT</span>'}${bossStatus}`;
     renderRouteStrip();
     debugToggle.hidden = state.running || !debugEnabled;
     if (state.running) debugPanel.hidden = true;

@@ -154,3 +154,4 @@
 - Loop 94 reaction pass: added distinct Fire, Water, Earth, and Air canvas motifs at reaction coordinates while preserving impact rings, score popups, physics, and mobile geometry.
 - Loop 95 microcopy pass: replaced cryptic active-table `CHG`/`AIM` labels with icon-led `FUEL`/`TARGET` labels without changing meter geometry or gameplay behavior.
 - Loop 96 identity pass: paired larger authored state symbols with one-word table labels inside the existing identity plate without changing active-play geometry.
+- Loop 97 status pass: replaced the cryptic hinge/imprint line with live 10px LEFT/RIGHT/NO IMPRINT chips while preserving the 16px HUD row and all geometry contracts.

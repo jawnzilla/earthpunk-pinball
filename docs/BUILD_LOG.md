@@ -3196,3 +3196,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 320px active screenshot confirms the identity plate remains centered and unclipped while FUEL/TARGET remain visible.
 - No new assets or network requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 97: explicit hinge/imprint status chips
+
+- Replaced the cryptic 7px hinge/imprint status string with a live chip instrument: `LEFT`, `RIGHT`, and `NO IMPRINT`, with active element/boss chips appended when present.
+- Preserved the same `updateHud()` live state source and kept the instrument in the existing 16px HUD row.
+- Raised status typography to 10px without changing HUD, canvas, CTA, or touch geometry.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, status-chip source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: status chip container has no internal overflow; HUD heights remain 63px and 83px; canvas positions remain `(46.94,103)` and `(17.81,142.39)`; CTA and touch rectangles are unchanged; zero page errors.
+- Player-facing debug controls remain hidden and zero-sized.
+- No new assets or network requests were added.
+- Physical-device touch behavior remains pending.
