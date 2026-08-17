@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" role="img" aria-label="Score instrument">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#17292b"/><stop offset=".52" stop-color="#27413d"/><stop offset="1" stop-color="#122022"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <path d="M5 8 14 2h152l9 6v28l-9 6H14L5 36Z" fill="url(#g)" stroke="#648274" stroke-width="1.5"/>
+  <path d="M15 8h150M15 36h150" stroke="#9fd4c0" stroke-opacity=".25"/>
+  <circle cx="19" cy="22" r="7" fill="#0b1517" stroke="#f1b35b"/><circle cx="19" cy="22" r="2.5" fill="#ffd083" filter="url(#glow)"/>
+  <path d="M31 12h4M31 22h4M31 32h4M145 12h18M145 32h18" stroke="#526e63" stroke-width="2"/>
+  <path d="M40 7v4M48 7v4M132 7v4M140 7v4M40 33v4M48 33v4M132 33v4M140 33v4" stroke="#f1b35b" stroke-opacity=".5"/>
+</svg>

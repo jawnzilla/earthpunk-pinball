@@ -2355,4 +2355,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: route card `358×812`, map panel `306×646`, CTA `y=742..794`, no horizontal overflow.
 - Pages workflow succeeded for `5f7c5b9`; hosted verification confirmed full-height route panel, bottom-to-top map order, restored `.16 / π-.16` flipper source contract, late-drain guard, and no horizontal overflow.
 - Loop 28 audit correction: capped the short-phone `main` to the exact dynamic viewport to remove a 5px document overflow; the route-map cue remains state-dependent and stays hidden when there is no actual scroll range.
+
+## 2026-08-16 — Loop 29: authored score instrument and compact HUD
+
+- Added authored local `assets/sprites/score-core.svg` as a manufactured score instrument instead of a plain text badge.
+- Simplified the live score from `0 SCORE` to a compact numeric readout with accessible `Score N` labeling.
+- Added a narrow-phone badge size and canvas-fit adjustment so the new HUD asset does not intrude into the 320×568 flipper controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline asset contract pass.
+- Exact 320×568: score badge `78×18`, Canvas `236.25×420`, controls gap `4.5px`, document height `568`, no horizontal overflow.
+- Exact 390×844: score badge `92×28`, Canvas `366×650.656`, controls gap `11.67px`, document height `844`, no horizontal overflow.
+- Active-play screenshot confirms the authored score module is visible in the HUD and the full custom table remains readable.
 - Physical-device flipper/drain behavior remains pending.
