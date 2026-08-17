@@ -864,8 +864,8 @@
       for (let i = 0; i < cells; i += 1) { const cx = innerX + i * (cellW + gap); ctx.fillStyle = i / cells < value ? accent : darkAccent; ctx.fillRect(cx, fillY, cellW, fillH); ctx.strokeStyle = '#152426'; ctx.lineWidth = .6; ctx.strokeRect(cx, fillY, cellW, fillH); }
       if (value > 0) { const leadX = innerX + Math.min(cells - 1, Math.ceil(value * cells) - 1) * (cellW + gap) + cellW * .5; ctx.fillStyle = '#fff0ba'; ctx.shadowColor = accent; ctx.shadowBlur = 5; ctx.fillRect(leadX, fillY - 1, 1.5, fillH + 2); ctx.shadowBlur = 0; }
     };
-    drawMeter(30, 138, 'CHG', 'ϟ', Math.min(1, state.charge / 12), '#f1b35b', '#4a3b26');
-    drawMeter(216, 114, 'AIM', '◎', Math.min(1, state.targets / targets.length), '#c56d49', '#432d2b');
+    drawMeter(30, 138, 'FUEL', 'ϟ', Math.min(1, state.charge / 12), '#f1b35b', '#4a3b26');
+    drawMeter(216, 114, 'TARGET', '◎', Math.min(1, state.targets / targets.length), '#c56d49', '#432d2b');
     if (state.combo > 1) { ctx.fillStyle = '#ffd083'; ctx.font = 'bold 10px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(`CHAIN ×${(1 + (state.combo - 1) * .25).toFixed(2)}`, 34, 151); }
     ctx.restore();
   }

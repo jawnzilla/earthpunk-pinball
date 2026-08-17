@@ -3168,3 +3168,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Real Chrome/Playwright route-to-active checks at 320×568 and 390×844: CTA, canvas, and control rectangles unchanged; debug toggle zero-sized; no overflow; no page errors.
 - No new runtime assets or network requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 95: readable active-table meter labels
+
+- Replaced cryptic in-table `CHG`/`AIM` abbreviations with icon-led one-word labels `FUEL`/`TARGET`.
+- Preserved the existing segmented meter renderer, meter coordinates, live values, color coding, and canvas footprint.
+- Kept the pass limited to the active-table micro-label layer; HUD, route UI, physics, score logic, and touch controls are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, label source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: route CTA, canvas, controls, and debug-hidden contracts unchanged; zero overflow; no page errors.
+- 320px active screenshot confirms `FUEL` and `TARGET` fit inside their plates without clipping and remain subordinate to the playfield.
+- No new assets or network requests were added.
+- Physical-device touch behavior remains pending.
