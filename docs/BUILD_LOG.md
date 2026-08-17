@@ -2611,6 +2611,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 49: authored upper crown insert
+
+- Added and wired `assets/sprites/upper-crown-insert.svg` as a render-only upper-crown service assembly inside the existing `(18,18)` to `(342,92)` logical bounds.
+- Added side housings, ceiling brackets, a protected central launch corridor, socket indicators, and lower contact rails.
+- Preserved ball trajectory, intake/target visibility, collision geometry, scoring, route behavior, controls, and procedural fallback behavior.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 
