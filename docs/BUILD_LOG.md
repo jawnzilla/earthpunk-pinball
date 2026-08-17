@@ -3053,3 +3053,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Rendered 320px screenshot visibly confirms three distinct landmarks between the bank and flippers, with the relay vault centered and the cyan/amber pods separated laterally.
 - No new asset requests were added; existing authored sprite loads remain untouched.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 87: deck-inset visual hierarchy
+
+- Rebalanced the authored `deck-inset.svg` scaffold so repeated background rails and grid separators sit below dynamic targets, ball, and impact lighting.
+- Reduced static rail opacity while preserving side machinery, focal bay outlines, central travel corridor, existing 360×420 render bounds, and asset identity.
+- Did not change collision geometry, target positions, ball paths, route topology, HUD, controls, or physics.
+
+### Verification notes
+
+- SVG bounds and source assertions pass; `git diff --check` passes.
+- Real Chrome/Playwright at 320×568 and 390×844: `scrollWidth === clientWidth`, unchanged canvas/control bounds, debug gate intact, no page errors.
+- Rendered 320px screenshot confirms the central lane reads calmer than the side machinery and bank targets while dynamic objects retain focal contrast.
+- Local authored asset remains directly renderable with no new runtime requests.
+- Physical-device touch behavior remains pending.

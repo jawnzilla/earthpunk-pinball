@@ -9,18 +9,18 @@
 <!-- mid transfer bays -->
 <path d="M26 142h92v82H26zM242 142h92v82h-92z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
 <path d="M40 158h64v10H40zM40 180h48v24H40zM256 158h64v10h-64zM272 180h48v24h-48z" fill="#09181a" stroke="#789487"/>
-<path d="M48 163h46M48 187h30M264 163h46M280 187h30" stroke="#9fd4c0" stroke-width="3" opacity=".68"/>
+<path d="M48 163h46M48 187h30M264 163h46M280 187h30" stroke="#9fd4c0" stroke-width="3" opacity=".38"/>
 <circle cx="108" cy="184" r="7" fill="#ef8b45" filter="url(#glow)"/><circle cx="252" cy="184" r="7" fill="#67c8d5" filter="url(#glow)"/>
 <!-- lower collector assemblies -->
 <path d="M32 278h78v112H32zM250 278h78v112h-78z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
-<path d="M45 294v72M58 294v72M71 294v72M84 294v72M263 294v72M276 294v72M289 294v72M302 294v72" stroke="#67c8d5" stroke-opacity=".45" stroke-width="4"/>
+<path d="M45 294v72M58 294v72M71 294v72M84 294v72M263 294v72M276 294v72M289 294v72M302 294v72" stroke="#67c8d5" stroke-opacity=".22" stroke-width="4"/>
 <path d="M40 286h62M258 286h62" stroke="#ffd083" stroke-opacity=".62" stroke-width="3"/>
 <circle cx="104" cy="370" r="6" fill="#ffd083" filter="url(#glow)"/><circle cx="256" cy="370" r="6" fill="#ef8b45" filter="url(#glow)"/>
 <!-- restrained central structural rails -->
-<path d="M122 18v384M238 18v384" stroke="#526e63" stroke-opacity=".45" stroke-width="2"/>
-<path d="M134 20v380M226 20v380" stroke="#67c8d5" stroke-opacity=".18" stroke-width="2" stroke-dasharray="7 9"/>
-<path d="M22 132h316M22 252h316M22 400h316" stroke="#ffd083" stroke-opacity=".22" stroke-width="2"/>
-<path d="M22 136h316M22 256h316M22 404h316" stroke="#67c8d5" stroke-opacity=".2"/>
+<path d="M122 18v384M238 18v384" stroke="#526e63" stroke-opacity=".28" stroke-width="2"/>
+<path d="M134 20v380M226 20v380" stroke="#67c8d5" stroke-opacity=".1" stroke-width="2" stroke-dasharray="7 9"/>
+<path d="M22 132h316M22 252h316M22 400h316" stroke="#ffd083" stroke-opacity=".12" stroke-width="2"/>
+<path d="M22 136h316M22 256h316M22 404h316" stroke="#67c8d5" stroke-opacity=".1"/>
 <!-- junctions -->
 <g fill="#071416" stroke="#d7e8d0"><circle cx="22" cy="18" r="4"/><circle cx="338" cy="18" r="4"/><circle cx="22" cy="402" r="4"/><circle cx="338" cy="402" r="4"/><circle cx="122" cy="132" r="4"/><circle cx="238" cy="252" r="4"/></g>
 <g fill="#ffd083"><rect x="42" y="16" width="28" height="3"/><rect x="290" y="16" width="28" height="3"/><rect x="42" y="405" width="28" height="3"/><rect x="290" y="405" width="28" height="3"/></g>
