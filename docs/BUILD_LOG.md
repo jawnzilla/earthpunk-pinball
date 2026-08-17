@@ -2466,5 +2466,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - The cassette visibly reads as manufactured machinery beneath the upper-bank assembly without obscuring the ball path or flippers.
 - Physical-device material readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 36: authored route-node icon system
+
+- Replaced route-map Unicode glyphs (`◉`, `◇`, `!`, `♜`, `✦`) with six local authored SVG node icons for current, free, hazard, boss, reward, and future states.
+- Preserved node labels, accessible route consequences, selected-node feedback, graph connectors, map inspection, and physical-chute-only commitment.
+- Kept the icon layer noninteractive inside the existing route buttons; no route graph or layout geometry changed.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Authored SVG inventory increased from 38 to 44 assets.
+- Exact 320×568 local route map: 5 unique nodes, 7 connector paths, authored 30×30 node icons, broken images `0`, and no horizontal overflow.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
 
 
