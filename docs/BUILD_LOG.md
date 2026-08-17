@@ -2491,6 +2491,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844 local route map: four authored legend marks loaded at `13×13`, text remained concise, broken images `0`, and no horizontal overflow.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 38: authored route depth field
+
+- Added `assets/sprites/route-depth-field.svg`, a recessed route-console depth module with three distinct service bays, central junction hardware, conduits, depth rails, lamps, and collector panels.
+- Layered it beneath the existing route nodes and connector paths without changing node positions, route semantics, scroll behavior, CTA placement, or physical-chute-only commitment.
+- Sized the authored field to the actual 541px route scroll content height so the lower map no longer ends in an unstructured blank tail.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Local exact 390×844 route map: depth-field asset loaded, rendered height `541px`, scroll content height `541px`, nodes `5`, connectors `7`, broken images `0`, and no horizontal overflow.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
 
 
 

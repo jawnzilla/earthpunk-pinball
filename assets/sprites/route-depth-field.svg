@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 422" fill="none" role="img" aria-label="Route depth service field">
+<defs><linearGradient id="bay" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26423e" stop-opacity=".78"/><stop offset=".5" stop-color="#102326" stop-opacity=".8"/><stop offset="1" stop-color="#071416" stop-opacity=".92"/></linearGradient><linearGradient id="rail"><stop stop-color="#9fd4c0"/><stop offset=".5" stop-color="#3c655d"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<!-- depth rails -->
+<path d="M34 18v382M326 18v382M62 18v382M298 18v382" stroke="#42675e" stroke-opacity=".45" stroke-width="2"/>
+<path d="M25 76h310M25 204h310M25 332h310" stroke="#ffd083" stroke-opacity=".25" stroke-width="2"/>
+<path d="M25 84h310M25 212h310M25 340h310" stroke="#67c8d5" stroke-opacity=".28"/>
+<!-- upper service bay -->
+<path d="M48 28h264v74H48z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M62 44h72v42H62zM226 44h72v42h-72z" fill="#091619" stroke="#526e63"/>
+<path d="M72 54h52M72 66h40M236 54h52M236 66h40" stroke="#67c8d5" stroke-opacity=".55" stroke-width="3"/>
+<circle cx="180" cy="65" r="19" fill="#0a181a" stroke="#ffd083" stroke-width="2"/><circle cx="180" cy="65" r="8" fill="#67c8d5" filter="url(#glow)"/><path d="M180 46v9M180 75v9" stroke="#9fd4c0" stroke-width="2"/>
+<!-- middle junction bay -->
+<path d="M70 150h220v100H70z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M82 166h72v68H82zM206 166h72v68h-72z" fill="#081619" stroke="#526e63"/>
+<path d="M94 180v42M110 180v42M126 180v42M222 180v42M238 180v42M254 180v42" stroke="#ef8b45" stroke-opacity=".38" stroke-width="4"/>
+<path d="M154 177h52v48h-52z" fill="#123337" stroke="#67c8d5"/><circle cx="180" cy="201" r="14" fill="#205b5c" stroke="#d7e8d0"/><circle cx="180" cy="201" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<!-- lower collector bay -->
+<path d="M42 294h276v92H42z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M57 309h90v60H57zM213 309h90v60h-90z" fill="#081619" stroke="#526e63"/>
+<path d="M69 322h66M69 336h52M225 322h66M225 336h52" stroke="#789487" stroke-width="4"/>
+<path d="M147 308h66v62h-66z" fill="#102d30" stroke="#67c8d5"/><path d="M158 320h44M158 332h30M158 344h38" stroke="#9fd4c0" stroke-width="2"/><circle cx="180" cy="356" r="6" fill="#ffd083" filter="url(#glow)"/>
+<!-- conduit wave -->
+<path d="M25 118c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 266c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 402c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0" stroke="#67c8d5" stroke-opacity=".4" stroke-width="2"/>
+<g fill="#081416" stroke="#d7e8d0"><circle cx="34" cy="18" r="4"/><circle cx="326" cy="18" r="4"/><circle cx="34" cy="400" r="4"/><circle cx="326" cy="400" r="4"/></g>
+<g fill="#ffd083"><rect x="48" y="12" width="34" height="3"/><rect x="278" y="12" width="34" height="3"/><rect x="48" y="407" width="34" height="3"/><rect x="278" y="407" width="34" height="3"/></g>
+</svg>

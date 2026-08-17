@@ -97,3 +97,4 @@
 - Loop 35 mid-deck material pass: rebuilt `mid-deck-cassette.svg` into a deeper service manifold with nested bays, a lit reactor spine, conduits, clamps, and stronger material contrast while preserving render bounds and gameplay geometry.
 - Loop 36 route-console icon pass: replaced route-map Unicode glyphs with authored current/free/hazard/boss/reward/future SVG node icons while preserving graph flow, consequences, accessibility, and physical-chute commitment.
 - Loop 37 legend pass: replaced the remaining route legend glyphs with compact authored SVG marks while preserving concise labels and route-map geometry.
+- Loop 38 depth-field pass: added an authored lower route-console service field with three recessed bays, junction hardware, conduits, and collector panels; preserved graph behavior and physical-chute commitment.
