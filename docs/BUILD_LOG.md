@@ -2503,6 +2503,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Local exact 390×844 route map: depth-field asset loaded, rendered height `541px`, scroll content height `541px`, nodes `5`, connectors `7`, broken images `0`, and no horizontal overflow.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 39: authored upper approach manifold
+
+- Added `assets/sprites/upper-approach-manifold.svg` behind the first target approach chamber.
+- Added paired side service modules, upper/lower rails, terminals, lamps, and a restrained central corridor treatment while keeping the center lane open for ball travel.
+- Integrated the asset as render-only art; target positions, bumpers, collision geometry, scoring, and physics are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
 
 
 

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" fill="none" role="img" aria-label="Upper approach service manifold">
+<defs><linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#35564d"/><stop offset=".35" stop-color="#172b2d"/><stop offset="1" stop-color="#071316"/></linearGradient><linearGradient id="metal"><stop stop-color="#9fd4c0"/><stop offset=".45" stop-color="#42675e"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M18 12h324v96H18z" fill="url(#shell)" stroke="url(#metal)" stroke-width="2"/>
+<!-- central clear lane -->
+<path d="M137 16h86v88h-86z" fill="#071518" fill-opacity=".7" stroke="#67c8d5" stroke-opacity=".24" stroke-dasharray="4 5"/>
+<path d="M180 18v84" stroke="#ffd083" stroke-opacity=".35" stroke-width="2" stroke-dasharray="8 8"/>
+<path d="M148 28h64M148 92h64" stroke="#9fd4c0" stroke-opacity=".32"/>
+<!-- left approach module -->
+<path d="M30 26h91v68H30z" fill="#0a191b" stroke="#526e63" stroke-width="2"/>
+<path d="M42 38h67v12H42zM42 58h48v22H42z" fill="#1d3937" stroke="#789487"/>
+<path d="M52 42h46M52 64h28M52 72h38" stroke="#67c8d5" stroke-width="3" stroke-opacity=".65"/>
+<circle cx="106" cy="73" r="7" fill="#ffd083" filter="url(#glow)"/><circle cx="42" cy="32" r="4" fill="#ef8b45"/>
+<!-- right approach module -->
+<path d="M239 26h91v68h-91z" fill="#0a191b" stroke="#526e63" stroke-width="2"/>
+<path d="M251 38h67v12h-67zM270 58h48v22h-48z" fill="#1d3937" stroke="#789487"/>
+<path d="M262 42h46M280 64h28M270 72h38" stroke="#ef8b45" stroke-width="3" stroke-opacity=".62"/>
+<circle cx="254" cy="73" r="7" fill="#67c8d5" filter="url(#glow)"/><circle cx="318" cy="32" r="4" fill="#ffd083"/>
+<!-- upper rail hardware -->
+<path d="M26 18h102M232 18h102" stroke="#ffd083" stroke-opacity=".6" stroke-width="3"/><path d="M26 102h102M232 102h102" stroke="#67c8d5" stroke-opacity=".42" stroke-width="2"/>
+<g fill="#071416" stroke="#d7e8d0"><circle cx="28" cy="20" r="4"/><circle cx="332" cy="20" r="4"/><circle cx="28" cy="100" r="4"/><circle cx="332" cy="100" r="4"/></g>
+<g fill="#ffd083"><rect x="74" y="17" width="22" height="3"/><rect x="264" y="17" width="22" height="3"/></g>
+</svg>
