@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 116 28" role="img" aria-label="Run status instrument">
+<defs><linearGradient id="p" x2="0" y2="1"><stop stop-color="#29423e"/><stop offset="1" stop-color="#101d20"/></linearGradient></defs>
+<path d="M4 3h100l8 6v10l-8 6H4l-2-2V5Z" fill="url(#p)" stroke="#526e63"/>
+<path d="M12 7h76M12 21h76" stroke="#9fd4c0" stroke-opacity=".18"/>
+<circle cx="99" cy="14" r="4" fill="#0b1517" stroke="#f1b35b"/><circle cx="99" cy="14" r="1.5" fill="#ffd083"/>
+<path d="M9 11v6M105 11v6" stroke="#67c8d5" stroke-opacity=".55"/>
+</svg>

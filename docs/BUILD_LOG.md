@@ -2383,3 +2383,15 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: controls `148×52` each at `y=508..560`, labels hidden, symbols `30px`, document height `568`, no horizontal overflow.
 - Exact 390×844: controls `179×52` each at `y=782..834`, labels hidden, symbols `30px`, document height `844`, no horizontal overflow.
 - Physical-device press/hold feel and flipper/drain behavior remain pending.
+
+## 2026-08-16 — Loop 31: authored run-status instrument
+
+- Added local `assets/sprites/run-status.svg` and applied it behind the masthead `RUN 1/4` status.
+- Kept the run text readable and semantic while replacing the bare text treatment with a recessed manufactured status plate.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568: stage plate `76×22.5`, Canvas `236.25×420`, control gap `4.5px`, no horizontal overflow.
+- Exact 390×844: stage plate `76×27.4`, Canvas `366×650.656`, control gap `10.48px`, no horizontal overflow.
+- Physical-device typography/material readability and flipper/drain behavior remain pending.
