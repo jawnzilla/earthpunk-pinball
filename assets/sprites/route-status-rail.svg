@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 64" fill="none" role="img" aria-label="Route status rail">
+<defs><linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#183336"/><stop offset="1" stop-color="#091719"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M4 4h352v56H4z" fill="url(#panel)" stroke="#526e63"/>
+<path d="M12 12h106v40H12zM126 12h106v40H126zM240 12h108v40H240z" fill="#0b1d20" stroke="#31524e"/>
+<path d="M20 20h18v24H20zM134 20h18v24h-18zM248 20h18v24h-18z" fill="#102d30" stroke="#789487"/>
+<circle cx="29" cy="32" r="5" fill="#ffd083" filter="url(#glow)"/><circle cx="143" cy="32" r="5" fill="#67c8d5" filter="url(#glow)"/><circle cx="257" cy="32" r="5" fill="#9fd4c0" filter="url(#glow)"/>
+<path d="M46 23h56M46 32h42M46 41h50M160 23h56M160 32h44M160 41h50M274 23h58M274 32h40M274 41h50" stroke="#789487" stroke-width="2"/>
+<path d="M8 4h54M298 4h54" stroke="#ffd083" stroke-width="2"/><path d="M8 60h54M298 60h54" stroke="#67c8d5" stroke-opacity=".7" stroke-width="2"/>
+</svg>

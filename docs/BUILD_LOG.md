@@ -2751,6 +2751,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 61: authored route status rail
+
+- Added `assets/sprites/route-status-rail.svg` as a local three-cell console treatment behind the route detail rail.
+- Shortened the default route detail from a text-heavy instruction sentence to `NOW · GENERATOR`; retained route-specific selection feedback and semantic legend labels.
+- Converted the legend to four compact authored status cells, fixed the combined rail to 49px, and prevented 320px wrapping or 390px false scroll overflow.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- 320×568: four legend cells fit one 25px row; cue remains visible with 541px content over 265px map content viewport.
+- 390×844: full map remains exactly 541/541; cue hidden; rail remains 49px.
+- Both sizes retain five nodes, seven connectors, exact CTA rectangles, zero broken images, and no horizontal overflow.
+
+
+
 
 
 
