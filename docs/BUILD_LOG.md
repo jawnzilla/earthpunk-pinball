@@ -2830,6 +2830,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 68: terminal termination band
+
+- Added three authored lower-band subassemblies to `route-depth-field.svg`: side collector claws, a central lock halo, and a lower return bridge.
+- Raised visual information density immediately above the route detail rail without changing route topology, node positions, scroll behavior, status rail, legend, CTA geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

@@ -92,4 +92,9 @@
 <path d="M148 513h20v18h-20zM192 513h20v18h-20z" fill="#102d30" stroke="#789487"/>
 <path d="M168 522h24" stroke="#ef8b45" stroke-width="3"/><circle cx="180" cy="522" r="5" fill="#fff0ba" filter="url(#glow)"/>
 <path d="M128 512h8M224 512h8M128 531h8M224 531h8" stroke="#67c8d5" stroke-width="2"/>
+<!-- terminal termination band -->
+<path d="M42 520h54l14 12H42zM318 520h-54l-14 12h68z" fill="#102d30" stroke="#67c8d5" stroke-opacity=".8" stroke-width="2"/>
+<path d="M54 524h28M266 524h28" stroke="#ffd083" stroke-width="3"/><circle cx="92" cy="526" r="4" fill="#67c8d5" filter="url(#glow)"/><circle cx="268" cy="526" r="4" fill="#ef8b45" filter="url(#glow)"/>
+<ellipse cx="180" cy="522" rx="28" ry="13" fill="none" stroke="#fff0ba" stroke-opacity=".7" stroke-width="2"/><ellipse cx="180" cy="522" rx="19" ry="8" fill="none" stroke="#67c8d5" stroke-opacity=".8" stroke-width="2"/>
+<path d="M100 538h160" stroke="#ffd083" stroke-width="3"/><path d="M116 538v-6M148 538v-6M212 538v-6M244 538v-6" stroke="#9fd4c0" stroke-width="2"/>
 </svg>
