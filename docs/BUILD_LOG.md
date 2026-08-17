@@ -2479,6 +2479,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 local route map: 5 unique nodes, 7 connector paths, authored 30×30 node icons, broken images `0`, and no horizontal overflow.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 37: authored route legend marks
+
+- Replaced the four remaining route legend glyphs with authored SVG marks, reusing the current/free/future/hazard node icon family at compact 13×13 legend scale.
+- Preserved the concise `NOW`, `OPEN`, `FUTURE`, and `LOCKED` labels, accessible `Route legend` name, route-node semantics, and map geometry.
+- Kept the legend noninteractive and visually subordinate to the connected route graph.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 390×844 local route map: four authored legend marks loaded at `13×13`, text remained concise, broken images `0`, and no horizontal overflow.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
 
 
 

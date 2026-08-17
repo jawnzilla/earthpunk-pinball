@@ -96,3 +96,4 @@
 - Loop 34 authored actuator pass: replaced the remaining Unicode flipper control glyphs with local left/right manufactured SVG symbols, preserving accessible labels, pointer hold behavior, and 52px touch targets.
 - Loop 35 mid-deck material pass: rebuilt `mid-deck-cassette.svg` into a deeper service manifold with nested bays, a lit reactor spine, conduits, clamps, and stronger material contrast while preserving render bounds and gameplay geometry.
 - Loop 36 route-console icon pass: replaced route-map Unicode glyphs with authored current/free/hazard/boss/reward/future SVG node icons while preserving graph flow, consequences, accessibility, and physical-chute commitment.
+- Loop 37 legend pass: replaced the remaining route legend glyphs with compact authored SVG marks while preserving concise labels and route-map geometry.
