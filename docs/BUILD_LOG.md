@@ -2635,6 +2635,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 51: central corridor telemetry spine
+
+- Added and wired `assets/sprites/corridor-telemetry-spine.svg` as a narrow render-only treatment through the middle transfer lane.
+- Added shallow side rails, six junction markers, segmented telemetry marks, and a localized center indicator while preserving at least 64 logical px of clear travel width.
+- Made no changes to collision geometry, ball trajectory, targets, bumpers, scoring, routing, input, or controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

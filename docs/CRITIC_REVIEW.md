@@ -109,3 +109,4 @@
 - Loop 48 intake-throat pass: added a recessed upper intake silhouette, guide brackets, contact-shadow framing, and localized terminal cues while preserving the ball corridor.
 - Loop 49 crown pass: added a local authored upper-crown service insert with side housings, ceiling brackets, central launch corridor, socket indicators, and lower contact rails.
 - Loop 50 lower-transfer pass: added a local authored lower-middle panel with left/right service bays, central transfer core, junction lamps, and conduit rails while preserving the ball corridor.
+- Loop 51 corridor pass: added a local authored telemetry spine with shallow side rails, six junction markers, segmented telemetry marks, and a localized center indicator while preserving clear travel width.
