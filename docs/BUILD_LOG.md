@@ -2984,6 +2984,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Browser capture was unavailable due to the persistent Browser Use daemon timeout; hosted canvas geometry therefore remains pending a fresh live capture.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 82: debug utility touch clearance
+
+- Moved the fixed debug utility button above the mobile touch rail with a 68px bottom inset.
+- Raised the debug panel to a 110px bottom inset so its interactive controls cannot cover the 52px flipper targets.
+- Preserved the modal utility slot’s in-card placement, debug toggle behavior, touch-control rectangles, gameplay geometry, and route behavior.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, CSS clearance assertions, and `git diff --check` pass.
+- Clearance is computed from the existing 34px utility size and 52px touch rail: 6px minimum separation at the viewport edge before safe-area expansion.
+- Browser capture remained unavailable due to the persistent Browser Use daemon timeout; hosted computed overlap verification remains pending.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 

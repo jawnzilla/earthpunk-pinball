@@ -139,3 +139,4 @@
 - Loop 78 HUD pass: replaced the plain progress fill with segmented active cells and cyan/amber/white leading treatment while preserving fill logic.
 - Loop 80 HUD pass: exposed the hidden elemental hinge/imprint state as a compact cyan-cued capsule within the existing 16px resource row; no gameplay or layout geometry changed.
 - Loop 81 canvas pass: replaced the visually similar dual meter bars with labeled Charge/Target icon plates, six segmented cells, inactive tint, and a bright leading-cell cue inside the existing logical footprint.
+- Loop 82 responsive pass: raised the fixed debug utility and panel above the 52px touch rail, preserving modal placement and preventing utility/control overlap.
