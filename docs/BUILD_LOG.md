@@ -2947,6 +2947,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `SCORE` pseudo-label and three Stability pips are visible at both sizes; route geometry remains unchanged.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 78: segmented progress instrument
+
+- Reworked the HUD progress row into distinct unfilled calibration cells and segmented active cells with cyan, amber, and white leading treatment.
+- Preserved gameplay-driven fill width and the existing 7px instrument geometry; no route, canvas, control, or state logic changed.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, segmented-gradient assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 retained HUD bounds, score label, three Stability pips, 9:16 canvas treatment, 52px controls, zero page overflow, and zero broken images.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
