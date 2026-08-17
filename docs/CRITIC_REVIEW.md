@@ -150,3 +150,4 @@
 - Loop 90 upgrade-card pass: authored the post-route module choices with icon wells, focal side rails, readable hierarchy, cost capsules, and non-color disabled treatment.
 - Loop 91 terminal-state pass: added authored success/failure emblems and compact SALVAGE/SCORE outcome instruments while preserving reset mechanics and viewport contracts.
 - Loop 92 modal-shell pass: added shared corner hardware, segmented top/bottom rails, recessed hatch texture, and inset shading without changing card or CTA geometry.
+- Loop 93 route-tail pass: added an authored three-module terminal bridge above the status rail and reinforced the route-depth termination band without changing route topology or interaction geometry.

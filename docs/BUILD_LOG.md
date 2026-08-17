@@ -3138,3 +3138,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Rendered 320px route screenshot visibly confirms the three shell assemblies while route map and CTA remain readable and unclipped.
 - No new runtime assets or requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 93: authored route-tail bridge
+
+- Added `assets/sprites/route-tail-bridge.svg`, a dedicated three-module cyan/amber termination bridge at the bottom of the route map.
+- Layered the bridge above the depth field to close the former low-information tail before the status rail.
+- Added a brighter terminal band inside `route-depth-field.svg` to reinforce the descent spine and collector connection.
+- Preserved route node count/topology, CTA geometry, status rail, route interaction layers, and active-play behavior.
+
+### Verification notes
+
+- SVG structure checks, extracted JavaScript `node --check`, and `git diff --check` pass.
+- Real Chrome/Playwright rendered route states at 320×568 and 390×844 with zero page errors and no horizontal overflow.
+- 390px screenshot confirms three distinct tail modules immediately above the status rail and a fully visible CTA.
+- New `route-tail-bridge.svg` is local, authored, and pointer-free.
+- Physical-device touch behavior remains pending.

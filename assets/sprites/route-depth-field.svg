@@ -119,4 +119,12 @@
 <!-- collector-to-rail transfer bridge -->
 <path d="M58 540h224" stroke="#67c8d5" stroke-opacity=".72" stroke-width="2"/><path d="M76 540h168" stroke="#ffd083" stroke-opacity=".8" stroke-width="2"/><path d="M96 540h128" stroke="#9fd4c0" stroke-opacity=".7" stroke-width="2"/>
 <path d="M58 534v6M76 534v6M244 534v6M262 534v6" stroke="#67c8d5" stroke-width="3"/><circle cx="180" cy="540" r="4" fill="#ffd083" filter="url(#glow)"/>
+<!-- terminal tail service bridge -->
+<g>
+<path d="M64 466h64v42H64z" fill="#0b1f21" stroke="#67c8d5" stroke-width="2"/><path d="M72 474h48v8H72zM72 488h34v8H72z" fill="#173b3b"/><circle cx="72" cy="502" r="4" fill="#67c8d5" filter="url(#glow)"/>
+<path d="M168 462h24v52h-24z" fill="#102d30" stroke="#ffd083" stroke-width="2"/><path d="M174 470h12v28h-12z" fill="#1d5b58" stroke="#fff0ba"/><circle cx="180" cy="505" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M232 466h64v42h-64z" fill="#0b1f21" stroke="#ef8b45" stroke-opacity=".8" stroke-width="2"/><path d="M240 474h48v8h-48zM240 488h34v8h-34z" fill="#3a3327"/><circle cx="288" cy="502" r="4" fill="#ef8b45" filter="url(#glow)"/>
+<path d="M128 484h40M192 484h40" stroke="#9fd4c0" stroke-width="2"/><path d="M94 516h172" stroke="#67c8d5" stroke-width="3" stroke-opacity=".7"/><path d="M112 510v12M180 510v12M248 510v12" stroke="#ffd083" stroke-width="2"/>
+<path d="M54 526h82v12H54z" fill="#102d30" stroke="#67c8d5" stroke-width="2"/><path d="M224 526h82v12h-82z" fill="#102d30" stroke="#ef8b45" stroke-opacity=".85" stroke-width="2"/><path d="M136 524h88v15h-88z" fill="#173b3b" stroke="#ffd083" stroke-width="2"/><path d="M64 532h46M246 532h46M150 531h60" stroke="#fff0ba" stroke-width="2"/><circle cx="54" cy="532" r="3" fill="#67c8d5" filter="url(#glow)"/><circle cx="306" cy="532" r="3" fill="#ef8b45" filter="url(#glow)"/><circle cx="180" cy="532" r="4" fill="#fff0ba" filter="url(#glow)"/>
+</g>
 </svg>
