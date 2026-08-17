@@ -2852,6 +2852,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 70: paired service elevators
+
+- Added paired vertical service elevators to the mid/lower route field with four segmented windows, opposing status rails, and cyan/amber focal lamps.
+- Strengthened the long descent silhouette while preserving all route graph geometry, existing terminal assemblies, scroll behavior, status rail, legend, CTA, and gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
