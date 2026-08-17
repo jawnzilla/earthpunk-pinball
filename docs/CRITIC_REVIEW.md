@@ -145,3 +145,4 @@
 - Loop 85 onboarding pass: added a compact state-aware canvas cue for cradle, launch, upper-bank target, and open-chute objectives without changing collision or layout geometry.
 - Loop 86 lower-mid pass: added mirrored cyan/amber transfer pods and a centered illuminated relay vault to break up the return field while preserving physics and layout contracts.
 - Loop 87 asset hierarchy pass: demoted repeated deck-inset rails and separators so the central travel lane stays quieter than dynamic targets and side machinery.
+- Loop 88 telemetry pass: replaced tiny `CHARGE`/`TARGET` meter labels with icon-first `CHG`/`AIM` labels at 9px while preserving live segmented values and geometry.

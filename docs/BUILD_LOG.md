@@ -3067,3 +3067,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Rendered 320px screenshot confirms the central lane reads calmer than the side machinery and bank targets while dynamic objects retain focal contrast.
 - Local authored asset remains directly renderable with no new runtime requests.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 88: icon-first relay telemetry
+
+- Simplified the in-table meter labels from tiny `CHARGE` / `TARGET` text to icon-first `CHG` / `AIM` channels.
+- Raised retained channel labels to 9px canvas typography while preserving segmented live values, meter footprint, combo state, and all update logic.
+- Preserved target/ball/objective spacing, canvas geometry, controls, route topology, and physics.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: `scrollWidth === clientWidth`, unchanged canvas/control bounds, debug gate intact, no page errors.
+- Rendered 320px screenshot visibly confirms separated `CHG` and `AIM` telemetry plates above the target bank and below the objective cue.
+- No new runtime assets or requests were added.
+- Physical-device touch behavior remains pending.
