@@ -147,3 +147,4 @@
 - Loop 87 asset hierarchy pass: demoted repeated deck-inset rails and separators so the central travel lane stays quieter than dynamic targets and side machinery.
 - Loop 88 telemetry pass: replaced tiny `CHARGE`/`TARGET` meter labels with icon-first `CHG`/`AIM` labels at 9px while preserving live segmented values and geometry.
 - Loop 89 CTA pass: converted the pre-descent action plate to an icon-first launch control while preserving exact CTA geometry and transition behavior.
+- Loop 90 upgrade-card pass: authored the post-route module choices with icon wells, focal side rails, readable hierarchy, cost capsules, and non-color disabled treatment.

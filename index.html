@@ -120,6 +120,14 @@
     .choices button strong { display: block; color: #ffd083; text-transform: uppercase; letter-spacing: .08em; }
     .choices button small { display: block; margin-top: 3px; color: #b8cbbb; line-height: 1.3; }
     .upgrade-cost { color: #ffd083 !important; font-weight: 900; letter-spacing: .08em; }
+    #overlay:not(.route-decision) .choices button { grid-template-columns: 44px 1fr; align-items: center; min-height: 58px; padding: 8px 10px; border-color: #789487; background: linear-gradient(105deg, rgba(49,78,73,.96), rgba(20,32,34,.98)); box-shadow: inset 3px 0 #67c8d5, 0 4px 0 #0b1112; }
+    #overlay:not(.route-decision) .choices button:nth-child(2n) { box-shadow: inset 3px 0 #ef8b45, 0 4px 0 #0b1112; }
+    #overlay:not(.route-decision) .choices button .upgrade-icon { width: 36px; height: 36px; padding: 3px; border: 1px solid #789487; border-radius: 6px; background: #0b1517; object-fit: contain; }
+    #overlay:not(.route-decision) .choices button .element-label { margin: 0; color: #9fd4c0; font-size: 9px; font-weight: 900; letter-spacing: .14em; }
+    #overlay:not(.route-decision) .choices button strong { margin-top: 1px; color: #f7d58f; font-size: 12px; line-height: 1.15; }
+    #overlay:not(.route-decision) .choices button .upgrade-cost { display: inline-block; margin-top: 3px; padding: 2px 5px; border: 1px solid rgba(255,208,131,.5); border-radius: 4px; background: rgba(241,179,91,.12); font-size: 9px; }
+    #overlay:not(.route-decision) .choices button:disabled { border-style: dashed; filter: saturate(.35); }
+    #overlay:not(.route-decision) .choices button:disabled .upgrade-cost { color: #9fb5a7 !important; border-color: #526e63; background: rgba(82,110,99,.12); }
     .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
     .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
     .choices button:active { background: #38524e; transform: translateY(1px); }

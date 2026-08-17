@@ -3095,3 +3095,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Rendered 320px route screenshot visibly confirms the launch glyph and short label fit inside the authored CTA without clipping.
 - No new runtime assets or requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 90: authored module-choice cards
+
+- Reworked post-route upgrade cards with icon wells, colored side rails, dominant titles, readable element lines, cost capsules, and dashed disabled treatment.
+- Preserved the existing upgrade pool, icon sources, costs, disabled/affordable/free logic, click handlers, route transitions, and choice ordering.
+- Preserved touch-safe card sizing and the existing mobile overlay geometry.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, upgrade-style source assertions, and `git diff --check` pass.
+- Synthetic module-choice renderer test at 320×568 and 390×844: no horizontal overflow; icon wells measure 30px and 40px respectively; titles remain one line in the test set; cost capsules remain inside each card.
+- Existing route CTA and active-play contracts remain unchanged.
+- No new runtime assets or requests were added; existing upgrade icons remain local.
+- Physical-device touch behavior remains pending.
