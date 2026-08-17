@@ -2704,6 +2704,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 57: route service landmark ladder
+
+- Added six authored mid/lower route landmarks to `route-depth-field.svg`: side service bays, inner socket modules, central indicator bars, opposing color anchors, and short return rails.
+- Increased visible route-depth landmark density without changing route topology, node positions, connector paths, scroll behavior, CTA/detail/legend geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
