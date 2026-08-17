@@ -105,3 +105,4 @@
 - Loop 43 upper-lane pass: enriched the upper approach’s central corridor with static transit rails, telemetry cues, sockets, and a central lamp while preserving the clear ball path.
 - Loop 45 lower-return pass: increased lower return-channel information density with rail, socket, conduit, and terminal details while preserving the gameplay-clear corridor.
 - Loop 46 cassette pass: differentiated the mid-deck service manifold with asymmetric feed couplers, service sockets, stronger rails, and distinct side-bay silhouettes around the reactor spine.
+- Loop 47 upper-manifold pass: added side housing depth, a central launch/intake lane, and a foreground gate/rail layer with localized amber/cyan cues.

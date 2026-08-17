@@ -2588,6 +2588,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 47: upper launch manifold depth
+
+- Enriched the existing `upper-approach-manifold.svg` within its unchanged `360×120` bounds.
+- Added three readable planes: side housing depth, a central launch/intake lane, and a foreground gate/rail layer with localized amber/cyan cues.
+- Preserved upper-target visibility, central ball travel, all collision/hit geometry, scoring, route behavior, and controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 
