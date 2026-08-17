@@ -143,3 +143,4 @@
 - Loop 83 UX pass: hid the developer physics tuner by default and added an explicit `?debug=1` gate while preserving the tuning panel and active-game suppression.
 - Loop 84 touch pass: restored `HOLD · LEFT/RIGHT` labels and stronger glyph hierarchy to the authored flipper plates while preserving exact rectangles and pointer behavior.
 - Loop 85 onboarding pass: added a compact state-aware canvas cue for cradle, launch, upper-bank target, and open-chute objectives without changing collision or layout geometry.
+- Loop 86 lower-mid pass: added mirrored cyan/amber transfer pods and a centered illuminated relay vault to break up the return field while preserving physics and layout contracts.

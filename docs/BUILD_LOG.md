@@ -3040,96 +3040,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Cue footprint is 224×34 logical canvas pixels, below 20% of the playable canvas and above the bottom control rail.
 - Physical-device touch behavior remains pending.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## 2026-08-17 — Loop 86: lower-mid transfer landmarks
+
+- Added three authored lower-mid field landmarks: mirrored cyan/amber transfer pods and a centered illuminated relay vault.
+- Used nested shells, highlights, conductor traces, localized emissive glow, and distinct silhouettes to break up the low-information return field.
+- Preserved collision geometry, ball paths, flippers, HUD, objective cue, route topology, scoring, and control rectangles.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, single-declaration assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: `scrollWidth === clientWidth`, unchanged canvas/control bounds, no page errors.
+- Rendered 320px screenshot visibly confirms three distinct landmarks between the bank and flippers, with the relay vault centered and the cyan/amber pods separated laterally.
+- No new asset requests were added; existing authored sprite loads remain untouched.
+- Physical-device touch behavior remains pending.
