@@ -2528,6 +2528,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 41: authored central transfer spine
+
+- Added `assets/sprites/central-transfer-spine.svg` to the former generic corridor between the upper approach manifold and bank-target assembly.
+- Added left/right transfer bays, a central conduit spine, socket details, junction lamps, and bridging rails.
+- Kept the render-only bounds at `(0, 208, W, 78)`; target positions, bumper collisions, scoring, ball path, flippers, and controls are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

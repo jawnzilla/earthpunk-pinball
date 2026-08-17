@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 78" fill="none" role="img" aria-label="Central transfer spine">
+<defs><linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#31534b"/><stop offset=".45" stop-color="#14282b"/><stop offset="1" stop-color="#071316"/></linearGradient><linearGradient id="rail"><stop stop-color="#67c8d5"/><stop offset=".5" stop-color="#526e63"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M18 7h324v64H18z" fill="url(#shell)" stroke="url(#rail)" stroke-width="2"/>
+<!-- transfer bays -->
+<path d="M30 17h90v44H30zM240 17h90v44h-90z" fill="#0a191b" stroke="#789487" stroke-width="2"/>
+<path d="M42 26h65v8H42zM42 42h46v9H42zM253 26h65v8h-65zM272 42h46v9h-46z" fill="#1e3c39" stroke="#67c8d5" stroke-opacity=".65"/>
+<path d="M52 29h44M52 46h28M264 29h44M282 46h28" stroke="#ffd083" stroke-width="2"/>
+<!-- central spine -->
+<path d="M124 13h112v52H124z" fill="#071719" stroke="#526e63" stroke-width="2"/>
+<path d="M136 25h88v28H136z" fill="#123337" stroke="#67c8d5" stroke-opacity=".6"/>
+<path d="M148 39h64" stroke="#9fd4c0" stroke-width="3" stroke-opacity=".7"/><path d="M180 25v28" stroke="#ffd083" stroke-width="2" stroke-dasharray="5 5"/>
+<circle cx="180" cy="39" r="8" fill="#0a181a" stroke="#fff0ba" stroke-width="2" filter="url(#glow)"/>
+<!-- junction links -->
+<path d="M120 39h16M224 39h16" stroke="#ef8b45" stroke-width="3"/><circle cx="120" cy="39" r="5" fill="#ef8b45"/><circle cx="240" cy="39" r="5" fill="#67c8d5"/>
+<g fill="#071416" stroke="#d7e8d0"><circle cx="22" cy="11" r="4"/><circle cx="338" cy="11" r="4"/><circle cx="22" cy="67" r="4"/><circle cx="338" cy="67" r="4"/></g>
+</svg>
