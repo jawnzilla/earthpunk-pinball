@@ -3210,3 +3210,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Player-facing debug controls remain hidden and zero-sized.
 - No new assets or network requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 98: hidden-control focus hygiene
+
+- Removed hidden developer/test controls from the keyboard tab order when the debug panel is unavailable or active play is running.
+- Applied `inert` and `aria-hidden` to the hidden debug panel, with original descendant tab indices restored only when `?debug=1` intentionally opens it.
+- Removed hidden reset, objective-tip, and route-overlay descendants from focus order when their parent surface is hidden.
+- Preserved visible route actions, debug-only access, route geometry, canvas dimensions, touch controls, and gameplay behavior.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, focusability source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: zero hidden zero-size focusables in route and active states; debug toggle is `tabIndex=-1` when hidden and available only in debug route; hidden reset is `tabIndex=-1` during active play.
+- Canvas remains `(46.94,103,226.125,402)` at 320 and `(17.81,142.39,354.375,630)` at 390; no overflow or page errors.
+- No new assets or network requests were added.
+- Physical-device touch behavior remains pending.
