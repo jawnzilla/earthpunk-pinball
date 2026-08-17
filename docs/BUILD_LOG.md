@@ -2552,6 +2552,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 43: upper transit-lane detail
+
+- Enriched the existing `upper-approach-manifold.svg` central lane with paired depth rails, dashed telemetry marks, four socket/junction cues, and a restrained central lamp.
+- Preserved the existing `360×120` upper-manifold bounds and side modules while keeping at least 80% of the central ball corridor clear.
+- Made no changes to target positions, bumpers, ball path, collision geometry, scoring, route behavior, or controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

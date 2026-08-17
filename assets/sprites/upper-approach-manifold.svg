@@ -5,6 +5,10 @@
 <path d="M137 16h86v88h-86z" fill="#071518" fill-opacity=".7" stroke="#67c8d5" stroke-opacity=".24" stroke-dasharray="4 5"/>
 <path d="M180 18v84" stroke="#ffd083" stroke-opacity=".35" stroke-width="2" stroke-dasharray="8 8"/>
 <path d="M148 28h64M148 92h64" stroke="#9fd4c0" stroke-opacity=".32"/>
+<!-- restrained transit cues inside the clear lane -->
+<path d="M145 24v70M215 24v70" stroke="#526e63" stroke-width="2"/><path d="M151 35h58M151 55h58M151 75h58" stroke="#67c8d5" stroke-opacity=".28" stroke-width="2" stroke-dasharray="3 6"/>
+<path d="M156 35h10M194 35h10M156 75h10M194 75h10" stroke="#ffd083" stroke-opacity=".62" stroke-width="3"/>
+<circle cx="145" cy="55" r="5" fill="#071416" stroke="#ef8b45" stroke-width="2"/><circle cx="215" cy="55" r="5" fill="#071416" stroke="#67c8d5" stroke-width="2"/><circle cx="180" cy="55" r="4" fill="#fff0ba" filter="url(#glow)"/>
 <!-- left approach module -->
 <path d="M30 26h91v68H30z" fill="#0a191b" stroke="#526e63" stroke-width="2"/>
 <path d="M42 38h67v12H42zM42 58h48v22H42z" fill="#1d3937" stroke="#789487"/>
