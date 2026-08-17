@@ -600,9 +600,9 @@
     return true;
   }
   function sweptSegmentContact(ball, segment, radius) {
-    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const travel = Math.hypot(ball.x - startX, ball.y - startY); if (travel < .01) return null;
+    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const travel = Math.hypot(ball.x - startX, ball.y - startY);
     const steps = Math.min(12, Math.max(2, Math.ceil(travel / Math.max(2, radius * .45)))); const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1;
-    for (let index = 1; index <= steps; index += 1) { const ratio = index / steps; const sampleX = startX + (ball.x - startX) * ratio, sampleY = startY + (ball.y - startY) * ratio; const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY }; }
+    for (let index = 0; index <= steps; index += 1) { const ratio = index / steps; const sampleX = startX + (ball.x - startX) * ratio, sampleY = startY + (ball.y - startY) * ratio; const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY }; }
     return null;
   }
   function sweptFlipperContact(ball, flipper, radius) {

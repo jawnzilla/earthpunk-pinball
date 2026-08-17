@@ -3253,3 +3253,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 320px screenshot confirms the cue no longer obscures the upper target lane.
 - No new assets or runtime requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Flipper tip collision regression fix
+
+- Fixed the flipper sweep seam that skipped the ball's previous position when the ball was momentarily stationary or nearly stationary while a flipper activated.
+- `sweptSegmentContact()` now samples ratio `0` before advancing through the ball path, instead of returning early for sub-pixel ball travel.
+- This preserves the old flipper position during activation, preventing the active flipper from effectively shortening at the tip and allowing the ball to drain through.
+- Preserved flipper geometry, activation timing, restitution, launch kick, route logic, and touch controls.
+
+### Verification notes
+
+- Focused regression probe is green: a stationary ball at the previous tip contact is detected by the sweep.
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Canvas, control, route, and asset contracts are unchanged by the collision-only patch.
+- A temporary local `file://` browser smoke harness was inconclusive and is not counted as gameplay evidence.
+- Physical-device touch behavior and high-speed flipper feel remain pending.
