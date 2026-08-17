@@ -2395,3 +2395,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568: stage plate `76×22.5`, Canvas `236.25×420`, control gap `4.5px`, no horizontal overflow.
 - Exact 390×844: stage plate `76×27.4`, Canvas `366×650.656`, control gap `10.48px`, no horizontal overflow.
 - Physical-device typography/material readability and flipper/drain behavior remain pending.
+
+## 2026-08-16 — Loop 31: authored lower mid-deck cassette
+
+- Added local `assets/sprites/mid-deck-cassette.svg` to fill the lower-mid playfield gap between the bank-target assembly and flippers.
+- Layered the cassette behind dynamic gameplay objects as a visual-only recessed service module with twin bays, relay core, conduits, lamps, rails, and fasteners.
+- Collision geometry, ball path, table dimensions, route modal, and input behavior are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, `git diff --check`, and offline asset contract pass.
+- Exact 320×568: Canvas `236.25×420`, controls gap `4.5px`, no horizontal overflow.
+- Exact 390×844: Canvas `366×650.656`, controls gap `10.48px`, no horizontal overflow.
+- Active-play screenshot confirms the authored cassette replaces the procedural empty band without obscuring the bank or flippers.
+- Physical-device material readability and flipper/drain behavior remain pending.
