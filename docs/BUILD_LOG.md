@@ -2958,6 +2958,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 retained HUD bounds, score label, three Stability pips, 9:16 canvas treatment, 52px controls, zero page overflow, and zero broken images.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 80: elemental imprint micro-instrument
+
+- Exposed the previously hidden elemental hinge/imprint status as a compact right-side HUD capsule.
+- Added a cyan diamond cue, bordered instrument treatment, concise left/right hinge state, and ellipsis protection for longer boss/imprint states.
+- Preserved the 16px resource-row contract after tightening the first visual version; no HUD height, canvas, physics, route, or touch geometry changes remain.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568: HUD 304×63, resource row 284×16, imprint capsule 120.08×16, canvas 226.125×402, controls 148×52, no overflow.
+- Exact 390×844: HUD 366×83, resource row 342×16, imprint capsule 120.08×16, canvas 354.375×630, controls 179×52, no overflow.
+- Source update path already communicates hinge, active-imprint, and boss state changes through `updateHud()`; physical-device touch behavior remains pending.
+
+
+
 
 
 
