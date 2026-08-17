@@ -2874,6 +2874,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-17 — Loop 72: collector-to-rail transfer bridge
+
+- Added a three-conductor collector-to-rail transfer bridge with cyan, amber, and green conductors, four side clamps, and a central relay lamp.
+- Closed the final authored route transition into the status rail without changing route topology, node positions, scrolling, status rail, legend, CTA geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
