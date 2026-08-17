@@ -156,3 +156,4 @@
 - Loop 96 identity pass: paired larger authored state symbols with one-word table labels inside the existing identity plate without changing active-play geometry.
 - Loop 97 status pass: replaced the cryptic hinge/imprint line with live 10px LEFT/RIGHT/NO IMPRINT chips while preserving the 16px HUD row and all geometry contracts.
 - Loop 98 focus pass: removed hidden debug, reset, objective-tip, and route-overlay controls from keyboard focus while preserving intentional debug access and player-facing geometry.
+- Loop 99 copy pass: reconciled the canonical four-descent run length across the live HUD, README, and current build documentation without changing stage logic.

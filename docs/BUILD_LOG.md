@@ -3225,3 +3225,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Canvas remains `(46.94,103,226.125,402)` at 320 and `(17.81,142.39,354.375,630)` at 390; no overflow or page errors.
 - No new assets or network requests were added.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 99: canonical four-descent copy
+
+- Reconciled the player-facing run counter and README: the canonical run length is four descents, matching `state.stageCount = 4` and the live `RUN 1/4` HUD.
+- Updated the README win condition to the fourth descent.
+- Preserved stage progression, route topology, win logic, HUD geometry, and gameplay behavior.
+
+### Verification notes
+
+- Source check asserts `stageCount: 4`, live `RUN ${state.stage}/${state.stageCount}`, and README references four descents/fourth descent.
+- Historical build-log entries remain unchanged; the latest canonical run-length entry supersedes them.
+- No assets or runtime requests changed.
+- Physical-device touch behavior remains pending.

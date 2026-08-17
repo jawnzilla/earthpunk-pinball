@@ -9,13 +9,13 @@ Prototype 01 answers one question: **is moving a probe through an underground in
 - Touch left/right halves of the table to work the flippers.
 - Keyboard fallback: `A` / `D` or arrow keys.
 - Hit all six salvage targets to complete a descent.
-- Complete three descents in one run.
+- Complete four descents in one run.
 - Choose a branching route or one between-descent elemental hinge module: Fire, Water, Earth, or Air.
 - Cradle the ball at an attuned flipper hinge to stack elemental imprints; matching targets, bumpers, and relays trigger elemental reactions.
 - Route modifiers materially change the next table: Flooded Sluice dampens gravity, Ember Lift boosts launch power and salvage, and Bedrock Shortcut reinforces the probe.
 - Flipper input works from either full-screen touch half, including the margins outside the table border.
 - Missing the ball costs stability; lose all stability and the probe is lost.
-- Reach the third descent's final signal to win.
+- Reach the fourth descent's final signal to win.
 - Reset is available after a win or loss.
 
 ## Build log
