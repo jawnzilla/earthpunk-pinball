@@ -124,3 +124,4 @@
 - Loop 63 route-depth pass: added a final destination-lock endpoint with twin jaws, amber lock bar, white core lamp, and cyan return clamps at the bottom of the route field.
 - Loop 64 route-depth pass: lifted `.route-depth-art` opacity to `.74` with restrained contrast/saturation to improve lower-field legibility without changing geometry or interaction.
 - Loop 65 route-depth pass: added six downward chevrons and three focal lamps as symbol-led continuation markers into the destination lock.
+- Loop 66 route-depth pass: added three staggered non-interactive future-layer service seals, color-coded to the cyan/amber/green continuation language.

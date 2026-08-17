@@ -70,6 +70,11 @@
 <path d="M154 460l26 14 26-14" stroke="#67c8d5" stroke-opacity=".68"/><path d="M154 482l26 14 26-14" stroke="#9fd4c0" stroke-opacity=".54"/>
 </g>
 <circle cx="180" cy="374" r="4" fill="#fff0ba" filter="url(#glow)"/><circle cx="180" cy="424" r="4" fill="#fff0ba" filter="url(#glow)"/><circle cx="180" cy="474" r="4" fill="#fff0ba" filter="url(#glow)"/>
+<!-- future-layer service seals -->
+<g fill="#081619" stroke-width="2">
+<circle cx="82" cy="374" r="13" stroke="#67c8d5" stroke-opacity=".65"/><circle cx="278" cy="424" r="13" stroke="#ffd083" stroke-opacity=".65"/><circle cx="82" cy="474" r="13" stroke="#9fd4c0" stroke-opacity=".6"/>
+</g>
+<path d="M76 374h12M82 368v12M272 424h12M278 418v12M76 474h12M82 468v12" stroke="#fff0ba" stroke-opacity=".8" stroke-width="2"/>
 <!-- lower tail terminal housing -->
 <path d="M34 432h292v82H34z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
 <path d="M48 446h82v48H48zM230 446h82v48h-82z" fill="#081619" stroke="#526e63"/>
