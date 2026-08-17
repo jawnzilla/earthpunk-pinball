@@ -2896,6 +2896,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-17 — Loop 74: compact stability HUD
+
+- Restored the existing three-pip Stability row as a compact third active-play HUD tier.
+- Kept verbose element status copy hidden and added a tall-viewport canvas cap so the 390px table remains 9:16 while both 52px flipper controls stay fully reachable.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568: HUD 304×63, canvas 236.25×420, controls 148×52, no page overflow.
+- Exact 390×844: HUD 366×83, canvas 354.375×630, controls 179×52 at y=782–834, no page overflow.
+- Three stability pips are visible at both viewports; route geometry and gameplay remain unchanged.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
