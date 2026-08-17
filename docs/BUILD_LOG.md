@@ -2715,6 +2715,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 58: route continuation depth elevator
+
+- Added a three-part continuation-band assembly to `route-depth-field.svg`: left/right service shafts plus two central depth-elevator cores with cyan/amber state anchors.
+- Strengthened the field beneath the final route-node row without changing route topology, node hit targets, connector paths, scroll behavior, CTA/detail/legend geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

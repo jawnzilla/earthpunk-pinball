@@ -19,6 +19,13 @@
 <path d="M57 309h90v60H57zM213 309h90v60h-90z" fill="#081619" stroke="#526e63"/>
 <path d="M69 322h66M69 336h52M225 322h66M225 336h52" stroke="#789487" stroke-width="4"/>
 <path d="M147 308h66v62h-66z" fill="#102d30" stroke="#67c8d5"/><path d="M158 320h44M158 332h30M158 344h38" stroke="#9fd4c0" stroke-width="2"/><circle cx="180" cy="356" r="6" fill="#ffd083" filter="url(#glow)"/>
+<!-- continuation depth elevator -->
+<path d="M38 174h28v82H38zM294 174h28v82h-28z" fill="#0a181a" stroke="#526e63" stroke-width="2"/>
+<path d="M45 184h14v24H45zM45 218h14v24H45zM301 184h14v24h-14zM301 218h14v24h-14z" fill="#102d30" stroke="#789487"/>
+<path d="M49 188v16M55 188v16M305 188v16M311 188v16M49 222v16M55 222v16M305 222v16M311 222v16" stroke="#67c8d5" stroke-opacity=".65" stroke-width="2"/>
+<path d="M76 186h44M76 244h44M240 186h44M240 244h44" stroke="#ffd083" stroke-opacity=".6" stroke-width="3"/>
+<path d="M128 174h104v28H128z" fill="#0b2022" stroke="#67c8d5" stroke-width="2"/><path d="M140 183h80M140 193h48" stroke="#9fd4c0" stroke-width="2"/><circle cx="180" cy="188" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M128 216h104v28H128z" fill="#102629" stroke="#ffd083" stroke-width="2"/><path d="M140 225h80M140 235h56" stroke="#ef8b45" stroke-opacity=".65" stroke-width="2"/><circle cx="180" cy="230" r="5" fill="#67c8d5" filter="url(#glow)"/>
 <!-- service landmark ladder -->
 <g stroke="#789487" stroke-width="2">
 <path d="M76 230h38v22H76z" fill="#0b2022"/><path d="M246 230h38v22h-38z" fill="#0b2022"/>

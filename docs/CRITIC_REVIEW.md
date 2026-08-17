@@ -116,3 +116,4 @@
 - Loop 55 route-depth pass: extended the terminal region with left/right collector pylons, vertical socket rails, and connecting amber bridges while preserving node and CTA geometry.
 - Loop 56 route-depth pass: added lower-field support towers, nested socket bays, cross-field amber rails, and a central return spine while preserving route topology and scroll geometry.
 - Loop 57 route-depth pass: added six authored service landmarks—side bays, inner sockets, central indicator bars, opposing color anchors, and return rails—without changing route topology or CTA geometry.
+- Loop 58 route-depth pass: added left/right service shafts and two central depth-elevator cores with cyan/amber anchors beneath the final node row while preserving route hit targets and scroll geometry.
