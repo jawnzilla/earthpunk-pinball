@@ -2440,3 +2440,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - The new assembly is visibly present behind the bank bumpers without covering targets, ball paths, or flippers.
 - Physical-device readability, high-speed flipper behavior, and full Blackout Core defeat remain pending.
 
+## 2026-08-16 — Loop 34: authored flipper actuator symbols
+
+- Replaced the remaining Unicode `◀` / `▶` touch-control glyphs with local `flipper-glyph-left.svg` and `flipper-glyph-right.svg` assets.
+- Added manufactured chevrons, pivot lamps, inset rails, and pressed-state contrast while preserving the existing authored control plates.
+- Preserved `Lift left/right flipper` accessibility labels, pointer hold behavior, 52px controls, and all physics/input code.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Authored SVG inventory increased from 36 to 38 assets.
+- Exact 320×568 and 390×844: glyphs rendered at `34×34`, broken images `0`, document dimensions exactly matched the viewport, and no horizontal overflow.
+- Pointer press state remained active on the left actuator during verification.
+- Physical-device press/hold feel and high-speed flipper behavior remain pending.
+
+

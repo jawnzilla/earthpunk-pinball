@@ -93,3 +93,4 @@
 - Loop 32 score contract: all visible score output is rounded to integers before display.
 - Loop 32 flipper solver correction: sampled rotating flipper angles against the complete ball segment to catch asynchronous fast-ball tip crossings without artificial geometry or drain barriers.
 - Loop 33 authored upper-bank pass: added `bank-target-assembly.svg` behind the upper bank bumpers, replacing the remaining generic rack with a recessed manufactured module while preserving all gameplay geometry.
+- Loop 34 authored actuator pass: replaced the remaining Unicode flipper control glyphs with local left/right manufactured SVG symbols, preserving accessible labels, pointer hold behavior, and 52px touch targets.

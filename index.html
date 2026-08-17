@@ -85,9 +85,9 @@
     .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .touch-control { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #648274; color: #e9f1df; background: #1c2b2d url('assets/sprites/flipper-control.svg') center / 100% 100% no-repeat; box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 0 #0b1112; }
     .touch-label { display: none; }
-    .touch-control .flipper-symbol { color: #ffd083; font-size: 30px; line-height: 1; text-shadow: 0 0 10px rgba(241,179,91,.45); }
+    .touch-control .flipper-symbol { display: block; width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(241,179,91,.42)); }
     .touch-control.is-pressed, .touch-control:active { color: #101518; border-color: #ffd083; background: #f1b35b; transform: translateY(2px); box-shadow: inset 0 1px rgba(255,255,255,.35), 0 2px 0 #0b1112; }
-    .touch-control.is-pressed .flipper-symbol, .touch-control:active .flipper-symbol, .touch-control.is-pressed .touch-label, .touch-control:active .touch-label { color: #101518; text-shadow: none; }
+    .touch-control.is-pressed .flipper-symbol, .touch-control:active .flipper-symbol { filter: brightness(.35); }
     button:hover { filter: brightness(1.08); }
     button:focus-visible { outline: 3px solid #9fd4c0; outline-offset: 3px; }
     footer { display: none; }
@@ -245,7 +245,7 @@
     </section>
     <section class="route-strip" id="route-strip" aria-label="Branching route structure" hidden></section>
     <div class="table-wrap"><canvas id="game" width="360" height="640" aria-label="Deadlight pinball table"></canvas></div>
-    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><span class="flipper-symbol" aria-hidden="true">◀</span><span class="touch-label">HOLD</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="touch-label">HOLD</span><span class="flipper-symbol" aria-hidden="true">▶</span></button></div>
+    <div class="touch-controls" aria-label="Touch flipper controls"><button class="touch-control" id="touch-left" type="button" aria-label="Lift left flipper"><img class="flipper-symbol" src="assets/sprites/flipper-glyph-left.svg" alt="" aria-hidden="true"><span class="touch-label">HOLD</span></button><button class="touch-control" id="touch-right" type="button" aria-label="Lift right flipper"><span class="touch-label">HOLD</span><img class="flipper-symbol" src="assets/sprites/flipper-glyph-right.svg" alt="" aria-hidden="true"></button></div>
     <footer aria-hidden="true">◀ FLIP · TAP OR HOLD · ▶</footer>
   </main>
   <div class="overlay" id="overlay" hidden>
