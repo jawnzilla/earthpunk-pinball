@@ -3153,3 +3153,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 390px screenshot confirms three distinct tail modules immediately above the status rail and a fully visible CTA.
 - New `route-tail-bridge.svg` is local, authored, and pointer-free.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 94: authored elemental reaction motifs
+
+- Added element-aware canvas reaction bursts for Fire, Water, Earth, and Air.
+- Fire now uses flame shards and a central ember diamond; Water uses orbital arcs and droplets; Earth uses rotating fracture shards and a block core; Air uses layered wind arcs and directional chevrons.
+- Preserved the existing impact ring and score popup as secondary feedback, so score and hit behavior remain intact.
+- Elemental motifs are emitted at the actual reaction/imprint coordinate and persist for approximately 367ms at 60fps.
+- Preserved collision geometry, physics, score logic, route behavior, canvas bounds, HUD copy, and touch controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, four-motif source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright route-to-active checks at 320×568 and 390×844: CTA, canvas, and control rectangles unchanged; debug toggle zero-sized; no overflow; no page errors.
+- No new runtime assets or network requests were added.
+- Physical-device touch behavior remains pending.
