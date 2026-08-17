@@ -131,3 +131,4 @@
 - Loop 70 route-depth pass: added paired vertical service elevators with segmented windows, opposing status rails, and cyan/amber focal lamps.
 - Loop 71 route-depth pass: added an asymmetric maintenance gantry with offset brackets, a central reactor vault, and cyan/white/amber status lamps.
 - Loop 72 route-depth pass: added a three-conductor collector-to-rail transfer bridge with four side clamps and a central relay lamp.
+- Loop 73 route-depth pass: added cyan/amber side vaults, a central green gate, three focal lamps, and lateral conductors as symbol-led terminal pylons.

@@ -64,8 +64,13 @@
 <g fill="#081416" stroke="#d7e8d0"><circle cx="34" cy="18" r="4"/><circle cx="326" cy="18" r="4"/><circle cx="34" cy="400" r="4"/><circle cx="326" cy="400" r="4"/></g>
 <g fill="#ffd083"><rect x="48" y="12" width="34" height="3"/><rect x="278" y="12" width="34" height="3"/><rect x="48" y="407" width="34" height="3"/><rect x="278" y="407" width="34" height="3"/></g>
 <g fill="#0a181a" stroke-width="2">
-<path d="M42 286h38v62H42z" stroke="#67c8d5" stroke-opacity=".7"/><path d="M280 286h38v62h-38z" stroke="#ffd083" stroke-opacity=".7"/>
+<path d="M54 230h34v48H54z" stroke="#67c8d5" stroke-opacity=".8"/><path d="M272 230h34v48h-34z" stroke="#ffd083" stroke-opacity=".8"/>
+<path d="M142 236h76v42h-76z" stroke="#9fd4c0" stroke-opacity=".85"/>
 </g>
+<path d="M62 242h18v10H62zM280 242h18v10h-18z" fill="#102d30" stroke="#9fd4c0"/><path d="M154 246h52M154 258h38" stroke="#fff0ba" stroke-width="2"/>
+<circle cx="71" cy="268" r="4" fill="#67c8d5" filter="url(#glow)"/><circle cx="289" cy="268" r="4" fill="#ef8b45" filter="url(#glow)"/><circle cx="180" cy="236" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M88 254h54M218 254h54" stroke="#67c8d5" stroke-width="2"/><path d="M88 270h54M218 270h54" stroke="#ffd083" stroke-width="2"/>
+
 <path d="M52 298h18v10H52zM52 316h18v10H52zM290 298h18v10h-18zM290 316h18v10h-18z" fill="#102d30" stroke="#9fd4c0"/>
 <path d="M42 338h38M280 338h38" stroke="#fff0ba" stroke-opacity=".75" stroke-width="2"/><circle cx="61" cy="338" r="3" fill="#67c8d5" filter="url(#glow)"/><circle cx="299" cy="338" r="3" fill="#ef8b45" filter="url(#glow)"/>
 <!-- maintenance gantry -->

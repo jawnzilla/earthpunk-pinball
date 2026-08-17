@@ -2885,6 +2885,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-17 — Loop 73: terminal pylons
+
+- Added three symbol-led terminal pylons below the D2 route row: cyan side vault, amber side vault, and a central green gate.
+- Added three focal lamps and lateral conductors to make the lower route continuation read as staged infrastructure without adding route nodes, text, or gameplay changes.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained authored field bounds, five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
