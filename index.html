@@ -179,7 +179,7 @@
       .route-map-depth { min-height: 42px; padding: 0; }
       .route-map-depth::before { top: 50%; left: 5px; transform: translateY(-50%); font-size: 7px; }
       .route-console-art { height: 214px; }
-      .route-map-cue { display: none !important; }
+      /* Route cue visibility is state-driven by syncRouteMapCue(); compact maps with hidden depth must advertise the scroll. */
     }
     @media (max-height: 600px) {
       main { height: 100dvh; min-height: 0; overflow: hidden; }
@@ -475,7 +475,7 @@
   function shortNodeTitle(id) { return ({ 'generator-well': 'Generator', 'pulse-manifold': 'Pulse', 'split-reactor': 'Split', 'blackout-core': 'Warden', 'surface-vault': 'Vault' })[id] || nodeTitle(id); }
   function allRouteEdges() { return routeGraph[state.currentNode] || []; }
   function syncOverlayScrollCue() { if (!overlayScrollCue || !overlay) return; const complete = overlay.scrollTop + overlay.clientHeight >= overlay.scrollHeight - 8; overlayScrollCue.classList.toggle('is-complete', complete); }
-  function syncRouteMapCue() { if (!routeMapCue || !routeMapScroll || routeMapScroll.clientHeight === 0 || routeMapScroll.scrollHeight === 0) return; const scrollable = routeMapScroll.scrollHeight > routeMapScroll.clientHeight + 2; const atEnd = routeMapScroll.scrollTop + routeMapScroll.clientHeight >= routeMapScroll.scrollHeight - 4; routeMapCue.classList.toggle('visible', scrollable); routeMapCue.classList.toggle('complete', atEnd); routeMapCue.textContent = atEnd ? 'ROUTE DEPTH REVEALED' : 'SWIPE UP · MORE ROUTE'; }
+  function syncRouteMapCue() { if (!routeMapCue || !routeMapScroll || routeMapScroll.clientHeight === 0 || routeMapScroll.scrollHeight === 0) return; routeMapCue.classList.remove('visible'); const baseHeight = routeMapScroll.scrollHeight; const scrollable = baseHeight > routeMapScroll.clientHeight + 2; const atEnd = routeMapScroll.scrollTop + routeMapScroll.clientHeight >= baseHeight - 4; routeMapCue.classList.toggle('visible', scrollable); routeMapCue.classList.toggle('complete', atEnd); routeMapCue.textContent = atEnd ? 'ROUTE DEPTH REVEALED' : 'SWIPE UP · MORE ROUTE'; }
   function renderRouteLinks(layers) {
     routeMapDepthContent.querySelector('.route-map-links')?.remove();
     const bounds = routeMapDepthContent.getBoundingClientRect(); if (!bounds.width || !bounds.height) return;

@@ -2726,6 +2726,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 59: truthful compact route scroll cue
+
+- Restored the compact route-map scroll cue when the 320px map has genuinely hidden depth; removed the blanket under-900px hide rule.
+- Updated `syncRouteMapCue()` to measure the route content with the cue hidden first, preventing the cue from creating false overflow at 390px where the full map fits.
+- Preserved route nodes, connector paths, CTA geometry, map selection semantics, and gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- 320×568: cue displays `SWIPE UP · MORE ROUTE`, content `541px`, viewport `255px`.
+- 390×844: cue remains hidden, content and viewport both `541px`.
+- Both sizes retain five nodes, seven connectors, exact CTA rectangles, zero broken images, and no horizontal overflow.
+
+
+
 
 
 
