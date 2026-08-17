@@ -2909,6 +2909,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Three stability pips are visible at both viewports; route geometry and gameplay remain unchanged.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 75: HUD progress instrument
+
+- Added repeating calibration ticks and a restrained cyan instrument edge to the 7px descent progress track.
+- Preserved gameplay-driven fill behavior while making the empty-at-start HUD track read as an intentional instrument instead of dead space.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 retained HUD bounds, three Stability pips, 9:16 canvas treatment, 52px controls, zero page overflow, and zero broken images.
+- Route topology, node positions, CTA geometry, and scroll behavior remain unchanged.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
