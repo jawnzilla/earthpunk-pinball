@@ -2934,6 +2934,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 390×844: canvas 354.375×630, controls 179×52, canvas/control gap 10px, no overflow.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 77: score instrument label
+
+- Added a compact visible `SCORE` prefix to the authored score-core HUD plate.
+- Made score, progress calibration, and Stability pips scan as explicit instruments without adding a new row or changing gameplay values.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, HUD label assertion, and `git diff --check` pass.
+- Exact 320×568: score plate 78×18, HUD 304×63, canvas 226.125×402, controls 148×52, no overflow.
+- Exact 390×844: score plate 92×28, HUD 366×83, canvas 354.375×630, controls 179×52, no overflow.
+- `SCORE` pseudo-label and three Stability pips are visible at both sizes; route geometry remains unchanged.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 

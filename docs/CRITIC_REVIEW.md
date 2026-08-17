@@ -135,3 +135,4 @@
 - Loop 74 HUD pass: restored the three-pip Stability tier, kept verbose element copy hidden, and capped the tall-viewport canvas to preserve 9:16 and 52px controls.
 - Loop 75 HUD pass: added repeating calibration ticks and a restrained cyan edge to the 7px progress instrument without changing fill logic.
 - Loop 76 responsive pass: reduced short-height canvas allocation to restore a 3px table/control separation at 320×568 while preserving the 9:16 ratio and 52px controls.
+- Loop 77 HUD pass: added a compact visible `SCORE` prefix to the score-core plate so score, progress, and Stability read as explicit instruments.
