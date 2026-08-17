@@ -2425,3 +2425,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568, 360×640, and 390×844: route map rendered 7 deduplicated connector paths with 2 open branch highlights; no horizontal overflow.
 - Upgrade fixture: four visible choices, no internal scrolling, no swipe cue, buttons measured 90px/108px/159px at the three target widths, and no document overflow.
 - Physical-device flipper feel, real high-speed play, and full Blackout Core defeat remain pending.
+
+## 2026-08-16 — Loop 33: authored upper-bank assembly
+
+- Added local `assets/sprites/bank-target-assembly.svg` behind the upper bank-target bumpers.
+- Replaced the remaining generic bank region with a manufactured rack: recessed shell, twin socket housings, central service rails, conduits, fasteners, and cyan/amber indicators.
+- Kept the layer render-only; target positions, bumper collision, scoring, upper-bank reach logic, and table dimensions are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Authored sprite inventory increased from 35 to 36 SVG assets.
+- Exact 390×844 local active play: Canvas `366×650.656`, broken image resources `0`, no horizontal overflow.
+- The new assembly is visibly present behind the bank bumpers without covering targets, ball paths, or flippers.
+- Physical-device readability, high-speed flipper behavior, and full Blackout Core defeat remain pending.
+
