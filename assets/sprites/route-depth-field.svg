@@ -68,6 +68,11 @@
 </g>
 <path d="M52 298h18v10H52zM52 316h18v10H52zM290 298h18v10h-18zM290 316h18v10h-18z" fill="#102d30" stroke="#9fd4c0"/>
 <path d="M42 338h38M280 338h38" stroke="#fff0ba" stroke-opacity=".75" stroke-width="2"/><circle cx="61" cy="338" r="3" fill="#67c8d5" filter="url(#glow)"/><circle cx="299" cy="338" r="3" fill="#ef8b45" filter="url(#glow)"/>
+<!-- maintenance gantry -->
+<path d="M92 348h176v12H92z" fill="#0a181a" stroke="#ffd083" stroke-opacity=".75" stroke-width="2"/>
+<path d="M104 360v18M256 360v18M116 360h-22v18h22M244 360h22v18h-22" fill="none" stroke="#67c8d5" stroke-width="2"/>
+<path d="M148 354h64v22h-64z" fill="#102d30" stroke="#9fd4c0" stroke-width="2"/><path d="M160 361h40M160 368h28" stroke="#fff0ba" stroke-width="2"/>
+<circle cx="154" cy="354" r="4" fill="#67c8d5" filter="url(#glow)"/><circle cx="180" cy="354" r="4" fill="#fff0ba" filter="url(#glow)"/><circle cx="206" cy="354" r="4" fill="#ef8b45" filter="url(#glow)"/>
 <!-- descent continuation markers -->
 <g fill="none" stroke-width="3">
 <path d="M154 360l26 14 26-14" stroke="#67c8d5" stroke-opacity=".78"/><path d="M154 382l26 14 26-14" stroke="#9fd4c0" stroke-opacity=".6"/>

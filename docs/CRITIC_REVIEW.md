@@ -129,3 +129,4 @@
 - Loop 68 route-depth pass: added side collector claws, a central lock halo, and a lower return bridge to densify the final termination band.
 - Loop 69 route-depth pass: added left-fork, center-crown, and right-fork end-stop modules anchored to the existing terminal assembly.
 - Loop 70 route-depth pass: added paired vertical service elevators with segmented windows, opposing status rails, and cyan/amber focal lamps.
+- Loop 71 route-depth pass: added an asymmetric maintenance gantry with offset brackets, a central reactor vault, and cyan/white/amber status lamps.
