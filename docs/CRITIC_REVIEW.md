@@ -118,3 +118,4 @@
 - Loop 57 route-depth pass: added six authored service landmarks—side bays, inner sockets, central indicator bars, opposing color anchors, and return rails—without changing route topology or CTA geometry.
 - Loop 58 route-depth pass: added left/right service shafts and two central depth-elevator cores with cyan/amber anchors beneath the final node row while preserving route hit targets and scroll geometry.
 - Loop 59 UX pass: restored the compact route scroll cue for genuine hidden depth and made its measurement self-excluding so the 390px full map does not create false overflow.
+- Loop 60 route-depth pass: extended the route field to its 541px presentation bound with a lower terminal housing, twin collector bays, central service core, endpoint lamps, and conduit termination.

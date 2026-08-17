@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 422" fill="none" role="img" aria-label="Route depth service field">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 541" fill="none" role="img" aria-label="Route depth service field">
 <defs><linearGradient id="bay" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26423e" stop-opacity=".78"/><stop offset=".5" stop-color="#102326" stop-opacity=".8"/><stop offset="1" stop-color="#071416" stop-opacity=".92"/></linearGradient><linearGradient id="rail"><stop stop-color="#9fd4c0"/><stop offset=".5" stop-color="#3c655d"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
 <!-- depth rails -->
 <path d="M34 18v382M326 18v382M62 18v382M298 18v382" stroke="#42675e" stroke-opacity=".45" stroke-width="2"/>
@@ -57,4 +57,12 @@
 <path d="M25 118c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 266c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 402c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0" stroke="#67c8d5" stroke-opacity=".4" stroke-width="2"/>
 <g fill="#081416" stroke="#d7e8d0"><circle cx="34" cy="18" r="4"/><circle cx="326" cy="18" r="4"/><circle cx="34" cy="400" r="4"/><circle cx="326" cy="400" r="4"/></g>
 <g fill="#ffd083"><rect x="48" y="12" width="34" height="3"/><rect x="278" y="12" width="34" height="3"/><rect x="48" y="407" width="34" height="3"/><rect x="278" y="407" width="34" height="3"/></g>
+<!-- lower tail terminal housing -->
+<path d="M34 432h292v82H34z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
+<path d="M48 446h82v48H48zM230 446h82v48h-82z" fill="#081619" stroke="#526e63"/>
+<path d="M60 458h58M60 470h42M242 458h58M242 470h42" stroke="#789487" stroke-width="4"/>
+<path d="M138 444h84v52h-84z" fill="#102d30" stroke="#67c8d5" stroke-width="2"/><path d="M151 456h58M151 468h42M151 480h50" stroke="#9fd4c0" stroke-width="2"/><circle cx="180" cy="487" r="6" fill="#fff0ba" filter="url(#glow)"/>
+<path d="M48 506h264" stroke="#ffd083" stroke-opacity=".65" stroke-width="3"/><circle cx="48" cy="506" r="5" fill="#ef8b45" filter="url(#glow)"/><circle cx="312" cy="506" r="5" fill="#67c8d5" filter="url(#glow)"/>
+<!-- lower tail conduit termination -->
+<path d="M72 526h216" stroke="#67c8d5" stroke-opacity=".55" stroke-width="4" stroke-dasharray="14 8"/><path d="M116 518v18M180 518v18M244 518v18" stroke="#9fd4c0" stroke-width="2"/>
 </svg>

@@ -2739,6 +2739,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 390×844: cue remains hidden, content and viewport both `541px`.
 - Both sizes retain five nodes, seven connectors, exact CTA rectangles, zero broken images, and no horizontal overflow.
 
+## 2026-08-16 — Loop 60: authored route lower-tail terminal
+
+- Extended `route-depth-field.svg` from `422px` to the existing `541px` presentation bound, eliminating its unarticulated dark tail.
+- Added a lower terminal housing, twin collector bays, central service core, endpoint lamps, and conduit termination at the route-field boundary.
+- Preserved route topology, node hit targets, connector paths, truthful scroll cue behavior, CTA/detail/legend geometry, and gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
