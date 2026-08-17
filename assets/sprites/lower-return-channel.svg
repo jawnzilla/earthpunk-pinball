@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 88" fill="none" role="img" aria-label="Lower return channel">
+<defs><linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#294943"/><stop offset=".4" stop-color="#122628"/><stop offset="1" stop-color="#061113"/></linearGradient><linearGradient id="rail"><stop stop-color="#ffd083"/><stop offset=".5" stop-color="#526e63"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M20 8h320v72H20z" fill="url(#shell)" stroke="url(#rail)" stroke-width="2"/>
+<!-- side collector plates -->
+<path d="M30 18h72v52H30zM258 18h72v52h-72z" fill="#091819" stroke="#526e63" stroke-width="2"/>
+<path d="M42 25v38M56 25v38M70 25v38M84 25v38M276 25v38M290 25v38M304 25v38M318 25v38" stroke="#67c8d5" stroke-opacity=".5" stroke-width="4"/>
+<path d="M35 20h60M265 20h60" stroke="#ffd083" stroke-opacity=".55" stroke-width="3"/>
+<!-- central return channel -->
+<path d="M112 14h136v60H112z" fill="#071416" stroke="#789487" stroke-width="2"/>
+<path d="M126 24h108v40H126z" fill="#123337" stroke="#67c8d5" stroke-opacity=".48"/>
+<path d="M140 30h80v27c-13 8-27 8-40 0-13 8-27 8-40 0z" fill="#0a2023" stroke="#9fd4c0" stroke-opacity=".5" stroke-width="2"/>
+<path d="M180 31v26" stroke="#ffd083" stroke-opacity=".55" stroke-width="2" stroke-dasharray="5 5"/>
+<!-- junctions and drain approach -->
+<circle cx="112" cy="44" r="8" fill="#0a181a" stroke="#ef8b45" stroke-width="2"/><circle cx="248" cy="44" r="8" fill="#0a181a" stroke="#67c8d5" stroke-width="2"/>
+<path d="M104 44H92M256 44h12" stroke="#ffd083" stroke-width="2"/><circle cx="180" cy="63" r="5" fill="#ffd083" filter="url(#glow)"/>
+<g fill="#071416" stroke="#d7e8d0"><circle cx="24" cy="12" r="4"/><circle cx="336" cy="12" r="4"/><circle cx="24" cy="76" r="4"/><circle cx="336" cy="76" r="4"/></g>
+</svg>

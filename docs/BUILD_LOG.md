@@ -2516,6 +2516,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 40: authored lower return channel
+
+- Added `assets/sprites/lower-return-channel.svg` over the former generic lower-deck rectangle immediately above the lower-edge machinery.
+- Added side collector plates, repeated ribs, central recessed return channel, junction lamps, conduit links, and a drain-approach marker.
+- Kept the existing `30, H - 125, W - 60, 88` render bounds; collision geometry, ball path, flippers, drain, scoring, and controls are unchanged.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
 
 
 

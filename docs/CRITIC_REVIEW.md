@@ -99,3 +99,4 @@
 - Loop 37 legend pass: replaced the remaining route legend glyphs with compact authored SVG marks while preserving concise labels and route-map geometry.
 - Loop 38 depth-field pass: added an authored lower route-console service field with three recessed bays, junction hardware, conduits, and collector panels; preserved graph behavior and physical-chute commitment.
 - Loop 39 upper-approach pass: added an authored upper approach manifold with side service modules and a clear central ball corridor; preserved target and collision geometry.
+- Loop 40 lower-return pass: added an authored lower return channel with collector plates, ribs, junctions, and a central drain approach; preserved the prior render bounds and gameplay geometry.
