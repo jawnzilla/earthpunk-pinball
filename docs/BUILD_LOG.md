@@ -2454,4 +2454,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Pointer press state remained active on the left actuator during verification.
 - Physical-device press/hold feel and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 35: deeper mid-deck service manifold
+
+- Rebuilt `assets/sprites/mid-deck-cassette.svg` as a higher-contrast authored service manifold.
+- Added nested maintenance bays, a central illuminated reactor spine, cross-feed conduits, clamps, indicator lamps, beveled shell layers, and stronger material separation.
+- Kept the existing `360×160` asset bounds and render-only integration; target positions, ball paths, collision geometry, scoring, and flipper behavior are unchanged.
+
+### Verification notes
+
+- Exact 320×568 local active play: Canvas `236.25×420`, broken images `0`, no horizontal overflow.
+- The cassette visibly reads as manufactured machinery beneath the upper-bank assembly without obscuring the ball path or flippers.
+- Physical-device material readability and high-speed flipper behavior remain pending.
+
+
 
