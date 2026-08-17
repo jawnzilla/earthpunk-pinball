@@ -157,3 +157,4 @@
 - Loop 97 status pass: replaced the cryptic hinge/imprint line with live 10px LEFT/RIGHT/NO IMPRINT chips while preserving the 16px HUD row and all geometry contracts.
 - Loop 98 focus pass: removed hidden debug, reset, objective-tip, and route-overlay controls from keyboard focus while preserving intentional debug access and player-facing geometry.
 - Loop 99 copy pass: reconciled the canonical four-descent run length across the live HUD, README, and current build documentation without changing stage logic.
+- Loop 100 visual pass: replaced the wide center objective card with a 48–52px icon-led signal badge capped at 20% canvas width, preserving lane visibility and gameplay geometry.

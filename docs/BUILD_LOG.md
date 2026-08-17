@@ -3238,3 +3238,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Historical build-log entries remain unchanged; the latest canonical run-length entry supersedes them.
 - No assets or runtime requests changed.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 100: compact center signal badge
+
+- Replaced the wide dynamic `CRADLE PROBE / HOLD LEFT OR RIGHT` objective card with a compact icon-led signal badge.
+- Reduced the badge to 48–52px wide and 30px tall, capped at 20% of the active canvas width.
+- Shortened state copy to two compact lines: `CRADLE / HOLD FLIPPER`, `READY / HOLD + RELEASE`, `BANK / HIT UPPER`, or `CHUTE OPEN / SEND PROBE`.
+- Preserved cue state logic, canvas dimensions, target/ball lane, physics, route topology, and touch controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, compact-cue source assertions, and `git diff --check` pass.
+- Real Chrome at 320×568 and 390×844: no overflow or page errors; canvas remains `226.125×402` and `354.375×630`; controls remain 52px high at the established positions.
+- 320px screenshot confirms the cue no longer obscures the upper target lane.
+- No new assets or runtime requests were added.
+- Physical-device touch behavior remains pending.
