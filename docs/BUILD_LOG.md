@@ -2600,6 +2600,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 48: recessed upper intake throat
+
+- Added a recessed intake-throat silhouette, guide brackets, contact-shadow framing, and four localized amber/cyan terminals inside the existing upper manifold.
+- Preserved at least 80% of the central ball corridor, the `360×120` bounds, target visibility, collision geometry, scoring, route behavior, and controls.
+
+### Verification notes
+
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

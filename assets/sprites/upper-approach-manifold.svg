@@ -3,6 +3,11 @@
 <path d="M18 12h324v96H18z" fill="url(#shell)" stroke="url(#metal)" stroke-width="2"/>
 <!-- central clear lane -->
 <path d="M137 16h86v88h-86z" fill="#071518" fill-opacity=".7" stroke="#67c8d5" stroke-opacity=".24" stroke-dasharray="4 5"/>
+<!-- recessed intake throat and guide brackets -->
+<path d="M143 20h74l-10 18v36l10 18h-74l10-18V38z" fill="#030b0e" stroke="#304f49" stroke-width="3"/>
+<path d="M151 28h58M151 92h58" stroke="#9fd4c0" stroke-opacity=".48" stroke-width="2"/>
+<path d="M144 34l12 8v36l-12 8M216 34l-12 8v36l12 8" stroke="#789487" stroke-width="3"/><path d="M148 42h12M148 78h12M200 42h12M200 78h12" stroke="#ffd083" stroke-opacity=".68" stroke-width="3"/>
+<circle cx="148" cy="42" r="3" fill="#ef8b45"/><circle cx="212" cy="42" r="3" fill="#67c8d5"/><circle cx="148" cy="78" r="3" fill="#67c8d5"/><circle cx="212" cy="78" r="3" fill="#ef8b45"/>
 <path d="M180 18v84" stroke="#ffd083" stroke-opacity=".35" stroke-width="2" stroke-dasharray="8 8"/>
 <path d="M148 28h64M148 92h64" stroke="#9fd4c0" stroke-opacity=".32"/>
 <!-- restrained transit cues inside the clear lane -->
