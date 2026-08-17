@@ -2764,6 +2764,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 390×844: full map remains exactly 541/541; cue hidden; rail remains 49px.
 - Both sizes retain five nodes, seven connectors, exact CTA rectangles, zero broken images, and no horizontal overflow.
 
+## 2026-08-16 — Loop 62: route depth gate hierarchy
+
+- Added three large diagonal depth gates to `route-depth-field.svg` with layered cyan/amber/green transitions, signal rails, and two focal markers.
+- Broke up the repeated rectangular console rhythm across the mid/lower descent while preserving route nodes, branch links, status rail, legend, scrolling, CTA geometry, and gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, SVG integrity assertion, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, truthful cue behavior, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

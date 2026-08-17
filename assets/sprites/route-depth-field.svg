@@ -14,6 +14,12 @@
 <path d="M82 166h72v68H82zM206 166h72v68h-72z" fill="#081619" stroke="#526e63"/>
 <path d="M94 180v42M110 180v42M126 180v42M222 180v42M238 180v42M254 180v42" stroke="#ef8b45" stroke-opacity=".38" stroke-width="4"/>
 <path d="M154 177h52v48h-52z" fill="#123337" stroke="#67c8d5"/><circle cx="180" cy="201" r="14" fill="#205b5c" stroke="#d7e8d0"/><circle cx="180" cy="201" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<!-- depth gate hierarchy -->
+<path d="M28 272h304l-28 24H56z" fill="#122c2f" fill-opacity=".72" stroke="#67c8d5" stroke-opacity=".45" stroke-width="2"/>
+<path d="M56 296h248l24 24H32z" fill="#0d2023" fill-opacity=".78" stroke="#ffd083" stroke-opacity=".35" stroke-width="2"/>
+<path d="M32 320h296l-24 24H56z" fill="#183336" fill-opacity=".58" stroke="#9fd4c0" stroke-opacity=".32" stroke-width="2"/>
+<path d="M48 280h88M224 280h88M72 306h64M224 306h64M48 334h88M224 334h88" stroke="#789487" stroke-opacity=".7" stroke-width="3"/>
+<path d="M180 274v70" stroke="#ef8b45" stroke-opacity=".62" stroke-width="2" stroke-dasharray="8 7"/><circle cx="180" cy="286" r="5" fill="#fff0ba" filter="url(#glow)"/><circle cx="180" cy="324" r="5" fill="#67c8d5" filter="url(#glow)"/>
 <!-- lower collector bay -->
 <path d="M42 294h276v92H42z" fill="url(#bay)" stroke="url(#rail)" stroke-width="2"/>
 <path d="M57 309h90v60H57zM213 309h90v60h-90z" fill="#081619" stroke="#526e63"/>
