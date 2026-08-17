@@ -2921,6 +2921,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Route topology, node positions, CTA geometry, and scroll behavior remain unchanged.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 76: short-phone table separation
+
+- Reduced the short-height canvas allocation from `100dvh - 148px` to `100dvh - 166px`.
+- Restored a 3px gap between the 320px table bottom and the 52px touch rail, eliminating the prior 15px overlap over the drain/flipper context.
+- Preserved the 9:16 canvas ratio, full control targets, tall-phone sizing, HUD semantics, and gameplay geometry.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, short-layout assertion, and `git diff --check` pass.
+- Exact 320×568: canvas 226.125×402, controls 148×52, canvas/control gap 3px, no overflow.
+- Exact 390×844: canvas 354.375×630, controls 179×52, canvas/control gap 10px, no overflow.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 
