@@ -2693,6 +2693,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 56: route lower support towers
+
+- Added lower-field side support towers, nested socket bays, cross-field amber rails, and a central return spine to `route-depth-field.svg`.
+- Strengthened the lower 35–40% route-map read without changing node centers, connector paths, route topology, scroll behavior, CTA/detail/legend geometry, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 
