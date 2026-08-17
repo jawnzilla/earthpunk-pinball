@@ -113,3 +113,4 @@
 - Loop 52 drain-throat pass: added a local authored lower-return assembly with left/right flumes, recessed central throat, amber/cyan flow indicators, and clamp rails above the flippers.
 - Loop 53 HUD pass: layered a local authored status console behind the semantic Run HUD with three instrument zones, telemetry rails, localized lamps, and a score-linked focal cue.
 - Loop 54 route-depth pass: enriched the lower route-map field with left/right collector modules, central terminal core, color-coded endpoint lamps, and clamp rails while preserving route geometry.
+- Loop 55 route-depth pass: extended the terminal region with left/right collector pylons, vertical socket rails, and connecting amber bridges while preserving node and CTA geometry.

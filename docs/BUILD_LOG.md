@@ -2682,6 +2682,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact document dimensions, and zero broken images.
 - Physical-device route-map readability and touch behavior remain pending.
 
+## 2026-08-16 — Loop 55: route lower collector cascade
+
+- Extended the existing route-depth terminal region with left/right collector pylons, vertical socket rails, and connecting amber bridges.
+- Increased lower-field information density while preserving route node centers, connector paths, scroll behavior, CTA/detail/legend geometry, and gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact CTA rectangles, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

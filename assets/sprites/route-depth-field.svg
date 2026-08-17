@@ -25,6 +25,11 @@
 <path d="M72 400h48M240 400h48" stroke="#67c8d5" stroke-opacity=".65" stroke-width="3"/>
 <path d="M144 389h72v24h-72z" fill="#102629" stroke="#ffd083" stroke-opacity=".68" stroke-width="2"/><circle cx="180" cy="401" r="6" fill="#fff0ba" filter="url(#glow)"/><path d="M180 390v8M180 404v8" stroke="#ef8b45" stroke-width="2"/>
 <circle cx="54" cy="401" r="4" fill="#ef8b45"/><circle cx="306" cy="401" r="4" fill="#67c8d5"/>
+<!-- lower collector cascade -->
+<path d="M30 362h42v46H30zM288 362h42v46h-42z" fill="#0a181a" stroke="#526e63" stroke-width="2"/>
+<path d="M38 370h26v5H38zM38 382h18v5H38zM296 370h26v5h-26zM304 382h18v5h-18z" fill="#244542"/>
+<path d="M43 368v29M57 368v29M299 368v29M313 368v29" stroke="#67c8d5" stroke-opacity=".55" stroke-width="2"/>
+<path d="M78 374h42M240 374h42M78 392h50M226 392h50" stroke="#ffd083" stroke-opacity=".6" stroke-width="3"/><circle cx="76" cy="374" r="4" fill="#ef8b45" filter="url(#glow)"/><circle cx="284" cy="374" r="4" fill="#67c8d5" filter="url(#glow)"/>
 <!-- conduit wave -->
 <path d="M25 118c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 266c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 402c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0" stroke="#67c8d5" stroke-opacity=".4" stroke-width="2"/>
 <g fill="#081416" stroke="#d7e8d0"><circle cx="34" cy="18" r="4"/><circle cx="326" cy="18" r="4"/><circle cx="34" cy="400" r="4"/><circle cx="326" cy="400" r="4"/></g>
