@@ -2671,6 +2671,19 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing HUD/control bounds, document dimensions, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 54: route depth terminal endpoint
+
+- Enriched the existing `route-depth-field.svg` bottom strip with left and right collector modules, a central terminal core, two color-coded endpoint lamps, and clamp rails.
+- Reduced the sparse lower map field without changing route topology, node positions, scroll behavior, CTA geometry, detail rail, legend, or gameplay.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local route overlays retained five nodes, seven connectors, exact document dimensions, and zero broken images.
+- Physical-device route-map readability and touch behavior remain pending.
+
+
+
 
 
 

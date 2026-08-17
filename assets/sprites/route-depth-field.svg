@@ -19,6 +19,12 @@
 <path d="M57 309h90v60H57zM213 309h90v60h-90z" fill="#081619" stroke="#526e63"/>
 <path d="M69 322h66M69 336h52M225 322h66M225 336h52" stroke="#789487" stroke-width="4"/>
 <path d="M147 308h66v62h-66z" fill="#102d30" stroke="#67c8d5"/><path d="M158 320h44M158 332h30M158 344h38" stroke="#9fd4c0" stroke-width="2"/><circle cx="180" cy="356" r="6" fill="#ffd083" filter="url(#glow)"/>
+<!-- lower terminal endpoint -->
+<path d="M48 389h264v24H48z" fill="#091719" stroke="#526e63" stroke-width="2"/>
+<path d="M60 395h72v10H60zM228 395h72v10h-72z" fill="#102d30" stroke="#789487"/>
+<path d="M72 400h48M240 400h48" stroke="#67c8d5" stroke-opacity=".65" stroke-width="3"/>
+<path d="M144 389h72v24h-72z" fill="#102629" stroke="#ffd083" stroke-opacity=".68" stroke-width="2"/><circle cx="180" cy="401" r="6" fill="#fff0ba" filter="url(#glow)"/><path d="M180 390v8M180 404v8" stroke="#ef8b45" stroke-width="2"/>
+<circle cx="54" cy="401" r="4" fill="#ef8b45"/><circle cx="306" cy="401" r="4" fill="#67c8d5"/>
 <!-- conduit wave -->
 <path d="M25 118c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 266c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0M25 402c36-25 54-25 90 0s54 25 90 0 54-25 90 0 36 25 40 0" stroke="#67c8d5" stroke-opacity=".4" stroke-width="2"/>
 <g fill="#081416" stroke="#d7e8d0"><circle cx="34" cy="18" r="4"/><circle cx="326" cy="18" r="4"/><circle cx="34" cy="400" r="4"/><circle cx="326" cy="400" r="4"/></g>
