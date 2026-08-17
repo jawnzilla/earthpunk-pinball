@@ -2659,6 +2659,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 53: authored HUD status console
+
+- Added and layered `assets/sprites/hud-status-console.svg` behind the existing semantic Run HUD labels and score core.
+- Added three instrument zones, segmented telemetry rails, localized amber/cyan lamps, and a score-linked center focal cue without adding text.
+- Preserved the exact 304×43 HUD at 320px and 366×61 HUD at 390px, readable route/score labels, 52px controls, and all gameplay behavior.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing HUD/control bounds, document dimensions, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 
