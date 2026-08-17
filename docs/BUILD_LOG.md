@@ -3109,3 +3109,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Existing route CTA and active-play contracts remain unchanged.
 - No new runtime assets or requests were added; existing upgrade icons remain local.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 91: authored terminal outcome modals
+
+- Added a dedicated terminal outcome family for win/loss states with a rotated emblem, grouped SALVAGE/SCORE instrument row, concise consequence copy, and state-specific retry/continue CTA labels.
+- Added success/failure visual treatment without introducing new runtime assets.
+- Fixed terminal states to hide the route-preview wrapper so the outcome CTA cannot be pushed below the 320px viewport.
+- Preserved win/lose mechanics, reset handlers, route topology, HUD, active controls, and upgrade flow.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, single win/lose declaration assertions, and `git diff --check` pass.
+- Synthetic terminal-state render at 320×568 and 390×844: outcome card remains within viewport width; emblem, instrument, heading, concise copy, and CTA all render; CTA measures 52px high.
+- 320×568 rendered screenshot confirms no route-map residue, visible outcome hierarchy, and fully contained reset CTA.
+- No new runtime assets or requests were added; zero broken image/page errors observed in the renderer test.
+- Physical-device touch behavior remains pending.
