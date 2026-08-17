@@ -30,9 +30,10 @@
     }
     .status strong { color: #f1b35b; }
     .run-hud { display: grid; gap: 6px; padding: 9px 11px; border: 1px solid #38524e; border-radius: 12px; background: #122326 url('assets/sprites/hud-rail.svg') center / 100% 100% no-repeat; box-shadow: inset 0 1px rgba(255,255,255,.08); }
-    .run-hud-top, .resource-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+    .run-hud-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; min-width: 0; }
+    .hud-key { display: none; }
     .hud-label { color: #9fb5a7; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-    .hud-key { display: inline-flex; gap: 4px; align-items: center; margin-left: auto; color: #789487; font-size: 11px; letter-spacing: .04em; }
+    .hud-key { gap: 4px; align-items: center; margin-left: auto; color: #789487; font-size: 11px; letter-spacing: .04em; }
     .hud-key .key-live { color: #ffd083; text-shadow: 0 0 7px rgba(255,208,131,.55); }
     .hud-key .key-shell { color: #526e63; }
     .hud-value { color: #ffd083; font-size: 12px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }

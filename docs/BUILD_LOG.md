@@ -2361,6 +2361,7 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Added authored local `assets/sprites/score-core.svg` as a manufactured score instrument instead of a plain text badge.
 - Simplified the live score from `0 SCORE` to a compact numeric readout with accessible `Score N` labeling.
 - Added a narrow-phone badge size and canvas-fit adjustment so the new HUD asset does not intrude into the 320×568 flipper controls.
+- Loop 29 delayed-audit correction: changed `.run-hud-top` to an explicit route-left/score-right two-zone grid and removed the cryptic decorative/collision key from the visible HUD; retained its accessible source markup and all authored rail treatment.
 
 ### Verification notes
 
