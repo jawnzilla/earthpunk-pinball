@@ -2647,6 +2647,20 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
 - Physical-device active-table readability and high-speed flipper behavior remain pending.
 
+## 2026-08-16 — Loop 52: drain throat lower-return assembly
+
+- Added and wired `assets/sprites/drain-throat-assembly.svg` across the existing lower-return bounds immediately above the flippers.
+- Added left/right return flumes, a recessed central drain throat, amber/cyan flow indicators, and lower clamp rails.
+- Preserved flipper visibility, touch controls, collision geometry, ball physics, scoring, route behavior, and table height.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, offline dependency scan, and `git diff --check` pass.
+- Exact 320×568 and 390×844 local active tables retained their existing canvas bounds, document dimensions, 52px controls, and zero broken images.
+- Physical-device active-table readability and high-speed flipper behavior remain pending.
+
+
+
 
 
 

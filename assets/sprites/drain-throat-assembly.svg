@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 88" fill="none" role="img" aria-label="Drain throat lower return assembly">
+<defs><linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#294943"/><stop offset=".42" stop-color="#112528"/><stop offset="1" stop-color="#050e11"/></linearGradient><linearGradient id="metal"><stop stop-color="#d7e8d0"/><stop offset=".5" stop-color="#526e63"/><stop offset="1" stop-color="#102324"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M5 8h290v72l-6 5H11l-6-5z" fill="url(#shell)" stroke="url(#metal)" stroke-width="2"/>
+<!-- left and right return flumes -->
+<path d="M14 18h82v50H14z" fill="#081719" stroke="#526e63" stroke-width="2"/><path d="M204 18h82v50h-82z" fill="#081719" stroke="#526e63" stroke-width="2"/>
+<path d="M23 26h58M23 38h44M23 50h52" stroke="#67c8d5" stroke-opacity=".6" stroke-width="3"/><path d="M219 26h58M233 38h44M225 50h52" stroke="#ef8b45" stroke-opacity=".62" stroke-width="3"/>
+<path d="M30 22v42M48 22v42M66 22v42M234 22v42M252 22v42M270 22v42" stroke="#789487" stroke-opacity=".5" stroke-width="2"/>
+<!-- central drain throat -->
+<path d="M103 14h94v58l-12 10h-70l-12-10z" fill="#030b0e" stroke="#304f49" stroke-width="3"/>
+<path d="M114 24h72v36l-10 13h-52l-10-13z" fill="#0a1d20" stroke="#789487" stroke-opacity=".8" stroke-width="2"/>
+<path d="M125 30h50M125 42h50M125 54h50" stroke="#67c8d5" stroke-opacity=".3" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M150 27v36" stroke="#ffd083" stroke-opacity=".55" stroke-width="2"/><path d="M136 70h28" stroke="#ef8b45" stroke-width="4"/><circle cx="150" cy="72" r="5" fill="#fff0ba" filter="url(#glow)"/>
+<!-- flow indicators and clamps -->
+<circle cx="92" cy="26" r="5" fill="#071416" stroke="#67c8d5" stroke-width="2" filter="url(#glow)"/><circle cx="208" cy="26" r="5" fill="#071416" stroke="#ef8b45" stroke-width="2" filter="url(#glow)"/>
+<path d="M82 26h14M204 26h14" stroke="#ffd083" stroke-width="2"/><path d="M22 72h72M206 72h72" stroke="#ffd083" stroke-opacity=".65" stroke-width="3"/><g fill="#071416" stroke="#d7e8d0"><circle cx="10" cy="13" r="3"/><circle cx="290" cy="13" r="3"/><circle cx="10" cy="74" r="3"/><circle cx="290" cy="74" r="3"/></g>
+</svg>

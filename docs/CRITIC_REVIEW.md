@@ -110,3 +110,4 @@
 - Loop 49 crown pass: added a local authored upper-crown service insert with side housings, ceiling brackets, central launch corridor, socket indicators, and lower contact rails.
 - Loop 50 lower-transfer pass: added a local authored lower-middle panel with left/right service bays, central transfer core, junction lamps, and conduit rails while preserving the ball corridor.
 - Loop 51 corridor pass: added a local authored telemetry spine with shallow side rails, six junction markers, segmented telemetry marks, and a localized center indicator while preserving clear travel width.
+- Loop 52 drain-throat pass: added a local authored lower-return assembly with left/right flumes, recessed central throat, amber/cyan flow indicators, and clamp rails above the flippers.
