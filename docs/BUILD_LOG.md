@@ -3026,6 +3026,22 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Default debug toggle remains hidden; zero broken image elements observed in the Playwright check.
 - Physical-device touch behavior remains pending.
 
+## 2026-08-17 — Loop 85: first-descent objective cue
+
+- Added a compact state-aware objective plate inside the upper canvas for first-descent onboarding.
+- Sequenced cues through existing state: `CRADLE PROBE`, `LAUNCH READY`, `BANK TARGET`, and `OPEN CHUTE`.
+- Preserved canvas collision geometry, touch controls, HUD bounds, route topology, scoring, and all gameplay state transitions.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, objective-cue source assertion, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: zero document overflow, unchanged canvas/control rectangles, no page errors.
+- Rendered 320px screenshot visibly confirms the compact `CRADLE PROBE / HOLD LEFT OR RIGHT` plate stays inside the upper canvas and clear of touch controls.
+- Cue footprint is 224×34 logical canvas pixels, below 20% of the playable canvas and above the bottom control rail.
+- Physical-device touch behavior remains pending.
+
+
+
 
 
 

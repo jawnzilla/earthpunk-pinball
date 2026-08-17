@@ -670,12 +670,20 @@
     if (spriteImages.tableShell.complete && spriteImages.tableShell.naturalWidth) { ctx.save(); ctx.globalAlpha = .96; ctx.drawImage(spriteImages.tableShell, 0, 0, W, H); ctx.restore(); }
     ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
     ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
-    drawDeckDetails(); drawReachBand(); drawTableIdentity(); if (state.boss.active) drawBoss();
+    drawDeckDetails(); drawReachBand(); drawTableIdentity(); drawObjectiveCue(); if (state.boss.active) drawBoss();
     ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
     if (spriteImages.lowerReturnChannel.complete && spriteImages.lowerReturnChannel.naturalWidth) { ctx.save(); ctx.globalAlpha = .86; ctx.drawImage(spriteImages.lowerReturnChannel, 30, H - 125, W - 60, 88); ctx.restore(); }
     if (spriteImages.drainThroatAssembly.complete && spriteImages.drainThroatAssembly.naturalWidth) { ctx.save(); ctx.globalAlpha = .82; ctx.drawImage(spriteImages.drainThroatAssembly, 30, H - 125, W - 60, 88); ctx.restore(); }
     drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawMeters(); drawEffects(); drawScorePopups(); drawAimReticle(); drawBall();
     if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
+  }
+  function drawObjectiveCue() {
+    if (!state.running) return;
+    const cue = state.routeGateOpen ? { icon: '◇', title: 'OPEN CHUTE', copy: 'KEEP THE PROBE MOVING' } : state.topHits > 0 ? { icon: '◎', title: 'BANK TARGET', copy: 'CLEAR THE UPPER BANK' } : state.ball?.cradleSide ? { icon: 'ϟ', title: 'LAUNCH READY', copy: 'HOLD FLIPPER · RELEASE' } : { icon: '⌁', title: 'CRADLE PROBE', copy: 'HOLD LEFT OR RIGHT' };
+    const x = 68, y = 44, width = W - 136, height = 34, color = state.routeGateOpen ? '#67c8d5' : state.topHits > 0 ? '#ffd083' : '#9fd4c0';
+    ctx.save(); ctx.fillStyle = 'rgba(7,13,15,.9)'; ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.shadowColor = color; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.moveTo(x + 6, y); ctx.lineTo(x + width - 6, y); ctx.quadraticCurveTo(x + width, y, x + width, y + 6); ctx.lineTo(x + width, y + height - 6); ctx.quadraticCurveTo(x + width, y + height, x + width - 6, y + height); ctx.lineTo(x + 6, y + height); ctx.quadraticCurveTo(x, y + height, x, y + height - 6); ctx.lineTo(x, y + 6); ctx.quadraticCurveTo(x, y, x + 6, y); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.fillStyle = color; ctx.font = 'bold 12px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(cue.icon, x + 15, y + 15); ctx.fillStyle = '#e9f1df'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(cue.title, x + 28, y + 13); ctx.fillStyle = '#9fb5a7'; ctx.font = '7px Trebuchet MS'; ctx.fillText(cue.copy, x + 28, y + 25); ctx.restore();
   }
   function drawReachBand() {
     const upper = getUpperBumpers(); if (!upper.length) return; const y = Math.min(...upper.map(item => item.y)); const bandTop = Math.max(138, y - 48); const reached = state.topHits > 0; ctx.save(); if (spriteImages.reachBand.complete && spriteImages.reachBand.naturalWidth) { ctx.globalAlpha = reached ? 1 : .82; ctx.drawImage(spriteImages.reachBand, 42, bandTop, W - 84, 88); ctx.globalAlpha = 1; } else { ctx.fillStyle = reached ? 'rgba(255,208,131,.08)' : 'rgba(103,200,213,.045)'; ctx.fillRect(42, bandTop, W - 84, 88); ctx.strokeStyle = reached ? 'rgba(255,208,131,.72)' : 'rgba(103,200,213,.35)'; ctx.setLineDash([5, 7]); ctx.lineWidth = reached ? 2 : 1; ctx.strokeRect(42, bandTop, W - 84, 88); ctx.setLineDash([]); } ctx.fillStyle = reached ? '#ffd083' : '#67c8d5'; ctx.font = 'bold 9px Trebuchet MS'; ctx.textAlign = 'left'; ctx.fillText(reached ? 'BANK ONLINE' : 'BANK TARGET', 50, bandTop + 13); ctx.restore();

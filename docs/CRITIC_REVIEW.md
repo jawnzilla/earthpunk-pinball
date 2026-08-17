@@ -142,3 +142,4 @@
 - Loop 82 responsive pass: raised the fixed debug utility and panel above the 52px touch rail, preserving modal placement and preventing utility/control overlap.
 - Loop 83 UX pass: hid the developer physics tuner by default and added an explicit `?debug=1` gate while preserving the tuning panel and active-game suppression.
 - Loop 84 touch pass: restored `HOLD · LEFT/RIGHT` labels and stronger glyph hierarchy to the authored flipper plates while preserving exact rectangles and pointer behavior.
+- Loop 85 onboarding pass: added a compact state-aware canvas cue for cradle, launch, upper-bank target, and open-chute objectives without changing collision or layout geometry.
