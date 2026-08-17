@@ -149,3 +149,4 @@
 - Loop 89 CTA pass: converted the pre-descent action plate to an icon-first launch control while preserving exact CTA geometry and transition behavior.
 - Loop 90 upgrade-card pass: authored the post-route module choices with icon wells, focal side rails, readable hierarchy, cost capsules, and non-color disabled treatment.
 - Loop 91 terminal-state pass: added authored success/failure emblems and compact SALVAGE/SCORE outcome instruments while preserving reset mechanics and viewport contracts.
+- Loop 92 modal-shell pass: added shared corner hardware, segmented top/bottom rails, recessed hatch texture, and inset shading without changing card or CTA geometry.

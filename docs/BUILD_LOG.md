@@ -3124,3 +3124,17 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - 320×568 rendered screenshot confirms no route-map residue, visible outcome hierarchy, and fully contained reset CTA.
 - No new runtime assets or requests were added; zero broken image/page errors observed in the renderer test.
 - Physical-device touch behavior remains pending.
+
+## 2026-08-17 — Loop 92: authored modal bezel shell
+
+- Added shared Earthpunk modal-bezel treatment across route, upgrade, and terminal surfaces.
+- Added four corner hardware lamps, segmented cyan/amber top and bottom rails, recessed hatch texture, and inset shell shading.
+- Preserved card/CTA rectangles, route-map density, terminal outcome hierarchy, upgrade flow, and all active-play geometry.
+
+### Verification notes
+
+- Extracted JavaScript `node --check`, bezel source assertions, and `git diff --check` pass.
+- Real Chrome/Playwright at 320×568 and 390×844: route CTA rectangles unchanged, active canvas/control rectangles unchanged, zero overflow, no page errors.
+- Rendered 320px route screenshot visibly confirms the three shell assemblies while route map and CTA remain readable and unclipped.
+- No new runtime assets or requests were added.
+- Physical-device touch behavior remains pending.
