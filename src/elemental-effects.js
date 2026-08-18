@@ -70,10 +70,11 @@ function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
   runtime.miniBalls = runtime.miniBalls.filter(ball => ball.lifetime > 0 && ball.bouncesRemaining > 0);
 }
 
-function advanceWindEcho(runtime, dt, integrateBodies) {
+function advanceWindEcho(runtime, dt, integrateBodies, contactResolver) {
   const echo = runtime.windEcho;
   if (!echo) return;
   if (integrateBodies) { echo.x += echo.vx * dt; echo.y += echo.vy * dt; }
+  if (contactResolver) contactResolver(echo);
   echo.distance += magnitude({ x: echo.vx, y: echo.vy }) * dt;
   echo.lifetime -= dt;
   if (echo.lifetime <= 0 || echo.distance >= ELEMENTAL_BUDGETS.wind.maxDistance) runtime.windEcho = null;
@@ -85,13 +86,13 @@ function advanceEarthLink(runtime, dt) {
   if (runtime.earthLink.lifetime <= 0) runtime.earthLink = null;
 }
 
-export function advanceElementalRuntime(runtime, { effects = {}, position, velocity = { x: 0, y: 0 }, dt = 0, integrateBodies = true, miniBallContactResolver = null } = {}) {
+export function advanceElementalRuntime(runtime, { effects = {}, position, velocity = { x: 0, y: 0 }, dt = 0, integrateBodies = true, miniBallContactResolver = null, windEchoContactResolver = null } = {}) {
   const safeDt = Math.max(0, Number.isFinite(dt) ? dt : 0);
   const events = [];
   addFireTrail(runtime, effects, position);
   advanceFireTrail(runtime, effects, safeDt, events);
   advanceMiniBalls(runtime, safeDt, integrateBodies, miniBallContactResolver);
-  advanceWindEcho(runtime, safeDt, integrateBodies);
+  advanceWindEcho(runtime, safeDt, integrateBodies, windEchoContactResolver);
   advanceEarthLink(runtime, safeDt);
   return events;
 }
@@ -111,7 +112,7 @@ export function onHardBounce(runtime, { effects = {}, position = { x: 0, y: 0 },
     events.push({ type: 'water-split', count: runtime.miniBalls.length });
   }
   if (impactSpeed >= 2 && activeStacks(effects, 'Wind') >= 3 && !runtime.windEcho && magnitude(velocity) > 0) {
-    runtime.windEcho = { id: 'wind-echo', x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') };
+    runtime.windEcho = { id: 'wind-echo', x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') };
     events.push({ type: 'wind-echo' });
   }
   return events[0] || { type: 'none' };
@@ -167,6 +168,28 @@ export function resolveMiniBallStructureDamage({ impactSpeed = 0, impactEnergy =
   const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => factor * (1 + Math.max(0, effect?.stacks ?? 0) * ((weaknesses[element] ?? 1) - 1) * .5), 1);
   const rawDamage = impactEnergy * damageScale * .06 * speedFactor * materialFactor * elementFactor;
   return { damage: Math.min(maxIntegrity * damageCap, Math.max(0, rawDamage)), materialFactor, speedFactor, elementFactor };
+}
+
+export function resolveWindEchoStructureDamage({ impactSpeed = 0, impactEnergy = 0, threshold = 1.4, maxIntegrity = 0, damageScale = 1, objectMaterial = 'timber', weaknesses = {}, elementEffects = {}, damageCap = .18 } = {}) {
+  if (!Number.isFinite(impactSpeed) || !Number.isFinite(impactEnergy) || impactSpeed < threshold || maxIntegrity <= 0) return { damage: 0, materialFactor: 0, speedFactor: 0, elementFactor: 0 };
+  const objectHardness = MINI_BALL_MATERIAL_HARDNESS[objectMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.timber;
+  const speedFactor = clamp(impactSpeed / Math.max(threshold, 1e-8), .25, 2.5);
+  const materialFactor = clamp(.28 / Math.max(objectHardness, 1e-8), .08, 1.2);
+  const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => factor * (1 + Math.max(0, effect?.stacks ?? 0) * ((weaknesses[element] ?? 1) - 1) * .5), 1);
+  const rawDamage = impactEnergy * damageScale * .045 * speedFactor * materialFactor * elementFactor;
+  return { damage: Math.min(maxIntegrity * damageCap, Math.max(0, rawDamage)), materialFactor, speedFactor, elementFactor };
+}
+
+export function onWindEchoStructureContact(runtime, { objectId, position = { x: 0, y: 0 }, normal = { x: 0, y: 0 }, contactKey = 'structure' } = {}) {
+  const echo = runtime.windEcho;
+  if (!echo || !objectId || !Number.isFinite(normal.x) || !Number.isFinite(normal.y) || echo.hitObjects.has(objectId)) return null;
+  echo.hitObjects.add(objectId);
+  const length = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / length, ny = normal.y / length;
+  const impactSpeed = Math.max(0, -(echo.vx * nx + echo.vy * ny));
+  const ignoreResponse = echo.ignoredResponses > 0;
+  if (ignoreResponse) echo.ignoredResponses -= 1;
+  return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: .5 * (echo.mass || .012) * impactSpeed ** 2 };
 }
 
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {

@@ -9,7 +9,9 @@ import {
   onMiniBallContact,
   onMiniBallStructureContact,
   onStructureContact,
-  resolveMiniBallStructureDamage
+  onWindEchoStructureContact,
+  resolveMiniBallStructureDamage,
+  resolveWindEchoStructureDamage
 } from '../src/elemental-effects.mjs';
 
 const effects = (element, stacks) => ({ [element]: { stacks, timer: 360 } });
@@ -108,6 +110,19 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.equal(duplicate.counted, false);
   advanceElementalRuntime(runtime, { effects: windEffects, position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, dt: 1.5 });
   assert.equal(runtime.windEcho, null);
+}
+
+{
+  const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Wind', 3), position: { x: 0, y: 0 }, velocity: { x: 300, y: 0 }, impactSpeed: 2.4 });
+  const first = onWindEchoStructureContact(runtime, { objectId: 'crate-a', position: { x: 20, y: 0 }, normal: { x: -1, y: 0 } });
+  assert.equal(first.ignoreResponse, true);
+  assert.ok(first.impactEnergy > 0);
+  assert.equal(onWindEchoStructureContact(runtime, { objectId: 'crate-a', normal: { x: -1, y: 0 } }), null);
+  const timber = resolveWindEchoStructureDamage({ impactSpeed: 3, impactEnergy: 20, threshold: 1.2, maxIntegrity: 100, damageScale: 1, objectMaterial: 'timber' });
+  const stone = resolveWindEchoStructureDamage({ impactSpeed: 3, impactEnergy: 20, threshold: 1.2, maxIntegrity: 100, damageScale: 1, objectMaterial: 'stone' });
+  assert.ok(timber.materialFactor > stone.materialFactor);
+  assert.ok(resolveWindEchoStructureDamage({ impactSpeed: 100, impactEnergy: 1e9, threshold: 1, maxIntegrity: 10, damageScale: 100 }).damage <= 1.8);
 }
 
 {

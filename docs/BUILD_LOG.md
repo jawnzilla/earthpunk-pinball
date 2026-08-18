@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: wind-echo material-aware structure seam
+
+### Implemented
+
+- Added a renderer-independent Wind echo structure-contact adapter with the existing one-hit-per-object ledger and ignored-first-response rule preserved.
+- Added force/impact-energy damage resolution for Wind echoes with speed threshold, object-material hardness, elemental weakness scaling, and an 18% per-hit integrity cap.
+- Wired the live echo through the same destructible object mask as Water fragments without score, Charge, target, or chain rewards.
+- Added deterministic coverage for echo contact energy, duplicate suppression, material differentiation, and the hard damage cap.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` passes.
+- `git diff --check` passes.
+- Local exact viewport browser verification and hosted Pages deployment remain pending until commit/push.
+
 ## 2026-08-18 — Overhaul tick: material-aware mini-ball damage adapter
 
 ### Implemented

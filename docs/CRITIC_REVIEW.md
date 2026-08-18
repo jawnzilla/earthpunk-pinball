@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 08 verdict
+
+**Playable hackathon slice: PASS for the Wind echo material-aware seam. AAA-ready: FAIL.** Wind echoes now damage destructibles through a renderer-independent, one-hit-per-object force policy while preserving the ignored-first-response behavior and reward-free semantics. The mine/tunnel visual reset, full shared Physics V2 parity for elemental bodies, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- Deterministic tests cover echo impact energy, ignored-first-response, duplicate suppression, timber-vs-stone differentiation, and the 18% integrity cap.
+- The live adapter runs echo contacts through the existing destructible mask and emits Wind-specific feedback without score/Charge/target/chain leakage.
+- Local exact viewport browser and hosted Pages verification are pending deployment for this tick.
+
+### Remaining risk / next smallest slice
+
+- Wind echoes still use a reduced kinematic body and duplicated material policy rather than the full Physics V2 contact solver.
+- Next bounded slice: consolidate elemental body contact energy into shared Physics V2 material helpers, beginning with Wind echo mass/force conversion.
+
 ## Overhaul tick 07 verdict
 
 **Playable hackathon slice: PASS for the material-aware reduced-mask policy. AAA-ready: FAIL.** Mini-ball structure damage is now renderer-independent and explicitly responds to material hardness, impact threshold/energy, elemental weaknesses, and the existing per-hit cap. The larger visual mine/tunnel reset, shared Physics V2 parity for elemental bodies, and physical-device evidence remain incomplete.
