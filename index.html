@@ -724,7 +724,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       state.ball.x = contactPoint.x;
       state.ball.y = contactPoint.y;
       state.ball.vx = 32 + sample * 8;
-      state.ball.vy = 180 + sample * 18;
+      state.ball.vy = -180 - sample * 18;
       state.ball.prevX = state.ball.x;
       state.ball.prevY = state.ball.y;
       resolveFlipperCollision(state.ball, flipper, 'left', false);
