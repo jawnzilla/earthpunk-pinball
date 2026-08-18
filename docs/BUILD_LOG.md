@@ -14,7 +14,7 @@
 - Extracted inline module passes `node --check`.
 - `git diff --check` passes.
 - Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `Enter descent` transitions to active Generator Well, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
-- Hosted Pages verification follows the prototype push.
+- Hosted Pages exact 320x568 and 390x844 checks pass after deployment: HTTP 200, `drawStaticContactLight` marker served, active Generator Well transition, 52px controls, `scrollWidth === clientWidth`, and zero console/page errors. GitHub Actions run `32116001723` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32116001723.
 
 
 ## 2026-08-18 — Overhaul tick: directional contact-light pass

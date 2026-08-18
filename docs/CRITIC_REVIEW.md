@@ -9,6 +9,7 @@
 - `drawStaticContactLight()` is applied to unhit salvage targets and non-edge bumpers after their authored base forms, adding nested value and rim treatment without replacing their silhouettes.
 - Local exact 320x568/390x844 Chromium checks pass with canvas, active transition, 52px touch controls, matching document widths, and zero console/page errors.
 - Deterministic physics/elemental tests remain green: 2 files, 2 tests, 0 failures.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment: HTTP 200, `drawStaticContactLight` served, active Generator Well transition, 52px controls, matching widths, and zero console/page errors. Workflow run `32116001723` completed success.
 
 ### Remaining risk / next smallest slice
 
