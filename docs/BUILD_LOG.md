@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: make the deterministic suite the package test command
+
+### Implemented
+
+- Added the repository-level `npm test` script, mapped directly to the existing deterministic Physics V2, elemental-effects, and flipper-contact test files.
+- Kept this slice tooling-only: no gameplay, renderer, physics, input, asset, or deployment behavior changed.
+
+### Verification
+
+- Before the change, `npm test` was red because `package.json` had no test script; the direct command `node --test tests/*.test.mjs` was already green with 5 tests.
+- After the change, `npm test` is the tight regression command for this repository and is required in the verification record for subsequent slices.
+- Exact local and hosted 320x568/390x844 browser checks, plus Pages deployment verification, are required after commit.
+
 ## 2026-08-18 — Overhaul tick: extracted swept flipper contact seam
 
 ### Implemented

@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 23 verdict
+
+**Playable hackathon slice: PASS for regression-command hygiene. AAA-ready: FAIL.** The deterministic suite now has a canonical `npm test` entry point, removing the repository's misleading missing-script failure without changing the playable path. This is maintenance infrastructure, not a visual, physics, or production-readiness claim.
+
+### Observed evidence
+
+- `package.json` exposes `npm test` as `node --test tests/*.test.mjs`, covering the existing Physics V2, elemental-effects, and flipper-contact seams.
+- The change is intentionally bounded to package metadata and verification documentation; no runtime source or assets were altered.
+
+### Remaining risk / next smallest slice
+
+- The game still needs the mandated hosted exact mobile checks after this commit, and the visual overhaul remains below the AAA reference bar pending grayscale/depth evidence.
+- Next implementation slice should be selected from fresh hosted evidence; do not broaden mechanics and visuals together.
+
 ## Overhaul tick 22 verdict
 
 **Playable hackathon slice: PASS for flipper collision seam isolation. AAA-ready: FAIL.** The moving-flipper swept query is now independently testable without changing the solver, cradle rules, or renderer. This is an infrastructure/physics-boundary slice, not a claim of complete first-principles table collision parity.
