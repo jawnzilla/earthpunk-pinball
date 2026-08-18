@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 29
 
+## Overhaul tick 34 verdict
+
+**Playable hackathon slice: PASS for target material/readability cues. AAA-ready: FAIL.** Salvage targets now carry family-specific nested geometry and a shared dark containment rim, improving grayscale recognition without changing gameplay. This is a small renderer correction, not evidence of visual completion.
+
+### Observed evidence
+
+- `drawTargetMaterialCue()` adds a dark rim and light-facing inner cue for timber, stone, and pipe target families at `index.html:1076-1104`.
+- The deterministic renderer contract test confirms the helper remains present and wired into `drawTargets()`.
+- Local Playwright at exact 320×568 and 390×844 reports complete documents, exact CSS widths, no horizontal overflow, two 52px flipper controls, and zero console/page/request errors. Screenshots are stored outside the repo at `%LOCALAPPDATA%/Temp/earthpunk-target-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-target-390.png`.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages verification is still required after this commit; local runtime health does not prove deployed parity.
+- Human grayscale inspection of the captured frames is still the visual gate; automated source and layout checks cannot prove that six small targets remain distinct at the rendered CSS scale.
+- The next physics slice should return to measured flipper contact/launch telemetry rather than layering more decoration.
+
 ## Overhaul tick 33 verdict
 
 **Playable hackathon slice: PASS for explicit mass-scaled impulse plumbing. AAA-ready: FAIL.** The Physics V2 contact solver now exposes a named discrete impulse seam instead of embedding velocity mutation inside contact resolution. This is a foundation correction, not visible gameplay proof or production readiness.

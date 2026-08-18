@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: target material cue pass
+
+### Implemented
+
+- Added `drawTargetMaterialCue()` to give each salvage target family a shared dark containment rim plus a non-color inner highlight: timber crates use a nested cross-brace, stone ore uses an inset faceted mark, and metal pipes use an inset panel with rails.
+- Kept target positions, hit-state rendering, element markers, collision logic, physics, progression, and input unchanged.
+- Added `tests/renderer-contract.test.mjs` so the renderer cannot silently lose the three family-specific grayscale/material cues.
+
+### Verification
+
+- `npm test`: 7 tests passed, 0 failures.
+- `node --check tests/renderer-contract.test.mjs`, `node --check src/physics-core.js`, and `git diff --check` passed.
+- Local Playwright checks at exact CSS viewports 320×568 and 390×844: document complete, `innerWidth` exact, Canvas present, `scrollWidth === clientWidth`, two 52px flipper controls, and zero console/page/request errors. Canvas footprints measured 226.125×402 and 354.375×630 CSS px.
+- Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-target-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-target-390.png`.
+- GitHub Pages deployment and hosted verification remain required after commit/push.
+
 ## 2026-08-18 — Overhaul tick: explicit mass-scaled impulse seam
 
 ### Implemented
