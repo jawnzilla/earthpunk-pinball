@@ -1266,8 +1266,27 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     drawStaticContactLight(gateMidX + gateNx * 4, gateMidY + gateNy * 4, 7, elementColors[gate.element] || '#f1b35b', '#263936', .34); ctx.restore();
   }
   function drawHingeModule(flipper, side) { const element = state.hingeElements[side]; const level = state.hingeLevels[side]; const heldCradle = hingeCradle(side); const color = element ? elementColors[element] : '#789487'; ctx.save(); if (spriteImages.hingeHousing.complete && spriteImages.hingeHousing.naturalWidth) { ctx.globalAlpha = heldCradle && element ? 1 : .92; ctx.drawImage(spriteImages.hingeHousing, flipper.pivotX - 27, flipper.pivotY - 27, 54, 54); } else { ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 22, 0, Math.PI * 2); ctx.fillStyle = heldCradle && element ? color : '#101a1c'; ctx.globalAlpha = heldCradle && element ? .82 : 1; ctx.fill(); ctx.strokeStyle = color; ctx.globalAlpha = heldCradle && element ? 1 : element ? .95 : .45; ctx.lineWidth = heldCradle && element ? 4 : element ? 3 : 1; ctx.stroke(); } ctx.globalAlpha = 1; if (element && elementImages[element]?.complete && !heldCradle) { ctx.globalAlpha = .82; ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 14, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(elementImages[element], flipper.pivotX - 14, flipper.pivotY - 14, 28, 28); } ctx.restore(); for (let index = 0; index < 3; index += 1) { ctx.beginPath(); ctx.arc(flipper.pivotX - 9 + index * 9, flipper.pivotY + 31, 2.5, 0, Math.PI * 2); ctx.fillStyle = element && index < level ? color : '#314f4a'; ctx.fill(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.stroke(); } }
+  function drawFlipperContactShadow(end, width) {
+    ctx.save();
+    ctx.globalAlpha = .34;
+    ctx.strokeStyle = '#050806';
+    ctx.lineWidth = width + 7;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(end.x1 + 2, end.y1 + 4);
+    ctx.lineTo(end.x2 + 2, end.y2 + 4);
+    ctx.stroke();
+    ctx.globalAlpha = .16;
+    ctx.lineWidth = width + 13;
+    ctx.beginPath();
+    ctx.moveTo(end.x1 + 3, end.y1 + 6);
+    ctx.lineTo(end.x2 + 3, end.y2 + 6);
+    ctx.stroke();
+    ctx.restore();
+  }
   function drawFlipperBlade(flipper, end, active, moving) {
     const dx = end.x2 - end.x1, dy = end.y2 - end.y1, length = Math.hypot(dx, dy) || 1, nx = -dy / length, ny = dx / length, width = flipper.width;
+    drawFlipperContactShadow(end, width);
     if (spriteImages.flipperBlade.complete && spriteImages.flipperBlade.naturalWidth) { ctx.save(); ctx.translate(end.x1, end.y1); ctx.rotate(Math.atan2(dy, dx)); ctx.globalAlpha = active ? 1 : .92; ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2; ctx.drawImage(spriteImages.flipperBlade, 0, -width / 2, length, width); ctx.restore(); return; }
     const tipWidth = width * .42, inset = 3, gradient = ctx.createLinearGradient(end.x1, end.y1, end.x2, end.y2); gradient.addColorStop(0, active ? '#fff0ba' : '#f1b35b'); gradient.addColorStop(.42, active ? '#ffd083' : '#c88748'); gradient.addColorStop(1, '#6b4932');
     ctx.save(); ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2;

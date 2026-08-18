@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: flipper contact-shadow depth slice
+
+### Implemented
+
+- Added a renderer-only two-pass contact shadow beneath both flipper blades before the authored sprite or procedural blade is drawn.
+- The shadow is offset along the portrait table plane and uses restrained alpha (`.34` core / `.16` falloff) so the flippers seat against the deck instead of floating above it.
+- Added renderer-contract coverage for the helper and its live draw call. Physics, input, collision geometry, progression, and assets are unchanged.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- `git diff --check`: passed.
+- Local exact Playwright attempt at 320×568 and 390×844 was blocked by the runner's existing `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed.
+- Hosted Pages verification is required after the prototype push; no deployment result is claimed yet.
+
+### Decision / next gate
+
+- This is a single depth-plane correction targeting the largest unverified visual risk: contact separation at the foreground flippers. Human grayscale inspection remains outstanding; do not infer AAA readiness from source/tests.
+
 ## 2026-08-18 — Overhaul tick: fresh hosted depth-fixture recheck
 
 ### Implemented

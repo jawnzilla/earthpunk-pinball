@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 49
 
+## Overhaul tick 53 verdict
+
+**Playable hackathon slice: PASS for renderer-contract depth correction. AAA-ready: FAIL / unverified.** Flipper blades now receive a restrained ground-contact shadow in both authored and fallback render paths. This is one bounded plane-separation change, not a complete visual verdict.
+
+### Observed evidence
+
+- `drawFlipperContactShadow(end, width)` renders a dark offset core and softer falloff before `drawFlipperBlade()` chooses the sprite or procedural branch.
+- Renderer-contract coverage asserts the helper, alpha seam, and live call; `npm test` passes 11 tests and `git diff --check` passes.
+- The local exact browser attempt at 320×568 and 390×844 hit the known runner `ERR_EMPTY_RESPONSE`; no local screenshot or runtime pass is claimed.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and exact hosted 320×568 / 390×844 checks are still pending for this commit.
+- Human inspection of the grayscale depth fixture remains the gate for judging whether the shadow is visible but not muddy. AAA-ready remains unsupported.
+- If hosted evidence is clean, return to one measured plane/object collision only; do not stack more shadow or glow layers without pixel evidence.
+
 ## Overhaul tick 52 verdict
 
 **Playable hackathon slice: PASS for hosted depth-fixture health. AAA-ready: FAIL / unverified.** A fresh exact browser pass confirms that the current GitHub Pages artifact still exposes the frozen depth review seam at both required portrait widths. This is operational evidence, not a visual-quality pass.
