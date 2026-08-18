@@ -1,3 +1,21 @@
+# Deadlight Critic Review — Overhaul tick 35
+
+## Overhaul tick 35 verdict
+
+**Playable hackathon slice: PASS for measured flipper-contact telemetry. AAA-ready: FAIL.** The real flipper collision path now exposes before/after speed and impulse evidence in the diagnostics surface, enabling tuning from recorded response rather than visual guesswork. This is a measurement seam, not proof that launch feel is correct or that the overhaul is complete.
+
+### Observed evidence
+
+- `summarizeFlipperContact()` is pure and deterministic; it reports side, catch/launch mode, speed response, impact speed/energy, and impulse magnitude.
+- The production `resolveFlipperCollision()` path stores the latest summary in the existing physics readout without changing collision math, input, progression, or renderer geometry.
+- `npm test` passes 8 tests; syntax and whitespace checks pass.
+- Local exact 320×568 and 390×844 checks pass with HTTP 200, complete documents, Canvas, two 52px controls, exact CSS widths, no overflow, and zero browser errors. Screenshots are outside the repo under `%LOCALAPPDATA%/Temp/earthpunk-local-320.png` and `earthpunk-local-390.png`.
+
+### Remaining risk / next smallest slice
+
+- The latest hosted Pages build predates this change, so the hosted telemetry marker is not yet evidence. Deploy and rerun the exact portrait checks before claiming parity.
+- The new readout becomes informative only after an actual flipper contact; the initial READY state correctly shows `—`. A future tuning tick should capture a repeatable active flipper contact and compare launch-speed distributions, not add more decorative rendering.
+
 # Deadlight Critic Review — Overhaul tick 29
 
 ## Overhaul tick 34 verdict

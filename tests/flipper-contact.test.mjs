@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sweptFlipperContact, sweptSegmentContact } from '../src/flipper-contact.js';
+import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -31,4 +31,21 @@ test('swept segment rejects a path that misses and detects a crossing path', () 
 test('stationary ball and stationary flipper do not manufacture contact', () => {
   const flipper = { pivotX: 0, pivotY: 0, length: 100, width: 17, angle: 0, previousAngle: 0 };
   assert.equal(sweptFlipperContact({ prevX: 50, prevY: 50, x: 50, y: 50 }, flipper, 8), null);
+});
+
+test('flipper telemetry reports response in stable units', () => {
+  const summary = summarizeFlipperContact({
+    side: 'left',
+    held: false,
+    beforeVelocity: { x: 0, y: -240 },
+    afterVelocity: { x: 180, y: -420 },
+    contact: { impactSpeed: 2.4, impactEnergy: 0.09, impulse: { x: 0.05, y: -0.1 } }
+  });
+  assert.equal(summary.side, 'left');
+  assert.equal(summary.mode, 'launch');
+  assert.equal(summary.beforeSpeed, 240);
+  assert.ok(summary.afterSpeed > 456 && summary.afterSpeed < 457);
+  assert.equal(summary.impactSpeed, 2.4);
+  assert.equal(summary.impactEnergy, 0.09);
+  assert.ok(summary.impulseMagnitude > 0.111 && summary.impulseMagnitude < 0.112);
 });

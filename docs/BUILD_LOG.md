@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: measured flipper-contact telemetry seam
+
+### Implemented
+
+- Added pure `summarizeFlipperContact()` telemetry in `src/flipper-contact.js`, reporting side, catch/launch mode, before/after speed, impact speed/energy, and impulse magnitude without changing collision response.
+- Wired the real flipper collision path to retain the latest response summary in the diagnostics readout. This makes launch feel measurable instead of relying on the previous generic “Contact energy” label.
+- Added deterministic coverage for stable telemetry units and kept physics, input, progression, and renderer geometry unchanged.
+
+### Verification
+
+- `npm test`: 8 tests passed, 0 failures.
+- `node --check src/flipper-contact.js` and `git diff --check` passed.
+- Local exact Playwright checks at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas present, two 52px flipper controls, zero console/page/request errors. Screenshots captured outside the repo at `%LOCALAPPDATA%/Temp/earthpunk-local-320.png` and `earthpunk-local-390.png`.
+- Hosted pre-deploy exact checks at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, no overflow, Canvas present, two 52px controls, zero browser errors. Hosted telemetry marker is intentionally stale until deployment.
+
+### Next gate
+
+- Commit/push this bounded slice, wait for the GitHub Pages workflow, then rerun the same exact hosted checks and confirm the deployed telemetry marker.
+
+
 ## 2026-08-18 — Overhaul tick: target material cue pass
 
 ### Implemented

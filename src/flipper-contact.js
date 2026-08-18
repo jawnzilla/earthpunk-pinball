@@ -57,4 +57,23 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   return null;
 }
 
+// Keep launch/contact evidence separate from the collision query. This makes
+// tuning probes deterministic without teaching the renderer how to infer
+// response quality from pixels.
+export function summarizeFlipperContact({ side = 'unknown', held = false, beforeVelocity = { x: 0, y: 0 }, afterVelocity = { x: 0, y: 0 }, contact = null } = {}) {
+  const speed = velocity => Math.hypot(
+    Number.isFinite(velocity?.x) ? velocity.x : 0,
+    Number.isFinite(velocity?.y) ? velocity.y : 0
+  );
+  return {
+    side,
+    mode: held ? 'catch' : 'launch',
+    beforeSpeed: speed(beforeVelocity),
+    afterSpeed: speed(afterVelocity),
+    impactSpeed: Number.isFinite(contact?.impactSpeed) ? contact.impactSpeed : 0,
+    impactEnergy: Number.isFinite(contact?.impactEnergy) ? contact.impactEnergy : 0,
+    impulseMagnitude: Math.hypot(contact?.impulse?.x || 0, contact?.impulse?.y || 0)
+  };
+}
+
 export { segmentAt as flipperSegmentAt };
