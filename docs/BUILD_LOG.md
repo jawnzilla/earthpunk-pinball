@@ -13,7 +13,9 @@
 - `npm test`: 11 tests passed, 0 failures.
 - `git diff --check`: passed.
 - Local exact Playwright attempt at 320×568 and 390×844 was blocked by the runner's existing `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed.
-- Hosted Pages verification is required after the prototype push; no deployment result is claimed yet.
+- GitHub Pages run `32189330002` completed successfully for commit `44c0567`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32189330002.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture marker, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, and zero console/page/request errors.
+- Hosted HTML contains the deployed `drawFlipperContactShadow(end, width)` marker.
 
 ### Decision / next gate
 

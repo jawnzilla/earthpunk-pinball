@@ -12,7 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Pages deployment and exact hosted 320×568 / 390×844 checks are still pending for this commit.
+- GitHub Pages run `32189330002` completed successfully for commit `44c0567`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32189330002.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth` passed at 320×568 and 390×844 with HTTP 200, complete documents, exact CSS widths, Canvas, `depth` marker, hidden overlay, expected grayscale filter, and zero console/page/request errors.
 - Human inspection of the grayscale depth fixture remains the gate for judging whether the shadow is visible but not muddy. AAA-ready remains unsupported.
 - If hosted evidence is clean, return to one measured plane/object collision only; do not stack more shadow or glow layers without pixel evidence.
 
