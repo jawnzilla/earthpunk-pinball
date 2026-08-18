@@ -13,7 +13,7 @@
 - `npm test`: 5 deterministic tests passed, 0 failures.
 - `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
 - Local exact Playwright checks passed at 320x568 and 390x844: `RUN 1/4 · READY`, Canvas present, two 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors. Screenshots were captured outside the repository under `%LOCALAPPDATA%/Temp/deadlight-*.png`.
-- Hosted Pages verification is pending the prototype push and GitHub Actions deployment.
+- Hosted exact Playwright checks passed after deployment at 320x568 and 390x844: document complete, `RUN 1/4 · READY`, Canvas present, two 52px touch controls, `scrollWidth === clientWidth`, authored draw markers served, and zero console/page/request errors. GitHub Actions run `32128591047` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32128591047.
 
 ## 2026-08-18 — Overhaul tick: make the deterministic suite the package test command
 

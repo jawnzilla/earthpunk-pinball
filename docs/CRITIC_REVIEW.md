@@ -13,7 +13,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages must be rechecked after deployment; this tick has no hosted evidence until the Pages workflow completes.
+- Hosted exact Playwright checks passed after deployment at 320x568 and 390x844: `RUN 1/4 · READY`, Canvas, 52px controls, matching document widths, authored draw markers, and zero console/page/request errors. Pages workflow run `32128591047` completed success.
 - The renderer still needs screenshot-based grayscale/depth review at 320/360/390 CSS widths. Authored layers improve depth, but their contrast and occlusion have not yet been judged from captured pixels.
 - Next bounded slice: perform the post-deploy screenshot audit and target only the largest observed readability failure; do not broaden mechanics and visuals together.
 
