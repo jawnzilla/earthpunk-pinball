@@ -3,9 +3,12 @@ import {
   FIXED_DT,
   MATERIALS,
   createBall,
+  addElementStack,
+  decayElementStacks,
   damageFromContact,
   integrateBall,
-  resolveContact
+  resolveContact,
+  resolveHybrid
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -47,4 +50,24 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 
 assert.equal(MATERIALS.steel.restitution < 1, true);
 assert.equal(FIXED_DT, 1 / 120);
+
+{
+  const effects = {};
+  addElementStack(effects, 'Fire', 5, 3, 10);
+  addElementStack(effects, 'Water', 1, 3, 4);
+  assert.equal(effects.Fire.stacks, 3);
+  assert.deepEqual(resolveHybrid(effects), { id: 'steam-fracture', elements: ['Fire', 'Water'] });
+  decayElementStacks(effects, 4);
+  assert.equal(effects.Water, undefined);
+  assert.equal(effects.Fire.stacks, 3);
+  decayElementStacks(effects, 6);
+  assert.equal(effects.Fire, undefined);
+}
+
+{
+  const effects = {};
+  addElementStack(effects, 'Unknown', 1);
+  assert.deepEqual(effects, {});
+}
+
 console.log('physics-core: all deterministic tests passed');

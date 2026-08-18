@@ -122,4 +122,29 @@ export function advanceFixed(world, elapsedSeconds, step = FIXED_DT, maxSteps = 
   return steps;
 }
 
+const ELEMENTS = Object.freeze(['Fire', 'Water', 'Wind', 'Earth']);
+
+export function addElementStack(effects = {}, element, amount = 1, maxStacks = 3, duration = 90) {
+  if (!ELEMENTS.includes(element) || amount <= 0) return effects;
+  const current = effects[element] ?? { stacks: 0, timer: 0 };
+  effects[element] = { stacks: clamp(current.stacks + amount, 0, maxStacks), timer: Math.max(current.timer, duration) };
+  return effects;
+}
+
+export function decayElementStacks(effects = {}, ticks = 1) {
+  Object.entries(effects).forEach(([element, effect]) => {
+    effect.timer = Math.max(0, (effect.timer ?? 0) - ticks);
+    if (effect.timer === 0) effect.stacks = 0;
+    if (effect.stacks === 0) delete effects[element];
+  });
+  return effects;
+}
+
+export function resolveHybrid(effects = {}) {
+  const active = new Set(Object.entries(effects).filter(([, effect]) => (effect?.stacks ?? 0) > 0).map(([element]) => element));
+  const pairs = [['Fire', 'Water', 'steam-fracture'], ['Fire', 'Wind', 'thermal-lance'], ['Water', 'Earth', 'slurry-bind'], ['Earth', 'Wind', 'root-sling']];
+  const match = pairs.find(([a, b]) => active.has(a) && active.has(b));
+  return match ? { id: match[2], elements: match.slice(0, 2) } : null;
+}
+
 export { add, clamp, dot, magnitude, normalize, scale, subtract };

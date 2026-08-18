@@ -1,8 +1,8 @@
-# Deadlight Critic Review — Pass 24
+# Deadlight Critic Review — Overhaul tick 01
 
 ## Verdict
 
-**Playable hackathon slice: PASS. AAA-ready: FAIL.** The current build now communicates a tighter run loop: map a descent, cradle a charged hinge, launch an imprinted ball into matching machinery, then choose either a route modifier or elemental hinge module. It is still a code-drawn prototype and needs another dedicated polish pass before it can credibly claim AAA.
+**Playable hackathon slice: PASS. AAA-ready: FAIL.** This tick hardens the renderer-independent elemental state seam, but the live table still uses legacy collision callbacks and has no destructible mine objects. The overhaul is not complete.
 
 ## Findings
 
@@ -13,6 +13,12 @@
 - **Physics/readability — WEAK:** Fixed-step physics and debug tuning remain useful. Real-device testing is still required for cradle timing, drain fairness, and route-modifier feel.
 - **Delivery — PASS with evidence gap:** Hosted URL responds HTTP 200 and the static build is offline-safe. The browser harness was unavailable in one attempt because of a missing `oci` dependency; a later critic run did verify the hosted 320px layout with `scrollWidth === clientWidth`.
 
+## Current tick evidence
+
+- Physics V2 deterministic test suite passes after adding bounded element-stack and hybrid primitives.
+- `node --check index.html` is not a valid command because Node does not parse `.html` as a JavaScript module; use extracted-script syntax checks or a browser smoke test for the page.
+- No browser capture was claimed this tick; hosted parity and exact-width checks remain delivery gates.
+
 ## Next-pass blockers
 
 1. Add a first-run cradle tutorial that points at the hinge and demonstrates one charged imprint.
@@ -20,6 +26,7 @@
 3. Give each elemental reaction a distinct animation/audio cue while preserving offline-safe assets.
 4. Playtest on physical phones at 320/360/390 CSS widths and record screenshots plus touch interruption behavior.
 5. Add one boss or threat table and one explicit resource/free-pass table so progression is not only a choice screen.
+6. Wire the new element primitives into live ContactResult consumers; do not duplicate stack caps in `index.html`.
 
 ## Simplified changelog
 

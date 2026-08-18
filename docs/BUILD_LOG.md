@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-17 — Overhaul tick: bounded elemental state core
+
+### Implemented
+
+- Added renderer-independent `addElementStack`, `decayElementStacks`, and `resolveHybrid` primitives to the Physics V2 core.
+- Element state is capped at three stacks, refreshes duration without exceeding the cap, expires deterministically, and recognizes the four canon hybrid pairs.
+- Added deterministic tests for cap enforcement, expiry, invalid elements, and Fire + Water hybrid selection.
+
+### Verification
+
+- `node --test tests/physics-core.test.mjs` passes (7 assertions groups, 0 failures).
+- The slice remains intentionally un-wired to the legacy renderer; live ContactResult consumers are the next migration seam.
+
 ## 2026-08-14 — Prototype 01: playable table slice
 
 ### Locked decisions
