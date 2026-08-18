@@ -312,7 +312,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
-import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
+import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -545,6 +545,7 @@ import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime
   function advanceElementalEffects(dt) {
     const ball = state.ball;
     const events = advanceElementalRuntime(ball.elementalRuntime, { effects: ball.elementEffects, position: { x: ball.x, y: ball.y }, velocity: { x: ball.vx, y: ball.vy }, dt, miniBallContactResolver: miniBall => {
+      let residualReplayed = false;
       const contacts = [];
       if (miniBall.x - miniBall.radius < table.left) contacts.push({ normal: { x: 1, y: 0 }, contactKey: 'left-wall' });
       if (miniBall.x + miniBall.radius > table.right) contacts.push({ normal: { x: -1, y: 0 }, contactKey: 'right-wall' });
@@ -565,6 +566,7 @@ import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime
         rewindElementalBodyToContact(miniBall, swept, Math.max(0, reach - (item.r || 11)));
         const response = onMiniBallStructureContact(ball.elementalRuntime, miniBall.id, { objectId: item.id, position: { x: item.x, y: item.y }, normal: swept.normal, contactKey: 'destructible' });
         if (!response?.counted || response.impactSpeed < item.threshold) return;
+        if (!residualReplayed) { advanceElementalBodyResidual(miniBall, dt, swept.t); residualReplayed = true; }
         const damageResult = resolveMiniBallStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects });
         const damage = damageResult.damage;
         if (damage <= 0) return;
@@ -576,6 +578,7 @@ import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime
         if (item.integrity <= 0) item.destroyed = true;
       });
       }, windEchoContactResolver: echo => {
+        let residualReplayed = false;
         state.destructibles.forEach(item => {
           if (item.destroyed) return;
           const swept = sweptCircleContact({ x: echo.previousX, y: echo.previousY }, { x: echo.x, y: echo.y }, { x: item.x, y: item.y }, 8 + (item.r || 11));
@@ -583,6 +586,7 @@ import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime
           rewindElementalBodyToContact(echo, swept, 8);
           const response = onWindEchoStructureContact(ball.elementalRuntime, { objectId: item.id, position: { x: item.x, y: item.y }, normal: swept.normal });
           if (!response?.counted || response.impactSpeed < item.threshold) return;
+          if (!residualReplayed) { advanceElementalBodyResidual(echo, dt, swept.t); residualReplayed = true; }
           const damage = resolveWindEchoStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects }).damage;
           if (damage <= 0) return;
           item.integrity = Math.max(0, item.integrity - damage); item.damageCooldown = 8; item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);

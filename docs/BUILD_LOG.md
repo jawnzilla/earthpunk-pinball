@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: residual post-contact travel
+
+### Implemented
+
+- Added renderer-independent `advanceElementalBodyResidual()` for Water mini-balls and Wind echoes.
+- After a swept destructible hit rewinds an elemental body to first contact, the live adapter now replays the unused fraction of the same fixed step once, preserving post-impact travel without changing rewards, ledgers, or primary-ball physics.
+- Added deterministic coverage for residual-time displacement and zero residual at contact completion.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
+- `git diff --check` passes (only Git LF/CRLF normalization warnings).
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `Enter descent` transitions to `RUN 1/4`, `scrollWidth === innerWidth`, 52px descent control, and zero console/page errors.
+- Hosted Pages verification pending push/deployment.
+
+
 ## 2026-08-18 — Overhaul tick: swept-contact positional correction
 
 ### Implemented

@@ -74,6 +74,20 @@ export function rewindElementalBodyToContact(body, swept, clearance = 0) {
   return true;
 }
 
+// Preserve the unused portion of a fixed step after a swept impact. The contact
+// resolver may rewind a body after integration; replay only the residual time so
+// a fast fragment does not lose its post-impact travel.
+export function advanceElementalBodyResidual(body, dt, contactFraction) {
+  if (!body || !body.physicsBody || !Number.isFinite(dt) || !Number.isFinite(contactFraction)) return 0;
+  const residualDt = Math.max(0, dt * (1 - clamp(contactFraction, 0, 1)));
+  if (residualDt <= 0) return 0;
+  body.previousX = body.x;
+  body.previousY = body.y;
+  integrateBall(body.physicsBody, { force: { x: 0, y: 0 }, gravity: { x: 0, y: 0 }, dt: residualDt });
+  syncLegacyFromPhysicsBody(body);
+  return residualDt;
+}
+
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
   water: Object.freeze({ maxBalls: 2, maxBounces: 3, lifetime: 1.25, splitSpeedScale: .72, spreadRadians: .34 }),

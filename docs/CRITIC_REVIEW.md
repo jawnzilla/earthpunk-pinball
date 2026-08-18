@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 12
+# Deadlight Critic Review — Overhaul tick 13
+
+## Overhaul tick 14 verdict
+
+**Playable hackathon slice: PASS for residual swept travel. AAA-ready: FAIL.** Elemental bodies now preserve the unused portion of a fixed step after a swept destructible contact: rewind, resolve, then replay residual time once. This closes the specific post-contact travel loss identified last tick. The mine/tunnel visual reset, full-table elemental collision parity, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `advanceElementalBodyResidual()` re-integrates Physics V2 using `dt × (1 - swept.t)` and resynchronizes renderer-space coordinates.
+- Water and Wind live adapters replay residual time once per resolver callback after a counted destructible response; duplicate contacts and reward-free semantics remain unchanged.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 Chromium checks pass with active transition, matching widths, 52px descent control, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Residual replay is intentionally limited to one counted destructible contact per elemental body per fixed step; full multi-contact continuous collision remains future work.
+- Hosted Pages exact 320x568/390x844 checks are pending this push.
+- Next bounded slice: begin the mine/tunnel material renderer phase (one coherent depth/material pass) rather than broadening gameplay rewards.
+
 
 ## Overhaul tick 13 verdict
 

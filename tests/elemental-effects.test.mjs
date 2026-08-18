@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
   ELEMENTAL_BUDGETS,
+  advanceElementalBodyResidual,
   advanceElementalRuntime,
   checkEarthLinkCrossing,
   createElementalRuntime,
@@ -193,6 +194,17 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.equal(rewindElementalBodyToContact(ball, swept, 2), true);
   assert.ok(Math.abs(ball.x - (swept.point.x + swept.normal.x * 2)) < 1e-9);
   assert.ok(Math.abs(ball.physicsBody.position.x - ball.x / 100) < 1e-9);
+}
+
+{
+  const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Water', 3), position: { x: 0, y: 0 }, velocity: { x: 600, y: 0 }, impactSpeed: 2.1 });
+  const ball = runtime.miniBalls[0];
+  advanceElementalRuntime(runtime, { effects: effects('Water', 3), position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, dt: 1 / 60 });
+  const before = ball.x;
+  assert.ok(advanceElementalBodyResidual(ball, 1 / 60, .25) > 0);
+  assert.ok(ball.x > before);
+  assert.equal(advanceElementalBodyResidual(ball, 1 / 60, 1), 0);
 }
 
 console.log('elemental-effects: all deterministic tests passed');
