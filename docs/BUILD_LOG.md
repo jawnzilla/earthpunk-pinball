@@ -13,7 +13,8 @@
 - `git diff --check` passed.
 - Hosted screenshot audit before this change captured exact 320×568, 360×844, and 390×844 frames outside the repository; grayscale pixel ranges were p05/p95 7/180, 9/157, and 9/158 respectively. These statistics are evidence of captured frames, not a substitute for human visual judgment.
 - Post-change local HTTP Playwright verification was attempted at 320×568/360×844/390×844 but the runner's local port returned `ERR_EMPTY_RESPONSE`; it is not counted as passing local browser evidence.
-- Next verification gate is the deployed hosted exact Playwright pass at all three widths, including `scrollWidth === clientWidth`, two 52px controls, active run state, and zero console/page/request errors.
+- GitHub Pages run `32134747352` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32134747352.
+- Post-deploy hosted Playwright checks passed at 320×568, 360×844, and 390×844: document complete, Canvas present, `RUN 1/4 · READY`, two 52px controls, `scrollWidth === innerWidth`, zero console/page/request errors, and served HTML contains both CSS changes. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ## 2026-08-18 — Overhaul tick: grayscale-safe silhouette cues
 

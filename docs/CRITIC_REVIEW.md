@@ -12,7 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Post-change local browser verification was blocked by `ERR_EMPTY_RESPONSE` from the runner's local HTTP port, so the change still needs the hosted deployment gate.
+- Post-change local browser verification was blocked by `ERR_EMPTY_RESPONSE` from the runner's local HTTP port; hosted verification is the counted browser evidence instead.
+- GitHub Pages run `32134747352` completed success. Hosted exact checks pass at 320×568, 360×844, and 390×844 with complete document, Canvas, `RUN 1/4 · READY`, two 52px controls, no horizontal overflow, zero console/page/request errors, and both CSS markers served.
 - The largest unresolved visual gap remains human inspection of the captured silhouettes, materials, and upgrade overlay at true portrait widths. Do not claim AAA readiness from automated checks.
 
 ## Overhaul tick 26 verdict
