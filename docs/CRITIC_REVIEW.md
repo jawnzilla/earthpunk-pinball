@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 41
 
+## Overhaul tick 42 verdict
+
+**Playable hackathon slice: PASS for telemetry integrity. AAA-ready: FAIL.** Production flipper telemetry now records the capped velocity that remains in play, preventing launch tuning from reading a pre-cap transient as the player's actual response. No claim is made for visual completion or final launch feel.
+
+### Observed evidence
+
+- `resolveFlipperCollision()` now calls `capBallSpeed(ball)` before `summarizeFlipperContact()`, while the contact solver and cap remain otherwise unchanged.
+- The renderer contract test asserts the ordering so future refactors cannot silently reintroduce pre-cap telemetry.
+- `npm test` passes 9 tests; `git diff --check` passes.
+
+### Remaining risk / next smallest slice
+
+- Local and hosted exact 320×568 / 390×844 browser evidence plus Pages deployment are still required for this commit.
+- This is an observability correction, not proof that ordinary human flipper launches have the desired distribution. Next: capture the corrected hosted fixture readout and compare it with a normal-play sample before tuning one solver property.
+
 ## Overhaul tick 41 verdict
 
 **Playable hackathon slice: PASS for corrected active-contact evidence. AAA-ready: FAIL.** The prior negative flipper telemetry was isolated to a malformed review fixture, not treated as a gameplay-solver defect. The opt-in fixture now exercises a ball-facing, approaching, moving flipper contact and produces a positive launch response while leaving live gameplay unchanged.

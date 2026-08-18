@@ -14,4 +14,6 @@ assert.match(source, /flipper\.angularVelocity = -8/);
 assert.match(source, /contactPoint\.x \+ fixtureNormal\.x \* 12/);
 assert.match(source, /review=flipper-contact/);
 assert.match(source, /activateFlipperContactReviewFixture\(\);/);
+assert.ok(source.indexOf('syncPixelsFromPhysics(ball); ball.lastContact = contact; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact') >= 0,
+  'flipper telemetry must summarize the capped live velocity');
 console.log('renderer-contract: target material cues and flipper review fixture present');

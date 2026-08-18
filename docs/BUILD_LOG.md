@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: cap flipper telemetry at the live response boundary
+
+### Implemented
+
+- Moved the production flipper-contact summary to after `capBallSpeed()`, so `afterSpeed`, `speedDelta`, and the launch series describe the velocity the live ball actually retains rather than the pre-cap solver result.
+- Added a renderer-contract regression guard that requires the cap-before-summary ordering. Physics constants, collision response, input, progression, and visuals are unchanged.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures; `git diff --check` passed.
+- Browser and hosted Pages checks are pending until this commit is pushed.
+
+### Decision / next gate
+
+- This closes a telemetry integrity gap: tuning evidence now reflects the post-cap gameplay path. It is not a launch-feel tuning decision.
+- Next slice should capture the corrected live readout in the hosted flipper fixture and compare capped versus uncapped ranges before changing one solver property.
+
 ## 2026-08-18 — Overhaul tick: geometry-correct active flipper fixture
 
 ### Implemented

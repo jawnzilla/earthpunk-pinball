@@ -834,7 +834,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     const beforeVelocity = { x: ball.vx, y: ball.vy };
     const physics = syncPhysicsBallFromPixels(ball);
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'rubber', inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: surfaceVx / PX_PER_M, y: surfaceVy / PX_PER_M }, penetration: Math.max(0, radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
-    syncPixelsFromPhysics(ball); ball.lastContact = contact; state.lastFlipperContact = summarizeFlipperContact({ side, held, beforeVelocity, afterVelocity: { x: ball.vx, y: ball.vy }, contact }); if (!held) { state.flipperContactSamples.push(state.lastFlipperContact); if (state.flipperContactSamples.length > 24) state.flipperContactSamples.shift(); } observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); return true;
+    syncPixelsFromPhysics(ball); ball.lastContact = contact; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact({ side, held, beforeVelocity, afterVelocity: { x: ball.vx, y: ball.vy }, contact }); if (!held) { state.flipperContactSamples.push(state.lastFlipperContact); if (state.flipperContactSamples.length > 24) state.flipperContactSamples.shift(); } return true;
   }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function updateFlippers(dt) {
