@@ -12,7 +12,7 @@
 
 - `npm test`: 9 tests passed, 0 failures; `node --check src/physics-core.js`; `git diff --check` passed.
 - Local exact Playwright checks at 320×568 and 390×568: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, `flipper-contact` fixture marker, zero console/page/request errors. Readout: `LEFT launch 241→600px/s · N 4 · μΔ +388px/s` at both widths.
-- Hosted Pages verification is pending this commit; no hosted result is claimed yet.
+- GitHub Pages run `32168995950` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32168995950. Hosted exact Playwright checks at 320×568 and 390×568 passed HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, `flipper-contact`, zero console/page/request errors, and `N 4` readout `241→600px/s · μΔ +388px/s`.
 
 ### Decision / next gate
 

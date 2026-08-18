@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The review fixture proves the retained post-cap value, but it is not ordinary human play. A normal-play active-contact sample is still required before changing restitution, friction, or the speed ceiling.
-- No visual completion or AAA claim is supported by this infrastructure slice. Hosted Pages verification remains pending for this commit.
+- No visual completion or AAA claim is supported by this infrastructure slice. GitHub Pages run `32168995950` completed successfully; hosted exact 320×568 and 390×568 checks passed HTTP 200, complete documents, exact widths with no overflow, Canvas, `flipper-contact`, zero browser/request errors, and `N 4` at `241→600px/s · μΔ +388px/s`.
 
 # Deadlight Critic Review — Overhaul tick 41
 
