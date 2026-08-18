@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - Elemental bodies still use the table adapter's reduced broad-phase geometry; they are not yet full-table collision participants.
-- Hosted Pages must be redeployed and rechecked after the push.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment; workflow run `32106419420` completed success.
 - Next bounded slice: migrate the reduced elemental wall/object broad-phase adapter to consume body positions directly while retaining the existing ledgers and no-reward semantics.
 
 ## Overhaul tick 10 verdict
