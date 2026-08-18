@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: destructible material renderer pass
+
+### Implemented
+
+- Added a renderer-only material palette seam for Generator Well destructibles: timber, copper, and stone now use distinct base/light/dark/edge cues.
+- Reworked crate, pipe, drum, and stone-plug surfaces to use directional gradients and material-specific highlights while preserving their authored silhouettes, damage stages, collision radii, and physics.
+- Damage cracks now inherit the object's material edge accent instead of using one generic amber treatment.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- Extracted inline module passes `node --check`.
+- `git diff --check` passes.
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `Enter descent` transitions to `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages verification is pending push/deployment.
+
+
 ## 2026-08-18 — Overhaul tick: residual post-contact travel
 
 ### Implemented

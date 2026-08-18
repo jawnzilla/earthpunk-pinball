@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 13
 
+## Overhaul tick 15 verdict
+
+**Playable hackathon slice: PASS for the destructible material renderer seam. AAA-ready: FAIL.** Generator Well salvage objects now have a clearer material read: timber, copper, and stone separate through directional value ramps and edge accents instead of palette-only flat fills. This is the smallest coherent visual phase; physics, silhouettes, damage rules, and reward semantics were not changed. The larger mine/tunnel reset, full-table elemental collision parity, hosted evidence, and physical-device feel remain incomplete.
+
+### Observed evidence
+
+- `materialVisual()` and `drawMaterialSheen()` provide distinct base/light/dark/edge cues for destructible materials.
+- Crate, pipe, drum, and stone-plug renderers consume the material palette; damage cracks use the material edge cue while integrity-stage dots and destroyed states remain intact.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 Chromium checks pass with active transition, 52px controls, matching widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- The renderer still uses procedural Canvas forms and does not yet provide a complete mine/tunnel lighting language or full grayscale silhouette audit.
+- Hosted Pages exact 320x568/390x844 checks are pending this push.
+- Next bounded slice: give the primary ball and elemental bodies a shared directional contact-light pass, or extend material-aware destructibles to the other route tables; do not broaden gameplay rewards in the same change.
+
 ## Overhaul tick 14 verdict
 
 **Playable hackathon slice: PASS for residual swept travel. AAA-ready: FAIL.** Elemental bodies now preserve the unused portion of a fixed step after a swept destructible contact: rewind, resolve, then replay residual time once. This closes the specific post-contact travel loss identified last tick. The mine/tunnel visual reset, full-table elemental collision parity, and physical-device evidence remain incomplete.

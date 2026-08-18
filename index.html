@@ -992,6 +992,21 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     ctx.beginPath(); ctx.arc(W / 2, railY, 7 + Math.sin(state.pulse * 1.5) * 1.5, 0, Math.PI * 2); ctx.fillStyle = '#081012'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); ctx.beginPath(); ctx.arc(W / 2 - 2, railY - 2, 3, 0, Math.PI * 2); ctx.fillStyle = '#f1b35b'; ctx.fill();
     ctx.restore();
   }
+  function materialVisual(material) {
+    return ({
+      timber: { base: '#69452f', light: '#bd8451', dark: '#2b1d17', edge: '#d7a45a' },
+      copper: { base: '#52615b', light: '#b97850', dark: '#202b2a', edge: '#ef8b45' },
+      stone: { base: '#5c584e', light: '#aaa08a', dark: '#252722', edge: '#b5d3a1' }
+    })[material] || { base: '#51483d', light: '#9c8b6c', dark: '#241f19', edge: '#d7a45a' };
+  }
+  function drawMaterialSheen(item, palette) {
+    const radius = item.r || 16;
+    const sheen = ctx.createLinearGradient(-radius, -radius, radius, radius);
+    sheen.addColorStop(0, palette.light);
+    sheen.addColorStop(.24, palette.base);
+    sheen.addColorStop(1, palette.dark);
+    ctx.fillStyle = sheen;
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
@@ -1002,16 +1017,17 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
         for (let index = 0; index < 3; index += 1) { ctx.save(); ctx.rotate((index - 1) * .45); ctx.fillRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.strokeRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.restore(); }
         ctx.restore(); return;
       }
+      const palette = materialVisual(item.material);
       if (item.kind === 'crate') {
-        ctx.rotate(-.05); ctx.fillStyle = '#5b3d29'; ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.fillRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-item.r * .58, -item.r * .48); ctx.lineTo(item.r * .56, item.r * .42); ctx.moveTo(item.r * .56, -item.r * .48); ctx.lineTo(-item.r * .58, item.r * .42); ctx.stroke(); ctx.fillStyle = '#3b2a20'; ctx.fillRect(-item.r * .82, -item.r * .64, 5, item.r * 1.28); ctx.fillRect(item.r * .7, -item.r * .64, 5, item.r * 1.28); ctx.fillStyle = '#9a6940'; [[-item.r * .7, -item.r * .52], [item.r * .7, -item.r * .52], [-item.r * .7, item.r * .5], [item.r * .7, item.r * .5]].forEach(([x, y]) => { ctx.fillRect(x - 2, y - 2, 4, 4); });
+        ctx.rotate(-.05); drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.fillRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeStyle = palette.light; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-item.r * .58, -item.r * .48); ctx.lineTo(item.r * .56, item.r * .42); ctx.moveTo(item.r * .56, -item.r * .48); ctx.lineTo(-item.r * .58, item.r * .42); ctx.stroke(); ctx.fillStyle = palette.dark; ctx.fillRect(-item.r * .82, -item.r * .64, 5, item.r * 1.28); ctx.fillRect(item.r * .7, -item.r * .64, 5, item.r * 1.28); ctx.fillStyle = palette.edge; [[-item.r * .7, -item.r * .52], [item.r * .7, -item.r * .52], [-item.r * .7, item.r * .5], [item.r * .7, item.r * .5]].forEach(([x, y]) => { ctx.fillRect(x - 2, y - 2, 4, 4); });
       } else if (item.kind === 'pipe') {
-        ctx.fillStyle = '#1b2425'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); ctx.strokeRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); for (let row = -1; row <= 1; row += 1) { const y = row * 8; ctx.fillStyle = '#3e4a47'; ctx.fillRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.strokeStyle = '#778078'; ctx.lineWidth = 1.5; ctx.strokeRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.fillStyle = '#895033'; ctx.fillRect(-item.r * .58, y - 6, 6, 12); ctx.fillRect(item.r * .48, y - 6, 6, 12); }
+        drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.fillRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); ctx.strokeRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); for (let row = -1; row <= 1; row += 1) { const y = row * 8; ctx.fillStyle = row === -1 ? palette.light : palette.base; ctx.fillRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.strokeStyle = '#778078'; ctx.lineWidth = 1.5; ctx.strokeRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.fillStyle = palette.edge; ctx.fillRect(-item.r * .58, y - 6, 6, 12); ctx.fillRect(item.r * .48, y - 6, 6, 12); }
       } else if (item.kind === 'drum') {
-        ctx.fillStyle = '#765437'; ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, 0, item.r * .72, item.r, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#b47b4c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, -item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.ellipse(0, item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = '#c8a06a'; ctx.fillRect(-4, -2, 8, 4);
+        drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, 0, item.r * .72, item.r, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, -item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.ellipse(0, item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = palette.edge; ctx.fillRect(-4, -2, 8, 4);
       } else {
-        ctx.fillStyle = '#51483d'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
+        drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
       }
-      if (stage > 0) { ctx.strokeStyle = '#d7a45a'; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
+      if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }
       ctx.globalAlpha = 1; ctx.fillStyle = '#d7a45a'; for (let index = 0; index < 3; index += 1) { ctx.beginPath(); ctx.arc(-7 + index * 7, item.r + 5, 2, 0, Math.PI * 2); ctx.fillStyle = index < stage ? '#d7a45a' : '#44372b'; ctx.fill(); }
       ctx.restore();
