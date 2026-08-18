@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 28 verdict
+
+**Playable hackathon slice: PASS for compact active-state HUD. AAA-ready: FAIL.** The persistent element rail now communicates only installed hinges, active imprints, and Warden integrity instead of reserving space for empty slots and implementation-style `NO IMPRINT` prose. This is a bounded hierarchy correction, not visual completion.
+
+### Observed evidence
+
+- `updateHud()` filters out uninstalled hinge slots, renders concise side/element/stack chips, preserves active imprint and Warden chips, and exposes the expanded meaning through `aria-label`/`title`.
+- `npm test`, extracted inline-module syntax checking, and `git diff --check` pass.
+- Pre-deploy hosted exact 320×568, 360×844, and 390×844 checks pass with Canvas, 52px controls, matching document widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Post-deploy hosted verification is still required for this commit. Screenshot-based human inspection of grayscale silhouettes, material separation, and the upgrade overlay remains outstanding; automated DOM/runtime checks do not prove the AAA reference bar.
+- Next bounded slice should be selected from fresh hosted screenshot evidence, not another broad mechanics/visual bundle.
+
 ## Overhaul tick 27 verdict
 
 **Playable hackathon slice: PASS for bounded mobile HUD legibility implementation. AAA-ready: FAIL.** Persistent HUD and flipper labels were below a comfortable small-screen reading target; this CSS-only pass raises them without changing playfield geometry or mechanics.

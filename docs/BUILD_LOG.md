@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: compact active-effect HUD
+
+### Implemented
+
+- Replaced the persistent `LEFT:— RIGHT:— NO IMPRINT` status prose with a compact active-state rail: uninstalled hinges disappear, installed hinges render as side/element/stack chips, active imprints remain visible, and the Warden integrity chip is preserved.
+- Added accessible labels and hover titles carrying the full meaning while keeping the portrait HUD visually compact. Gameplay, physics, input, progression, and canvas rendering are unchanged.
+
+### Verification
+
+- `npm test`: 5 deterministic tests passed, 0 failures.
+- Extracted inline module `node --check` passed; `git diff --check` passed.
+- Pre-deploy hosted exact checks at 320×568, 360×844, and 390×844 passed: HTTP 200, complete document, Canvas present, matching document widths, 52px controls, and zero console/page errors. Post-deploy Pages verification is required after push.
+
 ## 2026-08-18 — Overhaul tick: mobile HUD legibility pass
 
 ### Implemented

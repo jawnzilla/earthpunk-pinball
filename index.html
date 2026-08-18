@@ -511,10 +511,12 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     progressTrack.setAttribute('aria-valuenow', String(progress));
     stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${state.immortal || index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
     stabilityPips.setAttribute('aria-label', state.immortal ? 'Infinite stability enabled' : `${state.stability} of ${state.stabilityMax} stability remaining`);
-    const hingeParts = ['left', 'right'].map(side => `<span class="status-chip">${side.toUpperCase()}:${state.hingeElements[side] ? `${state.hingeElements[side]} ${state.hingeLevels[side]}` : '—'}</span>`).join('');
-    const imprintParts = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `<span class="status-chip imprint">${element.toUpperCase()} ${effect.stacks}/3</span>`).join('');
-    const bossStatus = state.boss.active ? `<span class="status-chip imprint">WARDEN ${state.boss.hp}/${state.boss.maxHp}</span>` : '';
-    elementStatus.innerHTML = `${hingeParts}${imprintParts || '<span class="status-chip">NO IMPRINT</span>'}${bossStatus}`;
+    const hingeParts = ['left', 'right'].filter(side => state.hingeElements[side]).map(side => `<span class="status-chip" title="${side} hinge: ${state.hingeElements[side]} stack ${state.hingeLevels[side]}">${side[0].toUpperCase()} ${displayElement(state.hingeElements[side]).toUpperCase()} ${state.hingeLevels[side]}</span>`).join('');
+    const imprintParts = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `<span class="status-chip imprint" title="Active ${displayElement(element)} imprint, ${effect.stacks} of 3 stacks">${displayElement(element).toUpperCase()} ${effect.stacks}</span>`).join('');
+    const bossStatus = state.boss.active ? `<span class="status-chip imprint" title="Warden armor integrity">WARDEN ${state.boss.hp}/${state.boss.maxHp}</span>` : '';
+    const statusMarkup = `${hingeParts}${imprintParts}${bossStatus}` || '<span class="status-chip">READY</span>';
+    elementStatus.setAttribute('aria-label', statusMarkup.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+    elementStatus.innerHTML = statusMarkup;
     renderRouteStrip();
     debugToggle.hidden = state.running || !debugEnabled;
     if (state.running) debugPanel.hidden = true;
