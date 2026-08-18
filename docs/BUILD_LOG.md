@@ -12,7 +12,8 @@
 
 - `npm test`: 11 tests passed, 0 failures.
 - `git diff --check`: passed.
-- Exact hosted browser verification and Pages deployment are pending for this commit; no result is claimed yet.
+- GitHub Pages run `32190968685` completed successfully for commit `b01c603`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32190968685.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=b01c603` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture marker, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, deployed target-shadow helper and live draw call markers, and zero console/page/request errors.
 
 ### Decision / next gate
 

@@ -2,7 +2,7 @@
 
 ## Overhaul tick 54 verdict
 
-**Playable hackathon slice: PASS pending hosted verification for target contact separation. AAA-ready: FAIL / unverified.** Target shadows now have an explicit two-pass pedestal treatment: a compact contact core and a softer offset falloff. This is a narrow renderer correction, not a full visual verdict.
+**Playable hackathon slice: PASS for hosted target contact separation. AAA-ready: FAIL / unverified.** Target shadows now have an explicit two-pass pedestal treatment: a compact contact core and a softer offset falloff. This is a narrow renderer correction, not a full visual verdict.
 
 ### Observed evidence
 
@@ -12,7 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Pages deployment and exact hosted 320×568 / 390×844 checks are pending for this commit.
+- GitHub Pages run `32190968685` completed successfully for commit `b01c603`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32190968685.
+- Hosted exact browser checks at 320×568 and 390×844 returned HTTP 200, complete documents, exact widths/no overflow, Canvas, `depth` marker, hidden overlay, expected grayscale filter, target-shadow helper/call markers, and zero console/page/request errors.
 - Pixel inspection must confirm the second falloff reads as contact depth rather than muddying the target row. Do not add another shadow/glow layer until that evidence exists.
 - AAA-ready remains unsupported.
 
