@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 27 verdict
+
+**Playable hackathon slice: PASS for bounded mobile HUD legibility implementation. AAA-ready: FAIL.** Persistent HUD and flipper labels were below a comfortable small-screen reading target; this CSS-only pass raises them without changing playfield geometry or mechanics.
+
+### Observed evidence
+
+- `.hud-label` is now 11px (was 10px); `.touch-label` is now 9px (was 7px) with slightly reduced tracking to preserve the same single-line labels.
+- `npm test` passes all 5 deterministic tests and `git diff --check` passes.
+- Hosted screenshots were captured at exact 320×568, 360×844, and 390×844 before the change. Automated luminance ranges are broad, but do not prove aesthetic success.
+
+### Remaining risk / next smallest slice
+
+- Post-change local browser verification was blocked by `ERR_EMPTY_RESPONSE` from the runner's local HTTP port, so the change still needs the hosted deployment gate.
+- The largest unresolved visual gap remains human inspection of the captured silhouettes, materials, and upgrade overlay at true portrait widths. Do not claim AAA readiness from automated checks.
+
 ## Overhaul tick 26 verdict
 
 **Playable hackathon slice: PASS for bounded silhouette readability implementation. AAA-ready: FAIL.** The primary probe and destructible mine families now have a grayscale-safe nested rim cue. This is a renderer-only correction aimed at the measured 320px-table risk, not visual completion.
