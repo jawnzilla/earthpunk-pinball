@@ -12,7 +12,8 @@ import {
   advanceFlipperMotor,
   impactEnergyFromMassSpeed,
   materialHardness,
-  applyImpulse
+  applyImpulse,
+  calibrateContactResponse
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -56,6 +57,15 @@ assert.equal(MATERIALS.steel.restitution < 1, true);
 assert.equal(FIXED_DT, 1 / 120);
 assert.equal(impactEnergyFromMassSpeed(.012, 10), .6);
 assert.equal(materialHardness('timber'), MATERIALS.timber.hardness);
+
+{
+  const samples = calibrateContactResponse({ speeds: [1, 2, 3] });
+  assert.deepEqual(samples.map(sample => sample.incomingSpeed), [1, 2, 3]);
+  assert.ok(samples.every(sample => sample.impactSpeed === sample.incomingSpeed));
+  assert.ok(samples.every(sample => Math.abs(sample.responseRatio - MATERIALS.steel.restitution) < 1e-9));
+  assert.ok(samples[0].outgoingSpeed < samples[1].outgoingSpeed);
+  assert.ok(samples[1].outgoingSpeed < samples[2].outgoingSpeed);
+}
 
 {
   const light = createBall({ mass: 1 });

@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: stationary contact calibration seam
+
+### Implemented
+
+- Added renderer-independent `calibrateContactResponse()` to the Physics V2 core. It samples controlled incoming speeds against a stationary material surface and reports outgoing speed, response ratio, impact speed, and impulse magnitude.
+- Added deterministic regression coverage across 1–3 m/s steel-ball-to-rubber contacts. The probe confirms the current response ratio is the material-combined restitution (`0.62`) and scales linearly with incoming speed.
+- No player-facing constants, flipper geometry, collision behavior, input, or renderer behavior changed; this is a measurement slice before any tuning decision.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures.
+- `node --check src/physics-core.js` and `git diff --check` passed.
+- Direct calibration output for 1–5 m/s returned response ratio `0.6200000000000001` and monotonic outgoing speeds `0.62, 1.24, 1.86, 2.48, 3.10` m/s.
+- Browser and GitHub Pages verification remain pending until this commit is pushed.
+
+### Decision / next gate
+
+- The stationary solver is internally consistent; it does not explain the live flipper fixture's negative pixel-speed delta because that path includes moving-surface velocity, tangential friction, and contact geometry. Do not retune restitution from this probe alone.
+- Next physics slice should add a controlled moving-surface calibration case matching flipper normal/tangent response, then change at most one solver property only if that evidence isolates a defect.
+
 ## 2026-08-18 — Overhaul tick: hosted repeatable flipper-contact capture
 
 ### Implemented

@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 37
 
+## Overhaul tick 38 verdict
+
+**Playable hackathon slice: PASS for stationary contact calibration. AAA-ready: FAIL.** The Physics V2 core now has a deterministic probe for separating baseline restitution behavior from flipper geometry and motor motion. This is instrumentation, not a gameplay tuning change or visual-completion claim.
+
+### Observed evidence
+
+- `calibrateContactResponse()` samples controlled 1–3 m/s steel-ball-to-rubber contacts against a stationary surface and reports impact speed, outgoing speed, response ratio, and impulse magnitude.
+- The regression probe confirms a stable combined restitution ratio of `0.62` with monotonic outgoing speed; the full suite passes 9 tests.
+- No player-facing physics constants, renderer, input, progression, or assets changed.
+
+### Remaining risk / next smallest slice
+
+- This stationary case cannot explain the hosted flipper fixture's `μΔ -81px/s`; the live path adds moving surface velocity, tangential friction, and swept/contact geometry. Changing restitution now would be guesswork.
+- Browser and Pages evidence is pending for this commit. After deployment, run the exact 320×568 and 390×844 hosted checks, then add one moving-surface calibration case before tuning a single solver property.
+
 ## Overhaul tick 37 verdict
 
 **Playable hackathon slice: PASS for repeatable hosted flipper telemetry capture. AAA-ready: FAIL.** A review-only fixture now makes the real flipper response path observable at the required portrait widths. The resulting negative mean speed delta is useful tuning evidence, not a claim that launch feel is correct or that the overhaul is complete.

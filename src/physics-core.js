@@ -121,6 +121,40 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
   return result;
 }
 
+// Renderer-independent calibration seam for contact tuning. Speeds are in m/s
+// and are sampled against a stationary surface so solver changes can be
+// distinguished from flipper geometry or motor velocity.
+export function calibrateContactResponse({
+  speeds = [1, 2, 3],
+  ballMaterial = 'steel',
+  surfaceMaterial = 'rubber',
+  normal = { x: 0, y: -1 },
+  surfaceVelocity = { x: 0, y: 0 },
+  restitution = null
+} = {}) {
+  return speeds
+    .filter(speed => Number.isFinite(speed) && speed > 0)
+    .map(incomingSpeed => {
+      const ball = createBall({ vx: 0, vy: incomingSpeed, material: ballMaterial });
+      const contact = resolveContact({
+        ball,
+        surface: { material: surfaceMaterial, inverseMass: 0 },
+        point: { x: 0, y: 0 },
+        normal,
+        surfaceVelocity,
+        restitution
+      });
+      const outgoingSpeed = magnitude(subtract(ball.velocity, surfaceVelocity));
+      return {
+        incomingSpeed,
+        outgoingSpeed,
+        responseRatio: outgoingSpeed / incomingSpeed,
+        impactSpeed: contact.impactSpeed,
+        impulseMagnitude: magnitude(contact.impulse)
+      };
+    });
+}
+
 export function damageFromContact(contact, { objectMaterial = 'timber', damageScale = 1, threshold = 1.2, weaknesses = {}, elementEffects = {} } = {}) {
   if (!contact?.hit || contact.separating || contact.impactSpeed < threshold) return 0;
   const material = MATERIALS[objectMaterial] ?? MATERIALS.timber;
