@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: active-element HUD chip slice
+
+### Implemented
+
+- Added a compact production-rendered active-element chip layer to the portrait table HUD. It shows at most two live Fire/Water/Earth/Wind effects with authored symbols and stack counts (`0–3`), using the existing world palette rather than persistent developer prose.
+- Chips are drawn from the ball's authoritative `elementEffects` state and share the existing element canonicalization path; no gameplay, physics, progression, or input behavior changed.
+- Added renderer-contract coverage for the two-chip cap, helper, and live draw call.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- `git diff --check`: passed; `node --check` passed for the physics modules.
+- Exact local Playwright at 320×568 and 390×844 was attempted but remains blocked by the runner's existing `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser pass is claimed.
+- Hosted verification and GitHub Pages deployment are pending this commit.
+
+### Decision / next gate
+
+- This is one bounded HUD hierarchy slice aligned to the canon's active-effects requirement. After hosted verification, inspect the live chip state and touch-sized layout before further HUD decoration.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: hosted depth audit and evidence refresh
 
 ### Implemented

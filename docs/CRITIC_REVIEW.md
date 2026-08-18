@@ -2,6 +2,23 @@
 
 ## Overhaul tick 56 verdict
 
+**Playable hackathon slice: PASS for bounded active-effect HUD readability. AAA-ready: FAIL / unverified.** The production table now reserves two compact, world-palette chips for live elemental state instead of relying only on transient messages and canvas effects.
+
+### Observed evidence
+
+- `drawActiveElementChips()` reads the ball's live `elementEffects`, canonicalizes Air/Wind, and caps the rendered set at two effects.
+- Each chip includes a non-color symbol, element label, and clamped `0–3` stack count; renderer-contract coverage asserts the helper, cap, and live call.
+- `npm test` passes 11 tests; whitespace and module syntax checks pass.
+- The local exact Playwright attempt at 320×568 and 390×844 hit the known `ERR_EMPTY_RESPONSE` runner failure; no local browser pass is claimed.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages verification is still pending this commit. The exact hosted check must confirm no overflow, no console/page/request errors, and the chip layer must be exercised with a live elemental state rather than inferred from source alone.
+- Pixel inspection remains required for hierarchy: chips must stay subordinate to the objective cue and not collide with the top rail at 320px CSS width.
+- AAA-ready remains unsupported.
+
+## Overhaul tick 55 verdict
+
 **Playable hackathon slice: PASS for hosted depth-fixture health. AAA-ready: FAIL / unverified.** This tick deliberately made no product-code change: it refreshed exact browser evidence and preserved the ban on adding another shadow layer without pixel inspection.
 
 ### Observed evidence
