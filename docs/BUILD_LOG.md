@@ -11,7 +11,8 @@
 
 - `npm test`: 5 deterministic tests passed, 0 failures.
 - Extracted inline module `node --check` passed; `git diff --check` passed.
-- Exact hosted 320×568 / 390×844 browser verification and grayscale screenshot audit are required after deployment; no hosted result is claimed before that run.
+- Hosted exact Playwright checks passed at 320×568, 360×844, and 390×844 after deployment: document complete, `RUN 1/4 · READY`, Canvas present, two 52px touch controls, `scrollWidth === innerWidth`, and zero console/page/request errors. Served HTML contains both silhouette markers. Pages run `32131702007` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32131702007.
+- A screenshot capture/aesthetic grayscale inspection remains outstanding in this tick; automated runtime evidence does not substitute for human visual judgment.
 
 ## 2026-08-18 — Overhaul tick: hosted grayscale/depth audit
 

@@ -12,8 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted exact browser checks and post-deploy grayscale screenshots are still required; no visual improvement is claimed as screenshot-verified yet.
-- Next step is evidence collection at true 320×568, 360×844, and 390×844 CSS viewports. If the cue is too heavy or still insufficient, target only the largest measured silhouette failure.
+- Hosted exact Playwright checks passed at true 320×568, 360×844, and 390×844 CSS viewports: `RUN 1/4 · READY`, Canvas, two 52px controls, no horizontal overflow, and zero console/page/request errors. Served HTML contains both silhouette markers. Pages run `32131702007` completed success.
+- Aesthetic grayscale screenshot inspection remains outstanding; automated geometry/runtime checks cannot prove that the new cue is neither too heavy nor insufficient. Next step is screenshot evidence only, targeting the largest measured silhouette failure.
 
 ## Overhaul tick 25 verdict
 
