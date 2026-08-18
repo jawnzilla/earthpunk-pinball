@@ -1153,11 +1153,25 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     }
     ctx.restore();
   }
+  function drawDestructibleContactShadow(item) {
+    const radius = item.r || 16;
+    ctx.save();
+    ctx.globalAlpha = item.destroyed ? .24 : .34;
+    ctx.fillStyle = '#050806';
+    ctx.beginPath();
+    ctx.ellipse(3, radius * .62, radius * 1.05, radius * .3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = item.destroyed ? .08 : .14;
+    ctx.beginPath();
+    ctx.ellipse(4, radius * .76, radius * 1.22, radius * .38, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
       ctx.save(); ctx.translate(item.x, item.y); ctx.globalAlpha = item.destroyed ? .72 : 1;
-      ctx.fillStyle = 'rgba(0,0,0,.42)'; ctx.beginPath(); ctx.ellipse(3, item.r * .62, item.r * 1.05, item.r * .3, 0, 0, Math.PI * 2); ctx.fill();
+      drawDestructibleContactShadow(item);
       if (item.destroyed) {
         ctx.fillStyle = item.kind === 'crate' ? '#5b3d29' : item.kind === 'pipe' ? '#3e4a47' : '#51483d'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3;
         for (let index = 0; index < 3; index += 1) { ctx.save(); ctx.rotate((index - 1) * .45); ctx.fillRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.strokeRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.restore(); }

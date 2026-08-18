@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+assert.match(source, /function drawDestructibleContactShadow\(item\)/);
+assert.match(source, /item\.destroyed \? \.24 : \.34/);
+assert.match(source, /item\.destroyed \? \.08 : \.14/);
+assert.match(source, /drawDestructibleContactShadow\(item\);/);
 assert.match(source, /function drawTargetContactShadow\(target\)/);
 assert.match(source, /ctx\.globalAlpha = \.32/);
 assert.match(source, /ctx\.ellipse\(3, radius \* \.72, radius \* 1\.08, radius \* \.3/);
