@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-17 — Overhaul tick: Water mini-ball reduced-mask contact slice
+
+### Implemented
+
+- Added a renderer-independent `onMiniBallContact()` response path for Water stack-3 mini-balls: normalized contact normals reflect velocity with bounded restitution, separating contacts do not consume budget, and duplicate contact keys are ignored within a fixed step.
+- Routed the live mini-ball runtime through the existing fixed-step elemental update and a deliberately reduced table adapter mask covering only the table's left wall, right wall, and top wall. Mini-balls remain excluded from scoring, flippers, route chutes, boss progression, and primary-ball elemental spawning.
+- Preserved the canon two-ball, three-valid-bounce, 1.25-second lifetime budget and existing presentation.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `git diff --check` passes.
+- `src/elemental-effects.js` imports successfully as an ES module.
+- Hosted Pages endpoint was checked before this change and returned HTTP 200; post-push deployment verification is recorded below after the commit.
+
 ## 2026-08-18 — Overhaul tick: bounded hybrid consequence slice
 
 ### Implemented

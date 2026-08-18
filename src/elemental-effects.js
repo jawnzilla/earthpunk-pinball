@@ -58,9 +58,11 @@ function advanceFireTrail(runtime, effects, dt, events) {
   runtime.fireTrail = runtime.fireTrail.filter(segment => segment.age < ELEMENTAL_BUDGETS.fire.lifetime);
 }
 
-function advanceMiniBalls(runtime, dt, integrateBodies) {
+function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
   runtime.miniBalls.forEach(ball => {
+    ball.contactKeys = new Set();
     if (integrateBodies) { ball.x += ball.vx * dt; ball.y += ball.vy * dt; }
+    if (contactResolver) contactResolver(ball);
     ball.distance += magnitude({ x: ball.vx, y: ball.vy }) * dt;
     ball.lifetime -= dt;
   });
@@ -82,12 +84,12 @@ function advanceEarthLink(runtime, dt) {
   if (runtime.earthLink.lifetime <= 0) runtime.earthLink = null;
 }
 
-export function advanceElementalRuntime(runtime, { effects = {}, position, velocity = { x: 0, y: 0 }, dt = 0, integrateBodies = true } = {}) {
+export function advanceElementalRuntime(runtime, { effects = {}, position, velocity = { x: 0, y: 0 }, dt = 0, integrateBodies = true, miniBallContactResolver = null } = {}) {
   const safeDt = Math.max(0, Number.isFinite(dt) ? dt : 0);
   const events = [];
   addFireTrail(runtime, effects, position);
   advanceFireTrail(runtime, effects, safeDt, events);
-  advanceMiniBalls(runtime, safeDt, integrateBodies);
+  advanceMiniBalls(runtime, safeDt, integrateBodies, miniBallContactResolver);
   advanceWindEcho(runtime, safeDt, integrateBodies);
   advanceEarthLink(runtime, safeDt);
   return events;
@@ -120,6 +122,26 @@ export function onMiniBallBounce(runtime, id) {
   ball.bouncesRemaining -= 1;
   if (ball.bouncesRemaining <= 0) runtime.miniBalls = runtime.miniBalls.filter(item => item.id !== id);
   return ball;
+}
+
+// Reduced-mask response: the table adapter owns broad-phase detection while
+// this module owns deterministic reflection and the three-bounce budget.
+export function onMiniBallContact(runtime, id, { normal = { x: 0, y: 0 }, contactKey = 'contact', restitution = .72 } = {}) {
+  const ball = runtime.miniBalls.find(item => item.id === id);
+  if (!ball || !Number.isFinite(normal.x) || !Number.isFinite(normal.y)) return null;
+  if (!ball.contactKeys) ball.contactKeys = new Set();
+  if (ball.contactKeys.has(contactKey)) return null;
+  ball.contactKeys.add(contactKey);
+  const length = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / length, ny = normal.y / length;
+  const approach = ball.vx * nx + ball.vy * ny;
+  if (approach >= 0) return { type: 'mini-ball-separating-contact', id: ball.id, counted: false };
+  ball.vx -= (1 + restitution) * approach * nx;
+  ball.vy -= (1 + restitution) * approach * ny;
+  const bounced = onMiniBallBounce(runtime, id);
+  return bounced
+    ? { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: bounced.bouncesRemaining }
+    : { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: 0 };
 }
 
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {

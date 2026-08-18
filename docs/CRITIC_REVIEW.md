@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 05 verdict
+
+**Playable hackathon slice: PASS for the bounded physics seam. AAA-ready: FAIL.** Water split mini-balls now have deterministic reduced-mask wall contacts rather than purely kinematic motion. The contact path is intentionally narrow: it covers table boundary reflection and bounce budgeting, not the full primary-ball gameplay graph. The larger overhaul remains incomplete because destructible contact participation, wind echo shared-solver parity, physical-device feel, and the mine/tunnel visual/material bar still need evidence.
+
+### Observed evidence
+
+- `onMiniBallContact()` reflects only approaching contacts, ignores duplicate contact keys within a fixed step, and consumes exactly one of the three bounce credits on a valid contact.
+- The live adapter invokes the contact path during `advanceElementalRuntime()` and clamps wall penetration after a counted response.
+- Deterministic test coverage now asserts reflection, separating-contact non-consumption, and duplicate-contact suppression.
+
+### Remaining risk / next smallest slice
+
+- Mini-balls still do not contact destructible objects; adding that requires a reduced object-mask adapter with explicit no-score/no-chain semantics.
+- The full browser interaction path still needs exact 320x568 and 390x844 runtime evidence after deployment; no screenshot or console claim is made here without that run.
+
 ## Verdict
 
 **Playable hackathon slice: CONDITIONAL PASS. AAA-ready: FAIL.** This tick gives the elemental hybrids their first bounded world consequence: Steam Fracture amplifies the next destructible integrity loss, while the other hybrid pairs now have deterministic one-shot runtime events. The overhaul is not complete: the new runtime gate still needs a clean post-resource-exhaustion test run, mini-balls/echoes are rendered but not yet full shared-solver bodies, and physical-device feel remains unverified.

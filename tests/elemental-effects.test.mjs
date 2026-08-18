@@ -6,6 +6,7 @@ import {
   createElementalRuntime,
   onHardBounce,
   onMiniBallBounce,
+  onMiniBallContact,
   onStructureContact
 } from '../src/elemental-effects.mjs';
 
@@ -50,6 +51,21 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.equal(onMiniBallBounce(runtime, runtime.miniBalls[0].id).bouncesRemaining, 2);
   advanceElementalRuntime(runtime, { effects: waterEffects, position: { x: 10, y: 20 }, velocity: { x: 0, y: 0 }, dt: 1.25 });
   assert.equal(runtime.miniBalls.length, 0);
+}
+
+{
+  const runtime = createElementalRuntime();
+  const waterEffects = effects('Water', 3);
+  onHardBounce(runtime, { effects: waterEffects, position: { x: 10, y: 20 }, velocity: { x: -120, y: 0 }, impactSpeed: 2.1 });
+  const ball = runtime.miniBalls[0];
+  const first = onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'left-wall' });
+  assert.equal(first.counted, true);
+  assert.equal(ball.bouncesRemaining, 2);
+  assert.ok(ball.vx > 0);
+  assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'left-wall' }), null);
+  ball.vx = 120;
+  assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'separating' }).counted, false);
+  assert.equal(ball.bouncesRemaining, 2);
 }
 
 {
