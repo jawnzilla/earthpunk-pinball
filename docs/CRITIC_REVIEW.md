@@ -11,8 +11,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages verification and actual pixel inspection of the frozen captures remain outstanding for this tick.
-- The largest remaining visual gap is still measured grayscale hierarchy across the complete portrait table: a fixture can expose a collision, but cannot certify that the hierarchy is convincing.
+- GitHub Pages run `32185549265` completed successfully for commit `3fc866c`. Hosted exact Playwright at 320×568 and 390×844 against `?review=depth` returned HTTP 200, exact widths with no overflow, Canvas, the `depth` marker, hidden overlay, the expected grayscale filter, and zero console/page/request errors; captures are outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-depth-320.png` and `earthpunk-depth-390.png`.
+- Actual pixel inspection of the frozen captures remains the visual-direction gate. The largest remaining visual gap is still measured grayscale hierarchy across the complete portrait table: a fixture can expose a collision, but cannot certify that the hierarchy is convincing.
 - AAA-ready remains unsupported.
 
 ## Overhaul tick 50 verdict

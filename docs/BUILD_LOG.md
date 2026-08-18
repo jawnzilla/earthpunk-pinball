@@ -16,7 +16,8 @@
 ### Decision / next gate
 
 - The frozen frame makes plane ordering and contact-shadow inspection repeatable without motion blur; it does not prove the visual bar by itself.
-- Re-run this fixture on hosted Pages and inspect the captured grayscale values before changing another renderer layer. AAA-ready remains unsupported.
+- GitHub Pages run `32185549265` completed successfully for commit `3fc866c`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32185549265. Hosted exact Playwright at 320×568 and 390×844 against `?review=depth` returned HTTP 200, complete documents, exact CSS widths, Canvas, fixture marker `depth`, hidden overlay, the expected grayscale filter, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-depth-320.png` and `earthpunk-depth-390.png`.
+- The frozen frame is now hosted-verifiable; pixel inspection is still a human visual-direction gate, not inferred from the fixture marker. AAA-ready remains unsupported.
 
 ## 2026-08-18 — Overhaul tick: separate the authored well from gameplay silhouettes
 
