@@ -12,7 +12,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages is stale until this commit is pushed and the Pages workflow completes; hosted verification is still required.
+- Hosted Pages exact 320x568, 360x844, and 390x844 Chromium checks pass after deployment: HTTP 200, Canvas present, active `RUN 1/4 · READY`, 52px controls, matching document widths, and zero console/page errors. Workflow run `32121285373` completed success.
 - The visual bar still needs a true grayscale screenshot audit and physical-device feel test; authored sprites and procedural fallbacks may not read identically at small sizes.
 - Next bounded slice: post-deploy grayscale/depth audit at 320/360/390 CSS widths and target only the largest measured readability failure. Do not add mechanics in that pass.
 

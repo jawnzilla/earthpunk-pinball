@@ -13,7 +13,7 @@
 - `node --check src/physics-core.js` and `node --check src/elemental-effects.js` pass.
 - `git diff --check` passes.
 - Local Chromium exact 320x568, 360x844, and 390x844 checks pass: Canvas present, `Enter descent` transitions to `RUN 1/4 · READY`, 52px touch controls, matching document widths, and zero console/page errors.
-- Hosted Pages verification is required after push.
+- Hosted Pages exact 320x568, 360x844, and 390x844 Chromium checks pass after deployment: HTTP 200, Canvas present, `Enter descent` transitions to `RUN 1/4 · READY`, 52px touch controls, matching document widths, and zero console/page errors. GitHub Actions run `32121285373` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32121285373.
 
 ## 2026-08-18 — Overhaul tick: relay-gate contact-light pass
 
