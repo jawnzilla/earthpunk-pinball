@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: material-aware mini-ball damage adapter
+
+### Implemented
+
+- Extracted reduced Water mini-ball destructible damage policy into renderer-independent `resolveMiniBallStructureDamage()` in `src/elemental-effects.js`.
+- The adapter now applies impact threshold, impact energy, object-material hardness, elemental weakness, damage scale, and the existing 22% max-integrity cap without entering score, Charge, target, or chain systems.
+- Added deterministic coverage for below-threshold contacts, timber/stone material response, weakness scaling, and the hard damage cap.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` passes.
+- `git diff --check` passes.
+- Local Playwright Chromium smoke passes at exact 320x568 and 390x844: canvas and both touch controls present, CSS/document widths match, and zero console/page errors.
+- Hosted Pages verification remains pending until the push/deployment completes.
+
 ## 2026-08-18 — Overhaul tick: Water mini-ball destructible contact slice
 
 ### Implemented

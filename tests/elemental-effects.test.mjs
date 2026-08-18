@@ -8,7 +8,8 @@ import {
   onMiniBallBounce,
   onMiniBallContact,
   onMiniBallStructureContact,
-  onStructureContact
+  onStructureContact,
+  resolveMiniBallStructureDamage
 } from '../src/elemental-effects.mjs';
 
 const effects = (element, stacks) => ({ [element]: { stacks, timer: 360 } });
@@ -79,6 +80,19 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.ok(hit.impactSpeed > 80);
   assert.equal(ball.bouncesRemaining, 2);
   assert.equal(onMiniBallStructureContact(runtime, ball.id, { objectId: 'timber-crate', normal: { x: 1, y: 0 } }), null);
+}
+
+{
+  const below = resolveMiniBallStructureDamage({ impactSpeed: 1.1, impactEnergy: 10, threshold: 1.2, maxIntegrity: 20, damageScale: 10, objectMaterial: 'timber' });
+  assert.equal(below.damage, 0);
+  const timber = resolveMiniBallStructureDamage({ impactSpeed: 3, impactEnergy: 20, threshold: 1.2, maxIntegrity: 100, damageScale: 1, objectMaterial: 'timber', elementEffects: { Water: { stacks: 3 } }, weaknesses: { Water: .8 } });
+  const stone = resolveMiniBallStructureDamage({ impactSpeed: 3, impactEnergy: 20, threshold: 1.2, maxIntegrity: 100, damageScale: 1, objectMaterial: 'stone' });
+  assert.ok(timber.materialFactor > stone.materialFactor);
+  assert.ok(timber.damage < 22);
+  const capped = resolveMiniBallStructureDamage({ impactSpeed: 100, impactEnergy: 1e9, threshold: 1, maxIntegrity: 10, damageScale: 100, objectMaterial: 'timber' });
+  assert.equal(capped.damage, 2.2);
+  const weakness = resolveMiniBallStructureDamage({ impactSpeed: 3, impactEnergy: 20, threshold: 1.2, maxIntegrity: 100, damageScale: 1, objectMaterial: 'copper', elementEffects: { Water: { stacks: 3 } }, weaknesses: { Water: 2 } });
+  assert.equal(weakness.elementFactor, 2.5);
 }
 
 {

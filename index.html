@@ -312,7 +312,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
-import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact } from './src/elemental-effects.js';
+import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, resolveMiniBallStructureDamage } from './src/elemental-effects.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -565,7 +565,8 @@ import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime
         const length = Math.hypot(dx, dy) || 1;
         const response = onMiniBallStructureContact(ball.elementalRuntime, miniBall.id, { objectId: item.id, position: { x: item.x, y: item.y }, normal: { x: dx / length, y: dy / length }, contactKey: 'destructible' });
         if (!response?.counted || response.impactSpeed < item.threshold) return;
-        const damage = Math.min(item.maxIntegrity * .22, response.impactEnergy * .06 * (item.damageScale || 1));
+        const damageResult = resolveMiniBallStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects });
+        const damage = damageResult.damage;
         if (damage <= 0) return;
         item.integrity = Math.max(0, item.integrity - damage);
         item.damageCooldown = 8;

@@ -2,6 +2,7 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const magnitude = vector => Math.hypot(vector.x, vector.y);
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const cross = (a, b) => a.x * b.y - a.y * b.x;
+const MINI_BALL_MATERIAL_HARDNESS = Object.freeze({ water: .05, timber: .42, copper: .72, stone: .88, steel: 1 });
 
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
@@ -154,6 +155,18 @@ export function onMiniBallStructureContact(runtime, id, { objectId, position = {
   if (!response?.counted) return response;
   const structure = onStructureContact(runtime, { objectId, position });
   return { ...response, type: 'mini-ball-structure-contact', objectId, impactSpeed, impactEnergy: .5 * ball.mass * impactSpeed ** 2, structure };
+}
+
+// Renderer-independent reduced-mask damage policy. Water fragments stay capped and reward-free.
+export function resolveMiniBallStructureDamage({ impactSpeed = 0, impactEnergy = 0, threshold = 1.2, maxIntegrity = 0, damageScale = 1, objectMaterial = 'timber', weaknesses = {}, elementEffects = {}, ballMaterial = 'water', damageCap = .22 } = {}) {
+  if (!Number.isFinite(impactSpeed) || !Number.isFinite(impactEnergy) || impactSpeed < threshold || maxIntegrity <= 0) return { damage: 0, materialFactor: 0, speedFactor: 0, elementFactor: 0 };
+  const objectHardness = MINI_BALL_MATERIAL_HARDNESS[objectMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.timber;
+  const ballHardness = MINI_BALL_MATERIAL_HARDNESS[ballMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.water;
+  const speedFactor = clamp(impactSpeed / Math.max(threshold, 1e-8), .25, 2.5);
+  const materialFactor = clamp(ballHardness / Math.max(objectHardness, 1e-8), .05, 2.5);
+  const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => factor * (1 + Math.max(0, effect?.stacks ?? 0) * ((weaknesses[element] ?? 1) - 1) * .5), 1);
+  const rawDamage = impactEnergy * damageScale * .06 * speedFactor * materialFactor * elementFactor;
+  return { damage: Math.min(maxIntegrity * damageCap, Math.max(0, rawDamage)), materialFactor, speedFactor, elementFactor };
 }
 
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {

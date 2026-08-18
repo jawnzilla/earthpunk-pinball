@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 07 verdict
+
+**Playable hackathon slice: PASS for the material-aware reduced-mask policy. AAA-ready: FAIL.** Mini-ball structure damage is now renderer-independent and explicitly responds to material hardness, impact threshold/energy, elemental weaknesses, and the existing per-hit cap. The larger visual mine/tunnel reset, shared Physics V2 parity for elemental bodies, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `resolveMiniBallStructureDamage()` is covered by deterministic tests for threshold rejection, material differentiation, weakness scaling, and the 22% integrity cap.
+- The browser adapter now consumes the policy result while retaining no-score/no-Chain/no-Reward semantics.
+- Local exact 320x568 and 390x844 browser checks report canvas/touch controls present, matching CSS/document widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- The mini-ball policy currently uses a reduced kinematic body and duplicated hardness constants rather than the full Physics V2 contact solver.
+- Hosted Pages must be checked after deployment.
+- Next bounded slice: apply the same reduced-mask contact/damage adapter to wind echoes, preserving their ignored-first-response and one-hit-per-object ledger.
+
 ## Overhaul tick 06 verdict
 
 **Playable hackathon slice: PASS for the bounded Water structure seam. AAA-ready: FAIL.** Water mini-balls now participate in a deliberately reduced destructible path: deterministic reflected contacts, impact-energy damage, integrity stages, and no score/charge/chain leakage. The larger visual mine/tunnel reset and shared-solver parity for wind echoes remain incomplete.
