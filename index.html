@@ -719,16 +719,23 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     const flipper = flippers.left;
     const segment = flipperEndpointsAt(flipper, flipper.angle);
     const tangent = { x: (segment.x2 - segment.x1) / flipper.length, y: (segment.y2 - segment.y1) / flipper.length };
+    // Put the probe on the ball-facing side and move it into the resting flipper.
+    // The old fixture injected the ball exactly at the closest point with an
+    // upward velocity, forcing the degenerate fallback normal and measuring a
+    // separating/resting contact rather than an active launch.
+    const fixtureNormal = { x: Math.sin(flipper.angle), y: -Math.cos(flipper.angle) };
     const contactPoint = { x: segment.x1 + tangent.x * flipper.length * .62, y: segment.y1 + tangent.y * flipper.length * .62 };
+    flipper.angularVelocity = -8;
     for (let sample = 0; sample < 4; sample += 1) {
-      state.ball.x = contactPoint.x;
-      state.ball.y = contactPoint.y;
+      state.ball.x = contactPoint.x + fixtureNormal.x * 12;
+      state.ball.y = contactPoint.y + fixtureNormal.y * 12;
       state.ball.vx = 32 + sample * 8;
-      state.ball.vy = -180 - sample * 18;
+      state.ball.vy = 180 + sample * 18;
       state.ball.prevX = state.ball.x;
       state.ball.prevY = state.ball.y;
       resolveFlipperCollision(state.ball, flipper, 'left', false);
     }
+    flipper.angularVelocity = 0;
     state.ball.x = W / 2;
     state.ball.y = H - 108;
     state.ball.prevX = state.ball.x;
