@@ -12,7 +12,7 @@
 
 - `npm test`: 11 tests passed, 0 failures; `node --check src/flipper-contact.js`; `git diff --check` passed.
 - Local exact Playwright at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas, and zero console/page/request errors.
-- Hosted exact Playwright at 320×568 and 390×844 against the current pre-deploy Pages build: HTTP 200, complete documents, exact CSS widths, Canvas, and zero console/page/request errors. The new helper is not yet expected in this pre-deploy artifact.
+- GitHub Pages run `32174365310` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32174365310. Hosted exact Playwright at 320×568 and 390×844 against commit `d6d4424`: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas, zero console/page/request errors, and `helperScript: true`. The opt-in fixture reports `FIXTURE N 4 · μΔ 388px/s · Δ 359…417` at both widths.
 
 ### Decision / next gate
 

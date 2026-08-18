@@ -9,7 +9,7 @@
 - `summarizeFlipperContactSources()` groups only explicitly sourced samples and delegates each bucket to the existing catch-excluding series report.
 - The developer readout now selects its current source through that bucket helper rather than recomputing a potentially mixed series.
 - `npm test` passes 11 tests; `node --check src/flipper-contact.js` and `git diff --check` pass.
-- Local and pre-deploy hosted exact Playwright checks at 320×568 and 390×844 report HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, and zero console/page/request errors.
+- GitHub Pages run `32174365310` completed successfully. Hosted exact Playwright at 320×568 and 390×844 against `d6d4424` reports HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, the shipped helper script, zero console/page/request errors, and fixture `FIXTURE N 4 · μΔ 388px/s · Δ 359…417`.
 
 ### Remaining risk / next smallest slice
 
