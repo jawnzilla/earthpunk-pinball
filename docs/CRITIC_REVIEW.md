@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 42
+# Deadlight Critic Review — Overhaul tick 49
+
+## Overhaul tick 49 verdict
+
+**Playable hackathon slice: PASS for repeatable value-only review. AAA-ready: FAIL.** The new opt-in grayscale fixture makes the production table inspectable without hue carrying the read. It is an evidence tool, not a visual completion claim.
+
+### Observed evidence
+
+- `?review=grayscale` starts the normal table renderer, hides the route overlay, marks `body.dataset.reviewFixture = 'grayscale'`, and applies only a canvas CSS filter.
+- Physics, input, progression, authored renderer colors, and damage behavior are untouched by the fixture.
+- Renderer-contract coverage asserts the query guard, marker, class, and boot hook.
+
+### Remaining risk / next smallest slice
+
+- Browser screenshot verification at exact 320×568 and 390×844, locally and on Pages, remains required for this tick.
+- The largest remaining visual gap is still unmeasured grayscale hierarchy across the complete portrait table; do not infer depth quality from the filter's presence.
+- After capture, make one renderer-only value hierarchy change if the evidence identifies a specific plane/object collision. AAA-ready remains unsupported.
+
 
 ## Overhaul tick 48 verdict
 

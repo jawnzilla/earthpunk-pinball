@@ -25,6 +25,11 @@ assert.match(source, /contactPoint\.x \+ fixtureNormal\.x \* 12/);
 assert.match(source, /review=flipper-contact/);
 assert.match(source, /activateFlipperContactReviewFixture\(\);/);
 assert.match(source, /activateDamagePulseReviewFixture\(\);/);
+assert.match(source, /function activateGrayscaleReviewFixture\(\)/);
+assert.match(source, /get\('review'\) !== 'grayscale'/);
+assert.match(source, /canvas\.classList\.add\('review-grayscale'\)/);
+assert.match(source, /dataset\.reviewFixture = 'grayscale'/);
+assert.match(source, /activateGrayscaleReviewFixture\(\);/);
 assert.ok(source.indexOf('syncPixelsFromPhysics(ball); ball.lastContact = contact; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact') >= 0,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);

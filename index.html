@@ -52,6 +52,8 @@
     .status-chip.imprint { color: #ffd083; }
     .table-wrap { min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; }
     canvas { width: min(100%, 420px); height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; border: 2px solid #38524e; border-radius: 18px; background: #182226; box-shadow: 0 0 0 5px #0c1012, 0 16px 50px rgba(0,0,0,.45); touch-action: none; }
+    /* Opt-in visual audit only; gameplay and authored palette remain unchanged. */
+    canvas.review-grayscale { filter: grayscale(1) contrast(1.08); }
     @media (min-height: 601px) {
       canvas { width: auto; max-height: calc(100dvh - 214px); }
     }
@@ -734,6 +736,21 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     document.body.dataset.reviewFixture = 'damage-pulse';
     updateHud();
   }
+  // Review-only fixture: puts the production table through a value-only pass.
+  // CSS filtering leaves physics and renderer colors untouched while making
+  // silhouette, depth planes, and contact-shadow failures easy to audit.
+  function activateGrayscaleReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'grayscale') return;
+    state.running = true;
+    state.message = 'Review fixture · grayscale value audit.';
+    routeMapPanel.hidden = true;
+    routePreviewSlot.hidden = true;
+    overlay.hidden = true;
+    debugToggle.hidden = true;
+    canvas.classList.add('review-grayscale');
+    document.body.dataset.reviewFixture = 'grayscale';
+    updateHud();
+  }
   // Review-only fixture: exercises the production flipper response path with
   // repeatable contacts so the hosted tuning readout can be inspected.
   function activateFlipperContactReviewFixture() {
@@ -1359,7 +1376,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
 })();
 </script>
 </body>

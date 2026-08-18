@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: add an opt-in grayscale value audit
+
+### Implemented
+
+- Added `?review=grayscale`, a review-only fixture that starts the production table without the route overlay and applies `grayscale(1) contrast(1.08)` to the live canvas.
+- The fixture does not alter physics, authored renderer colors, input, progression, or runtime state transitions; it exists to expose silhouette, depth-plane, and contact-shadow failures in value-only review.
+- Added renderer-contract coverage for the fixture query, marker, canvas class, and boot hook.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, fixture marker `grayscale`, route overlay hidden, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-grayscale-320.png` and `earthpunk-grayscale-390.png`.
+- Hosted exact checks remain required after Pages deployment.
+
+### Decision / next gate
+
+- This is the smallest safe visual-direction slice after the damaged-object fixture: it makes grayscale inspection repeatable without mistaking a color pass for depth/readability.
+- Do not claim AAA readiness from this fixture. Next gate is pixel/screenshot inspection of the hosted grayscale table and a concrete value-hierarchy decision.
+
+
 ## 2026-08-18 — Overhaul tick: add a real damaged-object visual review fixture
 
 ### Implemented
