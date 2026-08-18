@@ -14,7 +14,7 @@
 - `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
 - `git diff --check` passes (only Git's LF/CRLF normalization warnings).
 - Local exact 320x568 and 390x844 Playwright Chromium checks pass: canvas/touch controls present, `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors.
-- Hosted Pages verification and deployment run are pending this tick's push.
+- Hosted Pages exact 320x568 and 390x844 Playwright Chromium checks pass after deployment: canvas/touch controls present, `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors. GitHub Actions run `32104750883` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32104750883.
 
 ## 2026-08-18 — Overhaul tick: shared elemental impact primitives
 
@@ -31,7 +31,7 @@
 - `node --check src/physics-core.js` and `node --check src/elemental-effects.js` pass.
 - `git diff --check` passes (only Git's LF/CRLF normalization warnings).
 - Local exact 320x568 and 390x844 Playwright Chromium checks pass: initial canvas/touch controls present, active `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors.
-- Hosted Pages verification and deployment run are pending this tick's push.
+- Hosted Pages exact 320x568 and 390x844 Playwright Chromium checks pass after deployment: canvas/touch controls present, `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors. GitHub Actions run `32104750883` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32104750883.
 
 ## 2026-08-18 — Overhaul tick: wind-echo material-aware structure seam
 

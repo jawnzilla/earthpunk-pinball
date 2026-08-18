@@ -12,7 +12,7 @@
 ### Remaining risk / next smallest slice
 
 - The table adapter still owns reduced broad-phase geometry and pixel-space integration for elemental bodies; this is a solver seam, not full shared fixed-step body integration.
-- Hosted Pages must be re-verified after the push.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment; workflow run `32104750883` completed success.
 - Next bounded slice: migrate elemental integration to shared fixed-step body integration while preserving current lifetime, distance, contact-key, and bounce ledgers.
 
 ## Overhaul tick 09 verdict
