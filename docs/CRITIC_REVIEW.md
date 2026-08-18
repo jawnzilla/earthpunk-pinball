@@ -12,7 +12,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages must be re-verified after this push.
+- Hosted Pages exact Playwright checks pass after deployment: HTTP 200, deployed `src/flipper-contact.js` marker present, Canvas, active `RUN 1/4`, 52px controls, matching widths, and zero page/console/request errors at 320x568 and 390x844. Workflow run `32125124543` completed success.
 - The query remains a sampled approximation over three flipper poses and does not yet represent a continuous swept capsule or full primary-ball collision test seam.
 - Next bounded slice: deploy and capture grayscale/depth evidence, or add a focused continuous flipper-contact refinement only if gameplay telemetry demonstrates sampled misses; do not broaden mechanics and visuals together.
 

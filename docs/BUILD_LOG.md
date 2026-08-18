@@ -13,7 +13,7 @@
 - `node --test tests/*.test.mjs`: 5 tests passed, 0 failures.
 - `node --check src/flipper-contact.js` and direct module import passed.
 - Local exact Playwright checks passed at 320x568 and 390x844: HTTP 200, canvas present, `RUN 1/4`, 52px controls, `scrollWidth === innerWidth`, and zero page/console/request errors.
-- Hosted Pages verification and deployment workflow result are pending this push.
+- Hosted Pages exact Playwright checks passed after deployment: HTTP 200, deployed `src/flipper-contact.js` marker present, canvas present, `RUN 1/4`, 52px controls, `scrollWidth === innerWidth`, and zero page/console/request errors at 320x568 and 390x844. GitHub Actions run `32125124543` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32125124543.
 
 ## 2026-08-18 — Overhaul tick: primary probe directional rim pass
 
