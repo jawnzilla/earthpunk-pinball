@@ -3796,4 +3796,4 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `npm test`: 6 tests passed, 0 failures.
 - Inline module `node --check` and `git diff --check` passed.
 - Local Playwright review fixture passed at exact 320×568, 360×844, and 390×844: HTTP 200, document complete, 4 upgrade choices, zero console/page/request errors, and `scrollWidth === clientWidth`.
-- Before the gutter change, the 320×568 card touched the viewport bottom; the bounded CSS change is intended to make the 16px outer-gutter acceptance criterion testable. Hosted deployment and post-deploy verification remain pending.
+- Before the gutter change, the 320×568 card touched the viewport bottom; the bounded CSS change makes the 16px outer-gutter criterion testable. Pages run `32142374304` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32142374304. Hosted exact fixture checks now pass at 320×568, 360×844, and 390×844 with 16px left/right/bottom gutters, four choices, no overflow, and zero console/page/request errors.

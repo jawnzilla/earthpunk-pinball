@@ -23,7 +23,7 @@
 
 - Local exact Playwright checks at 320×568, 360×844, and 390×844 report HTTP 200, complete document, the `upgrade-decision` state, four visible choices, zero console/page/request errors, and no horizontal overflow.
 - The fixture is query-gated (`?review=upgrade`) and calls the production `showModuleChoices()` function; normal reset still starts on the route map.
-- The prior 320×568 capture showed the card ending at the viewport bottom. The CSS correction changes the card to `100dvh - 32px`; post-change hosted capture is required before calling the acceptance criterion verified.
+- The prior 320×568 capture showed the card ending at the viewport bottom. The CSS correction changes the card to `100dvh - 32px`; hosted post-deploy capture now measures 16px left/right/bottom gutters at all three requested widths. Pages run `32142374304` completed success.
 
 ### Remaining risk / next smallest slice
 
