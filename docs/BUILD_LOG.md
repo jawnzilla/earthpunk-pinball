@@ -4295,3 +4295,23 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Inline module `node --check` and `git diff --check` passed.
 - Local Playwright review fixture passed at exact 320×568, 360×844, and 390×844: HTTP 200, document complete, 4 upgrade choices, zero console/page/request errors, and `scrollWidth === clientWidth`.
 - Before the gutter change, the 320×568 card touched the viewport bottom; the bounded CSS change makes the 16px outer-gutter criterion testable. Pages run `32142374304` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32142374304. Hosted exact fixture checks now pass at 320×568, 360×844, and 390×844 with 16px left/right/bottom gutters, four choices, no overflow, and zero console/page/request errors.
+# Deadlight Build Log
+
+## 2026-08-18 — Overhaul tick: Physics V2 runtime telemetry seam
+
+### Implemented
+
+- Added debug-only Physics V2 runtime telemetry to the existing developer readout: measured fixed-step duration, contacts observed by the active resolver path, cumulative fixed substeps, and active elemental-body count.
+- Contact accounting is wired at circle, segment, boundary, and flipper resolver seams; no collision constants, reward rules, renderer geometry, or input behavior changed.
+- Extended the renderer contract test so the telemetry state, timing seam, contact accounting, and readout cannot silently disappear.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- Extracted inline module syntax check: passed with `node --check`.
+- `git diff --check`: passed.
+- Hosted pre-deploy probe returned HTTP 200 and confirmed the existing `depth` fixture; it correctly did not contain the new telemetry marker because deployment had not yet occurred.
+
+### Remaining risk
+
+- Hosted exact 320×568 and 390×844 browser verification and Pages deployment are required after this commit. Telemetry is instrumentation, not proof of final physics feel or visual completion.

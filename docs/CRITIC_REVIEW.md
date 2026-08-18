@@ -1050,3 +1050,21 @@
 - Collision fix: flipper sweep now samples the previous ball position during activation, preventing tip pass-through and preserving the effective flipper length.
 - Follow-up correction: restored moving-ball sweep semantics and added a current-position check across interpolated flipper poses to prevent false held-flipper sticking.
 - Overhaul kickoff: physics/UI/visual reset canonized with material-force physics, mine/tunnel depth, object damage taxonomy, element stack budgets, and AAA-mobile reference gates.
+# Deadlight Critic Review — Overhaul tick 57
+
+## Verdict
+
+**Playable hackathon slice: PASS for bounded Physics V2 observability. AAA-ready: FAIL.** The debug-only readout now exposes fixed-step cost, contact count, cumulative substeps, and active elemental-body count at the same seam used by the live loop. This is instrumentation, not a physics-tuning or visual-completion claim.
+
+### Observed evidence
+
+- Contact counts are recorded at circle, segment, boundary, and moving-flipper resolver seams.
+- Step duration is measured around each fixed update with `performance.now()`, and active-body count includes the primary ball plus live mini-balls, wind echo, and Earth-link endpoints.
+- `npm test` passes 11 tests; extracted inline module syntax and `git diff --check` pass.
+- Pre-deploy hosted probe returned HTTP 200 and preserved the existing `depth` fixture. The new telemetry marker was absent there by design because the current commit was not deployed yet.
+
+### Remaining risk / next smallest slice
+
+- Deploy this commit, then run exact hosted 320×568 and 390×844 checks and confirm the debug readout path does not introduce console errors or overflow.
+- Telemetry is not yet a p95 performance report and does not establish ordinary human-play feel. Do not retune restitution, friction, or speed caps from a single frame measurement.
+- The largest visual gap remains human inspection of frozen grayscale/depth captures; AAA-ready remains unsupported.

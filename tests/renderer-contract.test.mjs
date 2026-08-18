@@ -48,7 +48,11 @@ assert.match(source, /ctx\.globalAlpha = \.34/);
 assert.match(source, /drawFlipperContactShadow\(end, width\);/);
 assert.match(source, /const deckInsetOpacity = \.78/);
 assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(spriteImages\.deckInset/);
-assert.ok(source.indexOf('syncPixelsFromPhysics(ball); ball.lastContact = contact; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact') >= 0,
+assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);
-console.log('renderer-contract: target material cues and flipper review fixture present');
+assert.match(source, /physicsTelemetry: \{ physicsStepMs: 0, contactCount: 0, substepCount: 0, activeBodyCount: 1 \}/);
+assert.match(source, /performance\.now\(\)/);
+assert.match(source, /state\.physicsTelemetry\.contactCount \+= 1/);
+assert.match(source, /Step: \$\{telemetry\.physicsStepMs\.toFixed\(2\)\}ms/);
+console.log('renderer-contract: target material cues, review fixtures, and physics telemetry present');
