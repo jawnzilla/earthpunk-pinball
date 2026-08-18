@@ -9,7 +9,9 @@ import {
   integrateBall,
   resolveContact,
   resolveHybrid,
-  advanceFlipperMotor
+  advanceFlipperMotor,
+  impactEnergyFromMassSpeed,
+  materialHardness
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -51,6 +53,8 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 
 assert.equal(MATERIALS.steel.restitution < 1, true);
 assert.equal(FIXED_DT, 1 / 120);
+assert.equal(impactEnergyFromMassSpeed(.012, 10), .6);
+assert.equal(materialHardness('timber'), MATERIALS.timber.hardness);
 
 {
   const effects = {};

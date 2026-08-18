@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 09 verdict
+
+**Playable hackathon slice: PASS for shared elemental impact accounting. AAA-ready: FAIL.** Physics V2 now owns the shared hardness and kinetic-energy primitives consumed by primary contacts, Water mini-balls, and Wind echoes. The mine/tunnel visual reset, full shared Physics V2 bodies for elemental projectiles, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `materialHardness()` and `impactEnergyFromMassSpeed()` are centralized in `src/physics-core.js`; primary contact energy and Wind echo energy now use the same implementation.
+- Water mini-ball and Wind echo damage policies consume the Physics V2 material registry, eliminating their duplicated hardness table while preserving their distinct thresholds, scales, and per-hit caps.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 Playwright checks pass with active transition and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Elemental bodies still use pixel-space reduced kinematics rather than full Physics V2 position/velocity/contact bodies; this slice only consolidates shared accounting at the seam.
+- Hosted Pages must be re-verified after the push.
+- Next bounded slice: convert Wind echo contact response to a shared Physics V2 contact result while preserving the ignored-first-response and one-hit-per-object ledger.
+
 ## Overhaul tick 08 verdict
 
 **Playable hackathon slice: PASS for the Wind echo material-aware seam. AAA-ready: FAIL.** Wind echoes now damage destructibles through a renderer-independent, one-hit-per-object force policy while preserving the ignored-first-response behavior and reward-free semantics. The mine/tunnel visual reset, full shared Physics V2 parity for elemental bodies, and physical-device evidence remain incomplete.

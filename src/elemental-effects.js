@@ -2,7 +2,7 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const magnitude = vector => Math.hypot(vector.x, vector.y);
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const cross = (a, b) => a.x * b.y - a.y * b.x;
-const MINI_BALL_MATERIAL_HARDNESS = Object.freeze({ water: .05, timber: .42, copper: .72, stone: .88, steel: 1 });
+import { impactEnergyFromMassSpeed, materialHardness } from './physics-core.js';
 
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
@@ -161,8 +161,8 @@ export function onMiniBallStructureContact(runtime, id, { objectId, position = {
 // Renderer-independent reduced-mask damage policy. Water fragments stay capped and reward-free.
 export function resolveMiniBallStructureDamage({ impactSpeed = 0, impactEnergy = 0, threshold = 1.2, maxIntegrity = 0, damageScale = 1, objectMaterial = 'timber', weaknesses = {}, elementEffects = {}, ballMaterial = 'water', damageCap = .22 } = {}) {
   if (!Number.isFinite(impactSpeed) || !Number.isFinite(impactEnergy) || impactSpeed < threshold || maxIntegrity <= 0) return { damage: 0, materialFactor: 0, speedFactor: 0, elementFactor: 0 };
-  const objectHardness = MINI_BALL_MATERIAL_HARDNESS[objectMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.timber;
-  const ballHardness = MINI_BALL_MATERIAL_HARDNESS[ballMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.water;
+  const objectHardness = materialHardness(objectMaterial);
+  const ballHardness = materialHardness(ballMaterial);
   const speedFactor = clamp(impactSpeed / Math.max(threshold, 1e-8), .25, 2.5);
   const materialFactor = clamp(ballHardness / Math.max(objectHardness, 1e-8), .05, 2.5);
   const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => factor * (1 + Math.max(0, effect?.stacks ?? 0) * ((weaknesses[element] ?? 1) - 1) * .5), 1);
@@ -172,7 +172,7 @@ export function resolveMiniBallStructureDamage({ impactSpeed = 0, impactEnergy =
 
 export function resolveWindEchoStructureDamage({ impactSpeed = 0, impactEnergy = 0, threshold = 1.4, maxIntegrity = 0, damageScale = 1, objectMaterial = 'timber', weaknesses = {}, elementEffects = {}, damageCap = .18 } = {}) {
   if (!Number.isFinite(impactSpeed) || !Number.isFinite(impactEnergy) || impactSpeed < threshold || maxIntegrity <= 0) return { damage: 0, materialFactor: 0, speedFactor: 0, elementFactor: 0 };
-  const objectHardness = MINI_BALL_MATERIAL_HARDNESS[objectMaterial] ?? MINI_BALL_MATERIAL_HARDNESS.timber;
+  const objectHardness = materialHardness(objectMaterial);
   const speedFactor = clamp(impactSpeed / Math.max(threshold, 1e-8), .25, 2.5);
   const materialFactor = clamp(.28 / Math.max(objectHardness, 1e-8), .08, 1.2);
   const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => factor * (1 + Math.max(0, effect?.stacks ?? 0) * ((weaknesses[element] ?? 1) - 1) * .5), 1);
@@ -189,7 +189,7 @@ export function onWindEchoStructureContact(runtime, { objectId, position = { x: 
   const impactSpeed = Math.max(0, -(echo.vx * nx + echo.vy * ny));
   const ignoreResponse = echo.ignoredResponses > 0;
   if (ignoreResponse) echo.ignoredResponses -= 1;
-  return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: .5 * (echo.mass || .012) * impactSpeed ** 2 };
+  return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: impactEnergyFromMassSpeed(echo.mass || .012, impactSpeed) };
 }
 
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {

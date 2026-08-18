@@ -22,6 +22,16 @@ const normalize = value => {
   return length > EPSILON ? scale(value, 1 / length) : { x: 0, y: -1 };
 };
 
+export function materialHardness(material = 'steel') {
+  return MATERIALS[material]?.hardness ?? MATERIALS.steel.hardness;
+}
+
+export function impactEnergyFromMassSpeed(mass = 0, speed = 0) {
+  const safeMass = Number.isFinite(mass) ? Math.max(0, mass) : 0;
+  const safeSpeed = Number.isFinite(speed) ? Math.max(0, speed) : 0;
+  return 0.5 * safeMass * safeSpeed ** 2;
+}
+
 export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius = 0.08, material = 'steel' } = {}) {
   return {
     position: { x, y },
@@ -93,7 +103,7 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
 
   ball.velocity = add(ball.velocity, scale(impulse, ball.inverseMass));
   result.impulse = impulse;
-  result.impactEnergy = 0.5 * ball.mass * result.impactSpeed ** 2;
+  result.impactEnergy = impactEnergyFromMassSpeed(ball.mass, result.impactSpeed);
   return result;
 }
 

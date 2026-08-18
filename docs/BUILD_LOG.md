@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: shared elemental impact primitives
+
+### Implemented
+
+- Consolidated elemental material hardness lookup and kinetic impact-energy calculation into the renderer-independent Physics V2 core.
+- Updated Wind echo destructible contacts and Water mini-ball damage policies to consume the shared material registry instead of duplicated hardness constants.
+- Updated primary-ball contact energy to use the same mass/speed primitive, keeping elemental and primary contact accounting on one formula without changing gameplay thresholds or caps.
+- Added deterministic Physics V2 coverage for shared energy and material helpers.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/physics-core.js` and `node --check src/elemental-effects.js` pass.
+- `git diff --check` passes (only Git's LF/CRLF normalization warnings).
+- Local exact 320x568 and 390x844 Playwright Chromium checks pass: initial canvas/touch controls present, active `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors.
+- Hosted Pages verification and deployment run are pending this tick's push.
+
 ## 2026-08-18 — Overhaul tick: wind-echo material-aware structure seam
 
 ### Implemented
