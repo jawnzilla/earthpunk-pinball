@@ -751,6 +751,27 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     document.body.dataset.reviewFixture = 'grayscale';
     updateHud();
   }
+  // Review-only fixture: freezes a complete production table for a still-frame
+  // depth audit. It is intentionally separate from the moving grayscale pass so
+  // plane ordering and contact shadows can be judged without motion blur.
+  function activateDepthReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'depth') return;
+    state.running = false;
+    state.message = 'Review fixture · frozen depth audit.';
+    routeMapPanel.hidden = true;
+    routePreviewSlot.hidden = true;
+    overlay.hidden = true;
+    debugToggle.hidden = true;
+    canvas.classList.add('review-grayscale');
+    state.ball.x = W / 2;
+    state.ball.y = H * .58;
+    state.ball.prevX = state.ball.x;
+    state.ball.prevY = state.ball.y;
+    state.ball.vx = 0;
+    state.ball.vy = 0;
+    document.body.dataset.reviewFixture = 'depth';
+    updateHud();
+  }
   // Review-only fixture: exercises the production flipper response path with
   // repeatable contacts so the hosted tuning readout can be inspected.
   function activateFlipperContactReviewFixture() {
@@ -1379,7 +1400,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
 })();
 </script>
 </body>

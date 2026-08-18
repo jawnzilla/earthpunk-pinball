@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 49
 
+## Overhaul tick 51 verdict
+
+**Playable hackathon slice: PASS for repeatable frozen depth review. AAA-ready: FAIL.** The new `?review=depth` fixture freezes the production table at a stable ball position while retaining the grayscale filter, making value-plane and contact-shadow inspection less dependent on frame timing. It is an evidence tool, not visual completion.
+
+### Observed evidence
+
+- The fixture hides the route overlay, marks `body.dataset.reviewFixture = 'depth'`, stops gameplay updates, zeroes the ball velocity, and leaves the normal `draw()` path responsible for the frame.
+- Local exact Playwright at 320×568 and 390×844 returned HTTP 200, exact widths with no overflow, Canvas, hidden overlay, the expected grayscale filter, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages verification and actual pixel inspection of the frozen captures remain outstanding for this tick.
+- The largest remaining visual gap is still measured grayscale hierarchy across the complete portrait table: a fixture can expose a collision, but cannot certify that the hierarchy is convincing.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 50 verdict
 
 **Playable hackathon slice: PASS for hosted value-hierarchy recheck. AAA-ready: FAIL.** The authored deck well now recedes one controlled value step (`.78` alpha instead of `.92`) so grayscale review can distinguish the shell/well plane from gameplay silhouettes. This is a narrow renderer correction, not visual completion.

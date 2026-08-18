@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: add a frozen depth-audit fixture
+
+### Implemented
+
+- Added opt-in `?review=depth`, which uses the production table renderer, hides route/UI overlays, applies the existing grayscale value filter, and freezes the ball in a stable mid-table position.
+- This is a review/evidence seam only: no physics constants, collision rules, input behavior, progression, or authored palette changed.
+- Added renderer-contract coverage for the fixture guard, marker, boot hook, and frozen-audit message.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; physics/flipper syntax checks and `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844 against `?review=depth`: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, fixture marker `depth`, hidden overlay, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-depth-320.png` and `earthpunk-depth-390.png`.
+
+### Decision / next gate
+
+- The frozen frame makes plane ordering and contact-shadow inspection repeatable without motion blur; it does not prove the visual bar by itself.
+- Re-run this fixture on hosted Pages and inspect the captured grayscale values before changing another renderer layer. AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: separate the authored well from gameplay silhouettes
 
 ### Implemented
