@@ -102,4 +102,12 @@ export function summarizeFlipperContactSeries(samples = [], { source = null } = 
   };
 }
 
+// Keep provenance visible when a review capture and ordinary play are compared
+// in the same run. Empty buckets are included deliberately so a missing live
+// sample cannot be mistaken for fixture data.
+export function summarizeFlipperContactSources(samples = []) {
+  const sources = [...new Set(samples.map(sample => sample?.source).filter(Boolean))];
+  return Object.fromEntries(sources.map(source => [source, summarizeFlipperContactSeries(samples, { source })]));
+}
+
 export { segmentAt as flipperSegmentAt };

@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: provenance bucket helper for flipper telemetry
+
+### Implemented
+
+- Added `summarizeFlipperContactSources()` to produce independent launch reports keyed by explicit `live`/`fixture` provenance.
+- Updated the developer readout to consume the selected source bucket through the shared helper, preventing a future comparison tool from silently combining review contacts with ordinary play.
+- No solver constants, collision response, input, progression, or player-facing art changed.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; `node --check src/flipper-contact.js`; `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas, and zero console/page/request errors.
+- Hosted exact Playwright at 320×568 and 390×844 against the current pre-deploy Pages build: HTTP 200, complete documents, exact CSS widths, Canvas, and zero console/page/request errors. The new helper is not yet expected in this pre-deploy artifact.
+
+### Decision / next gate
+
+- Provenance aggregation is now a pure, regression-tested seam. It does not create ordinary human-play evidence; a live active-contact capture remains the next tuning gate.
+
+
 ## 2026-08-18 — Overhaul tick: separate live flipper telemetry from review fixtures
 
 ### Implemented

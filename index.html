@@ -321,7 +321,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
-import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries } from './src/flipper-contact.js';
+import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
 (() => {
   "use strict";
@@ -530,7 +530,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     debugToggle.hidden = state.running || !debugEnabled;
     if (state.running) debugPanel.hidden = true;
     syncDeveloperFocusability();
-    if (physicsReadout) { const contact = state.lastFlipperContact; const contactText = contact ? `${contact.side.toUpperCase()} ${contact.mode} ${contact.beforeSpeed.toFixed(0)}→${contact.afterSpeed.toFixed(0)}px/s · J ${contact.impulseMagnitude.toFixed(3)}` : '—'; const series = summarizeFlipperContactSeries(state.flipperContactSamples, { source: state.flipperContactSource || 'live' }); const seriesText = series.count ? ` · ${String(state.flipperContactSource || 'live').toUpperCase()} N ${series.count} · μΔ ${series.meanSpeedDelta.toFixed(0)}px/s · Δ ${series.minSpeedDelta.toFixed(0)}…${series.maxSpeedDelta.toFixed(0)}` : ''; physicsReadout.textContent = `V2 core · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Upper: ${state.topHits}/1 · Flipper contact: ${contactText}${seriesText} · Launch: ${(state.lastLaunchSpeed / LEGACY_FRAME_RATE).toFixed(2)} px/frame`; }
+    if (physicsReadout) { const contact = state.lastFlipperContact; const contactText = contact ? `${contact.side.toUpperCase()} ${contact.mode} ${contact.beforeSpeed.toFixed(0)}→${contact.afterSpeed.toFixed(0)}px/s · J ${contact.impulseMagnitude.toFixed(3)}` : '—'; const sourceReports = summarizeFlipperContactSources(state.flipperContactSamples); const source = state.flipperContactSource || 'live'; const series = sourceReports[source] || summarizeFlipperContactSeries([], { source }); const seriesText = series.count ? ` · ${String(source).toUpperCase()} N ${series.count} · μΔ ${series.meanSpeedDelta.toFixed(0)}px/s · Δ ${series.minSpeedDelta.toFixed(0)}…${series.maxSpeedDelta.toFixed(0)}` : ''; physicsReadout.textContent = `V2 core · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Upper: ${state.topHits}/1 · Flipper contact: ${contactText}${seriesText} · Launch: ${(state.lastLaunchSpeed / LEGACY_FRAME_RATE).toFixed(2)} px/frame`; }
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }

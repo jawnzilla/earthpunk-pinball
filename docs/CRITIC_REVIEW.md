@@ -1,5 +1,23 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 45 verdict
+
+**Playable hackathon slice: PASS for telemetry provenance buckets. AAA-ready: FAIL.** Flipper launch aggregation now has a dedicated pure helper that keeps explicit `LIVE` and `FIXTURE` reports independent. This improves evidence integrity; it is not a gameplay-feel or visual-overhaul completion claim.
+
+### Observed evidence
+
+- `summarizeFlipperContactSources()` groups only explicitly sourced samples and delegates each bucket to the existing catch-excluding series report.
+- The developer readout now selects its current source through that bucket helper rather than recomputing a potentially mixed series.
+- `npm test` passes 11 tests; `node --check src/flipper-contact.js` and `git diff --check` pass.
+- Local and pre-deploy hosted exact Playwright checks at 320×568 and 390×844 report HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- This is instrumentation only. No normal human-play launch distribution has been captured in this tick, and no restitution, friction, mass, speed ceiling, or input constants should be changed from fixture data.
+- Deploy and re-run the same exact hosted checks against the new commit, then capture a live active flipper contact through a deterministic browser input path if the game reaches one without a review fixture.
+- Visual overhaul remains materially incomplete; AAA-ready remains unsupported.
+
+
 ## Overhaul tick 44 verdict
 
 **Playable hackathon slice: PASS for telemetry provenance. AAA-ready: FAIL.** Production flipper samples now carry an explicit `LIVE` or `FIXTURE` source, and the aggregate can filter by source. The hosted fixture remains healthy, but ordinary human-play launch evidence is still absent.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries } from '../src/flipper-contact.js';
+import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -80,4 +80,17 @@ test('flipper telemetry can separate live play from review fixtures', () => {
   ];
   assert.equal(summarizeFlipperContactSeries(samples, { source: 'live' }).meanSpeedDelta, 90);
   assert.equal(summarizeFlipperContactSeries(samples, { source: 'fixture' }).meanSpeedDelta, 220);
+});
+
+test('flipper telemetry exposes independent provenance buckets', () => {
+  const reports = summarizeFlipperContactSources([
+    { mode: 'launch', source: 'live', afterSpeed: 420, speedDelta: 90, impactSpeed: 2 },
+    { mode: 'catch', source: 'live', afterSpeed: 10, speedDelta: 10, impactSpeed: 8 },
+    { mode: 'launch', source: 'fixture', afterSpeed: 600, speedDelta: 220, impactSpeed: 4 }
+  ]);
+  assert.deepEqual(Object.keys(reports), ['live', 'fixture']);
+  assert.equal(reports.live.count, 1);
+  assert.equal(reports.live.meanSpeedDelta, 90);
+  assert.equal(reports.fixture.count, 1);
+  assert.equal(reports.fixture.meanSpeedDelta, 220);
 });
