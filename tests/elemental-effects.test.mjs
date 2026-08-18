@@ -12,7 +12,8 @@ import {
   onWindEchoStructureContact,
   resolveElementalBodyContact,
   resolveMiniBallStructureDamage,
-  resolveWindEchoStructureDamage
+  resolveWindEchoStructureDamage,
+  sweptCircleContact
 } from '../src/elemental-effects.mjs';
 
 const effects = (element, stacks) => ({ [element]: { stacks, timer: 360 } });
@@ -171,6 +172,14 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   const echo = onHardBounce(wind, { effects: { Fire: { stacks: 1 }, Wind: { stacks: 3 } }, position: { x: 0, y: 0 }, velocity: { x: 100, y: 0 }, impactSpeed: 2 });
   assert.equal(echo.type, 'wind-echo');
   assert.equal(wind.windEcho.burnTrail, true);
+}
+
+{
+  const swept = sweptCircleContact({ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 50, y: 0 }, 4);
+  assert.equal(swept.hit, true);
+  assert.ok(swept.t > 0 && swept.t < 1);
+  assert.equal(swept.normal.x, -1);
+  assert.equal(sweptCircleContact({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 50, y: 0 }, 4).hit, false);
 }
 
 console.log('elemental-effects: all deterministic tests passed');

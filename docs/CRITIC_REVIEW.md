@@ -1,4 +1,25 @@
-# Deadlight Critic Review — Overhaul tick 04
+# Deadlight Critic Review — Overhaul tick 12
+
+## Overhaul tick 12 verdict
+
+**Playable hackathon slice: PASS for swept elemental broad-phase. AAA-ready: FAIL.** Fast Water mini-balls and Wind echoes now query their whole fixed-step path against destructibles, removing a concrete tunneling failure mode without widening rewards or changing primary-ball physics. The mine/tunnel visual reset, full-table elemental collision parity, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `sweptCircleContact()` returns the closest point and movement-derived normal for a segment/circle query; a mid-segment hit is covered by deterministic tests.
+- Elemental bodies retain `previousX/previousY` before Physics V2 integration, and the live destructible adapters consume the swept path for both Water and Wind.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 Chromium checks pass with active transition, 52px controls, matching widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Swept queries improve destructible broad phase, but elemental bodies still do not participate in the full table geometry or flippers/targets.
+- Hosted Pages must be redeployed and rechecked after this commit is pushed.
+- Next bounded slice: add contact-time positional correction for swept destructible hits, or begin the mine/tunnel visual/material phase; do not broaden gameplay rewards in the same change.
+
+## Overhaul tick 11 verdict
+
+**Playable hackathon slice: PASS for elemental fixed-step body integration. AAA-ready: FAIL.** Water mini-balls and Wind echoes now use Physics V2 as the authoritative fixed-step integrator with an explicit pixel↔meter boundary. The mine/tunnel visual reset, full elemental broad-phase parity, and physical-device evidence remain incomplete.
+
 
 ## Overhaul tick 11 verdict
 

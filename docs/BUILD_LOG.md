@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: swept elemental broad-phase
+
+### Implemented
+
+- Added a renderer-independent swept segment/circle contact query for fast Water mini-balls and Wind echoes, preventing fixed-step tunneling through small salvage objects.
+- Elemental bodies now retain their previous renderer-space position for each fixed step; the live destructible adapter consumes the swept path while preserving one-hit ledgers, bounce budgets, reward-free semantics, and Physics V2 response.
+- Added deterministic coverage for mid-segment hits, miss rejection, and movement-derived fallback normals.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
+- `git diff --check` passes (only Git LF/CRLF normalization warnings).
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, route CTA transitions to `RUN 1/4`, visible touch controls are 52px high, `scrollWidth === innerWidth`, and zero console/page errors.
+- Hosted Pages verification is pending the push/deployment for this commit.
+
+
+
 ## 2026-08-18 — Overhaul tick: elemental fixed-step body integration
 
 ### Implemented

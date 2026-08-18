@@ -36,9 +36,27 @@ function syncLegacyFromPhysicsBody(body) {
 }
 
 function createElementalBody({ id, position, velocity, ...metadata }) {
-  const body = { id, x: position.x, y: position.y, vx: velocity.vx ?? velocity.x, vy: velocity.vy ?? velocity.y, ...metadata };
+  const body = { id, x: position.x, y: position.y, previousX: position.x, previousY: position.y, vx: velocity.vx ?? velocity.x, vy: velocity.vy ?? velocity.y, ...metadata };
   body.physicsBody = createElementalPhysicsBody(body);
   return body;
+}
+
+// A point-in-circle check can tunnel through small salvage when a fixed step
+// moves farther than its radius. Keep the swept broad phase renderer-independent.
+export function sweptCircleContact(start, end, center, reach) {
+  const motion = { x: end.x - start.x, y: end.y - start.y };
+  const lengthSquared = motion.x * motion.x + motion.y * motion.y;
+  const t = lengthSquared > 1e-9
+    ? clamp(((center.x - start.x) * motion.x + (center.y - start.y) * motion.y) / lengthSquared, 0, 1)
+    : 1;
+  const point = { x: start.x + motion.x * t, y: start.y + motion.y * t };
+  const offset = { x: point.x - center.x, y: point.y - center.y };
+  if (offset.x * offset.x + offset.y * offset.y > reach * reach) return { hit: false, t, point, normal: { x: 0, y: 0 } };
+  const fallback = lengthSquared > 1e-9
+    ? { x: -motion.x, y: -motion.y }
+    : { x: end.x - center.x, y: end.y - center.y };
+  const length = Math.hypot(offset.x, offset.y) || Math.hypot(fallback.x, fallback.y) || 1;
+  return { hit: true, t, point, normal: { x: (offset.x || fallback.x) / length, y: (offset.y || fallback.y) / length } };
 }
 
 export const ELEMENTAL_BUDGETS = Object.freeze({
@@ -99,6 +117,8 @@ function advanceFireTrail(runtime, effects, dt, events) {
 function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
   runtime.miniBalls.forEach(ball => {
     ball.contactKeys = new Set();
+    ball.previousX = ball.x;
+    ball.previousY = ball.y;
     if (integrateBodies) {
       integrateBall(ball.physicsBody, { force: { x: 0, y: 0 }, gravity: { x: 0, y: 0 }, dt });
       syncLegacyFromPhysicsBody(ball);
@@ -113,6 +133,8 @@ function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
 function advanceWindEcho(runtime, dt, integrateBodies, contactResolver) {
   const echo = runtime.windEcho;
   if (!echo) return;
+  echo.previousX = echo.x;
+  echo.previousY = echo.y;
   if (integrateBodies) {
     integrateBall(echo.physicsBody, { force: { x: 0, y: 0 }, gravity: { x: 0, y: 0 }, dt });
     syncLegacyFromPhysicsBody(echo);
