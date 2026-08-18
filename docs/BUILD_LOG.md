@@ -14,7 +14,7 @@
 - `node --check tests/renderer-contract.test.mjs`, `node --check src/physics-core.js`, and `git diff --check` passed.
 - Local Playwright checks at exact CSS viewports 320×568 and 390×844: document complete, `innerWidth` exact, Canvas present, `scrollWidth === clientWidth`, two 52px flipper controls, and zero console/page/request errors. Canvas footprints measured 226.125×402 and 354.375×630 CSS px.
 - Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-target-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-target-390.png`.
-- GitHub Pages deployment and hosted verification remain required after commit/push.
+- GitHub Pages run `32149271594` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32149271594. Hosted exact checks at 320×568 and 390×844 returned HTTP 200, complete documents, Canvas present, exact `innerWidth`, `scrollWidth === clientWidth`, two 52px flipper controls, the `drawTargetMaterialCue` marker, and zero console/page/request errors. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ## 2026-08-18 — Overhaul tick: explicit mass-scaled impulse seam
 

@@ -12,7 +12,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages verification is still required after this commit; local runtime health does not prove deployed parity.
+- Hosted Pages run `32149271594` completed successfully for commit `47b75cf`; exact 320×568 and 390×844 checks returned HTTP 200 and the deployed source contains the new cue helper. Local and hosted runtime parity checks both report zero browser errors.
 - Human grayscale inspection of the captured frames is still the visual gate; automated source and layout checks cannot prove that six small targets remain distinct at the rendered CSS scale.
 - The next physics slice should return to measured flipper contact/launch telemetry rather than layering more decoration.
 
