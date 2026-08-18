@@ -13,7 +13,8 @@
 
 ### Remaining risk / next smallest slice
 
-- This fixture proves the damaged state is observable in-browser, but pixel/grayscale inspection has not been performed in this tick and no hosted result exists until deployment.
+- Hosted Pages run `32179797603` completed successfully for `cb6f3d8`. Hosted exact Playwright at 320×568 and 390×844 confirms HTTP 200, complete documents, exact widths/no overflow, Canvas, `damage-pulse`, hidden overlay, and zero console/page/request errors. Hosted screenshots are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-damage-320.png` and `earthpunk-hosted-damage-390.png`.
+- This fixture proves the damaged state is observable in-browser, but pixel/grayscale inspection has not been performed in this tick.
 - The largest remaining visual gap is full-table depth and grayscale hierarchy under motion. After hosted verification, inspect the captured damaged-object frame in grayscale before adding more decoration or changing physics.
 - AAA-ready remains unsupported.
 

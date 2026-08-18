@@ -15,7 +15,9 @@
 
 ### Decision / next gate
 
-- This closes the evidence gap for inspecting a live damaged salvage render, but it does not claim grayscale readability or AAA completion. Hosted deployment and hosted exact-width verification remain required for this commit.
+- GitHub Pages run `32179797603` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32179797603. Hosted exact Playwright at 320×568 and 390×844 against `cb6f3d8` returned HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas, fixture marker `damage-pulse`, hidden overlay, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-damage-320.png` and `earthpunk-hosted-damage-390.png`.
+
+- This closes the evidence gap for inspecting a live damaged salvage render, but it does not claim grayscale readability or AAA completion.
 
 ## 2026-08-18 — Overhaul tick: make destructible impacts read as events
 
