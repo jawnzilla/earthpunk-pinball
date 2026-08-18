@@ -14,7 +14,7 @@
 ### Remaining risk / next smallest slice
 
 - This remains a review fixture, not a normal human-play sample. Do not retune restitution, friction, or the cap from this range alone.
-- Pages deployment and hosted exact-width verification are required for this commit.
+- GitHub Pages run `32170761355` completed successfully. Hosted exact 320×568 and 390×844 checks pass HTTP 200, complete documents, exact widths with no overflow, Canvas, the fixture marker, zero browser/request errors, and `N 4 · μΔ 388px/s · Δ 359…417`.
 - Next slice should capture or instrument an ordinary playable flipper-contact sample and compare its range against this capped fixture. Visual overhaul and AAA claims remain unsupported.
 
 ## Overhaul tick 42 verdict
