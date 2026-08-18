@@ -144,6 +144,15 @@
     #overlay:not(.route-decision) .choices button:disabled .upgrade-cost { color: #9fb5a7 !important; border-color: #526e63; background: rgba(82,110,99,.12); }
     .upgrade-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f1b35b; border-radius: 8px; color: #f1b35b; font-size: 17px; object-fit: cover; background: #0c1415; }
     .element-label { display: block; margin-bottom: 2px; color: #9fd4c0; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+    /* Upgrade choices are a field-service decision surface, not a decorative splash card. */
+    #overlay.upgrade-decision .card { padding: 18px; border-color: #789487; background: linear-gradient(160deg, #223735, #111b1d 72%); box-shadow: 0 0 0 3px #0b1112, 0 0 0 4px #38524e, 0 18px 60px rgba(0,0,0,.7), inset 0 1px rgba(255,255,255,.1); }
+    #overlay.upgrade-decision .card::before { inset: 7px; border-color: rgba(159,212,192,.16); background: repeating-linear-gradient(90deg, transparent 0 28px, rgba(159,212,192,.025) 28px 29px); }
+    #overlay.upgrade-decision .card::after { top: 10px; left: 14px; right: 14px; height: 6px; border-top: 1px solid rgba(159,212,192,.55); border-bottom: 0; background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(103,200,213,.42) 22px 25px, transparent 25px 42px); box-shadow: none; opacity: .75; }
+    #overlay.upgrade-decision .decision-kicker { margin-top: 4px; color: #67c8d5; }
+    #overlay.upgrade-decision .card h2 { margin-bottom: 5px; font-size: clamp(18px, 5vw, 23px); }
+    #overlay.upgrade-decision .card > p:not(.decision-kicker) { margin: 0 0 8px; color: #b8cbbb; font-size: 12px; line-height: 1.35; }
+    #overlay.upgrade-decision .choices.upgrade-scroll { gap: 7px; margin: 8px 0 0; }
+    #overlay.upgrade-decision .choices.upgrade-scroll button { border-radius: 6px; }
     .choices button:active { background: #38524e; transform: translateY(1px); }
     .choices button[data-kind="boss"] { border-color: #ef8b45; background: linear-gradient(110deg, #4a3029, #211d20); }
     .choices button[data-kind="free"] { border-color: #67c8d5; background: linear-gradient(110deg, #23464b, #1d2d2e); }

@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: upgrade decision surface cleanup
+
+### Implemented
+
+- Reduced the upgrade overlay's decorative chrome and shifted it toward a compact field-service panel: quieter grid treatment, restrained rails, tighter route copy, and smaller decision-card gaps.
+- Kept the four module choices, charge costs, touch targets, route flow, physics, and canvas geometry unchanged. The CSS-only slice targets the previously unresolved mobile upgrade-overlay readability risk.
+
+### Verification
+
+- `npm test`: 5 deterministic tests passed, 0 failures.
+- `node --check` passed for `src/physics-core.js`, `src/elemental-effects.js`, and `src/flipper-contact.js`; `git diff --check` passed.
+- Hosted pre-deploy smoke: GitHub Pages returned HTTP 200 and served the expected HUD marker. Exact browser overlay evidence remains pending deployment/browser execution.
+
 ## 2026-08-18 — Overhaul tick: compact active-effect HUD
 
 ### Implemented

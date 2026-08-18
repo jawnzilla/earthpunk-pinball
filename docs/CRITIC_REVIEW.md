@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 19
+# Deadlight Critic Review — Overhaul tick 29
+
+## Overhaul tick 29 verdict
+
+**Playable hackathon slice: PASS for a narrower upgrade decision surface. AAA-ready: FAIL.** The module-choice overlay now reads more like a buried-machine service panel than a decorative splash card. This is a CSS-only visual correction, not visual completion.
+
+### Observed evidence
+
+- `.upgrade-decision .card` now uses a restrained linear field-service treatment, quieter pseudo-element rails, tighter explanatory copy, and reduced choice spacing while preserving the four module buttons and their charge costs.
+- Gameplay, physics, route progression, input, canvas geometry, and touch target sizing were not changed.
+- `npm test` passes all 5 deterministic tests; module syntax checks and `git diff --check` pass.
+
+### Remaining risk / next smallest slice
+
+- The upgrade state was not yet reached in a post-deploy browser capture during this tick, so card fit, focus state, and 320×568 screenshot readability remain unverified. Do not treat the CSS change as visual proof.
+- After deployment, verify the actual route-to-upgrade path at 320×568 and 390×844, then inspect one screenshot in color and grayscale. If the overlay passes, return to the playfield's largest measured material/depth gap rather than adding more overlay decoration.
 
 ## Overhaul tick 28 verdict
 
