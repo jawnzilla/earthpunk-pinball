@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: swept-contact positional correction
+
+### Implemented
+
+- Added renderer-independent `rewindElementalBodyToContact()` so swept Water mini-ball and Wind echo hits rewind to the first contact point before the Physics V2 impulse is resolved.
+- Wired the correction into both live destructible adapters with a bounded surface clearance; impact direction, one-hit ledgers, reward-free semantics, and damage thresholds remain unchanged.
+- Added deterministic coverage proving the renderer-space and Physics V2 positions remain synchronized after correction.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
+- `git diff --check` passes (only Git LF/CRLF normalization warnings).
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, route CTA transitions to `RUN 1/4`, visible touch controls are 52px high, `scrollWidth === innerWidth`, and zero console/page errors.
+- Hosted Pages verification is recorded after deployment below.
+
 ## 2026-08-18 — Overhaul tick: swept elemental broad-phase
 
 ### Implemented

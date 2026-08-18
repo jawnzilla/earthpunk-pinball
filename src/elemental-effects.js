@@ -59,6 +59,21 @@ export function sweptCircleContact(start, end, center, reach) {
   return { hit: true, t, point, normal: { x: (offset.x || fallback.x) / length, y: (offset.y || fallback.y) / length } };
 }
 
+// Rewind an elemental body to the first swept contact point before resolving
+// the impulse. This prevents a fast fragment from ending the fixed step inside
+// a salvage object after the broad phase has correctly found a mid-step hit.
+export function rewindElementalBodyToContact(body, swept, clearance = 0) {
+  if (!body || !swept?.hit || !swept.point || !swept.normal) return false;
+  const offset = Math.max(0, Number.isFinite(clearance) ? clearance : 0);
+  body.x = swept.point.x + swept.normal.x * offset;
+  body.y = swept.point.y + swept.normal.y * offset;
+  if (body.physicsBody) {
+    body.physicsBody.position.x = body.x / PX_PER_M;
+    body.physicsBody.position.y = body.y / PX_PER_M;
+  }
+  return true;
+}
+
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
   water: Object.freeze({ maxBalls: 2, maxBounces: 3, lifetime: 1.25, splitSpeedScale: .72, spreadRadians: .34 }),

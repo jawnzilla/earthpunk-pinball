@@ -13,7 +13,8 @@ import {
   resolveElementalBodyContact,
   resolveMiniBallStructureDamage,
   resolveWindEchoStructureDamage,
-  sweptCircleContact
+  sweptCircleContact,
+  rewindElementalBodyToContact
 } from '../src/elemental-effects.mjs';
 
 const effects = (element, stacks) => ({ [element]: { stacks, timer: 360 } });
@@ -180,6 +181,18 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.ok(swept.t > 0 && swept.t < 1);
   assert.equal(swept.normal.x, -1);
   assert.equal(sweptCircleContact({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 50, y: 0 }, 4).hit, false);
+}
+
+{
+  const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Water', 3), position: { x: 0, y: 0 }, velocity: { x: 600, y: 0 }, impactSpeed: 2.1 });
+  const ball = runtime.miniBalls[0];
+  advanceElementalRuntime(runtime, { effects: effects('Water', 3), position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, dt: 1 / 60 });
+  const swept = sweptCircleContact({ x: ball.previousX, y: ball.previousY }, { x: ball.x, y: ball.y }, { x: 5, y: 0 }, ball.radius + 2);
+  assert.equal(swept.hit, true);
+  assert.equal(rewindElementalBodyToContact(ball, swept, 2), true);
+  assert.ok(Math.abs(ball.x - (swept.point.x + swept.normal.x * 2)) < 1e-9);
+  assert.ok(Math.abs(ball.physicsBody.position.x - ball.x / 100) < 1e-9);
 }
 
 console.log('elemental-effects: all deterministic tests passed');

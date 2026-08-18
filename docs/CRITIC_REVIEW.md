@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 12
 
+## Overhaul tick 13 verdict
+
+**Playable hackathon slice: PASS for swept-contact correction. AAA-ready: FAIL.** Elemental broad-phase hits now rewind fast fragments to the first contact point before solver response, preventing a confirmed mid-step hit from leaving the body embedded in salvage. The mine/tunnel visual reset, full-table elemental collision parity, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `rewindElementalBodyToContact()` updates both renderer-space and Physics V2 positions; deterministic coverage verifies the conversion boundary after a swept hit.
+- Both Water mini-ball and Wind echo destructible paths call the correction before their existing structure response, with no changes to reward, score, or primary-ball paths.
+- Local exact 320x568/390x844 Chromium checks pass with active transition, 52px controls, matching widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- The correction resolves first-contact placement but does not yet carry the remaining fraction of the fixed step after the impulse; high-speed fragments can still lose some post-contact travel.
+- Hosted Pages exact 320x568/390x844 checks must be confirmed after this push.
+- Next bounded slice: preserve post-contact residual time for one elemental body only, or begin the mine/tunnel material renderer phase; do not broaden gameplay rewards in the same change.
+
 ## Overhaul tick 12 verdict
 
 **Playable hackathon slice: PASS for swept elemental broad-phase. AAA-ready: FAIL.** Fast Water mini-balls and Wind echoes now query their whole fixed-step path against destructibles, removing a concrete tunneling failure mode without widening rewards or changing primary-ball physics. The mine/tunnel visual reset, full-table elemental collision parity, and physical-device evidence remain incomplete.
