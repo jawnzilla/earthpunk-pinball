@@ -287,11 +287,12 @@
   <div class="overlay" id="overlay" hidden>
     <section class="card"><div id="modal-utility-slot"></div><div class="outcome-emblem" id="outcome-emblem" aria-hidden="true"><span>ϟ</span></div><div class="outcome-instrument" id="outcome-instrument" aria-label="Run results"><span><small>SALVAGE</small><strong id="outcome-salvage">—</strong></span><i></i><span><small>SCORE</small><strong id="outcome-score">—</strong></span></div><p class="decision-kicker" id="overlay-kicker">Route decision</p><h2 id="overlay-title">Probe recovered</h2><p id="overlay-copy"></p><div id="route-preview-slot"><section id="route-map-panel" class="route-map-panel" hidden aria-label="Portrait route map"><div class="route-map-head"><span>DESCENT MAP</span><span id="route-map-depth">DEPTH 1/4</span></div><div id="route-map-viewport" class="route-map-viewport"><div id="route-map-scroll" class="route-map-scroll"><img class="route-console-art" src="assets/sprites/route-console.svg" alt="" aria-hidden="true"><img class="route-depth-art" src="assets/sprites/route-depth-field.svg" alt="" aria-hidden="true"><img class="route-tail-bridge-art" src="assets/sprites/route-tail-bridge.svg" alt="" aria-hidden="true"><div id="route-map-cue" class="route-map-cue visible" aria-hidden="true">SWIPE UP · MORE ROUTE</div><div id="route-map-depth-content" class="route-map-depth-content"></div></div><div id="route-map-detail" class="route-map-detail" aria-live="polite"></div><div class="route-map-legend" aria-label="Route legend"><span><img class="map-dot current" src="assets/sprites/route-node-current.svg" alt="" aria-hidden="true">NOW</span><span><img class="map-dot available" src="assets/sprites/route-node-free.svg" alt="" aria-hidden="true">OPEN</span><span><img class="map-dot future" src="assets/sprites/route-node-future.svg" alt="" aria-hidden="true">FUTURE</span><span><img class="map-dot locked" src="assets/sprites/route-node-hazard.svg" alt="" aria-hidden="true">LOCKED</span></div></div></section></div><div id="overlay-scroll-cue" class="overlay-scroll-cue" aria-hidden="true">SWIPE UP · OBJECTIVE BELOW</div><div class="objective-tip" id="objective-tip" hidden><strong id="objective-tip-title">TABLE OBJECTIVE</strong><p id="objective-tip-copy"></p><label class="objective-dismiss"><input id="objective-tip-dismiss" type="checkbox"> Don’t show this tip again for this table</label></div><div class="choices" id="choices" hidden></div><button id="reset" type="button"><span class="action-glyph" aria-hidden="true">ϟ</span><span class="action-label">Start another descent</span></button></section>
   </div>
-  <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics tuning" hidden>⚙</button>
-  <section class="debug-panel" id="debug-panel" hidden aria-label="Physics tuning controls">
-    <h3>Live physics tuning</h3>
-    <p>Higher gravity feels heavier. Kick is first-hit power. Separation breaks rolling contact.</p>
+  <button class="debug-toggle" id="debug-toggle" type="button" aria-label="Open physics diagnostics" hidden>⚙</button>
+  <section class="debug-panel" id="debug-panel" hidden aria-label="Physics diagnostics">
+    <h3>Physics V2 diagnostics</h3>
+    <p>Gameplay reads material, mass, force, motor, and contact energy. No rebound, kick, catch, or separation sliders are active.</p>
     <div class="test-level"><label for="test-level-select">Test table</label><select id="test-level-select"><option value="generator-well">Generator Well</option><option value="pulse-manifold">Pulse Manifold</option><option value="split-reactor">Split Reactor</option><option value="blackout-core">Blackout Core</option><option value="surface-vault">Surface Vault</option></select><button id="test-level-button" type="button">Load selected table</button></div>
+    <div id="legacy-tuning-controls" hidden inert aria-hidden="true">
     <label class="debug-row" title="Downward acceleration applied every fixed update.">Gravity <input data-tune="gravity" type="range" min="0.01" max="0.16" step="0.01" value="0.08"><span class="debug-value" data-value="gravity">0.08</span></label>
     <label class="debug-row" title="Maximum outward impulse on the first active flipper contact.">Active kick <input data-tune="activeKick" type="range" min="0" max="24" step="0.5" value="12"><span class="debug-value" data-value="activeKick">12.00</span></label>
     <label class="debug-row" title="Energy retained when a stationary held flipper catches the ball.">Catch damping <input data-tune="catchRestitution" type="range" min="0" max="0.5" step="0.01" value="0"><span class="debug-value" data-value="catchRestitution">0.00</span></label>
@@ -305,11 +306,12 @@
     <label class="debug-row" title="Energy retained by bumpers only. Higher values make bumpers pop while rails and walls stay muted.">Bumper rebound <input data-tune="bumperRebound" type="range" min="0" max="1" step="0.01" value="0.82"><span class="debug-value" data-value="bumperRebound">0.82</span></label>
     <div class="debug-row" title="Flipper contacts use ball velocity relative to the rotating flipper surface. The rolling component is preserved while fresh activation adds contact-scaled normal impulse.">Flipper solver — relative contact <span class="debug-value" data-solver-value="relative-contact">rolling + surface velocity</span></div>
     <div class="preset-row" aria-label="Physics test presets"><strong>Test preset</strong><button type="button" data-preset="soft" aria-pressed="false">SOFT</button><button type="button" data-preset="balanced" aria-pressed="false">BALANCED</button><button type="button" data-preset="reach" aria-pressed="false">HIGH REACH</button><button type="button" data-preset="pop" aria-pressed="false">POP</button></div>
+    </div>
     <label class="cheat-row"><input id="cheat-infinite" type="checkbox"><span>∞ Stability / lives</span></label>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
 <script type="module">
-import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -371,8 +373,10 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
   cheatInfinite.addEventListener('change', () => { if (state) state.immortal = cheatInfinite.checked; updateHud(); });
   testLevelButton.addEventListener('click', () => loadTestLevel(testLevelSelect.value));
   objectiveTipDismiss.addEventListener('change', () => { if (!state) return; try { if (objectiveTipDismiss.checked) localStorage.setItem(`deadlight-objective-tip:${state.tableKind}`, 'dismissed'); else localStorage.removeItem(`deadlight-objective-tip:${state.tableKind}`); } catch (error) { /* private browsing may deny storage */ } });
-  const elementColors = { Fire: '#ef8b45', Water: '#67c8d5', Earth: '#9ab56f', Air: '#c6a7ef' };
+  const elementColors = { Fire: '#b65f32', Water: '#6f8f88', Earth: '#a47d4d', Wind: '#b5c2a4', Air: '#b5c2a4' };
   const elementalOrder = ['Fire', 'Water', 'Earth', 'Air'];
+  const canonicalElement = element => element === 'Air' ? 'Wind' : element;
+  const displayElement = element => element === 'Wind' ? 'Air' : element;
   function installHingeElement(stateRef, element) { const slot = stateRef.hingeElements.left === null ? 'left' : stateRef.hingeElements.right === null ? 'right' : (stateRef.hingeLevels.left <= stateRef.hingeLevels.right ? 'left' : 'right'); if (stateRef.hingeElements[slot] === element) stateRef.hingeLevels[slot] = Math.min(3, stateRef.hingeLevels[slot] + 1); else { stateRef.hingeElements[slot] = element; stateRef.hingeLevels[slot] = 1; } return slot; }
   const upgradePool = [
     { id: 'fire', element: 'Fire', image: 'assets/elements/fire.png', title: 'Ember hinge module', text: 'Attune a cradle point to apply stacking Fire imprints to the ball.', cost: 3, apply: s => installHingeElement(s, 'Fire') },
@@ -426,7 +430,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     reward: ['SURFACE VAULT', 'Reach the upper bank or build 4 Charge to unlock the vault reward, then clear the table.']
   };
   function showObjectiveTip() { const kind = state.tableKind || 'standard'; const [title, copy] = objectiveCopy[kind] || objectiveCopy.standard; let dismissed = false; try { dismissed = localStorage.getItem(`deadlight-objective-tip:${kind}`) === 'dismissed'; } catch (error) { /* private browsing may deny storage */ } objectiveTipTitle.textContent = title; objectiveTipCopy.textContent = copy; objectiveTipDismiss.checked = dismissed; objectiveTip.hidden = dismissed; }
-  function loadTestLevel(levelId) { reset(); const layout = routeNodeLayouts[levelId] || levelLayouts[0]; state.stage = 1; state.stageCount = 1; state.currentNode = levelId; state.layout = layout; state.tableKind = levelId === 'blackout-core' ? 'boss' : levelId === 'surface-vault' ? 'reward' : 'standard'; state.tableLabel = state.tableKind.toUpperCase(); state.boss = layout.boss ? { active: true, exposed: false, hp: layout.boss.maxHp, maxHp: layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; applyTargetLayout(); resetLayoutDamage(); spawnBall(); testLevelSelect.value = levelId; debugPanel.hidden = true; showPreLevelMap(); updateHud(); }
+  function loadTestLevel(levelId) { reset(); const layout = routeNodeLayouts[levelId] || levelLayouts[0]; state.stage = 1; state.stageCount = 1; state.currentNode = levelId; state.layout = layout; state.tableKind = levelId === 'blackout-core' ? 'boss' : levelId === 'surface-vault' ? 'reward' : 'standard'; state.tableLabel = state.tableKind.toUpperCase(); state.boss = layout.boss ? { active: true, exposed: false, hp: layout.boss.maxHp, maxHp: layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; applyTargetLayout(); resetLayoutDamage(); state.destructibles = createDestructibles(); spawnBall(); testLevelSelect.value = levelId; debugPanel.hidden = true; showPreLevelMap(); updateHud(); }
   function resetLayoutDamage() { levelLayouts.forEach(layout => layout.bumpers.forEach(item => { item.hits = 0; })); }
   function applyTargetLayout() { const targetElements = ['Fire', 'Water', 'Earth', 'Air', 'Fire', 'Water']; state.layout.targetPositions.forEach((position, index) => { const target = targets[index]; target.x = position[0]; target.y = position[1]; target.r = position[2]; target.element = targetElements[index]; target.hit = false; }); }
   let input = { left: false, right: false };
@@ -434,6 +438,13 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
   let activePointerId = null;
   let activePointerSide = null;
   let state;
+  const destructibleTemplates = Object.freeze([
+    { id: 'timber-crate', label: 'TIMBER CRATE', kind: 'crate', x: 74, y: 226, r: 22, material: 'timber', maxIntegrity: 18, threshold: 1.2, damageScale: 13, weaknesses: { Fire: 2, Water: .8 }, salvageValue: 55, salvageCharge: .35 },
+    { id: 'copper-pipe', label: 'COPPER PIPE', kind: 'pipe', x: 286, y: 226, r: 20, material: 'copper', maxIntegrity: 26, threshold: 1.8, damageScale: 18, weaknesses: { Earth: 1.25, Wind: .9 }, salvageValue: 70, salvageCharge: .45 },
+    { id: 'stone-plug', label: 'STONE PLUG', kind: 'stone', x: 180, y: 292, r: 22, material: 'stone', maxIntegrity: 42, threshold: 2.4, damageScale: 30, weaknesses: { Earth: 1.5, Water: 1.2, Fire: .7 }, salvageValue: 95, salvageCharge: .65 },
+    { id: 'salvage-drum', label: 'SALVAGE DRUM', kind: 'drum', x: 250, y: 314, r: 18, material: 'copper', maxIntegrity: 10, threshold: .8, damageScale: 10, weaknesses: { Fire: 1.25, Water: .9 }, salvageValue: 40, salvageCharge: .25 }
+  ]);
+  function createDestructibles() { return state.currentNode === 'generator-well' ? destructibleTemplates.map(template => ({ ...template, integrity: template.maxIntegrity, damageStage: 0, damageCooldown: 0, destroyed: false })) : []; }
   const targets = [
     { x: 90, y: 164, r: 17, hit: false, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, material: 'timber' }, { x: 270, y: 164, r: 17, hit: false, material: 'timber' },
     { x: 77, y: 274, r: 15, hit: false, material: 'timber' }, { x: 283, y: 274, r: 15, hit: false, material: 'timber' }, { x: 180, y: 242, r: 14, hit: false, material: 'timber' }
@@ -450,11 +461,12 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Wind: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], destructibles: [], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
     cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
     resetLayoutDamage();
+    state.destructibles = createDestructibles();
     applyTargetLayout();
     spawnBall();
     showPreLevelMap();
@@ -511,9 +523,9 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1, element = null) { state.effects.push({ x, y, color, power, element, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
   function emitScorePopup(x, y, value, color = '#ffd083') { if (!value || !state?.scorePops) return; state.scorePops.push({ x, y, value: `+${Math.round(value)}`, color, life: 1 }); if (state.scorePops.length > 12) state.scorePops.shift(); }
-  function refreshElement(element, source = 'hinge') { addElementStack(state.ball.elementEffects, element, 1, 3, 360); const effect = state.ball.elementEffects[element]; state.ball.hybrid = resolveHybrid(state.ball.elementEffects); state.elementalCharge[element] = Math.min(3, state.elementalCharge[element] + 1); emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15, element); setMessage(state.ball.hybrid ? `${element} imprint ${effect.stacks}/3 · ${state.ball.hybrid.id}.` : `${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
-  function activeElement(element) { const effect = state.ball.elementEffects[element]; return effect && effect.stacks > 0 && effect.timer > 0; }
-  function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; emitScorePopup(x, y, 15 * effect.stacks, elementColors[element]); state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2, element); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
+  function refreshElement(element, source = 'hinge') { const canonical = canonicalElement(element); addElementStack(state.ball.elementEffects, canonical, 1, 3, 360); const effect = state.ball.elementEffects[canonical]; state.ball.hybrid = resolveHybrid(state.ball.elementEffects); state.elementalCharge[canonical] = Math.min(3, (state.elementalCharge[canonical] || 0) + 1); emitImpact(state.ball.x, state.ball.y, elementColors[canonical], .7 + effect.stacks * .15, canonical); setMessage(state.ball.hybrid ? `${displayElement(canonical)} imprint ${effect.stacks}/3 · ${state.ball.hybrid.id}.` : `${displayElement(canonical)} imprint ${effect.stacks}/3 applied by ${source}.`); }
+  function activeElement(element) { const effect = state.ball.elementEffects[canonicalElement(element)]; return effect && effect.stacks > 0 && effect.timer > 0; }
+  function reactWithEnvironment(element, x, y, label) { const canonical = canonicalElement(element); if (!activeElement(canonical)) return false; const effect = state.ball.elementEffects[canonical]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; emitScorePopup(x, y, 15 * effect.stacks, elementColors[canonical]); state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[canonical], .9 + effect.stacks * .2, canonical); setMessage(`${displayElement(canonical)} reaction: ${label} · stack ${effect.stacks}.`); return true; }
   function hingeCradle(side) { return state.ball?.cradleSide === side && input[side]; }
   function imprintFromHinge(side) { const element = state.hingeElements[side]; if (element) refreshElement(element, `${element} hinge`); }
   function decayElementEffects(frameScale = 1) { decayElementStacks(state.ball.elementEffects, frameScale); state.ball.hybrid = resolveHybrid(state.ball.elementEffects); }
@@ -537,6 +549,22 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); const points = Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.score += points; emitScorePopup(target.x, target.y, points, reaction ? elementColors[target.element] : '#ffd083'); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? (state.tableKind === 'boss' ? `Armor core ${state.bossHits}/3 exposed.` : 'Descent mapped. Choose a modification.') : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
+  }
+  function applyDestructibleContact(item, contact) {
+    if (item.destroyed || item.damageCooldown > 0 || contact.separating) return;
+    const damage = damageFromContact(contact, { objectMaterial: item.material, damageScale: item.damageScale, threshold: item.threshold, weaknesses: item.weaknesses, elementEffects: state.ball.elementEffects });
+    if (damage <= 0) return;
+    item.integrity = Math.max(0, item.integrity - damage);
+    item.damageCooldown = 8;
+    item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
+    const activeDamageElement = Object.entries(state.ball.elementEffects).find(([, effect]) => effect.stacks > 0 && effect.timer > 0)?.[0];
+    const impactColor = activeDamageElement ? elementColors[activeDamageElement] : '#d7a45a';
+    emitImpact(item.x, item.y, impactColor, item.damageStage === 3 ? 1.4 : .65, activeDamageElement || null);
+    if (item.destroyed || item.integrity <= 0) {
+      item.destroyed = true; item.damageStage = 3; state.score += item.salvageValue; state.charge = Math.min(99, state.charge + item.salvageCharge); emitScorePopup(item.x, item.y, item.salvageValue, '#d7a45a'); setMessage(`${item.label} broken. Salvage recovered.`);
+    } else {
+      setMessage(`${item.label} damaged · ${Math.ceil(item.integrity)}/${item.maxIntegrity} integrity.`);
+    }
   }
   function nodeTitle(id) { return routeNodeLayouts[id]?.name || id.replaceAll('-', ' '); }
   function shortNodeTitle(id) { return ({ 'generator-well': 'Generator', 'pulse-manifold': 'Pulse', 'split-reactor': 'Split', 'blackout-core': 'Warden', 'surface-vault': 'Vault' })[id] || nodeTitle(id); }
@@ -577,14 +605,14 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? `◈ ${upgrade.cost}` : 'FREE'; button.title = `${upgrade.title} · ${price}`; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element}</small><strong>${upgrade.title.replace(' hinge module', '')}</strong><small class="upgrade-cost" aria-label="Cost ${upgrade.cost || 0} charge">${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.classList.add('upgrade-scroll'); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
   }
   function beginNextRoute() {
-    state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
+    state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.destructibles = createDestructibles(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
   }
   function chooseUpgrade(upgrade) {
     if (upgrade.cost && state.charge < upgrade.cost) return; if (upgrade.id === 'repair' && state.stability >= state.stabilityMax) return; if (upgrade.cost) state.charge -= upgrade.cost; upgrade.apply(state); if (state.pendingRoute) state.routeHistory.push(state.pendingRoute); state.attunements.push(upgrade.element); state.pendingRoute = null; state.message = `${upgrade.element} attunement installed.`; beginNextRoute();
   }
   function win() { routeMapPanel.hidden = true; routePreviewSlot.hidden = true; overlay.classList.remove('route-decision', 'upgrade-decision', 'outcome-failure'); overlay.classList.add('terminal-outcome'); overlayKicker.hidden = false; overlayTitle.hidden = false; overlayCopy.hidden = false; overlayScrollCue.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; resetLabel.textContent = 'Start another descent'; resetButton.onclick = reset; outcomeSalvage.textContent = Math.floor(state.charge); outcomeScore.textContent = Math.round(state.score); overlayKicker.textContent = 'Route complete'; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = 'The probe found a route through the buried machine.'; overlay.hidden = false; updateHud(); }
   function lose() { routeMapPanel.hidden = true; routePreviewSlot.hidden = true; overlay.classList.remove('route-decision', 'upgrade-decision'); overlay.classList.add('terminal-outcome', 'outcome-failure'); overlayKicker.hidden = false; overlayTitle.hidden = false; overlayCopy.hidden = false; overlayScrollCue.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; resetLabel.textContent = 'Retry descent'; resetButton.onclick = reset; state.running = false; outcomeSalvage.textContent = Math.floor(state.charge); outcomeScore.textContent = Math.round(state.score); overlayKicker.textContent = 'Run ended'; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = 'The tunnel collapsed before the route was mapped.'; overlay.hidden = false; updateHud(); }
-  function circleCollision(ball, item, legacyRestitution = 1) {
+  function circleCollision(ball, item) {
     const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
     const dist = Math.hypot(dx, dy);
     if (dist >= min) return null;
@@ -599,14 +627,19 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const speed = Math.hypot(ball.vx, ball.vy);
     if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
   }
+  function resolveBoundaryContact(ball, normal, point, penetration) {
+    const physics = syncPhysicsBallFromPixels(ball);
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'steel', inverseMass: 0 }, point: { x: point.x / PX_PER_M, y: point.y / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    syncPixelsFromPhysics(ball); ball.lastContact = contact; return contact;
+  }
   function flipperEndpoints(flipper) {
     return flipperEndpointsAt(flipper, flipper.angle);
   }
   function flipperEndpointsAt(flipper, angle) {
     return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
   }
-  function edgeSegment(item) { const half = item.length / 2; if (item.vertical) { const inward = item.inward * (item.x < W / 2 ? 1 : -1); return { x1: item.x - inward / 2, y1: item.y - half, x2: item.x + inward / 2, y2: item.y + half, width: item.width }; } const rise = Math.tan(item.angle || 0) * half; return { x1: item.x - half, y1: item.y - rise, x2: item.x + half, y2: item.y + rise, width: item.width }; }
-  function segmentCollision(ball, segment, legacyRestitution = .82, legacyKick = 0, tipWeighted = false) {
+  function edgeSegment(item) { const half = item.length / 2; const side = item.x < W / 2 ? 1 : -1; if (item.vertical) { const inward = item.inward * side; return { x1: item.x - inward / 2, y1: item.y - half, x2: item.x + inward / 2, y2: item.y + half, width: item.width, surfaceVelocity: { x: side * (item.inwardForce || 0) * LEGACY_FRAME_RATE, y: -(item.upward || 0) * LEGACY_FRAME_RATE } }; } const rise = Math.tan(item.angle || 0) * half; return { x1: item.x - half, y1: item.y - rise, x2: item.x + half, y2: item.y + rise, width: item.width, surfaceVelocity: { x: 0, y: 0 } }; }
+  function segmentCollision(ball, segment) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
     const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
@@ -620,7 +653,6 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(segment, 'steel'), inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: (segment.surfaceVelocity?.x || 0) / PX_PER_M, y: (segment.surfaceVelocity?.y || 0) / PX_PER_M }, penetration: (radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
     ball.lastContact = contact;
-    if (tipWeighted) ball.lastFlipperLaunchFactor = .18 + projection * .82;
     return contact;
   }
   function sweptSegmentContact(ball, segment, radius) {
@@ -630,9 +662,23 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     return null;
   }
   function sweptFlipperContact(ball, flipper, radius) {
-    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle; const ballTravel = Math.hypot(ball.x - startX, ball.y - startY); const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + (state?.flipperLengthBonus || 0)); const travel = Math.max(ballTravel, tipTravel); if (travel < .01) return null;
-    const angleSteps = Math.min(28, Math.max(5, Math.ceil(Math.abs(flipper.angle - previousAngle) * 24), Math.ceil(tipTravel / Math.max(2, radius * .35))));
-    for (let index = 0; index <= angleSteps; index += 1) { const ratio = index / angleSteps; const angle = previousAngle + (flipper.angle - previousAngle) * ratio; const segment = { ...flipperEndpointsAt(flipper, angle), width: flipper.width }; const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1; const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(ball.x - closestX, ball.y - closestY) < radius) return { x: ball.x, y: ball.y, segment }; const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, radius); if (swept) return { x: swept.x, y: swept.y, segment }; }
+    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
+    const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
+    const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle;
+    const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + (state?.flipperLengthBonus || 0));
+    const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
+    if (Math.max(ballTravel, tipTravel) < .01) return null;
+    const queryRadius = radius + Math.min(10, tipTravel * .28);
+    const angles = [previousAngle, (previousAngle + flipper.angle) / 2, flipper.angle];
+    for (const angle of angles) {
+      const segment = { ...flipperEndpointsAt(flipper, angle), width: flipper.width, material: 'rubber' };
+      const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1;
+      const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
+      const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+      if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, segment };
+      const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, queryRadius);
+      if (swept) return { x: swept.x, y: swept.y, segment };
+    }
     return null;
   }
   function resolveFlipperCollision(ball, flipper, side, held) {
@@ -684,26 +730,27 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const b = state.ball;
     const frameScale = dt * LEGACY_FRAME_RATE;
     state.pulse += .08 * frameScale; state.flash = Math.max(0, state.flash - frameScale); state.topHitCooldown = Math.max(0, state.topHitCooldown - frameScale); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - frameScale); state.relayCooldown = Math.max(0, state.relayCooldown - frameScale); state.comboTimer = Math.max(0, state.comboTimer - frameScale); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(frameScale); state.effects.forEach(effect => effect.life -= .045 * frameScale); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035 * frameScale; pop.y -= .42 * frameScale; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
+    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); });
     updateFlippers(dt);
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
     integratePrimaryBall(b, routeGravity, dt);
     state.peakY = Math.min(state.peakY, b.y);
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
-    const wallRebound = MATERIALS.steel.restitution;
-    if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * wallRebound; }
-    if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * wallRebound; }
-    if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * wallRebound; }
+    if (b.x - b.r < table.left) resolveBoundaryContact(b, { x: 1, y: 0 }, { x: table.left, y: b.y }, table.left - (b.x - b.r));
+    if (b.x + b.r > table.right) resolveBoundaryContact(b, { x: -1, y: 0 }, { x: table.right, y: b.y }, (b.x + b.r) - table.right);
+    if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
     targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) hitTarget(t); });
+    state.destructibles.forEach(item => { if (item.destroyed) return; const contact = circleCollision(b, item); if (contact && !contact.separating) applyDestructibleContact(item, contact); });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
       const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);
       if (item.type === 'edge') {
         if (item.oneWay && !energetic) return;
-        const segment = { ...edgeSegment(item), material: 'steel' }, contact = segmentCollision(b, segment);
-        if (contact && !contact.separating && energetic) { b.vx += (item.x < W / 2 ? 1 : -1) * (item.inwardForce || .5) * LEGACY_FRAME_RATE; b.vy -= (item.upward || .7) * LEGACY_FRAME_RATE; capBallSpeed(b); }
+        const segment = { ...edgeSegment(item), material: 'steel' };
+        segmentCollision(b, segment);
         return;
       }
       if (item.oneWay && !energetic) return;
@@ -742,26 +789,40 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
       setMessage(state.tableKind === 'boss' ? 'Warden backlash. Stability lost.' : 'Probe recovered. Stability lost.'); spawnBall(); return;    }
     updateHud();
   }
+  function drawMineBackdrop() {
+    const wall = ctx.createLinearGradient(0, 0, W, H); wall.addColorStop(0, '#201a15'); wall.addColorStop(.42, '#2c241c'); wall.addColorStop(1, '#0d0e0d');
+    ctx.fillStyle = wall; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#161513'; ctx.fillRect(18, 18, W - 36, H - 36);
+    ctx.save(); ctx.globalAlpha = .5; ctx.strokeStyle = '#5a4330'; ctx.lineWidth = 2;
+    for (let band = 0; band < 9; band += 1) { const y = 52 + band * 64; ctx.beginPath(); ctx.moveTo(24, y); ctx.bezierCurveTo(82, y - 18 + (band % 2) * 9, 126, y + 14, 180, y - 2); ctx.bezierCurveTo(236, y - 19, 278, y + 16, W - 24, y - 4); ctx.stroke(); }
+    ctx.globalAlpha = .22; ctx.strokeStyle = '#907052'; ctx.lineWidth = 1;
+    for (let band = 0; band < 8; band += 1) { const y = 66 + band * 64; ctx.beginPath(); ctx.moveTo(24, y + 8); ctx.bezierCurveTo(84, y - 8, 128, y + 18, 180, y + 4); ctx.bezierCurveTo(234, y - 11, 280, y + 16, W - 24, y + 2); ctx.stroke(); }
+    ctx.restore();
+    ctx.save(); ctx.fillStyle = '#111412'; ctx.beginPath(); ctx.moveTo(76, 28); ctx.lineTo(W - 76, 28); ctx.lineTo(W - 116, 118); ctx.lineTo(116, 118); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#5a4330'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = 'rgba(215,164,90,.08)'; ctx.beginPath(); ctx.moveTo(108, 35); ctx.lineTo(W - 108, 35); ctx.lineTo(W - 142, 105); ctx.lineTo(142, 105); ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.save(); const deck = ctx.createLinearGradient(0, 100, 0, H - 24); deck.addColorStop(0, '#31312a'); deck.addColorStop(.48, '#252825'); deck.addColorStop(1, '#171a18'); ctx.fillStyle = deck; ctx.fillRect(27, 100, W - 54, H - 126); ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 3; ctx.strokeRect(27, 100, W - 54, H - 126); ctx.strokeStyle = 'rgba(9,10,9,.7)'; ctx.lineWidth = 8; ctx.strokeRect(31, 104, W - 62, H - 134); ctx.restore();
+    [[49, 72], [W - 49, 72], [49, H - 112], [W - 49, H - 112]].forEach(([x, y]) => { const glow = ctx.createRadialGradient(x, y, 1, x, y, 26); glow.addColorStop(0, 'rgba(255,228,163,.42)'); glow.addColorStop(1, 'rgba(215,164,90,0)'); ctx.fillStyle = glow; ctx.fillRect(x - 28, y - 28, 56, 56); ctx.fillStyle = '#ffe4a3'; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#895033'; ctx.lineWidth = 2; ctx.stroke(); });
+    ctx.save(); ctx.strokeStyle = '#567b7a'; ctx.globalAlpha = .55; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(37, 170); ctx.bezierCurveTo(52, 190, 42, 218, 58, 242); ctx.bezierCurveTo(70, 262, 50, 292, 67, 318); ctx.bezierCurveTo(78, 338, 64, 366, 76, 390); ctx.stroke(); ctx.globalAlpha = .18; ctx.lineWidth = 7; ctx.stroke(); ctx.restore();
+  }
+  function drawMineStructures() {
+    ctx.save();
+    const beam = (x, y, width, height, angle = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.fillStyle = '#4d3525'; ctx.fillRect(-width / 2, -height / 2, width, height); ctx.fillStyle = '#93613d'; ctx.fillRect(-width / 2 + 2, -height / 2 + 2, width - 4, 4); ctx.strokeStyle = '#241b15'; ctx.lineWidth = 2; ctx.strokeRect(-width / 2, -height / 2, width, height); ctx.restore(); };
+    beam(62, 118, 13, 88, -.04); beam(W - 62, 118, 13, 88, .04); beam(W / 2, 78, W - 110, 12, 0); beam(62, 388, 10, 132, -.025); beam(W - 62, 388, 10, 132, .025);
+    ctx.strokeStyle = '#9c6b45'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(70, 76); ctx.quadraticCurveTo(W / 2, 24, W - 70, 76); ctx.stroke();
+    const pipe = (x, y, length, vertical = false) => { ctx.save(); ctx.translate(x, y); if (vertical) ctx.rotate(Math.PI / 2); ctx.fillStyle = '#3d4944'; ctx.fillRect(-length / 2, -5, length, 10); ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.strokeRect(-length / 2, -5, length, 10); [-length * .32, length * .32].forEach(joint => { ctx.fillStyle = '#895033'; ctx.fillRect(joint - 4, -8, 8, 16); ctx.strokeStyle = '#b06a3c'; ctx.strokeRect(joint - 4, -8, 8, 16); }); ctx.restore(); };
+    pipe(W - 50, 194, 130, true); pipe(W - 48, 272, 88, true); pipe(46, 430, 108, false);
+    ctx.strokeStyle = '#6a5140'; ctx.globalAlpha = .62; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(42, 322); ctx.lineTo(94, 308); ctx.lineTo(132, 316); ctx.stroke(); ctx.strokeStyle = '#8c6d4d'; ctx.globalAlpha = .36; ctx.beginPath(); ctx.moveTo(228, 422); ctx.lineTo(280, 414); ctx.lineTo(318, 426); ctx.stroke();
+    ctx.restore();
+  }
+  function drawMineDrain() {
+    ctx.save(); const y = H - 96; ctx.fillStyle = '#101311'; ctx.beginPath(); ctx.moveTo(28, y + 42); ctx.lineTo(28, y + 6); ctx.lineTo(76, y - 4); ctx.lineTo(126, y + 10); ctx.lineTo(W - 126, y + 10); ctx.lineTo(W - 76, y - 4); ctx.lineTo(W - 28, y + 6); ctx.lineTo(W - 28, y + 42); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 3; ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(34, y + 15); ctx.lineTo(126, y + 25); ctx.moveTo(W - 34, y + 15); ctx.lineTo(W - 126, y + 25); ctx.stroke(); ctx.fillStyle = '#070908'; ctx.beginPath(); ctx.moveTo(146, y + 39); ctx.lineTo(214, y + 39); ctx.lineTo(196, y + 4); ctx.lineTo(164, y + 4); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#8a7760'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#d7a45a'; ctx.beginPath(); ctx.arc(W / 2, y + 20, 5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    const deck = ctx.createLinearGradient(0, 0, W, H); deck.addColorStop(0, '#304943'); deck.addColorStop(.32, '#1b2a2b'); deck.addColorStop(.7, '#152023'); deck.addColorStop(1, '#080e11');
-    ctx.fillStyle = deck; ctx.fillRect(0, 0, W, H);
-    const coreGlow = ctx.createRadialGradient(W / 2, 290, 20, W / 2, 290, 260); coreGlow.addColorStop(0, 'rgba(91,166,125,.18)'); coreGlow.addColorStop(.58, 'rgba(33,93,72,.07)'); coreGlow.addColorStop(1, 'rgba(10,18,20,0)'); ctx.fillStyle = coreGlow; ctx.fillRect(20, 20, W - 40, H - 40);
-    ctx.fillStyle = 'rgba(7,13,15,.55)'; ctx.fillRect(24, 28, 11, H - 68); ctx.fillRect(W - 35, 28, 11, H - 68);
-    ctx.save(); ctx.strokeStyle = 'rgba(141,168,149,.18)'; ctx.lineWidth = 2;
-    for (let y = 30; y < H - 20; y += 26) { ctx.beginPath(); ctx.moveTo(24, y); ctx.lineTo(W - 24, y); ctx.stroke(); }
-    ctx.strokeStyle = 'rgba(241,179,91,.08)'; ctx.lineWidth = 1;
-    for (let x = 42; x < W - 40; x += 34) { ctx.beginPath(); ctx.moveTo(x, 30); ctx.lineTo(x, H - 42); ctx.stroke(); }
-    ctx.restore();
-    if (spriteImages.tableShell.complete && spriteImages.tableShell.naturalWidth) { ctx.save(); ctx.globalAlpha = .96; ctx.drawImage(spriteImages.tableShell, 0, 0, W, H); ctx.restore(); }
-    ctx.strokeStyle = '#8da895'; ctx.lineWidth = 5; ctx.strokeRect(table.left, table.top, table.right - table.left, table.bottom - table.top);
-    ctx.strokeStyle = 'rgba(241,179,91,.2)'; ctx.lineWidth = 1; ctx.strokeRect(table.left + 7, table.top + 7, table.right - table.left - 14, table.bottom - table.top - 14);
-    drawDeckDetails(); drawLowerMidLandmarks(); drawReachBand(); drawTableIdentity(); drawObjectiveCue(); if (state.boss.active) drawBoss();
-    ctx.fillStyle = 'rgba(9,17,19,.84)'; ctx.fillRect(30, H - 125, W - 60, 88);
-    if (spriteImages.lowerReturnChannel.complete && spriteImages.lowerReturnChannel.naturalWidth) { ctx.save(); ctx.globalAlpha = .86; ctx.drawImage(spriteImages.lowerReturnChannel, 30, H - 125, W - 60, 88); ctx.restore(); }
-    if (spriteImages.drainThroatAssembly.complete && spriteImages.drainThroatAssembly.naturalWidth) { ctx.save(); ctx.globalAlpha = .82; ctx.drawImage(spriteImages.drainThroatAssembly, 30, H - 125, W - 60, 88); ctx.restore(); }
-    drawEdgeMachinery(); drawReactor(); drawTargets(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawMeters(); drawEffects(); drawScorePopups(); drawAimReticle(); drawBall();
-    if (state.flash > 0) { ctx.fillStyle = `rgba(241,179,91,${state.flash / 40})`; ctx.fillRect(20, 20, W - 40, H - 40); }
+    drawMineBackdrop();
+
+    drawMineStructures(); if (state.boss.active) drawBoss();
+    drawMineDrain(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawEffects(); drawScorePopups(); drawAimReticle(); drawBall();
   }
   function drawObjectiveCue() {
     if (!state.running) return;
@@ -850,29 +911,53 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     ctx.beginPath(); ctx.arc(W / 2, railY, 7 + Math.sin(state.pulse * 1.5) * 1.5, 0, Math.PI * 2); ctx.fillStyle = '#081012'; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); ctx.beginPath(); ctx.arc(W / 2 - 2, railY - 2, 3, 0, Math.PI * 2); ctx.fillStyle = '#f1b35b'; ctx.fill();
     ctx.restore();
   }
-  function drawTargets() {
-    targets.forEach(t => {
-      const pulse = 3 + Math.sin(state.pulse * 1.4 + t.x) * 2, color = t.hit ? '#526e63' : elementColors[t.element];
-      const sprite = spriteImages[`target${t.element}`];
-      ctx.save(); ctx.translate(t.x, t.y); ctx.shadowColor = color; ctx.shadowBlur = t.hit ? 0 : pulse * 2;
-      ctx.fillStyle = 'rgba(0,0,0,.48)'; ctx.beginPath(); ctx.ellipse(3, 5, t.r + 7, t.r * .72 + 5, -.25, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-      if (sprite?.complete && sprite.naturalWidth) { const size = (t.r + 7) * 2; ctx.globalAlpha = t.hit ? .32 : 1; ctx.drawImage(sprite, -size / 2, -size / 2, size, size); ctx.globalAlpha = 1; }
-      else { ctx.rotate(Math.PI / 4); ctx.beginPath(); for (let side = 0; side < 8; side += 1) { const a = side * Math.PI / 4; const radius = side % 2 ? t.r * .9 : t.r * 1.12; const x = Math.cos(a) * (radius + pulse * .25), y = Math.sin(a) * (radius + pulse * .25); side === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fillStyle = color; ctx.fill(); ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.rotate(-Math.PI / 4); ctx.beginPath(); ctx.moveTo(-t.r * .62, 0); ctx.lineTo(t.r * .62, 0); ctx.moveTo(0, -t.r * .62); ctx.lineTo(0, t.r * .62); ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, Math.max(3, t.r * .24), 0, Math.PI * 2); ctx.fillStyle = '#f4f0d5'; ctx.fill(); ctx.strokeStyle = color; ctx.stroke(); }
-      if (!t.hit) { ctx.strokeStyle = color; ctx.globalAlpha = .5; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, t.r + 6 + pulse * .3, -Math.PI / 2, -Math.PI / 2 + Math.PI * .8); ctx.stroke(); ctx.globalAlpha = 1; } else { ctx.fillStyle = 'rgba(7,13,15,.52)'; ctx.beginPath(); ctx.arc(0, 0, t.r + 4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 1; ctx.stroke(); }
+  function drawDestructibles() {
+    state.destructibles.forEach(item => {
+      const stage = item.damageStage || 0;
+      ctx.save(); ctx.translate(item.x, item.y); ctx.globalAlpha = item.destroyed ? .72 : 1;
+      ctx.fillStyle = 'rgba(0,0,0,.42)'; ctx.beginPath(); ctx.ellipse(3, item.r * .62, item.r * 1.05, item.r * .3, 0, 0, Math.PI * 2); ctx.fill();
+      if (item.destroyed) {
+        ctx.fillStyle = item.kind === 'crate' ? '#5b3d29' : item.kind === 'pipe' ? '#3e4a47' : '#51483d'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3;
+        for (let index = 0; index < 3; index += 1) { ctx.save(); ctx.rotate((index - 1) * .45); ctx.fillRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.strokeRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.restore(); }
+        ctx.restore(); return;
+      }
+      if (item.kind === 'crate') {
+        ctx.rotate(-.05); ctx.fillStyle = '#5b3d29'; ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.fillRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-item.r * .58, -item.r * .48); ctx.lineTo(item.r * .56, item.r * .42); ctx.moveTo(item.r * .56, -item.r * .48); ctx.lineTo(-item.r * .58, item.r * .42); ctx.stroke(); ctx.fillStyle = '#3b2a20'; ctx.fillRect(-item.r * .82, -item.r * .64, 5, item.r * 1.28); ctx.fillRect(item.r * .7, -item.r * .64, 5, item.r * 1.28); ctx.fillStyle = '#9a6940'; [[-item.r * .7, -item.r * .52], [item.r * .7, -item.r * .52], [-item.r * .7, item.r * .5], [item.r * .7, item.r * .5]].forEach(([x, y]) => { ctx.fillRect(x - 2, y - 2, 4, 4); });
+      } else if (item.kind === 'pipe') {
+        ctx.fillStyle = '#1b2425'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); ctx.strokeRect(-item.r * .86, -item.r * .58, item.r * 1.72, item.r * 1.16); for (let row = -1; row <= 1; row += 1) { const y = row * 8; ctx.fillStyle = '#3e4a47'; ctx.fillRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.strokeStyle = '#778078'; ctx.lineWidth = 1.5; ctx.strokeRect(-item.r * .72, y - 4, item.r * 1.44, 8); ctx.fillStyle = '#895033'; ctx.fillRect(-item.r * .58, y - 6, 6, 12); ctx.fillRect(item.r * .48, y - 6, 6, 12); }
+      } else if (item.kind === 'drum') {
+        ctx.fillStyle = '#765437'; ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, 0, item.r * .72, item.r, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#b47b4c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, -item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.ellipse(0, item.r * .62, item.r * .72, item.r * .22, 0, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = '#c8a06a'; ctx.fillRect(-4, -2, 8, 4);
+      } else {
+        ctx.fillStyle = '#51483d'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
+      }
+      if (stage > 0) { ctx.strokeStyle = '#d7a45a'; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
+      if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }
+      ctx.globalAlpha = 1; ctx.fillStyle = '#d7a45a'; for (let index = 0; index < 3; index += 1) { ctx.beginPath(); ctx.arc(-7 + index * 7, item.r + 5, 2, 0, Math.PI * 2); ctx.fillStyle = index < stage ? '#d7a45a' : '#44372b'; ctx.fill(); }
       ctx.restore();
+    });
+  }
+  function drawTargets() {
+    targets.forEach((target, index) => {
+      ctx.save(); ctx.translate(target.x, target.y); ctx.globalAlpha = target.hit ? .42 : 1;
+      ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(3, 5, target.r + 5, target.r * .55, 0, 0, Math.PI * 2); ctx.fill();
+      if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.beginPath(); ctx.moveTo(-target.r * .45, -target.r * .35); ctx.lineTo(target.r * .4, target.r * .35); ctx.stroke(); ctx.restore(); return; }
+      ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = index % 3 === 0 ? '#5b3d29' : index % 3 === 1 ? '#51483d' : '#3e4a47';
+      if (index % 3 === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }
+      else if (index % 3 === 1) { ctx.beginPath(); ctx.moveTo(-target.r * .82, target.r * .2); ctx.lineTo(-target.r * .6, -target.r * .56); ctx.lineTo(target.r * .5, -target.r * .62); ctx.lineTo(target.r * .8, target.r * .25); ctx.lineTo(target.r * .36, target.r * .68); ctx.lineTo(-target.r * .5, target.r * .62); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .42, -.1); ctx.lineTo(target.r * .42, .18); ctx.stroke(); }
+      else { ctx.fillRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .58, -target.r * .45); ctx.lineTo(-target.r * .58, target.r * .45); ctx.moveTo(target.r * .58, -target.r * .45); ctx.lineTo(target.r * .58, target.r * .45); ctx.stroke(); }
+      ctx.fillStyle = elementColors[canonicalElement(target.element)] || '#d7a45a'; ctx.beginPath(); ctx.arc(target.r * .52, -target.r * .45, 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });
   }
   function drawBumpers() {
     state.layout.bumpers.forEach(item => {
-      if (item.type === 'edge') { ctx.save(); const segment = edgeSegment(item), side = item.x < W / 2 ? 1 : -1; ctx.lineCap = 'round'; ctx.strokeStyle = '#101a1c'; ctx.lineWidth = item.width + 4; ctx.beginPath(); ctx.moveTo(segment.x1, segment.y1); ctx.lineTo(segment.x2, segment.y2); ctx.stroke(); ctx.strokeStyle = elementColors[item.element]; ctx.lineWidth = item.width; ctx.beginPath(); ctx.moveTo(segment.x1, segment.y1); ctx.lineTo(segment.x2, segment.y2); ctx.stroke(); ctx.strokeStyle = '#b5d3a1'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(segment.x1, segment.y1); ctx.lineTo(segment.x2, segment.y2); ctx.stroke(); if (item.oneWay) { ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 1.5; const midX = (segment.x1 + segment.x2) / 2, midY = (segment.y1 + segment.y2) / 2; ctx.beginPath(); ctx.moveTo(midX - side * 5, midY); ctx.lineTo(midX + side * 2, midY - 4); ctx.lineTo(midX - side * 2, midY - 4); ctx.moveTo(midX + side * 2, midY - 4); ctx.lineTo(midX - side * 2, midY - 7); ctx.stroke(); } ctx.restore(); return; }
-      const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const element = item.element || 'Earth'; const outer = pulse ? elementColors[element] : armor ? '#526e63' : '#314f4a'; const inner = pulse ? '#efba6a' : armor ? '#83998b' : '#6f9b84';
-      ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 2 : 0), 0, Math.PI * 2); ctx.fillStyle = outer; ctx.fill();
-      ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill(); ctx.strokeStyle = pulse ? '#ffd083' : '#b5d3a1'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.save(); ctx.translate(item.x, item.y); ctx.rotate(state.pulse * .12); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.globalAlpha = .8; for (let tooth = 0; tooth < 8; tooth += 1) { ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(item.r - 2, 0); ctx.lineTo(item.r + 5, 0); ctx.stroke(); } ctx.restore();
-      ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * .25); ctx.strokeStyle = elementColors[element]; ctx.lineWidth = 2; ctx.stroke();
-      ctx.beginPath(); ctx.arc(item.x, item.y, Math.max(4, item.r * .28), 0, Math.PI * 2); ctx.fillStyle = elementColors[element]; ctx.globalAlpha = .8; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = '#e9f1df'; ctx.lineWidth = 1; ctx.stroke();
-      const bumperSprite = armor ? spriteImages.bumperArmor : pulse ? spriteImages.bumperPulse : spriteImages.bumperStandard; if (bumperSprite.complete && bumperSprite.naturalWidth) { const spriteSize = (item.r + 8) * 2; ctx.globalAlpha = .82; ctx.drawImage(bumperSprite, item.x - spriteSize / 2, item.y - spriteSize / 2, spriteSize, spriteSize); ctx.globalAlpha = 1; }
-      if (armor) { ctx.beginPath(); ctx.arc(item.x, item.y, item.r - 5, 0, Math.PI * 2); ctx.strokeStyle = item.hits ? '#f1b35b' : '#b5d3a1'; ctx.lineWidth = item.hits ? 3 : 1; ctx.stroke(); if (item.hits) { ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.strokeStyle = '#f1b35b'; ctx.lineWidth = 2; ctx.stroke(); } }
+      if (item.type === 'edge') { ctx.save(); const segment = edgeSegment(item), side = item.x < W / 2 ? 1 : -1; ctx.lineCap = 'round'; ctx.strokeStyle = '#171614'; ctx.lineWidth = item.width + 6; ctx.beginPath(); ctx.moveTo(segment.x1, segment.y1); ctx.lineTo(segment.x2, segment.y2); ctx.stroke(); ctx.strokeStyle = '#3e4a47'; ctx.lineWidth = item.width; ctx.beginPath(); ctx.moveTo(segment.x1, segment.y1); ctx.lineTo(segment.x2, segment.y2); ctx.stroke(); ctx.strokeStyle = '#778078'; ctx.lineWidth = 1; ctx.stroke(); if (item.oneWay) { const midX = (segment.x1 + segment.x2) / 2, midY = (segment.y1 + segment.y2) / 2; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(midX - side * 5, midY); ctx.lineTo(midX + side * 2, midY - 4); ctx.lineTo(midX - side * 2, midY - 4); ctx.stroke(); } ctx.restore(); return; }
+      const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const collar = pulse ? '#5f4932' : armor ? '#3e4a47' : '#2d3029'; const rubber = pulse ? '#8a6340' : '#49372c';
+      ctx.fillStyle = 'rgba(0,0,0,.42)'; ctx.beginPath(); ctx.ellipse(item.x + 3, item.y + 5, item.r + 6, item.r * .55, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = collar; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 1.5 : 0), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = rubber; ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = pulse ? '#d7a45a' : armor ? '#6d6654' : '#8a7760'; ctx.beginPath(); ctx.arc(item.x, item.y, item.r * .3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#171614'; ctx.lineWidth = 2; ctx.stroke();
+      for (let bolt = 0; bolt < 4; bolt += 1) { const angle = bolt * Math.PI / 2 + Math.PI / 4; const x = item.x + Math.cos(angle) * (item.r + 1), y = item.y + Math.sin(angle) * (item.r + 1); ctx.fillStyle = '#b3a58b'; ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill(); }
+      if (armor && item.hits) { ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.stroke(); }
     });
   }
   function drawRouteChutes() {
@@ -944,9 +1029,9 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const b = state.ball; const speed = Math.hypot(b.vx, b.vy); const motionX = speed > .05 ? -b.vx / speed : -.35; const motionY = speed > .05 ? -b.vy / speed : -.55;
     const activeEffects = Object.entries(b.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0);
     activeEffects.forEach(([element, effect], index) => { ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 5 + index * 4, 0, Math.PI * 2); ctx.strokeStyle = elementColors[element]; ctx.globalAlpha = .35 + effect.stacks * .12; ctx.lineWidth = 2 + effect.stacks; ctx.stroke(); }); ctx.globalAlpha = 1;
-    b.trail.forEach((point, index) => { const alpha = (index + 1) / b.trail.length * .18; ctx.beginPath(); ctx.arc(point.x, point.y, Math.max(2, b.r * (index + 1) / b.trail.length), 0, Math.PI * 2); ctx.fillStyle = `rgba(241,179,91,${alpha})`; ctx.fill(); });
+    b.trail.forEach((point, index) => { const alpha = (index + 1) / b.trail.length * .18; ctx.beginPath(); ctx.arc(point.x, point.y, Math.max(2, b.r * (index + 1) / b.trail.length), 0, Math.PI * 2); ctx.fillStyle = `rgba(215,223,202,${alpha})`; ctx.fill(); });
     ctx.save(); ctx.globalAlpha = .32; ctx.fillStyle = '#020608'; ctx.beginPath(); ctx.ellipse(b.x + 2, b.y + 4, b.r * 1.35, b.r * .55, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = .22; const well = ctx.createRadialGradient(b.x, b.y + 2, b.r * .4, b.x, b.y + 2, b.r * 2.5); well.addColorStop(0, '#9fc8b1'); well.addColorStop(1, 'rgba(20,44,40,0)'); ctx.fillStyle = well; ctx.beginPath(); ctx.arc(b.x, b.y + 2, b.r * 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,179,91,.18)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(215,223,202,.12)'; ctx.fill();
     if (spriteImages.ball.complete && spriteImages.ball.naturalWidth) { ctx.drawImage(spriteImages.ball, b.x - b.r - 2, b.y - b.r - 2, (b.r + 2) * 2, (b.r + 2) * 2); } else { const metal = ctx.createRadialGradient(b.x + motionX * 2 - 2, b.y + motionY * 2 - 2, 1, b.x, b.y, b.r); metal.addColorStop(0, '#fff8d6'); metal.addColorStop(.35, '#d8e6d0'); metal.addColorStop(.78, '#8ba99c'); metal.addColorStop(1, '#2d5149'); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }

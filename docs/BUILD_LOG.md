@@ -3335,3 +3335,21 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `git diff --check` passes.
 - No existing route, canvas, HUD, asset, or gameplay behavior was changed in this slice.
 - Browser memory pressure remains a verification risk; failed local browser harnesses are recorded rather than treated as evidence.
+
+## 2026-08-18 — Overhaul tick: mine-object damage slice
+
+### Implemented
+
+- Added the first live destructible object family to Generator Well: timber crate, copper pipe, stone plug, and salvage drum.
+- Routed object contacts through `damageFromContact`, so impact energy, steel-vs-object material hardness, speed threshold, and active elemental weaknesses determine integrity loss.
+- Added cooldown-protected integrity stages, distinct manufactured/mine silhouettes, destroyed states, salvage score/Charge rewards, and damage feedback without changing the ball solver.
+- Replaced the active table's former cyan console wash with a restrained mine/tunnel composition: bedrock strata, timber supports, oxidized pipework, worn deck, foreground drain throat, and warm work lamps.
+- Kept destructibles scoped to Generator Well so the slice is reversible and other route tables retain their existing collision/content contracts.
+
+### Verification
+
+- `node --test tests/physics-core.test.mjs` passes: 1 test file, 1 pass, 0 failures; material damage and elemental weakness coverage remain green.
+- `node --check src/physics-core.js` passes.
+- `git diff --check` passes.
+- Playwright Chromium against local and hosted builds passes at exact `320×568` and `390×844`: HTTP 200, route overlay enters play, touch press/release state is observed, `scrollWidth === clientWidth`, and page/console errors are empty.
+- Hosted screenshots were captured for all four viewport cases; visual review confirms the build renders without corruption. Physical-device touch and impact-feel testing remain pending.

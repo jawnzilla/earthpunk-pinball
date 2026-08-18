@@ -1,16 +1,16 @@
-# Deadlight Critic Review — Overhaul tick 02
+# Deadlight Critic Review — Overhaul tick 03
 
 ## Verdict
 
-**Playable hackathon slice: PASS. AAA-ready: FAIL.** This tick makes the primary ball, fixed-step loop, flippers, and table contacts materially physics-driven. The live build still lacks the planned destructible mine-object taxonomy and still visibly reads as an over-dense cyberpunk instrument; the overhaul is not complete.
+**Playable hackathon slice: PASS. AAA-ready: FAIL.** This tick lands the first live mine-object damage slice and materially shifts the active table toward a readable earthpunk tunnel. The physics and object response are now credible enough for the next gameplay pass, but the overhaul is not complete: elemental consequences remain mostly feedback-level, route tables still lack the new object taxonomy, and physical-device feel is unverified.
 
 ## Findings
 
 - **Gameplay clarity — PASS/WEAK:** The HUD now exposes route, score, progress, Stability, hinge attunements, and active imprints. Route choices are visible after each completed descent. The remaining weakness is that a player must discover the exact cradle geometry through play; a short animated first-use hint would improve onboarding.
 - **Elemental loop — PASS:** Hinge cradling applies stacks, matching targets/generators/relays react, and route modifiers change the gravity field. Fire, Water, Earth, and Air have distinct hooks, but the reactions still share a common feedback language.
-- **Visual direction — WEAK:** The table has stronger depth planes, edge machinery, local glows, and impact rings. It remains primarily procedural Canvas geometry; authored silhouettes, animation language, and asset variety are not yet at AAA quality.
+- **Visual direction — IMPROVED/WEAK:** Generator Well now has bedrock strata, timber supports, pipework, warm work lamps, a worn deck, foreground drain throat, and distinct crate/pipe/stone/drum silhouettes. It is a better mine read than the previous cyan console wash, but remains procedural Canvas geometry without a full material/animation language.
 - **Mobile UX — PASS/WEAK:** Touch controls are dedicated, 48px minimum, keyboard-compatible, and responsive at narrow widths. The route/module list is information-dense on very short screens and needs a focused card carousel or two-step choice flow.
-- **Physics/readability — PASS/WEAK:** The primary ball now integrates through the Physics V2 material/contact core, the loop is fixed at 120Hz with bounded catch-up, and flippers use motor surface velocity instead of active-kick/rebound presets. The remaining weakness is that non-flipper object damage is not yet driven by impact energy and the physical feel still needs device playtesting.
+- **Physics/readability — PASS/WEAK:** The primary ball integrates through the Physics V2 material/contact core, the loop is fixed at 120Hz with bounded catch-up, flippers use motor surface velocity, and Generator Well destructibles consume contact energy with material/element modifiers. The remaining weakness is that elemental stacks do not yet produce the full canon Fire/Water/Wind/Earth world events, and physical feel still needs device playtesting.
 - **Delivery — PASS with evidence gap:** Hosted URL responds HTTP 200 and the static build is offline-safe. The browser harness was unavailable in one attempt because of a missing `oci` dependency; a later critic run did verify the hosted 320px layout with `scrollWidth === clientWidth`.
 
 ## Current tick evidence
@@ -27,7 +27,14 @@
 3. Give each elemental reaction a distinct animation/audio cue while preserving offline-safe assets.
 4. Playtest on physical phones at 320/360/390 CSS widths and record screenshots plus touch interruption behavior.
 5. Add one boss or threat table and one explicit resource/free-pass table so progression is not only a choice screen.
-6. Add the first destructible mine-object slice: timber crate, copper pipe, stone plug, and salvage drum with impact-energy damage and material/element weaknesses.
+6. Extend the destructible taxonomy to the remaining route tables, then add object-specific collision affordances rather than reusing one shared contact presentation.
+7. Implement the first canon elemental world event (Fire trail or Water mini-balls) against the existing capped effect state.
+
+## Current tick evidence
+
+- Four Generator Well destructibles are present in source and initialized only for that table: `timber-crate`, `copper-pipe`, `stone-plug`, and `salvage-drum`.
+- `applyDestructibleContact()` consumes `damageFromContact()` output and exposes integrity stages, cooldown protection, destruction, salvage value, and Charge reward.
+- Local and hosted Playwright smoke checks passed at exact 320×568 and 390×844 with no overflow or browser errors.
 
 ## Simplified changelog
 
