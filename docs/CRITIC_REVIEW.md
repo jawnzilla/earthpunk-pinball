@@ -1,3 +1,22 @@
+# Deadlight Critic Review — Overhaul tick 40
+
+## Overhaul tick 40 verdict
+
+**Playable hackathon slice: PASS for geometry-matched flipper calibration. AAA-ready: FAIL.** The Physics V2 probe now models the live flipper's angular surface velocity at an explicit contact point, closing the gap between ideal moving-normal calibration and the production geometry. This is measurement infrastructure, not a launch-feel fix or visual-completion claim.
+
+### Observed evidence
+
+- `calibrateFlipperContactResponse()` derives `v_surface = omega × (contactPoint - pivot)` and reports normal impact, world/relative outgoing speed, impulse, and response ratio across normal/tangent/angular inputs.
+- Deterministic tests pass for stationary and approaching cases. With 4 m/s normal input, 0.6 m contact radius, and -8 rad/s rotation, the probe reports 4.8 m/s surface speed, 8.8 m/s impact, 10.256 m/s world outgoing, and 0.6200000000000002 relative response.
+- `npm test` passes 9 tests; syntax and whitespace checks pass. No player-facing behavior changed.
+- Local exact Playwright checks at 320×568 and 390×844 pass HTTP 200, complete documents, exact widths, no overflow, Canvas, and zero browser/request errors. The review fixture's `N 4` debug readout was not exposed in this local DOM capture and is not claimed.
+
+### Remaining risk / next smallest slice
+
+- The probe still does not prove that the live fixture's negative `μΔ -81px/s` is caused by solver response rather than fixture orientation, tangent friction, or contact placement. Do not tune restitution or friction from this result alone.
+- Hosted Pages deployment and exact hosted checks remain required for this commit.
+- Next slice should compare the geometry-matched probe's measured contact-point/angular-velocity range against a fresh hosted active-contact capture, then change one solver property only if the comparison isolates a defect.
+
 # Deadlight Critic Review — Overhaul tick 37
 
 ## Overhaul tick 39 verdict

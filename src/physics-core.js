@@ -201,6 +201,67 @@ export function calibrateMovingSurfaceResponse({
       }));
 }
 
+// Geometry-matched flipper calibration: preserve the actual rotating-surface
+// velocity at a contact point, while keeping the normal/tangent inputs explicit.
+// This is a probe only; live gameplay still owns its collision call site.
+export function calibrateFlipperContactResponse({
+  incomingNormalSpeeds = [1, 2, 3],
+  tangentSpeeds = [0],
+  angularVelocities = [0, 4, 8],
+  contactPoint = { x: 0.6, y: 0 },
+  pivot = { x: 0, y: 0 },
+  normal = { x: 0, y: -1 },
+  ballMaterial = 'steel',
+  surfaceMaterial = 'rubber',
+  restitution = null
+} = {}) {
+  const n = normalize(normal);
+  const tangent = { x: -n.y, y: n.x };
+  const offset = subtract(contactPoint, pivot);
+  return incomingNormalSpeeds
+    .filter(speed => Number.isFinite(speed) && speed > 0)
+    .flatMap(incomingNormalSpeed => tangentSpeeds
+      .filter(speed => Number.isFinite(speed))
+      .flatMap(tangentSpeed => angularVelocities
+        .filter(angularVelocity => Number.isFinite(angularVelocity))
+        .map(angularVelocity => {
+          const surfaceVelocity = {
+            x: -angularVelocity * offset.y,
+            y: angularVelocity * offset.x
+          };
+          const ball = createBall({
+            vx: -n.x * incomingNormalSpeed + tangent.x * tangentSpeed,
+            vy: -n.y * incomingNormalSpeed + tangent.y * tangentSpeed,
+            material: ballMaterial
+          });
+          const contact = resolveContact({
+            ball,
+            surface: { material: surfaceMaterial, inverseMass: 0 },
+            point: contactPoint,
+            normal: n,
+            surfaceVelocity,
+            restitution
+          });
+          const relativeIncoming = subtract({
+            x: -n.x * incomingNormalSpeed + tangent.x * tangentSpeed,
+            y: -n.y * incomingNormalSpeed + tangent.y * tangentSpeed
+          }, surfaceVelocity);
+          const relativeOutgoing = subtract(ball.velocity, surfaceVelocity);
+          const relativeIncomingSpeed = magnitude(relativeIncoming);
+          return {
+            incomingNormalSpeed,
+            tangentSpeed,
+            angularVelocity,
+            surfaceSpeed: magnitude(surfaceVelocity),
+            impactSpeed: contact.impactSpeed,
+            outgoingSpeed: magnitude(ball.velocity),
+            relativeOutgoingSpeed: magnitude(relativeOutgoing),
+            responseRatio: relativeIncomingSpeed > EPSILON ? magnitude(relativeOutgoing) / relativeIncomingSpeed : 0,
+            impulseMagnitude: magnitude(contact.impulse)
+          };
+        })));
+}
+
 export function damageFromContact(contact, { objectMaterial = 'timber', damageScale = 1, threshold = 1.2, weaknesses = {}, elementEffects = {} } = {}) {
   if (!contact?.hit || contact.separating || contact.impactSpeed < threshold) return 0;
   const material = MATERIALS[objectMaterial] ?? MATERIALS.timber;

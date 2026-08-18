@@ -14,7 +14,8 @@ import {
   materialHardness,
   applyImpulse,
   calibrateContactResponse,
-  calibrateMovingSurfaceResponse
+  calibrateMovingSurfaceResponse,
+  calibrateFlipperContactResponse
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -75,6 +76,23 @@ assert.equal(materialHardness('timber'), MATERIALS.timber.hardness);
   assert.ok(samples[1].impactSpeed > samples[0].impactSpeed);
   assert.ok(samples[1].outgoingSpeed > samples[0].outgoingSpeed);
   assert.ok(samples[1].relativeOutgoingSpeed > samples[0].relativeOutgoingSpeed);
+}
+
+{
+  const samples = calibrateFlipperContactResponse({
+    incomingNormalSpeeds: [4],
+    tangentSpeeds: [0, 1],
+    angularVelocities: [0, -8],
+    contactPoint: { x: 0.6, y: 0 },
+    pivot: { x: 0, y: 0 },
+    normal: { x: 0, y: -1 }
+  });
+  assert.equal(samples.length, 4);
+  assert.deepEqual(samples.map(sample => sample.surfaceSpeed), [0, 4.8, 0, 4.8]);
+  assert.ok(samples.filter(sample => sample.tangentSpeed === 0).every(sample => Math.abs(sample.responseRatio - MATERIALS.steel.restitution) < 1e-9));
+  assert.ok(samples[1].impactSpeed > samples[0].impactSpeed);
+  assert.ok(samples[3].outgoingSpeed > samples[2].outgoingSpeed);
+  assert.ok(samples.every(sample => sample.impulseMagnitude > 0));
 }
 
 {

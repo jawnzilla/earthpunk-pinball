@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: geometry-matched flipper calibration probe
+
+### Implemented
+
+- Added renderer-independent `calibrateFlipperContactResponse()` to the Physics V2 core. It samples explicit incoming normal speed, tangent speed, contact-point offset, and angular flipper velocity, deriving the same rotating-surface velocity used by the live flipper path.
+- Added deterministic regression coverage for stationary and approaching rotating contacts. The probe confirms that an approaching surface raises impact and world outgoing speed while preserving the `0.62` relative normal response; tangent speed remains observable as friction rather than being incorrectly folded into restitution.
+- No player-facing constants, collision behavior, input, progression, or renderer behavior changed.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures.
+- `node --check src/physics-core.js` and `git diff --check` passed.
+- Direct probe output for a 4 m/s normal input at a 0.6 m contact radius and `-8 rad/s` angular velocity: surface speed `4.8 m/s`, impact `8.8 m/s`, world outgoing `10.256 m/s`, relative response ratio `0.6200000000000002`.
+- Local exact Playwright checks at 320×568 and 390×844 against the correct temporary server returned HTTP 200, complete documents, exact CSS widths, `scrollWidth === clientWidth`, Canvas, and zero console/page/request errors. The review fixture's debug readout was not exposed in the served DOM, so no `N 4` claim is made from this local run.
+
+### Decision / next gate
+
+- Geometry now matches the live flipper's angular contact velocity closely enough to compare solver response without changing gameplay. The probe does not justify tuning restitution or friction yet; the next slice should compare its measured range against a fresh hosted active-contact capture.
+
 ## 2026-08-18 — Overhaul tick: moving-surface contact calibration seam
 
 ### Implemented
