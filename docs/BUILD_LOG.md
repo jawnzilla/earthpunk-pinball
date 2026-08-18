@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: fresh hosted depth-fixture recheck
+
+### Implemented
+
+- Re-ran the exact hosted `?review=depth` browser path against the current Pages artifact; no product code or physics constants changed in this verification-only slice.
+- Captured fresh 320px and 390px CSS-viewport frames outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-390.png`.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- Local exact Playwright at 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, `innerWidth === clientWidth === scrollWidth`, fixture marker `depth`, hidden route overlay, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth` at 320×568 and 390×844 returned the same results: HTTP 200, complete documents, exact widths/no overflow, Canvas, `depth` marker, hidden overlay, expected filter, and zero console/page/request errors.
+
+### Decision / next gate
+
+- The current hosted artifact is operationally parity-checked at both required portrait widths. The remaining visual-direction gate is human pixel inspection of the fresh frozen frames; browser health alone does not certify depth or AAA readiness.
+- No renderer or physics change is justified by this recheck alone. Next implementation slice should be chosen only after the frame inspection identifies one named plane/object hierarchy defect.
+
 ## 2026-08-18 — Overhaul tick: add a frozen depth-audit fixture
 
 ### Implemented

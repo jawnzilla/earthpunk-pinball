@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 49
 
+## Overhaul tick 52 verdict
+
+**Playable hackathon slice: PASS for hosted depth-fixture health. AAA-ready: FAIL / unverified.** A fresh exact browser pass confirms that the current GitHub Pages artifact still exposes the frozen depth review seam at both required portrait widths. This is operational evidence, not a visual-quality pass.
+
+### Observed evidence
+
+- Hosted `?review=depth` returned HTTP 200 at 320×568 and 390×844; both documents completed with Canvas present, `depth` review marker, hidden route overlay, and `grayscale(1) contrast(1.08)` on the canvas.
+- Both hosted viewports reported exact CSS width parity (`innerWidth === clientWidth === scrollWidth`) and zero console, page, or failed-request errors.
+- The same exact Playwright check passed locally against the current checkout, establishing that the hosted artifact is behaving like the inspected path for this fixture.
+- Fresh captures are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-390.png`.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is still visual, not runtime: the frozen frames have not been human-inspected here, so plane ordering, silhouette separation, contact-shadow strength, and material differentiation remain unverified.
+- Do not infer AAA readiness from zero browser errors or fixture presence. Inspect the frames first, then change one named renderer layer only if the evidence identifies a specific hierarchy collision.
+
 ## Overhaul tick 51 verdict
 
 **Playable hackathon slice: PASS for repeatable frozen depth review. AAA-ready: FAIL.** The new `?review=depth` fixture freezes the production table at a stable ball position while retaining the grayscale filter, making value-plane and contact-shadow inspection less dependent on frame timing. It is an evidence tool, not visual completion.
