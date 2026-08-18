@@ -10,6 +10,8 @@ assert.match(source, /family === 1/);
 assert.match(source, /ctx\.strokeRect\(-target\.r \* \.66/);
 assert.match(source, /const integrityRatio = Math\.max\(0, Math\.min\(1, item\.integrity \/ item\.maxIntegrity\)\)/);
 assert.match(source, /ctx\.fillRect\(-barWidth \/ 2, barY, barWidth \* integrityRatio, barHeight\)/);
+assert.match(source, /const damagePulse = Math\.min\(1, item\.damageCooldown \/ 8\)/);
+assert.match(source, /ctx\.beginPath\(\); ctx\.arc\(0, 0, item\.r \+ 4 \+ \(1 - damagePulse\) \* 4/);
 assert.match(source, /function activateFlipperContactReviewFixture\(\)/);
 assert.match(source, /const fixtureNormal = \{ x: Math\.sin\(flipper\.angle\), y: -Math\.cos\(flipper\.angle\) \}/);
 assert.match(source, /flipper\.angularVelocity = -8/);

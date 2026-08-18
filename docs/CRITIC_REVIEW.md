@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 47 verdict
+
+**Playable hackathon slice: PASS for destructible impact feedback. AAA-ready: FAIL.** Live destructible targets now emit a restrained, material-colored pulse when the existing production damage path registers a hit. The pulse improves event timing and pairs with the persistent integrity strip, but it is not evidence of complete visual direction or final combat readability.
+
+### Observed evidence
+
+- `drawDestructibles()` derives `damagePulse` from the existing `item.damageCooldown` state and renders an expanding/fading ring using the target material edge color; no new damage state or gameplay rule was introduced.
+- The renderer contract asserts both the cooldown normalization and expanding ring geometry.
+- `npm test` passes 11 tests; syntax and whitespace checks pass.
+- Local exact Playwright at 320×568 and 390×844 against `?review=upgrade` reports HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, four choices, upgrade overlay, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- No browser capture in this tick observed a live damaged salvage object, so pulse visibility at contact scale remains unverified evidence rather than a claim.
+- The primary visual gap is still grayscale readability and depth under motion across the whole portrait table. Next: capture a real contact-driven damaged-object state and inspect it in grayscale before adding more renderer detail.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 46 verdict
 
 **Playable hackathon slice: PASS for destructible-state readability. AAA-ready: FAIL.** Salvage objects now expose a small in-world integrity strip tied to their actual runtime damage state. The cue improves immediate consequence readability without adding another HUD meter, but it is one polish slice inside a still-incomplete overhaul.

@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: make destructible impacts read as events
+
+### Implemented
+
+- Added a short-lived, material-colored impact pulse around each live destructible when its production damage path sets `damageCooldown`.
+- The pulse expands and fades from the object shell, complementing the persistent integrity strip and damage cracks without adding HUD clutter or changing collision, damage, elemental, input, or progression behavior.
+- Added renderer-contract coverage for the cooldown-driven pulse.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js`; `node --check src/flipper-contact.js`; `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844 against `?review=upgrade`: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, four upgrade choices, upgrade overlay reached, and zero console/page/request errors. The first two occupied local ports served unrelated apps; the verified run used port 47831. Temporary script was outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-check.mjs`.
+
+### Decision / next gate
+
+- This is a bounded feedback/readability slice; it does not claim that a live damaged-object screenshot or grayscale visual gate has been completed.
+- Next visual gate remains a real contact-driven damaged-object capture plus grayscale inspection of the full portrait table before further decoration or physics tuning.
+
 ## 2026-08-18 — Overhaul tick: make destructible integrity readable in-world
 
 ### Implemented

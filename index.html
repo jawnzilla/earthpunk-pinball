@@ -1097,6 +1097,15 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
         ctx.restore(); return;
       }
       const palette = materialVisual(item.material);
+      if (item.damageCooldown > 0) {
+        const damagePulse = Math.min(1, item.damageCooldown / 8);
+        ctx.save();
+        ctx.globalAlpha = damagePulse * .72;
+        ctx.strokeStyle = palette.edge;
+        ctx.lineWidth = 1.5 + damagePulse * 2;
+        ctx.beginPath(); ctx.arc(0, 0, item.r + 4 + (1 - damagePulse) * 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
       if (item.kind === 'crate') {
         ctx.rotate(-.05); drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.fillRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeRect(-item.r * .72, -item.r * .6, item.r * 1.44, item.r * 1.16); ctx.strokeStyle = palette.light; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-item.r * .58, -item.r * .48); ctx.lineTo(item.r * .56, item.r * .42); ctx.moveTo(item.r * .56, -item.r * .48); ctx.lineTo(-item.r * .58, item.r * .42); ctx.stroke(); ctx.fillStyle = palette.dark; ctx.fillRect(-item.r * .82, -item.r * .64, 5, item.r * 1.28); ctx.fillRect(item.r * .7, -item.r * .64, 5, item.r * 1.28); ctx.fillStyle = palette.edge; [[-item.r * .7, -item.r * .52], [item.r * .7, -item.r * .52], [-item.r * .7, item.r * .5], [item.r * .7, item.r * .5]].forEach(([x, y]) => { ctx.fillRect(x - 2, y - 2, 4, 4); });
       } else if (item.kind === 'pipe') {
