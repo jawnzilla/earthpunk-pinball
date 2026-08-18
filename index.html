@@ -710,6 +710,32 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   // Review-only fixture: exercises the production flipper response path with
   // repeatable contacts so the hosted tuning readout can be inspected. It is
   // opt-in via ?review=flipper-contact and never runs during normal play.
+  // Review-only fixture: presents a live damaged salvage object in the normal table
+  // renderer so impact readability can be inspected without steering a ball.
+  function activateDamagePulseReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'damage-pulse') return;
+    state.running = true;
+    state.message = 'Review fixture · recent salvage impact.';
+    routeMapPanel.hidden = true;
+    routePreviewSlot.hidden = true;
+    overlay.hidden = true;
+    debugToggle.hidden = true;
+    const target = state.destructibles[0];
+    if (!target) return;
+    target.integrity = target.maxIntegrity * .56;
+    target.damageStage = 1;
+    target.damageCooldown = 6;
+    state.ball.x = W / 2;
+    state.ball.y = H - 108;
+    state.ball.prevX = state.ball.x;
+    state.ball.prevY = state.ball.y;
+    state.ball.vx = 70;
+    state.ball.vy = -312;
+    document.body.dataset.reviewFixture = 'damage-pulse';
+    updateHud();
+  }
+  // Review-only fixture: exercises the production flipper response path with
+  // repeatable contacts so the hosted tuning readout can be inspected.
   function activateFlipperContactReviewFixture() {
     if (new URLSearchParams(window.location.search).get('review') !== 'flipper-contact') return;
     state.running = true;
@@ -1333,7 +1359,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateFlipperContactReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
 })();
 </script>
 </body>

@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: add a real damaged-object visual review fixture
+
+### Implemented
+
+- Added opt-in `?review=damage-pulse` review mode that starts the normal generator-well table, hides the route overlay, and presents the first live destructible at 56% integrity with its production `damageStage` and cooldown-driven impact pulse active.
+- The fixture changes review setup only; it does not add gameplay state, alter damage math, or bypass `drawDestructibles()`.
+- Added renderer-contract coverage for the fixture marker, damaged integrity state, pulse cooldown, and overlay dismissal.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; physics/flipper syntax checks and `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844 against `?review=damage-pulse`: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, fixture marker `damage-pulse`, gameplay overlay hidden, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-damage-320.png` and `earthpunk-damage-390.png`.
+
+### Decision / next gate
+
+- This closes the evidence gap for inspecting a live damaged salvage render, but it does not claim grayscale readability or AAA completion. Hosted deployment and hosted exact-width verification remain required for this commit.
+
 ## 2026-08-18 — Overhaul tick: make destructible impacts read as events
 
 ### Implemented

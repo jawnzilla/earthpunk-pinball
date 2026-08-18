@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 48 verdict
+
+**Playable hackathon slice: PASS for reviewable damaged-object state. AAA-ready: FAIL.** An opt-in fixture now exposes a production-rendered, partially damaged salvage object with its integrity strip and impact pulse visible in the actual table state. This makes the previously missing browser evidence capturable without changing gameplay, but it is not a grayscale or final visual-direction pass.
+
+### Observed evidence
+
+- `activateDamagePulseReviewFixture()` starts the generator-well table, sets the first destructible to 56% integrity with `damageStage = 1` and `damageCooldown = 6`, and leaves the route overlay hidden.
+- `drawDestructibles()` remains the production path for the integrity strip, cracks, nested material silhouette, contact shadow, and cooldown-driven pulse.
+- `npm test` passes 11 tests; syntax and whitespace checks pass.
+- Local exact Playwright at 320×568 and 390×844 reports HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, fixture marker `damage-pulse`, hidden overlay, and zero console/page/request errors. Screenshots are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-damage-320.png` and `earthpunk-damage-390.png`.
+
+### Remaining risk / next smallest slice
+
+- This fixture proves the damaged state is observable in-browser, but pixel/grayscale inspection has not been performed in this tick and no hosted result exists until deployment.
+- The largest remaining visual gap is full-table depth and grayscale hierarchy under motion. After hosted verification, inspect the captured damaged-object frame in grayscale before adding more decoration or changing physics.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 47 verdict
 
 **Playable hackathon slice: PASS for destructible impact feedback. AAA-ready: FAIL.** Live destructible targets now emit a restrained, material-colored pulse when the existing production damage path registers a hit. The pulse improves event timing and pairs with the persistent integrity strip, but it is not evidence of complete visual direction or final combat readability.
