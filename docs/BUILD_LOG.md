@@ -13,7 +13,7 @@
 - `npm test`: 8 tests passed, 0 failures.
 - `node --check src/flipper-contact.js` and `git diff --check` passed.
 - Local exact Playwright checks at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas present, two 52px flipper controls, zero console/page/request errors. Screenshots captured outside the repo at `%LOCALAPPDATA%/Temp/earthpunk-local-320.png` and `earthpunk-local-390.png`.
-- Hosted pre-deploy exact checks at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, no overflow, Canvas present, two 52px controls, zero browser errors. Hosted telemetry marker is intentionally stale until deployment.
+- Hosted post-deploy exact checks at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas present, two 52px controls, and zero console/page/request errors. Served HTML contains `summarizeFlipperContact`, `lastFlipperContact`, and `Flipper contact:` markers. GitHub Pages run `32152482988` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32152482988. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ### Next gate
 

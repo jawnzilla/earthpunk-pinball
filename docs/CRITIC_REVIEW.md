@@ -13,7 +13,7 @@
 
 ### Remaining risk / next smallest slice
 
-- The latest hosted Pages build predates this change, so the hosted telemetry marker is not yet evidence. Deploy and rerun the exact portrait checks before claiming parity.
+- GitHub Pages run `32152482988` deployed commit `9945b5a` successfully. Hosted exact 320×568 and 390×844 checks confirm the served telemetry markers, Canvas, 52px controls, exact widths, no overflow, and zero browser errors.
 - The new readout becomes informative only after an actual flipper contact; the initial READY state correctly shows `—`. A future tuning tick should capture a repeatable active flipper contact and compare launch-speed distributions, not add more decorative rendering.
 
 # Deadlight Critic Review — Overhaul tick 29
