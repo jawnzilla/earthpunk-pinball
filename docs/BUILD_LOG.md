@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: moving-surface contact calibration seam
+
+### Implemented
+
+- Added renderer-independent `calibrateMovingSurfaceResponse()` to the Physics V2 core. It samples controlled incoming speeds against a rubber surface moving along the contact normal, reporting impact speed, world outgoing speed, relative outgoing speed, restitution ratio, and impulse magnitude.
+- Added deterministic regression coverage proving that the combined steel/rubber response remains `0.62` in relative-contact space while a 2 m/s surface speed raises impact from `4` to `6` m/s and world outgoing speed from `2.48` to `5.72` m/s.
+- No player-facing constants, flipper geometry, collision behavior, input, progression, or renderer behavior changed; this is the controlled moving-surface measurement gate requested by the prior calibration entry.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures.
+- `node --check src/physics-core.js` and `git diff --check` passed.
+- Direct calibration output matched the expected stationary/moving pair: response ratios `0.6200000000000001`, impact speeds `4` / `6`, and outgoing speeds `2.4800000000000004` / `5.720000000000001` m/s.
+- Browser and GitHub Pages verification remain pending until this commit is pushed.
+
+### Decision / next gate
+
+- The moving-surface probe confirms that surface velocity is included in relative contact response and can add launch energy without changing restitution. It does not yet explain the hosted fixture's negative pixel-speed delta because that path still includes flipper orientation, tangential friction, and swept geometry.
+- Next physics slice should map this controlled normal-speed result to the live flipper telemetry with one geometry-matched probe before tuning a single solver property.
+
 ## 2026-08-18 — Overhaul tick: stationary contact calibration seam
 
 ### Implemented

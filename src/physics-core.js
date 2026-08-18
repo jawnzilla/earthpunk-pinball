@@ -155,6 +155,52 @@ export function calibrateContactResponse({
     });
 }
 
+// Calibration seam for moving flipper-like surfaces. The incoming and
+// surface velocities are both aligned to the supplied normal so the result
+// isolates surface motion from tangent friction and contact geometry.
+export function calibrateMovingSurfaceResponse({
+  speeds = [1, 2, 3],
+  surfaceSpeeds = [0, 1, 2],
+  ballMaterial = 'steel',
+  surfaceMaterial = 'rubber',
+  normal = { x: 0, y: -1 },
+  restitution = null
+} = {}) {
+  const n = normalize(normal);
+  return speeds
+    .filter(speed => Number.isFinite(speed) && speed > 0)
+    .flatMap(incomingSpeed => surfaceSpeeds
+      .filter(surfaceSpeed => Number.isFinite(surfaceSpeed) && surfaceSpeed >= 0)
+      .map(surfaceSpeed => {
+        const ball = createBall({
+          vx: -n.x * incomingSpeed,
+          vy: -n.y * incomingSpeed,
+          material: ballMaterial
+        });
+        const surfaceVelocity = scale(n, surfaceSpeed);
+        const contact = resolveContact({
+          ball,
+          surface: { material: surfaceMaterial, inverseMass: 0 },
+          point: { x: 0, y: 0 },
+          normal: n,
+          surfaceVelocity,
+          restitution
+        });
+        const relativeIncomingSpeed = Math.max(0, -dot(scale(n, -incomingSpeed), n) + surfaceSpeed);
+        const relativeOutgoingVelocity = subtract(ball.velocity, surfaceVelocity);
+        const relativeOutgoingSpeed = magnitude(relativeOutgoingVelocity);
+        return {
+          incomingSpeed,
+          surfaceSpeed,
+          impactSpeed: contact.impactSpeed,
+          outgoingSpeed: magnitude(ball.velocity),
+          relativeOutgoingSpeed,
+          responseRatio: relativeIncomingSpeed > EPSILON ? relativeOutgoingSpeed / relativeIncomingSpeed : 0,
+          impulseMagnitude: magnitude(contact.impulse)
+        };
+      }));
+}
+
 export function damageFromContact(contact, { objectMaterial = 'timber', damageScale = 1, threshold = 1.2, weaknesses = {}, elementEffects = {} } = {}) {
   if (!contact?.hit || contact.separating || contact.impactSpeed < threshold) return 0;
   const material = MATERIALS[objectMaterial] ?? MATERIALS.timber;

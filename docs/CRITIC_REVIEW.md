@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 37
 
+## Overhaul tick 39 verdict
+
+**Playable hackathon slice: PASS for moving-surface calibration. AAA-ready: FAIL.** Physics V2 now has a deterministic normal-contact probe that separates restitution from the velocity of a flipper-like moving surface. This is measurement infrastructure, not a launch-feel fix or visual-completion claim.
+
+### Observed evidence
+
+- `calibrateMovingSurfaceResponse()` samples the same steel-ball/rubber-surface solver with stationary and normal-moving surface cases, exposing both world-space and surface-relative outgoing speeds.
+- The regression confirms a `0.62` relative response ratio in both cases; at 4 m/s incoming speed, a 2 m/s surface raises impact from 4 to 6 m/s and world outgoing speed from 2.48 to 5.72 m/s.
+- `npm test` passes 9 tests; `node --check src/physics-core.js` and `git diff --check` pass. No player-facing behavior changed.
+
+### Remaining risk / next smallest slice
+
+- The probe still does not reproduce the hosted fixture's negative `μΔ -81px/s`, because live flippers add orientation, tangent friction, swept contact sampling, and the motor's actual surface velocity.
+- Browser and Pages evidence is pending for this commit. After deployment, run exact hosted checks at 320×568 and 390×844, then add one geometry-matched flipper calibration before tuning one solver property.
+
 ## Overhaul tick 38 verdict
 
 **Playable hackathon slice: PASS for stationary contact calibration. AAA-ready: FAIL.** The Physics V2 core now has a deterministic probe for separating baseline restitution behavior from flipper geometry and motor motion. This is instrumentation, not a gameplay tuning change or visual-completion claim.
