@@ -3268,3 +3268,16 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Canvas, control, route, and asset contracts are unchanged by the collision-only patch.
 - A temporary local `file://` browser smoke harness was inconclusive and is not counted as gameplay evidence.
 - Physical-device touch behavior and high-speed flipper feel remain pending.
+
+## 2026-08-17 — Flipper sweep correction: prevent false sticking
+
+- Superseded the overly broad previous-position sweep behavior after it caused held-flipper sticking.
+- Restored the original moving-ball path sweep, including its near-zero travel guard and `index = 1` sampling.
+- Added a narrower current-position check across the flipper's interpolated poses during activation, catching genuine old-tip contact without treating stale previous-position samples as live contact.
+- Preserved cradle capture semantics for actual near-hinge contacts; clear balls are not captured by the sweep.
+
+### Verification notes
+
+- Focused regression probe passes: current tip contact is caught while a clear ball is not falsely captured.
+- Extracted JavaScript `node --check` and `git diff --check` pass.
+- The first `936644a` fix was not sufficient and is superseded by this correction; physical-device and high-speed feel validation remain pending.
