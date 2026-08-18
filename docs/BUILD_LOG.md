@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: relay-gate contact-light pass
+
+### Implemented
+
+- Extended the restrained mine-table contact-light language to the relay gate fallback and sprite-backed path.
+- Added a material/element-tinted midpoint sheen plus a narrow upper-edge highlight; gate routing, collision geometry, cooldown behavior, and elemental reactions are unchanged.
+- Kept the slice renderer-only with no new assets or runtime dependencies.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- Extracted inline module passes `node --check`.
+- `git diff --check` passes.
+- Local Chromium exact 320x568 and 390x844 checks pass: Canvas present, `Enter descent` transitions to `RUN 1/4`, 52px touch controls, no horizontal overflow, and zero console/page errors.
+- Hosted Pages was checked before this commit and still serves the prior relay-gate renderer; deployment verification is required after push.
+
 ## 2026-08-18 — Overhaul tick: route and drain hardware contact-light pass
 
 ### Implemented

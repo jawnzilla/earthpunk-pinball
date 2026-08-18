@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 16
+# Deadlight Critic Review — Overhaul tick 19
+
+## Overhaul tick 19 verdict
+
+**Playable hackathon slice: PASS for relay-gate contact readability. AAA-ready: FAIL.** The relay gate now participates in the same restrained mine-table material/light language as the salvage, bumpers, drain, and route chutes. This remains a bounded renderer-only pass, not a complete dynamic lighting system or production-readiness claim.
+
+### Observed evidence
+
+- `drawRelayGate()` adds a tinted midpoint sheen and upper-edge highlight in both the authored sprite and procedural fallback paths.
+- Local exact 320x568/390x844 Chromium checks pass with Canvas, active `RUN 1/4`, 52px controls, matching document widths, and zero console/page errors.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages was inspected before this commit and therefore remains stale for this renderer change until the GitHub Pages deployment completes.
+- The table still needs a true grayscale screenshot audit and physical-device feel test; procedural fallback surfaces remain less authored than the sprite path.
+- Next bounded slice: perform the post-deploy grayscale/depth audit at 320/360/390 CSS widths and target only the largest measured readability failure.
 
 ## Overhaul tick 18 verdict
 
