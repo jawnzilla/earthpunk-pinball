@@ -63,7 +63,7 @@ export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, 
   return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };
 }
 
-export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001 }) {
+export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001, restitution = null }) {
   const ballMaterial = MATERIALS[ball.material] ?? MATERIALS.steel;
   const surfaceMaterial = MATERIALS[surface.material] ?? MATERIALS.steel;
   const n = normalize(normal);
@@ -87,10 +87,12 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
   }
   if (result.separating) return result;
 
-  const restitution = Math.min(ballMaterial.restitution, surfaceMaterial.restitution);
+  const responseRestitution = restitution == null
+    ? Math.min(ballMaterial.restitution, surfaceMaterial.restitution)
+    : clamp(restitution, 0, 1);
   const inverseMassSum = ball.inverseMass + (surface.inverseMass ?? 0);
   if (inverseMassSum <= EPSILON) return result;
-  const impulseMagnitude = -(1 + restitution) * normalSpeed / inverseMassSum;
+  const impulseMagnitude = -(1 + responseRestitution) * normalSpeed / inverseMassSum;
   let impulse = scale(n, impulseMagnitude);
 
   const tangentVelocity = subtract(relativeVelocity, scale(n, normalSpeed));

@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 11 verdict
+
+**Playable hackathon slice: PASS for elemental fixed-step body integration. AAA-ready: FAIL.** Water mini-balls and Wind echoes now use Physics V2 as the authoritative fixed-step integrator with an explicit pixel↔meter boundary. The mine/tunnel visual reset, full elemental broad-phase parity, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `advanceMiniBalls()` and `advanceWindEcho()` call `integrateBall()` and synchronize renderer-facing pixel fields from the Physics V2 body; no direct elemental `x += vx * dt` integration remains.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures, including restitution override and body synchronization assertions.
+- Local exact 320x568/390x844 Chromium checks pass with route-to-active transition, 52px controls, matching document widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Elemental bodies still use the table adapter's reduced broad-phase geometry; they are not yet full-table collision participants.
+- Hosted Pages must be redeployed and rechecked after the push.
+- Next bounded slice: migrate the reduced elemental wall/object broad-phase adapter to consume body positions directly while retaining the existing ledgers and no-reward semantics.
+
 ## Overhaul tick 10 verdict
 
 **Playable hackathon slice: PASS for the shared elemental contact seam. AAA-ready: FAIL.** Water mini-balls and Wind echoes now use the shared Physics V2 body/contact solver for material-aware impulse and impact-energy accounting. The mine/tunnel visual reset, full elemental broad-phase parity, and physical-device evidence remain incomplete.

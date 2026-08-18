@@ -67,6 +67,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.equal(first.counted, true);
   assert.equal(ball.bouncesRemaining, 2);
   assert.ok(ball.vx > 0);
+  assert.ok(Math.abs(ball.physicsBody.velocity.x - ball.vx / 100) < 1e-9);
   assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'left-wall' }), null);
   ball.vx = 120;
   assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'separating' }).counted, false);
@@ -80,6 +81,18 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.ok(contact.impactEnergy > 0);
   assert.ok(miniBall.vx > 0);
   assert.equal(miniBall.physicsBody.material, 'water');
+  assert.ok(Math.abs(miniBall.vx - 50.4) < 1e-9, `override restitution should return 50.4 px/s, got ${miniBall.vx}`);
+}
+
+{
+  const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Water', 3), position: { x: 10, y: 20 }, velocity: { x: 120, y: 0 }, impactSpeed: 2.1 });
+  const ball = runtime.miniBalls[0];
+  const startX = ball.x;
+  advanceElementalRuntime(runtime, { effects: effects('Water', 3), position: { x: 10, y: 20 }, velocity: { x: 0, y: 0 }, dt: .1 });
+  assert.ok(ball.x > startX);
+  assert.ok(Math.abs(ball.physicsBody.position.x - ball.x / 100) < 1e-9);
+  assert.ok(Math.abs(ball.physicsBody.velocity.x - ball.vx / 100) < 1e-9);
 }
 
 {
@@ -89,7 +102,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   const hit = onMiniBallStructureContact(runtime, ball.id, { objectId: 'timber-crate', position: { x: 10, y: 20 }, normal: { x: 1, y: 0 } });
   assert.equal(hit.type, 'mini-ball-structure-contact');
   assert.equal(hit.structure.type, 'none');
-  assert.ok(hit.impactSpeed > 80);
+  assert.ok(hit.impactSpeed > .8);
   assert.equal(ball.bouncesRemaining, 2);
   assert.equal(onMiniBallStructureContact(runtime, ball.id, { objectId: 'timber-crate', normal: { x: 1, y: 0 } }), null);
 }

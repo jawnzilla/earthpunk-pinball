@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: elemental fixed-step body integration
+
+### Implemented
+
+- Migrated Water mini-balls and Wind echoes from direct pixel-space `x += vx * dt` kinematics to the shared Physics V2 `integrateBall()` fixed-step path with zero external gravity, preserving the existing lifetime, distance, contact-key, ignored-response, hit-object, and bounce ledgers.
+- Added an explicit pixel↔meter boundary (`PX_PER_M = 100`) so renderer-facing coordinates remain pixels while Physics V2 owns authoritative positions and velocities in SI-like units.
+- Wired the previously ignored elemental restitution option through `resolveElementalBodyContact()` into `resolveContact()`.
+- Added deterministic coverage for body synchronization, fixed-step displacement, unit conversion, and restitution override behavior.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
+- `git diff --check` passes (only Git LF/CRLF normalization warnings).
+- Local Chromium exact 320x568 and 390x844 checks pass: route CTA transitions to `RUN 1/4 · READY`, canvas and 52px touch controls are present, `scrollWidth === innerWidth`, and zero console/page errors.
+- Hosted Pages deployment and hosted browser verification remain pending until this commit is pushed.
+
 ## 2026-08-18 — Overhaul tick: elemental bodies enter Physics V2 contact seam
 
 ### Implemented

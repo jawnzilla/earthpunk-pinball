@@ -2,7 +2,44 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const magnitude = vector => Math.hypot(vector.x, vector.y);
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const cross = (a, b) => a.x * b.y - a.y * b.x;
-import { createBall, impactEnergyFromMassSpeed, materialHardness, resolveContact } from './physics-core.js';
+import { createBall, impactEnergyFromMassSpeed, integrateBall, materialHardness, PX_PER_M, resolveContact } from './physics-core.js';
+
+// Elemental adapters expose pixel-space coordinates to the renderer, while Physics V2
+// remains authoritative in meters and meters/second. Keep this conversion at the seam.
+function createElementalPhysicsBody(body) {
+  return createBall({
+    x: body.x / PX_PER_M,
+    y: body.y / PX_PER_M,
+    vx: body.vx / PX_PER_M,
+    vy: body.vy / PX_PER_M,
+    mass: body.mass ?? .01,
+    radius: body.radius ?? .05,
+    material: body.material ?? 'rubber'
+  });
+}
+
+function syncPhysicsFromLegacyBody(body) {
+  const physicsBody = body.physicsBody ?? (body.physicsBody = createElementalPhysicsBody(body));
+  physicsBody.position.x = body.x / PX_PER_M;
+  physicsBody.position.y = body.y / PX_PER_M;
+  physicsBody.velocity.x = body.vx / PX_PER_M;
+  physicsBody.velocity.y = body.vy / PX_PER_M;
+  return physicsBody;
+}
+
+function syncLegacyFromPhysicsBody(body) {
+  const physicsBody = body.physicsBody;
+  body.x = physicsBody.position.x * PX_PER_M;
+  body.y = physicsBody.position.y * PX_PER_M;
+  body.vx = physicsBody.velocity.x * PX_PER_M;
+  body.vy = physicsBody.velocity.y * PX_PER_M;
+}
+
+function createElementalBody({ id, position, velocity, ...metadata }) {
+  const body = { id, x: position.x, y: position.y, vx: velocity.vx ?? velocity.x, vy: velocity.vy ?? velocity.y, ...metadata };
+  body.physicsBody = createElementalPhysicsBody(body);
+  return body;
+}
 
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
@@ -62,7 +99,10 @@ function advanceFireTrail(runtime, effects, dt, events) {
 function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
   runtime.miniBalls.forEach(ball => {
     ball.contactKeys = new Set();
-    if (integrateBodies) { ball.x += ball.vx * dt; ball.y += ball.vy * dt; }
+    if (integrateBodies) {
+      integrateBall(ball.physicsBody, { force: { x: 0, y: 0 }, gravity: { x: 0, y: 0 }, dt });
+      syncLegacyFromPhysicsBody(ball);
+    }
     if (contactResolver) contactResolver(ball);
     ball.distance += magnitude({ x: ball.vx, y: ball.vy }) * dt;
     ball.lifetime -= dt;
@@ -73,7 +113,10 @@ function advanceMiniBalls(runtime, dt, integrateBodies, contactResolver) {
 function advanceWindEcho(runtime, dt, integrateBodies, contactResolver) {
   const echo = runtime.windEcho;
   if (!echo) return;
-  if (integrateBodies) { echo.x += echo.vx * dt; echo.y += echo.vy * dt; }
+  if (integrateBodies) {
+    integrateBall(echo.physicsBody, { force: { x: 0, y: 0 }, gravity: { x: 0, y: 0 }, dt });
+    syncLegacyFromPhysicsBody(echo);
+  }
   if (contactResolver) contactResolver(echo);
   echo.distance += magnitude({ x: echo.vx, y: echo.vy }) * dt;
   echo.lifetime -= dt;
@@ -110,12 +153,12 @@ export function onHardBounce(runtime, { effects = {}, position = { x: 0, y: 0 },
     const spread = ELEMENTAL_BUDGETS.water.spreadRadians;
     runtime.miniBalls = [-spread, spread].map(angle => {
       const launch = rotatedVelocity(velocity, angle, ELEMENTAL_BUDGETS.water.splitSpeedScale);
-      return { id: `water-mini-${nextMiniBallId++}`, x: position.x, y: position.y, ...launch, radius: .045, mass: .008, material: 'water', physicsBody: createBall({ x: position.x, y: position.y, vx: launch.vx, vy: launch.vy, mass: .008, radius: .045, material: 'water' }), lifetime: ELEMENTAL_BUDGETS.water.lifetime, bouncesRemaining: ELEMENTAL_BUDGETS.water.maxBounces, distance: 0 };
+      return createElementalBody({ id: `water-mini-${nextMiniBallId++}`, position, velocity: launch, radius: .045, mass: .008, material: 'water', lifetime: ELEMENTAL_BUDGETS.water.lifetime, bouncesRemaining: ELEMENTAL_BUDGETS.water.maxBounces, distance: 0 });
     });
     events.push({ type: 'water-split', count: runtime.miniBalls.length });
   }
   if (impactSpeed >= 2 && activeStacks(effects, 'Wind') >= 3 && !runtime.windEcho && magnitude(velocity) > 0) {
-    runtime.windEcho = { id: 'wind-echo', x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, material: 'rubber', physicsBody: createBall({ x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, radius: .06, material: 'rubber' }), lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') };
+    runtime.windEcho = createElementalBody({ id: 'wind-echo', position, velocity, radius: .06, mass: .012, material: 'rubber', lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') });
     events.push({ type: 'wind-echo' });
   }
   return events[0] || { type: 'none' };
@@ -148,16 +191,12 @@ export function onMiniBallContact(runtime, id, { normal = { x: 0, y: 0 }, contac
 // Shared Physics V2 seam for elemental bodies. The table adapter remains responsible
 // for broad-phase geometry; this keeps mass/material/restitution response identical.
 export function resolveElementalBodyContact(body, normal, { restitution = null, surfaceMaterial = 'steel' } = {}) {
-  const physicsBody = body.physicsBody ?? createBall({ x: body.x, y: body.y, vx: body.vx, vy: body.vy, mass: body.mass ?? .01, radius: body.radius ?? .05, material: body.material ?? 'rubber' });
-  physicsBody.position.x = body.x;
-  physicsBody.position.y = body.y;
-  physicsBody.velocity.x = body.vx;
-  physicsBody.velocity.y = body.vy;
+  const physicsBody = body.physicsBody ?? createElementalPhysicsBody(body);
+  syncPhysicsFromLegacyBody(body);
   const surface = { material: surfaceMaterial, inverseMass: 0 };
-  const contact = resolveContact({ ball: physicsBody, surface, point: physicsBody.position, normal, penetration: 0 });
+  const contact = resolveContact({ ball: physicsBody, surface, point: physicsBody.position, normal, penetration: 0, restitution });
   body.physicsBody = physicsBody;
-  body.vx = physicsBody.velocity.x;
-  body.vy = physicsBody.velocity.y;
+  syncLegacyFromPhysicsBody(body);
   return contact;
 }
 
