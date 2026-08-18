@@ -7,7 +7,7 @@
 ## Findings
 
 - **Gameplay clarity — PASS/WEAK:** The HUD now exposes route, score, progress, Stability, hinge attunements, and active imprints. Route choices are visible after each completed descent. The remaining weakness is that a player must discover the exact cradle geometry through play; a short animated first-use hint would improve onboarding.
-- **Elemental loop — PASS:** Hinge cradling applies stacks, matching targets/generators/relays react, and route modifiers change gravity or launch kick. Fire, Water, Earth, and Air have distinct hooks, but the reactions still share a common feedback language.
+- **Elemental loop — PASS:** Hinge cradling applies stacks, matching targets/generators/relays react, and route modifiers change the gravity field. Fire, Water, Earth, and Air have distinct hooks, but the reactions still share a common feedback language.
 - **Visual direction — WEAK:** The table has stronger depth planes, edge machinery, local glows, and impact rings. It remains primarily procedural Canvas geometry; authored silhouettes, animation language, and asset variety are not yet at AAA quality.
 - **Mobile UX — PASS/WEAK:** Touch controls are dedicated, 48px minimum, keyboard-compatible, and responsive at narrow widths. The route/module list is information-dense on very short screens and needs a focused card carousel or two-step choice flow.
 - **Physics/readability — PASS/WEAK:** The primary ball now integrates through the Physics V2 material/contact core, the loop is fixed at 120Hz with bounded catch-up, and flippers use motor surface velocity instead of active-kick/rebound presets. The remaining weakness is that non-flipper object damage is not yet driven by impact energy and the physical feel still needs device playtesting.
