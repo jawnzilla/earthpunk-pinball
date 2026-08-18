@@ -11,7 +11,8 @@
 
 - `npm test`: 5 deterministic tests passed, 0 failures.
 - `node --check` passed for `src/physics-core.js`, `src/elemental-effects.js`, and `src/flipper-contact.js`; `git diff --check` passed.
-- Hosted pre-deploy smoke: GitHub Pages returned HTTP 200 and served the expected HUD marker. Exact browser overlay evidence remains pending deployment/browser execution.
+- Post-deploy hosted exact Playwright checks passed at 320×568, 360×844, and 390×844: HTTP 200, complete document, Canvas present, `RUN 1/4 · READY`, two 52px controls, `scrollWidth === innerWidth`, zero console/page/request errors, and the served HTML contains the upgrade decision CSS marker. Pages run `32138182338` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32138182338. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
+- The automated path did not reach a route-complete upgrade overlay, so screenshot-level card fit and grayscale judgment remain explicitly unverified.
 
 ## 2026-08-18 — Overhaul tick: compact active-effect HUD
 

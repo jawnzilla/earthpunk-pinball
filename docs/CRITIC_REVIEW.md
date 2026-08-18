@@ -9,6 +9,7 @@
 - `.upgrade-decision .card` now uses a restrained linear field-service treatment, quieter pseudo-element rails, tighter explanatory copy, and reduced choice spacing while preserving the four module buttons and their charge costs.
 - Gameplay, physics, route progression, input, canvas geometry, and touch target sizing were not changed.
 - `npm test` passes all 5 deterministic tests; module syntax checks and `git diff --check` pass.
+- Post-deploy hosted exact checks pass at 320×568, 360×844, and 390×844 with HTTP 200, complete document, Canvas, `RUN 1/4 · READY`, 52px controls, no horizontal overflow, and zero console/page/request errors. Pages run `32138182338` completed success.
 
 ### Remaining risk / next smallest slice
 
