@@ -7,7 +7,8 @@
 ### Observed evidence
 
 - Hosted `?review=depth` returned HTTP 200 at 320×568 and 390×844; both documents completed with Canvas present, `depth` review marker, hidden route overlay, and `grayscale(1) contrast(1.08)` on the canvas.
-- Both hosted viewports reported exact CSS width parity (`innerWidth === clientWidth === scrollWidth`) and zero console, page, or failed-request errors.
+- GitHub Pages run `32187484474` completed successfully for commit `bbba9da`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32187484474.
+- Both hosted viewports reported exact CSS width parity (`innerWidth === clientWidth === scrollWidth`) and zero console, page, or failed-request errors after that deployment.
 - The same exact Playwright check passed locally against the current checkout, establishing that the hosted artifact is behaving like the inspected path for this fixture.
 - Fresh captures are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-hosted-depth-now-390.png`.
 

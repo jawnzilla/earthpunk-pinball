@@ -11,7 +11,8 @@
 
 - `npm test`: 11 tests passed, 0 failures.
 - Local exact Playwright at 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, `innerWidth === clientWidth === scrollWidth`, fixture marker `depth`, hidden route overlay, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors.
-- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth` at 320×568 and 390×844 returned the same results: HTTP 200, complete documents, exact widths/no overflow, Canvas, `depth` marker, hidden overlay, expected filter, and zero console/page/request errors.
+- GitHub Pages run `32187484474` completed successfully for commit `bbba9da`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32187484474.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth` at 320×568 and 390×844 returned the same results: HTTP 200, complete documents, exact widths/no overflow, Canvas, `depth` marker, hidden overlay, expected filter, and zero console/page/request errors after that deployment.
 
 ### Decision / next gate
 
