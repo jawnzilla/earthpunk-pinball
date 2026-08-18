@@ -126,7 +126,7 @@
     .choices button { display: grid; grid-template-columns: 48px 1fr; text-align: left; padding: 10px 14px 10px 10px; min-height: 70px; background: linear-gradient(110deg, #314e49, #1d2d2e); color: #e9f1df; border: 1px solid #648274; text-transform: none; letter-spacing: .02em; }
     .choices.upgrade-scroll { max-height: 252px; overflow-y: auto; overscroll-behavior: contain; padding: 2px 4px 28px 0; position: relative; }
     .choices.upgrade-scroll::after { content: 'SWIPE FOR MORE'; position: sticky; bottom: 0; display: block; grid-column: 1 / -1; margin: 0; padding: 5px 0 3px; color: #ffd083; background: linear-gradient(180deg, transparent, #18282a 42%); font-size: 9px; font-weight: 900; letter-spacing: .16em; text-align: center; pointer-events: none; }
-    #overlay:not(.route-decision) .card { height: calc(100dvh - 16px); max-height: calc(100dvh - 16px); overflow: hidden; display: flex; flex-direction: column; }
+    #overlay:not(.route-decision) .card { height: calc(100dvh - 32px); max-height: calc(100dvh - 32px); overflow: hidden; display: flex; flex-direction: column; }
     #overlay:not(.route-decision) .choices.upgrade-scroll { flex: 1 1 auto; min-height: 280px; max-height: none; overflow: visible; padding-bottom: 0; grid-template-rows: repeat(4, minmax(0, 1fr)); }
     #overlay:not(.route-decision) .choices.upgrade-scroll button { min-height: 48px; }
     #overlay:not(.route-decision) .choices.upgrade-scroll::after { display: none; }
@@ -694,6 +694,19 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     routeMapPanel.hidden = true; routePreviewSlot.hidden = true; overlay.classList.remove('route-decision'); overlay.classList.add('upgrade-decision'); objectiveTip.hidden = true; overlayKicker.hidden = false; overlayTitle.hidden = false; overlayCopy.hidden = false; overlayScrollCue.hidden = true; overlayKicker.textContent = 'Route chute confirmed · Hinge tune'; overlayTitle.textContent = `${state.tableLabel} route`; overlayCopy.textContent = `Choose a module for ${shortNodeTitle(state.nextNode)} · Charge ${Math.floor(state.charge)}`;
     const moduleChoices = upgradePool.map(upgrade => { const button = document.createElement('button'); button.type = 'button'; button.dataset.upgrade = upgrade.id; button.disabled = Boolean(upgrade.cost && state.charge < upgrade.cost); const price = upgrade.cost ? `◈ ${upgrade.cost}` : 'FREE'; button.title = `${upgrade.title} · ${price}`; button.innerHTML = `<img class="upgrade-icon" src="${upgrade.image}" alt=""><span><small class="element-label">${upgrade.element}</small><strong>${upgrade.title.replace(' hinge module', '')}</strong><small class="upgrade-cost" aria-label="Cost ${upgrade.cost || 0} charge">${price}</small></span>`; button.addEventListener('click', () => chooseUpgrade(upgrade)); return button; }); choices.classList.add('upgrade-scroll'); choices.replaceChildren(...moduleChoices); choices.hidden = false; resetButton.hidden = true; overlay.hidden = false;
   }
+  // Review-only fixture: reaches the real upgrade renderer without altering player progression.
+  // It is opt-in via ?review=upgrade so normal hosted play always starts on the route map.
+  function activateUpgradeReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'upgrade') return;
+    state.charge = 6;
+    state.nextNode = 'pulse-manifold';
+    state.pendingRoute = 'flooded-sluice';
+    state.tableKind = 'free';
+    state.tableLabel = 'FREE PASS';
+    showModuleChoices();
+    overlay.dataset.reviewFixture = 'upgrade';
+    updateHud();
+  }
   function beginNextRoute() {
     state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.destructibles = createDestructibles(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
   }
@@ -1234,7 +1247,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); loop();
+  reset(); activateUpgradeReviewFixture(); loop();
 })();
 </script>
 </body>

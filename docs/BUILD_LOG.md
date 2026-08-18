@@ -3782,3 +3782,18 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - `git diff --check` passes.
 - Playwright Chromium against local and hosted builds passes at exact `320×568` and `390×844`: HTTP 200, route overlay enters play, touch press/release state is observed, `scrollWidth === clientWidth`, and page/console errors are empty.
 - Hosted screenshots were captured for all four viewport cases; visual review confirms the build renders without corruption. Physical-device touch and impact-feel testing remain pending.
+
+## 2026-08-18 — Overhaul tick: deterministic upgrade-overlay review fixture
+
+### Implemented
+
+- Added an opt-in `?review=upgrade` fixture that calls the live `showModuleChoices()` renderer after normal reset; it is not used by the normal route-map/player start path.
+- Added a source-level regression test proving the fixture remains query-gated and uses the real upgrade renderer.
+- Tightened the upgrade card height from `100dvh - 16px` to `100dvh - 32px`, restoring a measurable 16px bottom gutter on portrait review captures while preserving the four choices and gameplay code.
+
+### Verification
+
+- `npm test`: 6 tests passed, 0 failures.
+- Inline module `node --check` and `git diff --check` passed.
+- Local Playwright review fixture passed at exact 320×568, 360×844, and 390×844: HTTP 200, document complete, 4 upgrade choices, zero console/page/request errors, and `scrollWidth === clientWidth`.
+- Before the gutter change, the 320×568 card touched the viewport bottom; the bounded CSS change is intended to make the 16px outer-gutter acceptance criterion testable. Hosted deployment and post-deploy verification remain pending.

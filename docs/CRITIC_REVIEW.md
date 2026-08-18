@@ -15,6 +15,21 @@
 - Upgrade card fit, focus/pressed state, and grayscale readability remain unverified in an actually reached route-complete state. The initial/play screenshots are stored outside the repository and are not treated as visual proof by themselves.
 - The next smallest useful slice is a deterministic test-only/browser harness seam for reaching `showModuleChoices()` through the real route-completion state, or a debug-only fixture that is disabled in the shipped build. Keep physics, player-facing progression, and renderer scope unchanged until that evidence exists.
 
+## Overhaul tick 31 verdict
+
+**Playable hackathon slice: PASS for upgrade-overlay evidence capture. AAA-ready: FAIL.** The review-only fixture reaches the real upgrade choice renderer deterministically, and the card now preserves a 16px bottom gutter at portrait widths. This is evidence infrastructure plus one narrow layout correction, not a claim that the player route is complete or that the overlay meets the AAA bar.
+
+### Observed evidence
+
+- Local exact Playwright checks at 320×568, 360×844, and 390×844 report HTTP 200, complete document, the `upgrade-decision` state, four visible choices, zero console/page/request errors, and no horizontal overflow.
+- The fixture is query-gated (`?review=upgrade`) and calls the production `showModuleChoices()` function; normal reset still starts on the route map.
+- The prior 320×568 capture showed the card ending at the viewport bottom. The CSS correction changes the card to `100dvh - 32px`; post-change hosted capture is required before calling the acceptance criterion verified.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages is stale for this commit until deployment completes. The review fixture is an explicit evidence seam, not proof that a human can complete a route under ordinary physics.
+- After deploy, re-run the exact fixture checks and inspect the three captured screenshots in color and grayscale. If the 16px gutters and choice hierarchy hold, return to the largest playfield material/depth gap rather than adding more overlay chrome.
+
 ## Overhaul tick 29 verdict
 
 **Playable hackathon slice: PASS for a narrower upgrade decision surface. AAA-ready: FAIL.** The module-choice overlay now reads more like a buried-machine service panel than a decorative splash card. This is a CSS-only visual correction, not visual completion.
