@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: side-guard edge-light pass
+
+### Implemented
+
+- Added a restrained upper-edge highlight to both side-guard render paths (sprite-backed and procedural fallback).
+- The highlight follows each guard segment's surface normal, extending the mine-table contact-light language to the last major rail hardware without changing collision geometry, input, or physics.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/physics-core.js` and `node --check src/elemental-effects.js` pass.
+- `git diff --check` passes.
+- Local Chromium exact 320x568, 360x844, and 390x844 checks pass: Canvas present, `Enter descent` transitions to `RUN 1/4 · READY`, 52px touch controls, matching document widths, and zero console/page errors.
+- Hosted Pages verification is required after push.
+
 ## 2026-08-18 — Overhaul tick: relay-gate contact-light pass
 
 ### Implemented

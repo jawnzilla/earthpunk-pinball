@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 20 verdict
+
+**Playable hackathon slice: PASS for side-guard edge readability. AAA-ready: FAIL.** Side guards now carry a restrained directional edge highlight in both sprite-backed and procedural paths. This is a narrow renderer-only extension of the existing mine-table light language, not a complete dynamic lighting system or production-readiness claim.
+
+### Observed evidence
+
+- `drawFlippers()` adds a normal-offset edge stroke after either side-guard renderer path; the offset is derived from the guard segment, so the highlight remains aligned on slanted guards.
+- Local exact 320x568, 360x844, and 390x844 Chromium checks pass with Canvas, active `RUN 1/4 · READY`, 52px controls, matching document widths, and zero console/page errors.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages is stale until this commit is pushed and the Pages workflow completes; hosted verification is still required.
+- The visual bar still needs a true grayscale screenshot audit and physical-device feel test; authored sprites and procedural fallbacks may not read identically at small sizes.
+- Next bounded slice: post-deploy grayscale/depth audit at 320/360/390 CSS widths and target only the largest measured readability failure. Do not add mechanics in that pass.
+
 ## Overhaul tick 19 verdict
 
 **Playable hackathon slice: PASS for relay-gate contact readability. AAA-ready: FAIL.** The relay gate now participates in the same restrained mine-table material/light language as the salvage, bumpers, drain, and route chutes. This remains a bounded renderer-only pass, not a complete dynamic lighting system or production-readiness claim.
