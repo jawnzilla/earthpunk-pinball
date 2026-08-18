@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The primary ball and destructibles still use separate renderer paths, so this is not yet a complete table-wide lighting language.
-- Hosted Pages exact 320x568/390x844 checks are pending this push.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment: HTTP 200, active `RUN 1/4`, 52px controls, matching widths, and zero console/page errors. GitHub Actions run `32114306885` completed `success`.
 - Next bounded slice: extend the same restrained contact-light language to the primary ball/major table hardware, without changing collision or reward behavior.
 
 ## Overhaul tick 15 verdict

@@ -14,7 +14,7 @@
 - `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
 - `git diff --check` passes.
 - Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `#reset` enters `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
-- Hosted Pages verification pending push/deployment.
+- Hosted Pages exact 320x568 and 390x844 checks pass after deployment: HTTP 200, canvas present, `#reset` enters `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors. GitHub Actions run `32114306885` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32114306885.
 
 
 ## 2026-08-18 — Overhaul tick: destructible material renderer pass
