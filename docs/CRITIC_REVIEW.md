@@ -9,7 +9,7 @@
 - `drawActiveElementChips()` reads the ball's live `elementEffects`, canonicalizes Air/Wind, and caps the rendered set at two effects. Each chip includes a non-color symbol, element label, and clamped `0–3` stack count.
 - `npm test` passes 11 tests; `node --check` passes for `src/physics-core.js`, `src/elemental-effects.js`, and `src/flipper-contact.js`; `git diff --check` passes.
 - Hosted exact Playwright at `?review=depth&cacheBust=active` passes at 320×568 and 390×844: HTTP 200, Canvas, exact CSS/document width parity, viewport-height parity, hidden overlay, `depth` marker, expected grayscale filter, and zero console/page/request errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-active-320.png` and `earthpunk-hosted-active-390.png`.
-- GitHub Pages run `32196849825` completed successfully for commit `15eaa25754b2d348832d702c63f5497d73d33ed4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32196849825.
+- GitHub Pages run `32199168006` completed successfully for commit `dfa32e7d14ba4a21e8e74aff25c48c521232f98e`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32199168006.
 
 ### Remaining risk / next smallest slice
 
