@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: hosted depth audit and evidence refresh
+
+### Implemented
+
+- No product-code change was justified this tick. Re-ran the production `?review=depth` path at the exact required portrait viewports and recorded the evidence rather than stacking another unverified shadow/glow layer.
+- Captured fresh hosted frames outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-local-depth-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-local-depth-390.png`.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=tick` passed at 320×568 and 390×844: HTTP 200, complete navigation, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture, hidden overlay, `grayscale(1) contrast(1.08)`, and zero console/page/request errors.
+- Hosted HTML contains the deployed `drawDestructibleContactShadow`, `drawTargetContactShadow`, and `drawFlipperContactShadow` markers.
+- Local exact Playwright was also run against the current checkout; it passed the same assertions and captured the two frames. The prior local server attempt produced the known `ERR_EMPTY_RESPONSE`; the hosted and direct local browser run are the claimed evidence, not that failed attempt.
+- GitHub Pages latest run for `b26e7b4` is successful: run `32192474603`, https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32192474603.
+
+### Decision / next gate
+
+- Operationally, the frozen depth fixture is healthy at both required widths. This does not certify visual quality: the frame still requires pixel-level human inspection for shadow-versus-mud, grayscale silhouettes, and plane separation.
+- Do not change renderer, physics, collision geometry, input, or progression until one concrete visual hierarchy defect is identified from the captures.
+
 ## 2026-08-18 — Overhaul tick: destructible salvage contact-shadow slice
 
 ### Implemented

@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 55
 
+## Overhaul tick 56 verdict
+
+**Playable hackathon slice: PASS for hosted depth-fixture health. AAA-ready: FAIL / unverified.** This tick deliberately made no product-code change: it refreshed exact browser evidence and preserved the ban on adding another shadow layer without pixel inspection.
+
+### Observed evidence
+
+- Hosted `?review=depth` passed at 320×568 and 390×844 with HTTP 200, Canvas, exact CSS width parity, hidden overlay, grayscale filter, and zero console/page/request errors.
+- Local exact Playwright against the current checkout passed the same assertions at both widths and captured fresh frames outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-local-depth-320.png` and `earthpunk-local-depth-390.png`.
+- `npm test` passes 11 tests. GitHub Pages run `32192474603` for `b26e7b4` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32192474603.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is still visual evidence, not browser health: no pixel-level visual verdict is claimed here because the available automation can capture and assert the frames but cannot establish whether contact shadows muddy the target/salvage row.
+- Next implementation slice remains blocked until one named hierarchy defect is identified from those captures. If the shadows read cleanly, return to a measured physics/object interaction slice rather than adding decoration.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 55 verdict
 
 **Playable hackathon slice: PASS for bounded salvage-object depth correction. AAA-ready: FAIL / unverified.** Destructible mine/salvage objects now have an explicit two-pass contact shadow, matching the recent target and flipper plane treatment without touching gameplay.
