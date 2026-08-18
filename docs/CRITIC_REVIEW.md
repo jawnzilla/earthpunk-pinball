@@ -10,6 +10,7 @@
 - Deterministic tests pass for stationary and approaching cases. With 4 m/s normal input, 0.6 m contact radius, and -8 rad/s rotation, the probe reports 4.8 m/s surface speed, 8.8 m/s impact, 10.256 m/s world outgoing, and 0.6200000000000002 relative response.
 - `npm test` passes 9 tests; syntax and whitespace checks pass. No player-facing behavior changed.
 - Local exact Playwright checks at 320×568 and 390×844 pass HTTP 200, complete documents, exact widths, no overflow, Canvas, and zero browser/request errors. The review fixture's `N 4` debug readout was not exposed in this local DOM capture and is not claimed.
+- Hosted Pages run `32163449130` completed successfully for commit `0052719`. Hosted exact 320×568 and 390×844 checks pass HTTP 200, complete documents, exact widths, no overflow, Canvas, the `flipper-contact` fixture marker, and zero browser/request errors. Screenshots are outside the repo under `%LOCALAPPDATA%/Temp/earthpunk-hosted-geometry-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-hosted-geometry-390.png`.
 
 ### Remaining risk / next smallest slice
 

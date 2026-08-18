@@ -14,6 +14,8 @@
 - `node --check src/physics-core.js` and `git diff --check` passed.
 - Direct probe output for a 4 m/s normal input at a 0.6 m contact radius and `-8 rad/s` angular velocity: surface speed `4.8 m/s`, impact `8.8 m/s`, world outgoing `10.256 m/s`, relative response ratio `0.6200000000000002`.
 - Local exact Playwright checks at 320×568 and 390×844 against the correct temporary server returned HTTP 200, complete documents, exact CSS widths, `scrollWidth === clientWidth`, Canvas, and zero console/page/request errors. The review fixture's debug readout was not exposed in the served DOM, so no `N 4` claim is made from this local run.
+- Pushed commit `0052719` to `prototype`. GitHub Pages run `32163449130` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32163449130.
+- Hosted exact Playwright checks at `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact` passed at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas, `document.body.dataset.reviewFixture === 'flipper-contact'`, and zero console/page/request errors. Hosted screenshots were captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-geometry-320.png` and `earthpunk-hosted-geometry-390.png`.
 
 ### Decision / next gate
 
