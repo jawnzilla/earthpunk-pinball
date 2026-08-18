@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 42
+
+## Overhaul tick 42 verdict
+
+**Playable hackathon slice: PASS for a shared post-cap response seam. AAA-ready: FAIL.** The speed ceiling is now a pure, tested Physics V2 operation used by the live renderer path. This improves measurement integrity and reduces duplicated solver-adjacent math; it does not claim a finished launch feel or visual overhaul.
+
+### Observed evidence
+
+- `capVelocity()` sanitizes invalid components, preserves direction, and clamps the vector to the requested maximum. `capBallSpeed()` now delegates to it before flipper telemetry is summarized.
+- `npm test` passes 9 tests; `node --check src/physics-core.js` and `git diff --check` pass.
+- Local exact Playwright checks at 320×568 and 390×568 report HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, the `flipper-contact` marker, zero console/page/request errors, and `N 4` telemetry with `241→600px/s · μΔ +388px/s`.
+
+### Remaining risk / next smallest slice
+
+- The review fixture proves the retained post-cap value, but it is not ordinary human play. A normal-play active-contact sample is still required before changing restitution, friction, or the speed ceiling.
+- No visual completion or AAA claim is supported by this infrastructure slice. Hosted Pages verification remains pending for this commit.
+
 # Deadlight Critic Review — Overhaul tick 41
 
 ## Overhaul tick 42 verdict

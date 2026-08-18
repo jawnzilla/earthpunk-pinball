@@ -70,6 +70,20 @@ export function applyImpulse(ball, impulse = { x: 0, y: 0 }) {
   return ball;
 }
 
+// Keep the gameplay speed ceiling as a pure velocity operation so callers can
+// measure/verify the post-cap state without duplicating vector math.
+export function capVelocity(velocity = { x: 0, y: 0 }, maxSpeed = Infinity) {
+  const safe = {
+    x: Number.isFinite(velocity.x) ? velocity.x : 0,
+    y: Number.isFinite(velocity.y) ? velocity.y : 0
+  };
+  if (!Number.isFinite(maxSpeed) || maxSpeed <= 0) return safe;
+  const speed = Math.hypot(safe.x, safe.y);
+  if (speed <= maxSpeed || speed <= EPSILON) return safe;
+  const scaleFactor = maxSpeed / speed;
+  return { x: safe.x * scaleFactor, y: safe.y * scaleFactor };
+}
+
 export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, point = { x: 0, y: 0 }, origin = { x: 0, y: 0 } } = {}) {
   const offset = subtract(point, origin);
   return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };

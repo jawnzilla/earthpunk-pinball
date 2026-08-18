@@ -320,7 +320,7 @@
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
 <script type="module">
-import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
 (() => {
@@ -766,8 +766,8 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     return contact;
   }
   function capBallSpeed(ball, maxSpeed = MAX_BALL_SPEED_PX_S) {
-    const speed = Math.hypot(ball.vx, ball.vy);
-    if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
+    const capped = capVelocity({ x: ball.vx, y: ball.vy }, maxSpeed);
+    ball.vx = capped.x; ball.vy = capped.y;
   }
   function resolveBoundaryContact(ball, normal, point, penetration) {
     const physics = syncPhysicsBallFromPixels(ball);

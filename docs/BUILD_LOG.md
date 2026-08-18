@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: make the post-cap velocity seam testable
+
+### Implemented
+
+- Added pure `capVelocity()` to the Physics V2 core. It sanitizes non-finite components, preserves direction, and clamps only when the configured speed ceiling is exceeded.
+- Routed the production pixel-space `capBallSpeed()` path through the shared core helper, so flipper telemetry and live gameplay use the same post-cap operation without changing the 600px/s ceiling.
+- Added deterministic coverage for direction-preserving clamping, non-finite input handling, and below-cap no-op behavior.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures; `node --check src/physics-core.js`; `git diff --check` passed.
+- Local exact Playwright checks at 320×568 and 390×568: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, `flipper-contact` fixture marker, zero console/page/request errors. Readout: `LEFT launch 241→600px/s · N 4 · μΔ +388px/s` at both widths.
+- Hosted Pages verification is pending this commit; no hosted result is claimed yet.
+
+### Decision / next gate
+
+- The cap is now a shared, regression-tested response boundary rather than duplicated renderer-side vector math. The fixture confirms the live retained launch is capped at 600px/s while still producing a positive measured delta.
+- Next slice should compare this capped fixture against a normal-play contact sample before changing any response constant. AAA-ready remains unclaimed.
+
 ## 2026-08-18 — Overhaul tick: cap flipper telemetry at the live response boundary
 
 ### Implemented

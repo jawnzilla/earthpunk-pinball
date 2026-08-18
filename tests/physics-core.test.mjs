@@ -13,6 +13,7 @@ import {
   impactEnergyFromMassSpeed,
   materialHardness,
   applyImpulse,
+  capVelocity,
   calibrateContactResponse,
   calibrateMovingSurfaceResponse,
   calibrateFlipperContactResponse
@@ -104,6 +105,14 @@ assert.equal(materialHardness('timber'), MATERIALS.timber.hardness);
   assert.deepEqual(heavy.velocity, { x: 2, y: -1 });
   applyImpulse(heavy, { x: Number.NaN, y: Number.POSITIVE_INFINITY });
   assert.deepEqual(heavy.velocity, { x: 2, y: -1 });
+}
+
+{
+  const capped = capVelocity({ x: 480, y: 360 }, 600);
+  approx(Math.hypot(capped.x, capped.y), 600);
+  approx(capped.x / capped.y, 4 / 3);
+  assert.deepEqual(capVelocity({ x: Number.NaN, y: Number.POSITIVE_INFINITY }, 600), { x: 0, y: 0 });
+  assert.deepEqual(capVelocity({ x: 3, y: 4 }, 600), { x: 3, y: 4 });
 }
 
 {
