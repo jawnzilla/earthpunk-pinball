@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 25 verdict
+
+**Playable hackathon slice: PASS for hosted mobile geometry and runtime health. AAA-ready: FAIL.** The deployed authored-layer build holds its playable path at all requested portrait widths, but the grayscale audit still lacks human silhouette/material judgment. This is evidence collection, not a claim of production visual readiness.
+
+### Observed evidence
+
+- Hosted exact Playwright checks passed at 320×568, 360×844, and 390×844: HTTP 200, complete document, Canvas, `RUN 1/4`, two 52px controls, no horizontal overflow, and zero console/page/request errors.
+- The table scales to 226×402 CSS px at 320×568 and expands to 344×612 / 354×630 at 360×844 / 390×844. The smallest viewport is height-limited by the portrait HUD + table + controls composition; it does not crop or overflow.
+- CSS-grayscale screenshots were captured for all three widths outside the repository. Pixel-value ranges remain broad, but automated luminance statistics cannot establish whether the primary ball and destructibles are recognizable without color.
+
+### Remaining risk / next smallest slice
+
+- The largest unresolved visual gap is grayscale silhouette separation for the primary ball and destructible mine objects at the 226px-wide 320px table scale. Current evidence does not justify changing layout or mechanics.
+- Next bounded slice: add restrained nested silhouette/rim cues to those renderer paths only, then repeat hosted grayscale screenshots and exact mobile checks. Keep physics, input, progression, and asset loading unchanged.
+- Pages workflow run `32128717103` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32128717103.
+
 ## Overhaul tick 24 verdict
 
 **Playable hackathon slice: PASS for authored-layer composition. AAA-ready: FAIL.** The live renderer now actually composes the authored mine/deck planes and HUD cues that were already defined and loaded but unreachable from `draw()`. This is the smallest coherent visual correction for the measured “procedural fallback despite authored assets” gap; it is not a claim of complete lighting or production readiness.

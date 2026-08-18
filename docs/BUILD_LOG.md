@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: hosted grayscale/depth audit
+
+### Audited
+
+- Re-ran the exact hosted GitHub Pages build at CSS viewports 320×568, 360×844, and 390×844 after the authored-layer composition deployment.
+- Captured color and CSS-grayscale screenshots outside the repository under `%LOCALAPPDATA%/Temp/deadlight-hosted-*.png`; no screenshot artifacts were added to git.
+- Measured the live table footprint: 226×402 CSS px at 320×568, 344×612 at 360×844, and 354×630 at 390×844. The 320px viewport is intentionally height-constrained by the HUD/table/control stack rather than horizontally overflowing.
+
+### Verification
+
+- Hosted HTTP 200, `document.readyState === complete`, Canvas present, `RUN 1/4`, two 52px touch controls, `scrollWidth === clientWidth`, and zero console/page/request errors at all three widths.
+- Grayscale captures retain a measurable value range (p05 15 / p95 119 at 320px; p05 15 / p95 126 at 360px; p05 15 / p95 124 at 390px), but this numeric check cannot replace human inspection of silhouettes/material separation.
+- GitHub Pages workflow run `32128717103` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32128717103.
+
+### Decision / next slice
+
+- No renderer change was made from screenshot evidence alone: the largest remaining risk is qualitative grayscale silhouette judgment, not a proven geometry or overflow defect.
+- Next bounded implementation slice: add a renderer-only grayscale-safe silhouette cue to the primary ball and the four destructible families, then repeat this exact hosted audit. Physics, input, progression, and asset loading remain out of scope.
+
 ## 2026-08-18 — Overhaul tick: reconnect authored mine/deck render layers
 
 ### Implemented
