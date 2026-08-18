@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: destructible salvage contact-shadow slice
+
+### Implemented
+
+- Extracted the destructible salvage object's ground shadow into the named `drawDestructibleContactShadow(item)` renderer helper.
+- Added a restrained two-pass shadow: compact contact core plus softer offset falloff. Destroyed debris uses reduced opacity so broken objects settle into the well without becoming a dark smear.
+- Added renderer-contract coverage for both alpha seams and the live helper call. Physics, collision geometry, damage math, input, progression, and assets are unchanged.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- `node --check src/physics-core.js` and `node --check src/flipper-contact.js`: passed.
+- `git diff --check`: passed.
+- GitHub Pages run `32192347605` completed successfully for commit `4721296`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32192347605.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=4721296` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture marker, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, deployed destructible-shadow helper/live-call markers, and zero console/page/request errors on the clean rerun.
+
+### Decision / next gate
+
+- This is one bounded salvage-object plane correction. Pixel inspection of the hosted frozen grayscale frame must confirm the falloff reads as grounding rather than muddying the object row.
+- AAA-ready remains unsupported. Do not stack another shadow/glow layer without that visual evidence.
+
 ## 2026-08-18 — Overhaul tick: target pedestal contact-shadow slice
 
 ### Implemented

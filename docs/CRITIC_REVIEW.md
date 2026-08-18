@@ -1,4 +1,22 @@
-# Deadlight Critic Review — Overhaul tick 49
+# Deadlight Critic Review — Overhaul tick 55
+
+## Overhaul tick 55 verdict
+
+**Playable hackathon slice: PASS for bounded salvage-object depth correction. AAA-ready: FAIL / unverified.** Destructible mine/salvage objects now have an explicit two-pass contact shadow, matching the recent target and flipper plane treatment without touching gameplay.
+
+### Observed evidence
+
+- `drawDestructibleContactShadow(item)` renders a `.34` compact contact core and `.14` softer offset falloff for live objects; destroyed debris drops to `.24` / `.08` so wreckage does not dominate the well.
+- `drawDestructibles()` calls the helper before both intact and destroyed-object branches. Renderer-contract coverage asserts the helper, both alpha seams, and live call.
+- `npm test` passes 11 tests; syntax and whitespace checks pass.
+- GitHub Pages run `32192347605` completed successfully for commit `4721296`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32192347605.
+- Hosted exact Playwright at 320×568 and 390×844 reports HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, `depth` fixture, hidden overlay, expected grayscale filter, deployed helper/live-call markers, and zero console/page/request errors on clean rerun.
+
+### Remaining risk / next smallest slice
+
+- Human pixel inspection of the hosted frozen grayscale capture remains necessary to judge whether the destructible falloff grounds silhouettes or muddies the salvage row. Browser health is not visual proof.
+- Do not add another shadow/glow layer until that inspection identifies a concrete hierarchy defect. If the shadow reads cleanly, the next work should return to the largest remaining visual or measured live-play physics gap rather than stacking decoration.
+- AAA-ready remains unsupported.
 
 ## Overhaul tick 54 verdict
 
