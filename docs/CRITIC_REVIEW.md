@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 29
 
+## Overhaul tick 30 verdict
+
+**Playable hackathon slice: PASS for hosted portrait runtime health. AAA-ready: FAIL.** The deployed build remains stable at the required portrait widths, but this tick deliberately did not change gameplay or renderer code because the upgrade overlay still lacks an evidence-backed gameplay reachability capture.
+
+### Observed evidence
+
+- Fresh hosted Playwright checks at 320×568, 360×844, and 390×844 report HTTP 200, complete document, Canvas, `RUN 1/4 · READY`, two 52px controls, exact document-width fit, zero console/page/request errors, and no incomplete image assets.
+- The measured table footprints are 226.125×402 CSS px, 343.984×611.547 CSS px, and 354.375×630 CSS px respectively.
+- A 24-cycle alternating touch-flipper run at 320×568 stayed active without browser errors but did not complete the table, so it cannot stand in for route-overlay evidence.
+
+### Remaining risk / next smallest slice
+
+- Upgrade card fit, focus/pressed state, and grayscale readability remain unverified in an actually reached route-complete state. The initial/play screenshots are stored outside the repository and are not treated as visual proof by themselves.
+- The next smallest useful slice is a deterministic test-only/browser harness seam for reaching `showModuleChoices()` through the real route-completion state, or a debug-only fixture that is disabled in the shipped build. Keep physics, player-facing progression, and renderer scope unchanged until that evidence exists.
+
 ## Overhaul tick 29 verdict
 
 **Playable hackathon slice: PASS for a narrower upgrade decision surface. AAA-ready: FAIL.** The module-choice overlay now reads more like a buried-machine service panel than a decorative splash card. This is a CSS-only visual correction, not visual completion.

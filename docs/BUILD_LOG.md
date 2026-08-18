@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: hosted portrait audit and route-overlay reachability check
+
+### Audited
+
+- Rechecked the exact hosted GitHub Pages build at CSS viewports 320×568, 360×844, and 390×844 before changing product code.
+- Captured fresh full-page PNG evidence outside the repository under `%LOCALAPPDATA%/Temp/deadlight-hosted-320.png`, `deadlight-hosted-360.png`, and `deadlight-hosted-390.png`; no temporary artifacts were added to git.
+- Exercised the hosted start path with alternating touch-flipper pointer events for 24 cycles at 320×568 and captured `deadlight-hosted-play.png` outside the repository. The run stayed in `RUN 1/4`; it did not reach a route-complete upgrade overlay.
+
+### Verification
+
+- Hosted HTTP 200, `document.readyState === complete`, Canvas present, `RUN 1/4 · READY`, two 52px touch controls, `scrollWidth === clientWidth`, zero console/page/request errors, and no incomplete image assets at all three widths.
+- Measured canvas footprints: 226.125×402 CSS px at 320×568, 343.984×611.547 at 360×844, and 354.375×630 at 390×844.
+- The route-overlay path remains unverified from an actual gameplay completion; the automated flipper run is evidence of runtime stability only, not overlay fit or visual quality.
+
+### Decision / next slice
+
+- No renderer or gameplay change is justified by this audit alone. The largest unresolved evidence gap is still a genuine route-to-upgrade capture at 320×568 and 390×844, followed by human color/grayscale inspection.
+- Next bounded slice should make the route-completion path deterministic in a test-only/browser harness or add a narrowly scoped debug-only route-state fixture, without changing player-facing physics or progression semantics. Do not claim visual completion until the real overlay is captured.
+
 ## 2026-08-18 — Overhaul tick: upgrade decision surface cleanup
 
 ### Implemented
