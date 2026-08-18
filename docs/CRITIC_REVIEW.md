@@ -2,7 +2,7 @@
 
 ## Overhaul tick 50 verdict
 
-**Playable hackathon slice: PASS pending hosted visual recheck. AAA-ready: FAIL.** The authored deck well now recedes one controlled value step (`.78` alpha instead of `.92`) so grayscale review can distinguish the shell/well plane from gameplay silhouettes. This is a narrow renderer correction, not visual completion.
+**Playable hackathon slice: PASS for hosted value-hierarchy recheck. AAA-ready: FAIL.** The authored deck well now recedes one controlled value step (`.78` alpha instead of `.92`) so grayscale review can distinguish the shell/well plane from gameplay silhouettes. This is a narrow renderer correction, not visual completion.
 
 ### Observed evidence
 
@@ -12,8 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- The new commit still requires GitHub Pages deployment and exact hosted checks at 320×568 and 390×844, including `?review=grayscale`, zero console/page/request errors, and screenshot inspection.
-- If the hosted grayscale frame still shows a plane collision, change only that named layer next. Do not stack additional opacity changes without evidence.
+- GitHub Pages run `32183574911` completed successfully for `b6ffc75`. Hosted exact checks at 320×568 and 390×844 against `?review=grayscale` returned HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, the grayscale marker/filter, hidden overlay, and zero console/page/request errors; screenshots are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-value-320.png` and `earthpunk-hosted-value-390.png`.
+- Pixel comparison against the prior hosted grayscale captures changed 3,596 pixels at 320×568 and 8,571 at 390×844 (absolute mean channel delta 0.37 and 0.49 respectively), confirming the opacity seam affects the intended image region without a broad layout/runtime change. If the next hosted grayscale frame still shows a plane collision, change only that named layer next. Do not stack additional opacity changes without evidence.
 - AAA-ready remains unsupported.
 
 ## Overhaul tick 49 verdict
