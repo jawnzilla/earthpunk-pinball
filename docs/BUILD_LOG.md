@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: target pedestal contact-shadow slice
+
+### Implemented
+
+- Replaced the inline target shadow with the named `drawTargetContactShadow(target)` renderer helper.
+- The helper adds a compact dark contact core plus a softer offset falloff beneath every target, including hit targets, to separate target silhouettes from the recessed well without touching gameplay or collision geometry.
+- Added renderer-contract coverage for the helper, alpha seam, offset ellipse, and live draw call.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- `git diff --check`: passed.
+- Exact hosted browser verification and Pages deployment are pending for this commit; no result is claimed yet.
+
+### Decision / next gate
+
+- This is one bounded foreground-object depth correction. Re-run the hosted frozen depth fixture at 320×568 and 390×844 before changing another renderer layer.
+- AAA-ready remains unsupported; human pixel inspection is still required.
+
 ## 2026-08-18 — Overhaul tick: flipper contact-shadow depth slice
 
 ### Implemented

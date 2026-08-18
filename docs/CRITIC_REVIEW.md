@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 49
 
+## Overhaul tick 54 verdict
+
+**Playable hackathon slice: PASS pending hosted verification for target contact separation. AAA-ready: FAIL / unverified.** Target shadows now have an explicit two-pass pedestal treatment: a compact contact core and a softer offset falloff. This is a narrow renderer correction, not a full visual verdict.
+
+### Observed evidence
+
+- `drawTargetContactShadow(target)` is called before hit/active target geometry and uses restrained `.32` / `.14` alpha with a downward offset tied to target radius.
+- Renderer-contract coverage was expanded; the deterministic suite must pass before deployment.
+- No physics, input, progression, target dimensions, or collision response changed.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and exact hosted 320×568 / 390×844 checks are pending for this commit.
+- Pixel inspection must confirm the second falloff reads as contact depth rather than muddying the target row. Do not add another shadow/glow layer until that evidence exists.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 53 verdict
 
 **Playable hackathon slice: PASS for renderer-contract depth correction. AAA-ready: FAIL / unverified.** Flipper blades now receive a restrained ground-contact shadow in both authored and fallback render paths. This is one bounded plane-separation change, not a complete visual verdict.

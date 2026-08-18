@@ -1196,6 +1196,20 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       ctx.restore();
     });
   }
+  function drawTargetContactShadow(target) {
+    const radius = target.r || 16;
+    ctx.save();
+    ctx.globalAlpha = .32;
+    ctx.fillStyle = '#050806';
+    ctx.beginPath();
+    ctx.ellipse(3, radius * .72, radius * 1.08, radius * .3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = .14;
+    ctx.beginPath();
+    ctx.ellipse(4, radius * .84, radius * 1.24, radius * .4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
   function drawTargetMaterialCue(target, index) {
     const family = index % 3;
     ctx.save();
@@ -1228,7 +1242,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   function drawTargets() {
     targets.forEach((target, index) => {
       ctx.save(); ctx.translate(target.x, target.y); ctx.globalAlpha = target.hit ? .42 : 1;
-      ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(3, 5, target.r + 5, target.r * .55, 0, 0, Math.PI * 2); ctx.fill();
+      drawTargetContactShadow(target);
       if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.beginPath(); ctx.moveTo(-target.r * .45, -target.r * .35); ctx.lineTo(target.r * .4, target.r * .35); ctx.stroke(); ctx.restore(); return; }
       ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = index % 3 === 0 ? '#5b3d29' : index % 3 === 1 ? '#51483d' : '#3e4a47';
       if (index % 3 === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }
