@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: make destructible integrity readable in-world
+
+### Implemented
+
+- Added a compact integrity strip above each live destructible salvage object, derived directly from its runtime `integrity / maxIntegrity` state.
+- The strip uses restrained green/amber/orange thresholds and stays attached to the object, so damage feedback reads in the table instead of competing with the HUD.
+- Destroyed objects keep their existing debris treatment; physics, damage math, elemental interactions, input, and progression are unchanged.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js`; `node --check src/flipper-contact.js`; `git diff --check` passed.
+- Local exact Playwright at 320×568 and 390×844 against `?review=upgrade`: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, upgrade overlay reached, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-integrity-320.png` and `earthpunk-integrity-390.png`.
+
+### Decision / next gate
+
+- This is a bounded readability slice for the mine/salvage fantasy. It does not claim AAA visual completion.
+- Next visual gate is a grayscale/portrait review of the full table with the new object-state cues, followed by one physics slice only if live telemetry still identifies a response defect.
+
 ## 2026-08-18 — Overhaul tick: provenance bucket helper for flipper telemetry
 
 ### Implemented

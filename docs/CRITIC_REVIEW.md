@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 46 verdict
+
+**Playable hackathon slice: PASS for destructible-state readability. AAA-ready: FAIL.** Salvage objects now expose a small in-world integrity strip tied to their actual runtime damage state. The cue improves immediate consequence readability without adding another HUD meter, but it is one polish slice inside a still-incomplete overhaul.
+
+### Observed evidence
+
+- `drawDestructibles()` computes `integrityRatio` from each object's live `integrity / maxIntegrity` and renders a 3px strip above the object with green, amber, and orange thresholds.
+- The existing nested silhouettes, material palettes, cracks, damage pips, contact shadows, and debris states remain intact; no physics or damage constants changed.
+- `npm test` passes 11 tests; syntax and whitespace checks pass.
+- Local exact Playwright at 320×568 and 390×844 reaches the opt-in upgrade overlay with HTTP 200, complete documents, exact widths/no overflow, Canvas, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- This cue has not yet been verified on a live damaged object in a browser capture; the renderer contract and runtime boot path are covered, but a contact-driven damage screenshot remains stronger evidence.
+- The visual overhaul is not complete: the remaining bar is full-table grayscale readability, authored depth under motion, and a measured live-play physics pass. AAA-ready remains unsupported.
+
 ## Overhaul tick 45 verdict
 
 **Playable hackathon slice: PASS for telemetry provenance buckets. AAA-ready: FAIL.** Flipper launch aggregation now has a dedicated pure helper that keeps explicit `LIVE` and `FIXTURE` reports independent. This improves evidence integrity; it is not a gameplay-feel or visual-overhaul completion claim.

@@ -8,6 +8,8 @@ assert.match(source, /drawTargetMaterialCue\(target, index\);/);
 assert.match(source, /family === 0/);
 assert.match(source, /family === 1/);
 assert.match(source, /ctx\.strokeRect\(-target\.r \* \.66/);
+assert.match(source, /const integrityRatio = Math\.max\(0, Math\.min\(1, item\.integrity \/ item\.maxIntegrity\)\)/);
+assert.match(source, /ctx\.fillRect\(-barWidth \/ 2, barY, barWidth \* integrityRatio, barHeight\)/);
 assert.match(source, /function activateFlipperContactReviewFixture\(\)/);
 assert.match(source, /const fixtureNormal = \{ x: Math\.sin\(flipper\.angle\), y: -Math\.cos\(flipper\.angle\) \}/);
 assert.match(source, /flipper\.angularVelocity = -8/);

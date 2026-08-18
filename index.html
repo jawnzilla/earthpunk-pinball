@@ -1110,6 +1110,13 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }
       ctx.globalAlpha = 1; ctx.fillStyle = '#d7a45a'; for (let index = 0; index < 3; index += 1) { ctx.beginPath(); ctx.arc(-7 + index * 7, item.r + 5, 2, 0, Math.PI * 2); ctx.fillStyle = index < stage ? '#d7a45a' : '#44372b'; ctx.fill(); }
+      // A compact integrity strip makes material damage legible without adding HUD clutter.
+      const integrityRatio = Math.max(0, Math.min(1, item.integrity / item.maxIntegrity));
+      const barWidth = item.r * 1.5, barHeight = 3, barY = -item.r - 7;
+      ctx.fillStyle = 'rgba(5,9,8,.88)'; ctx.fillRect(-barWidth / 2, barY, barWidth, barHeight);
+      ctx.fillStyle = integrityRatio > .5 ? '#b5d3a1' : integrityRatio > .2 ? '#ffd083' : '#ef8b45';
+      ctx.fillRect(-barWidth / 2, barY, barWidth * integrityRatio, barHeight);
+      ctx.strokeStyle = '#171614'; ctx.lineWidth = 1; ctx.strokeRect(-barWidth / 2, barY, barWidth, barHeight);
       ctx.restore();
     });
   }
