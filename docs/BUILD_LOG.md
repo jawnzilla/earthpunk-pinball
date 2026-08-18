@@ -12,7 +12,8 @@
 
 - `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
 - Local exact Playwright at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, fixture marker `grayscale`, route overlay hidden, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-grayscale-320.png` and `earthpunk-grayscale-390.png`.
-- Hosted exact checks remain required after Pages deployment.
+- GitHub Pages run `32181673809` completed successfully for commit `de61367`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32181673809.
+- Hosted exact Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=grayscale` passed at 320×568 and 390×844 on retry: HTTP 200, complete documents, exact CSS widths, Canvas, fixture marker `grayscale`, hidden overlay, computed filter `grayscale(1) contrast(1.08)`, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-grayscale-320.png` and `earthpunk-hosted-grayscale-390.png`.
 
 ### Decision / next gate
 

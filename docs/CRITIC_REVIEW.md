@@ -12,7 +12,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Browser screenshot verification at exact 320×568 and 390×844, locally and on Pages, remains required for this tick.
+- GitHub Pages run `32181673809` completed successfully for commit `de61367`. Hosted exact Playwright at 320×568 and 390×844 passed HTTP 200, complete documents, exact widths/no overflow, Canvas, the grayscale marker/filter, hidden overlay, and zero console/page/request errors on retry; screenshots are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-grayscale-320.png` and `earthpunk-hosted-grayscale-390.png`.
 - The largest remaining visual gap is still unmeasured grayscale hierarchy across the complete portrait table; do not infer depth quality from the filter's presence.
 - After capture, make one renderer-only value hierarchy change if the evidence identifies a specific plane/object collision. AAA-ready remains unsupported.
 
