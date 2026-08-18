@@ -707,6 +707,37 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     overlay.dataset.reviewFixture = 'upgrade';
     updateHud();
   }
+  // Review-only fixture: exercises the production flipper response path with
+  // repeatable contacts so the hosted tuning readout can be inspected. It is
+  // opt-in via ?review=flipper-contact and never runs during normal play.
+  function activateFlipperContactReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'flipper-contact') return;
+    state.running = true;
+    state.message = 'Review fixture · repeated flipper launches.';
+    state.flipperContactSamples = [];
+    state.lastFlipperContact = null;
+    const flipper = flippers.left;
+    const segment = flipperEndpointsAt(flipper, flipper.angle);
+    const tangent = { x: (segment.x2 - segment.x1) / flipper.length, y: (segment.y2 - segment.y1) / flipper.length };
+    const contactPoint = { x: segment.x1 + tangent.x * flipper.length * .62, y: segment.y1 + tangent.y * flipper.length * .62 };
+    for (let sample = 0; sample < 4; sample += 1) {
+      state.ball.x = contactPoint.x;
+      state.ball.y = contactPoint.y;
+      state.ball.vx = 32 + sample * 8;
+      state.ball.vy = 180 + sample * 18;
+      state.ball.prevX = state.ball.x;
+      state.ball.prevY = state.ball.y;
+      resolveFlipperCollision(state.ball, flipper, 'left', false);
+    }
+    state.ball.x = W / 2;
+    state.ball.y = H - 108;
+    state.ball.prevX = state.ball.x;
+    state.ball.prevY = state.ball.y;
+    state.ball.vx = 70;
+    state.ball.vy = -312;
+    document.body.dataset.reviewFixture = 'flipper-contact';
+    updateHud();
+  }
   function beginNextRoute() {
     state.stage += 1; state.currentNode = state.nextNode; state.layout = routeNodeLayouts[state.currentNode] || levelLayouts[Math.min(levelLayouts.length - 1, state.stage - 1)]; state.routeTarget = null; state.nextNode = null; state.routeGateOpen = false; state.stageComplete = false; state.routeChutes = []; state.boss = state.layout.boss ? { active: true, exposed: false, hp: state.layout.boss.maxHp, maxHp: state.layout.boss.maxHp, cooldown: 120 } : { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }; state.targets = 0; state.topHits = 0; state.topHitCooldown = 0; applyTargetLayout(); resetLayoutDamage(); state.destructibles = createDestructibles(); state.relayCooldown = 0; state.running = false; spawnBall(); showPreLevelMap(); updateHud();
   }
@@ -1278,7 +1309,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop();
+  reset(); activateUpgradeReviewFixture(); loop(); activateFlipperContactReviewFixture();
 })();
 </script>
 </body>

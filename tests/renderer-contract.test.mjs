@@ -8,4 +8,7 @@ assert.match(source, /drawTargetMaterialCue\(target, index\);/);
 assert.match(source, /family === 0/);
 assert.match(source, /family === 1/);
 assert.match(source, /ctx\.strokeRect\(-target\.r \* \.66/);
-console.log('renderer-contract: target material cues present');
+assert.match(source, /function activateFlipperContactReviewFixture\(\)/);
+assert.match(source, /review=flipper-contact/);
+assert.match(source, /activateFlipperContactReviewFixture\(\);/);
+console.log('renderer-contract: target material cues and flipper review fixture present');
