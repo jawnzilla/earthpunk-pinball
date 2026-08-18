@@ -8,7 +8,7 @@
 
 - Deterministic tests cover echo impact energy, ignored-first-response, duplicate suppression, timber-vs-stone differentiation, and the 18% integrity cap.
 - The live adapter runs echo contacts through the existing destructible mask and emits Wind-specific feedback without score/Charge/target/chain leakage.
-- Local exact viewport browser and hosted Pages verification are pending deployment for this tick.
+- Local and hosted exact 320x568/390x844 Playwright Chromium smoke passes: canvas/touch controls present, active transition succeeds, widths match, touch press is observed, and zero console/page errors. Hosted workflow run `32102356804` completed success.
 
 ### Remaining risk / next smallest slice
 

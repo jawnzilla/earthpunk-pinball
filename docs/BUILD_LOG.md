@@ -14,7 +14,8 @@
 - `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
 - `node --check src/elemental-effects.js` passes.
 - `git diff --check` passes.
-- Local exact viewport browser verification and hosted Pages deployment remain pending until commit/push.
+- Local exact 320x568 and 390x844 Playwright Chromium smoke passes: canvas/touch controls present, active transition succeeds, CSS/document widths match, touch press is observed, and zero console/page errors.
+- Hosted Pages exact 320x568 and 390x844 Playwright Chromium smoke passes with the same gates and zero console/page errors. GitHub Actions run `32102356804` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32102356804
 
 ## 2026-08-18 — Overhaul tick: material-aware mini-ball damage adapter
 
