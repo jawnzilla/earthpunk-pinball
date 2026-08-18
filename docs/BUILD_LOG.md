@@ -14,7 +14,7 @@
 - `git diff --check` passes.
 - Extracted inline module passes `node --check`.
 - Local Playwright Chromium smoke passes at exact 320x568 and 390x844: canvas/reset present, active transition succeeds, CSS/document widths match, and no console/page errors.
-- Hosted Pages verification and Actions status are recorded after push below.
+- Hosted Pages endpoint returned HTTP 200 with the new `onMiniBallStructureContact` marker after cache-busting query `?v=0143efd`; hosted Playwright Chromium at exact 320x568 and 390x844 reported matching CSS/document widths, canvas present, and zero page/console errors. GitHub Actions run `32099724086` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32099724086
 
 ## 2026-08-17 — Overhaul tick: Water mini-ball reduced-mask contact slice
 
