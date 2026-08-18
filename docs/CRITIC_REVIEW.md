@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The renderer still uses procedural Canvas forms and does not yet provide a complete mine/tunnel lighting language or full grayscale silhouette audit.
-- Hosted Pages exact 320x568/390x844 checks are pending this push.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment: HTTP 200, active transition to `RUN 1/4`, 52px controls, matching widths, and zero console/page errors. Workflow run `32112523087` completed success.
 - Next bounded slice: give the primary ball and elemental bodies a shared directional contact-light pass, or extend material-aware destructibles to the other route tables; do not broaden gameplay rewards in the same change.
 
 ## Overhaul tick 14 verdict

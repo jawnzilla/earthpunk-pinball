@@ -14,7 +14,7 @@
 - Extracted inline module passes `node --check`.
 - `git diff --check` passes.
 - Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `Enter descent` transitions to `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
-- Hosted Pages verification is pending push/deployment.
+- Hosted Pages exact 320x568 and 390x844 checks pass after deployment: HTTP 200, canvas present, `Enter descent` transitions to `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors. GitHub Actions run `32112523087` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32112523087.
 
 
 ## 2026-08-18 — Overhaul tick: residual post-contact travel
