@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 44 verdict
+
+**Playable hackathon slice: PASS for telemetry provenance. AAA-ready: FAIL.** Production flipper samples now carry an explicit `LIVE` or `FIXTURE` source, and the aggregate can filter by source. The hosted fixture remains healthy, but ordinary human-play launch evidence is still absent.
+
+### Observed evidence
+
+- Reset state defaults to `live`; `?review=flipper-contact` switches only the review harness to `fixture`.
+- `summarizeFlipperContactSeries(samples, { source })` is covered by a regression test that keeps live and fixture ranges separate.
+- `npm test` passes 10 tests; syntax and whitespace checks pass.
+- Hosted exact Playwright at 320×568 and 390×844 reports HTTP 200, exact widths/no overflow, Canvas, the fixture marker, zero browser/request errors, and the fixture readout `N 4 · μΔ 388px/s · Δ 359…417`.
+
+### Remaining risk / next smallest slice
+
+- Local browser verification returned `ERR_EMPTY_RESPONSE`; hosted evidence is the counted browser result.
+- The fixture is still deterministic evidence, not ordinary human play. Do not retune restitution, friction, or the speed ceiling from it.
+- Next slice should capture a real active flipper contact from a normal play path and report the new `LIVE` range alongside the fixture range.
+
 ## Overhaul tick 43 verdict
 
 **Playable hackathon slice: PASS for response-range observability. AAA-ready: FAIL.** The repeated production flipper fixture now reports the minimum and maximum retained launch-speed deltas after the live cap. This narrows tuning evidence; it does not prove ordinary human-play feel or visual completion.

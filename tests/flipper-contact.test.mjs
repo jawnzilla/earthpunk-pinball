@@ -72,3 +72,12 @@ test('flipper telemetry aggregates launches and ignores catches', () => {
     peakImpactSpeed: 0
   });
 });
+
+test('flipper telemetry can separate live play from review fixtures', () => {
+  const samples = [
+    { mode: 'launch', source: 'live', afterSpeed: 420, speedDelta: 90, impactSpeed: 2 },
+    { mode: 'launch', source: 'fixture', afterSpeed: 600, speedDelta: 220, impactSpeed: 4 }
+  ];
+  assert.equal(summarizeFlipperContactSeries(samples, { source: 'live' }).meanSpeedDelta, 90);
+  assert.equal(summarizeFlipperContactSeries(samples, { source: 'fixture' }).meanSpeedDelta, 220);
+});

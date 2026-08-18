@@ -81,8 +81,8 @@ export function summarizeFlipperContact({ side = 'unknown', held = false, before
 
 // Aggregate real contacts without mixing catch events into launch tuning. The
 // result is intentionally descriptive: it does not alter the collision solver.
-export function summarizeFlipperContactSeries(samples = []) {
-  const launches = samples.filter(sample => sample?.mode === 'launch');
+export function summarizeFlipperContactSeries(samples = [], { source = null } = {}) {
+  const launches = samples.filter(sample => sample?.mode === 'launch' && (!source || sample.source === source));
   if (!launches.length) return {
     count: 0,
     meanAfterSpeed: 0,

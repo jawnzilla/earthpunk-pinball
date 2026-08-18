@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: separate live flipper telemetry from review fixtures
+
+### Implemented
+
+- Added an explicit telemetry source (`live` or `fixture`) to production flipper-contact samples.
+- Added source-filtered aggregation so the developer readout cannot silently mix deterministic review contacts with ordinary play contacts.
+- The review fixture is now labeled `FIXTURE`; reset gameplay defaults to `LIVE`.
+
+### Verification
+
+- `npm test`: 10 tests passed, 0 failures; `node --check src/flipper-contact.js`; `git diff --check` passed.
+- Local HTTP verification was attempted at exact 320×568 and returned the runner's `ERR_EMPTY_RESPONSE`; no local browser result is claimed.
+- Hosted exact Playwright checks at 320×568 and 390×844: HTTP 200, exact CSS widths with no overflow, Canvas, `flipper-contact`, zero console/page/request errors, and fixture readout `N 4 · μΔ 388px/s · Δ 359…417`.
+
+### Decision
+
+- This is observability only. No solver constants, collision response, input, progression, or player-facing art changed. Normal-play samples remain the next tuning gate.
+
 ## 2026-08-18 — Overhaul tick: expose flipper launch delta range
 
 ### Implemented
