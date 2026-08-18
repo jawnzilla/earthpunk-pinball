@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 42
 
+## Overhaul tick 43 verdict
+
+**Playable hackathon slice: PASS for response-range observability. AAA-ready: FAIL.** The repeated production flipper fixture now reports the minimum and maximum retained launch-speed deltas after the live cap. This narrows tuning evidence; it does not prove ordinary human-play feel or visual completion.
+
+### Observed evidence
+
+- `summarizeFlipperContactSeries()` now returns `minSpeedDelta` and `maxSpeedDelta` alongside count and mean, excluding catches.
+- The live developer readout exposes `N 4 · μΔ 388px/s · Δ 359…417` for the current fixture.
+- `npm test` passes 9 tests; syntax and whitespace checks pass.
+- Local exact 320×568 and 390×844 checks pass HTTP 200, complete documents, exact CSS widths with no overflow, Canvas, fixture marker, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- This remains a review fixture, not a normal human-play sample. Do not retune restitution, friction, or the cap from this range alone.
+- Pages deployment and hosted exact-width verification are required for this commit.
+- Next slice should capture or instrument an ordinary playable flipper-contact sample and compare its range against this capped fixture. Visual overhaul and AAA claims remain unsupported.
+
 ## Overhaul tick 42 verdict
 
 **Playable hackathon slice: PASS for a shared post-cap response seam. AAA-ready: FAIL.** The speed ceiling is now a pure, tested Physics V2 operation used by the live renderer path. This improves measurement integrity and reduces duplicated solver-adjacent math; it does not claim a finished launch feel or visual overhaul.

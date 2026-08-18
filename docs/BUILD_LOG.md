@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: expose flipper launch delta range
+
+### Implemented
+
+- Extended the pure flipper-contact series report with `minSpeedDelta` and `maxSpeedDelta`, while continuing to ignore catch contacts and sanitize non-finite deltas.
+- Added the capped live launch range to the developer readout as `Δ min…max`, so a repeated production-path fixture reports distribution bounds instead of only a mean.
+- No solver constants, collision response, input, progression, or player-facing art changed.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures; `node --check src/flipper-contact.js`; `git diff --check` passed.
+- Local exact Playwright checks at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas, `flipper-contact`, zero console/page/request errors. Readout: `N 4 · μΔ 388px/s · Δ 359…417` at both widths.
+- Hosted Pages verification is pending the push for this commit.
+
+### Decision / next gate
+
+- The fixture now exposes response spread at the same post-cap boundary as the live telemetry; this is measurement infrastructure, not a launch-feel tuning decision.
+- Normal human-play contact samples remain the next gate before changing restitution, friction, or the speed ceiling. AAA-ready remains unclaimed.
+
 ## 2026-08-18 — Overhaul tick: make the post-cap velocity seam testable
 
 ### Implemented

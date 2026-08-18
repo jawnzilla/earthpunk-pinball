@@ -83,11 +83,21 @@ export function summarizeFlipperContact({ side = 'unknown', held = false, before
 // result is intentionally descriptive: it does not alter the collision solver.
 export function summarizeFlipperContactSeries(samples = []) {
   const launches = samples.filter(sample => sample?.mode === 'launch');
-  if (!launches.length) return { count: 0, meanAfterSpeed: 0, meanSpeedDelta: 0, peakImpactSpeed: 0 };
+  if (!launches.length) return {
+    count: 0,
+    meanAfterSpeed: 0,
+    meanSpeedDelta: 0,
+    minSpeedDelta: 0,
+    maxSpeedDelta: 0,
+    peakImpactSpeed: 0
+  };
+  const speedDeltas = launches.map(sample => Number.isFinite(sample.speedDelta) ? sample.speedDelta : 0);
   return {
     count: launches.length,
     meanAfterSpeed: launches.reduce((sum, sample) => sum + (Number.isFinite(sample.afterSpeed) ? sample.afterSpeed : 0), 0) / launches.length,
-    meanSpeedDelta: launches.reduce((sum, sample) => sum + (Number.isFinite(sample.speedDelta) ? sample.speedDelta : 0), 0) / launches.length,
+    meanSpeedDelta: speedDeltas.reduce((sum, delta) => sum + delta, 0) / launches.length,
+    minSpeedDelta: Math.min(...speedDeltas),
+    maxSpeedDelta: Math.max(...speedDeltas),
     peakImpactSpeed: Math.max(...launches.map(sample => Number.isFinite(sample.impactSpeed) ? sample.impactSpeed : 0))
   };
 }

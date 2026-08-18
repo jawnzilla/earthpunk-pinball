@@ -60,6 +60,15 @@ test('flipper telemetry aggregates launches and ignores catches', () => {
   assert.equal(report.count, 2);
   assert.equal(report.meanAfterSpeed, 450);
   assert.equal(report.meanSpeedDelta, 150);
+  assert.equal(report.minSpeedDelta, 120);
+  assert.equal(report.maxSpeedDelta, 180);
   assert.equal(report.peakImpactSpeed, 5);
-  assert.deepEqual(summarizeFlipperContactSeries([]), { count: 0, meanAfterSpeed: 0, meanSpeedDelta: 0, peakImpactSpeed: 0 });
+  assert.deepEqual(summarizeFlipperContactSeries([]), {
+    count: 0,
+    meanAfterSpeed: 0,
+    meanSpeedDelta: 0,
+    minSpeedDelta: 0,
+    maxSpeedDelta: 0,
+    peakImpactSpeed: 0
+  });
 });
