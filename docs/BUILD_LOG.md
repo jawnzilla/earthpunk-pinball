@@ -1,23 +1,23 @@
 # Deadlight Build Log
 
-## 2026-08-18 — Overhaul tick: active-element HUD chip slice
+## 2026-08-18 — Overhaul tick: hosted active-element HUD verification
 
 ### Implemented
 
-- Added a compact production-rendered active-element chip layer to the portrait table HUD. It shows at most two live Fire/Water/Earth/Wind effects with authored symbols and stack counts (`0–3`), using the existing world palette rather than persistent developer prose.
-- Chips are drawn from the ball's authoritative `elementEffects` state and share the existing element canonicalization path; no gameplay, physics, progression, or input behavior changed.
-- Added renderer-contract coverage for the two-chip cap, helper, and live draw call.
+- No product-code change this tick. Closed the verification gate for the prior active-element HUD chip slice rather than stacking another uninspected visual layer.
+- The deployed artifact is the current `prototype` commit `15eaa25754b2d348832d702c63f5497d73d33ed4`; the chip renderer remains bounded to two live Fire/Water/Earth/Wind effects with authored symbols and clamped stack counts.
 
 ### Verification
 
 - `npm test`: 11 tests passed, 0 failures.
-- `git diff --check`: passed; `node --check` passed for the physics modules.
-- Exact local Playwright at 320×568 and 390×844 was attempted but remains blocked by the runner's existing `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser pass is claimed.
-- Hosted verification and GitHub Pages deployment are pending this commit.
+- `node --check src/physics-core.js`, `src/elemental-effects.js`, and `src/flipper-contact.js`: passed.
+- `git diff --check`: passed.
+- Hosted exact Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=active` passed at 320×568 and 390×844: HTTP 200, Canvas present, exact CSS/document width parity, body height equal to viewport, hidden overlay, `depth` fixture, expected `grayscale(1) contrast(1.08)` filter, and zero console/page/request errors. Captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-active-320.png` and `earthpunk-hosted-active-390.png`.
+- GitHub Pages run `32196849825` completed successfully for `15eaa25754b2d348832d702c63f5497d73d33ed4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32196849825.
 
 ### Decision / next gate
 
-- This is one bounded HUD hierarchy slice aligned to the canon's active-effects requirement. After hosted verification, inspect the live chip state and touch-sized layout before further HUD decoration.
+- Deployment/runtime health is closed for this commit. The depth fixture intentionally freezes the table and does not manufacture an elemental state, so it does **not** count as visual proof that live chips remain subordinate during an active imprint. A live-state browser fixture or ordinary play capture is still required before judging that hierarchy.
 - AAA-ready remains unsupported.
 
 ## 2026-08-18 — Overhaul tick: hosted depth audit and evidence refresh
