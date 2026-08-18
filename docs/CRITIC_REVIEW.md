@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 16
 
+## Overhaul tick 17 verdict
+
+**Playable hackathon slice: PASS for table-hardware contact readability. AAA-ready: FAIL.** Salvage targets and active bumpers now share the mine-table's restrained contact-light language: material-tinted body values, a consistent upper-left key, and edge accents. This is a renderer-only phase and does not claim full production visual readiness.
+
+### Observed evidence
+
+- `drawStaticContactLight()` is applied to unhit salvage targets and non-edge bumpers after their authored base forms, adding nested value and rim treatment without replacing their silhouettes.
+- Local exact 320x568/390x844 Chromium checks pass with canvas, active transition, 52px touch controls, matching document widths, and zero console/page errors.
+- Deterministic physics/elemental tests remain green: 2 files, 2 tests, 0 failures.
+
+### Remaining risk / next smallest slice
+
+- The table still relies on procedural Canvas geometry and has not passed a grayscale screenshot audit or physical-device feel test.
+- Full-table lighting is still incomplete for route hardware, drain, and sprite-backed surfaces; the static key is intentionally not a dynamic illumination system.
+- Next bounded slice: apply the same material/key treatment to the drain and route chutes, or pause renderer work for a true 320/360/390 visual screenshot audit; do not change mechanics in that pass.
+
 ## Overhaul tick 16 verdict
 
 **Playable hackathon slice: PASS for directional elemental body readability. AAA-ready: FAIL.** Water mini-balls and Wind echoes now carry a shared motion-driven highlight, edge value, and contact shadow instead of reading as flat dots/lines. This is a narrow renderer phase; the larger mine/tunnel lighting language, full-table elemental collision parity, and physical-device feel remain incomplete.

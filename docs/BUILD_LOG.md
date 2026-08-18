@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: shared contact-light language for hardware
+
+### Implemented
+
+- Extended the restrained mine-table contact-light language from the primary/elemental body pass to salvage targets and active bumpers.
+- Added a static upper-left key with material-tinted value ramps, edge accents, and a controlled highlight; shadows, silhouettes, hit states, collision geometry, and gameplay behavior remain unchanged.
+- Kept the renderer-only slice bounded to major table hardware; no physics, rewards, input, or asset loading changes.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- Extracted inline module passes `node --check`.
+- `git diff --check` passes.
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `Enter descent` transitions to active Generator Well, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages verification follows the prototype push.
+
+
 ## 2026-08-18 — Overhaul tick: directional contact-light pass
 
 ### Implemented

@@ -1042,6 +1042,8 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       if (index % 3 === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }
       else if (index % 3 === 1) { ctx.beginPath(); ctx.moveTo(-target.r * .82, target.r * .2); ctx.lineTo(-target.r * .6, -target.r * .56); ctx.lineTo(target.r * .5, -target.r * .62); ctx.lineTo(target.r * .8, target.r * .25); ctx.lineTo(target.r * .36, target.r * .68); ctx.lineTo(-target.r * .5, target.r * .62); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .42, -.1); ctx.lineTo(target.r * .42, .18); ctx.stroke(); }
       else { ctx.fillRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .58, -target.r * .45); ctx.lineTo(-target.r * .58, target.r * .45); ctx.moveTo(target.r * .58, -target.r * .45); ctx.lineTo(target.r * .58, target.r * .45); ctx.stroke(); }
+      const targetBase = index % 3 === 0 ? '#8a5b3d' : index % 3 === 1 ? '#817968' : '#667570';
+      drawStaticContactLight(0, 0, target.r * .62, targetBase, '#263936', .78);
       ctx.fillStyle = elementColors[canonicalElement(target.element)] || '#d7a45a'; ctx.beginPath(); ctx.arc(target.r * .52, -target.r * .45, 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });
   }
@@ -1051,7 +1053,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       const pulse = item.type === 'pulse'; const armor = item.type === 'armor'; const collar = pulse ? '#5f4932' : armor ? '#3e4a47' : '#2d3029'; const rubber = pulse ? '#8a6340' : '#49372c';
       ctx.fillStyle = 'rgba(0,0,0,.42)'; ctx.beginPath(); ctx.ellipse(item.x + 3, item.y + 5, item.r + 6, item.r * .55, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = collar; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(item.x, item.y, item.r + 5 + (pulse ? Math.sin(state.pulse * 2 + item.x) * 1.5 : 0), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = rubber; ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = rubber; ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); drawStaticContactLight(item.x, item.y, item.r * .78, pulse ? '#a8784b' : armor ? '#778078' : '#72533b', '#27332f', .82);
       ctx.fillStyle = pulse ? '#d7a45a' : armor ? '#6d6654' : '#8a7760'; ctx.beginPath(); ctx.arc(item.x, item.y, item.r * .3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#171614'; ctx.lineWidth = 2; ctx.stroke();
       for (let bolt = 0; bolt < 4; bolt += 1) { const angle = bolt * Math.PI / 2 + Math.PI / 4; const x = item.x + Math.cos(angle) * (item.r + 1), y = item.y + Math.sin(angle) * (item.r + 1); ctx.fillStyle = '#b3a58b'; ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill(); }
       if (armor && item.hits) { ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(item.x - 7, item.y - 6); ctx.lineTo(item.x + 5, item.y + 6); ctx.stroke(); }
@@ -1121,6 +1123,12 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     ctx.globalAlpha = alpha; ctx.fillStyle = light; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
     ctx.globalAlpha = alpha * .8; ctx.strokeStyle = edge; ctx.lineWidth = Math.max(1, radius * .18); ctx.beginPath(); ctx.arc(x, y, radius * .86, Math.PI * .78, Math.PI * 1.72); ctx.stroke();
     ctx.globalAlpha = alpha * .72; ctx.fillStyle = '#fff4c4'; ctx.beginPath(); ctx.arc(x + lx * radius * .42, y + ly * radius * .42, Math.max(1, radius * .18), 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+  }
+  function drawStaticContactLight(x, y, radius, base, edge, alpha = 1) {
+    const light = ctx.createRadialGradient(x - radius * .38, y - radius * .48, radius * .08, x, y, radius * 1.16);
+    light.addColorStop(0, '#fff8d5'); light.addColorStop(.2, base); light.addColorStop(.72, base); light.addColorStop(1, edge);
+    ctx.globalAlpha = alpha; ctx.fillStyle = light; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = alpha * .72; ctx.strokeStyle = edge; ctx.lineWidth = Math.max(1, radius * .12); ctx.beginPath(); ctx.arc(x, y, radius * .86, Math.PI * .78, Math.PI * 1.72); ctx.stroke(); ctx.globalAlpha = 1;
   }
   function drawElementalRuntime() {
     const runtime = state.ball?.elementalRuntime; if (!runtime) return;
