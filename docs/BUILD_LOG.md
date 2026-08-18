@@ -14,7 +14,7 @@
 - `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
 - `git diff --check` passes (only Git LF/CRLF normalization warnings).
 - Local Chromium exact 320x568 and 390x844 checks pass: canvas present, route CTA transitions to `RUN 1/4`, visible touch controls are 52px high, `scrollWidth === innerWidth`, and zero console/page errors.
-- Hosted Pages verification is recorded after deployment below.
+- Hosted Pages exact 320x568 and 390x844 checks pass after deployment: canvas present, route CTA transitions to `RUN 1/4`, 52px touch controls are present, `scrollWidth === innerWidth`, and zero console/page errors. GitHub Actions run `32109250042` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32109250042.
 
 ## 2026-08-18 — Overhaul tick: swept elemental broad-phase
 

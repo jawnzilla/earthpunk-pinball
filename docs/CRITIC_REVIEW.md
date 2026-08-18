@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The correction resolves first-contact placement but does not yet carry the remaining fraction of the fixed step after the impulse; high-speed fragments can still lose some post-contact travel.
-- Hosted Pages exact 320x568/390x844 checks must be confirmed after this push.
+- Hosted Pages exact 320x568/390x844 checks pass after this push: canvas present, `RUN 1/4` active transition, 52px controls, matching widths, and zero console/page errors. Workflow run `32109250042` completed success.
 - Next bounded slice: preserve post-contact residual time for one elemental body only, or begin the mine/tunnel material renderer phase; do not broaden gameplay rewards in the same change.
 
 ## Overhaul tick 12 verdict
