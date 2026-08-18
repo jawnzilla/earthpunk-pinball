@@ -13,7 +13,7 @@
 - `npm test`: 6 tests passed, 0 failures; Physics V2, elemental-effects, flipper-contact, and opt-in upgrade-fixture coverage remain green.
 - `node --check` passed for the extracted physics modules; `git diff --check` passed.
 - Local exact browser check was attempted at 320×568/360×844/390×844 but the runner's local HTTP server returned `ERR_EMPTY_RESPONSE`; it is not counted as passing local browser evidence.
-- Hosted post-deploy exact fixture checks are required before this tick is release-ready.
+- Hosted exact Playwright fixture checks passed post-deploy at 320×568, 360×844, and 390×844: HTTP 200, complete document, Canvas present, real `upgrade-decision` renderer, four visible choices, 16px card gutters, `scrollWidth === clientWidth`, zero console/page/request errors, and card heights 98.2px / 104px / 104px respectively. Screenshots were captured outside the repo at `%LOCALAPPDATA%/Temp/deadlight-upgrade-320.png`, `deadlight-upgrade-360.png`, and `deadlight-upgrade-390.png`. Pages run `32144414428` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32144414428. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ## 2026-08-18 — Overhaul tick: hosted portrait audit and route-overlay reachability check
 

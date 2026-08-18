@@ -2,7 +2,7 @@
 
 ## Overhaul tick 32 verdict
 
-**Playable hackathon slice: PASS pending hosted deployment. AAA-ready: FAIL.** The upgrade decision surface no longer stretches four cards into oversized panels on tall portrait screens. This is a bounded hierarchy correction; it does not establish visual completion or production readiness.
+**Playable hackathon slice: PASS for hosted upgrade-card density. AAA-ready: FAIL.** The upgrade decision surface no longer stretches four cards into oversized panels on tall portrait screens. This is a bounded hierarchy correction; it does not establish visual completion or production readiness.
 
 ### Observed evidence
 
