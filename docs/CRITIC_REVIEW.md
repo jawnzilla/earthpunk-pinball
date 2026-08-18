@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 10 verdict
+
+**Playable hackathon slice: PASS for the shared elemental contact seam. AAA-ready: FAIL.** Water mini-balls and Wind echoes now use the shared Physics V2 body/contact solver for material-aware impulse and impact-energy accounting. The mine/tunnel visual reset, full elemental broad-phase parity, and physical-device evidence remain incomplete.
+
+### Observed evidence
+
+- `resolveElementalBodyContact()` creates/retains explicit Physics V2 bodies with Water/Rubber materials and synchronizes the legacy adapter fields after solver response.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 checks pass with active transition, matching widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- The table adapter still owns reduced broad-phase geometry and pixel-space integration for elemental bodies; this is a solver seam, not full shared fixed-step body integration.
+- Hosted Pages must be re-verified after the push.
+- Next bounded slice: migrate elemental integration to shared fixed-step body integration while preserving current lifetime, distance, contact-key, and bounce ledgers.
+
 ## Overhaul tick 09 verdict
 
 **Playable hackathon slice: PASS for shared elemental impact accounting. AAA-ready: FAIL.** Physics V2 now owns the shared hardness and kinetic-energy primitives consumed by primary contacts, Water mini-balls, and Wind echoes. The mine/tunnel visual reset, full shared Physics V2 bodies for elemental projectiles, and physical-device evidence remain incomplete.

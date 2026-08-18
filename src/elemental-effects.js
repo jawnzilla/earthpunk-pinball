@@ -2,7 +2,7 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const magnitude = vector => Math.hypot(vector.x, vector.y);
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const cross = (a, b) => a.x * b.y - a.y * b.x;
-import { impactEnergyFromMassSpeed, materialHardness } from './physics-core.js';
+import { createBall, impactEnergyFromMassSpeed, materialHardness, resolveContact } from './physics-core.js';
 
 export const ELEMENTAL_BUDGETS = Object.freeze({
   fire: Object.freeze({ maxSegments: 12, lifetime: .75, tickInterval: .1, spacing: 9 }),
@@ -108,11 +108,14 @@ export function onHardBounce(runtime, { effects = {}, position = { x: 0, y: 0 },
   if (impactSpeed >= 2 && activeStacks(effects, 'Water') >= 3 && !runtime.waterSplitUsed) {
     runtime.waterSplitUsed = true;
     const spread = ELEMENTAL_BUDGETS.water.spreadRadians;
-    runtime.miniBalls = [-spread, spread].map(angle => ({ id: `water-mini-${nextMiniBallId++}`, x: position.x, y: position.y, ...rotatedVelocity(velocity, angle, ELEMENTAL_BUDGETS.water.splitSpeedScale), radius: .045, mass: .008, lifetime: ELEMENTAL_BUDGETS.water.lifetime, bouncesRemaining: ELEMENTAL_BUDGETS.water.maxBounces, distance: 0 }));
+    runtime.miniBalls = [-spread, spread].map(angle => {
+      const launch = rotatedVelocity(velocity, angle, ELEMENTAL_BUDGETS.water.splitSpeedScale);
+      return { id: `water-mini-${nextMiniBallId++}`, x: position.x, y: position.y, ...launch, radius: .045, mass: .008, material: 'water', physicsBody: createBall({ x: position.x, y: position.y, vx: launch.vx, vy: launch.vy, mass: .008, radius: .045, material: 'water' }), lifetime: ELEMENTAL_BUDGETS.water.lifetime, bouncesRemaining: ELEMENTAL_BUDGETS.water.maxBounces, distance: 0 };
+    });
     events.push({ type: 'water-split', count: runtime.miniBalls.length });
   }
   if (impactSpeed >= 2 && activeStacks(effects, 'Wind') >= 3 && !runtime.windEcho && magnitude(velocity) > 0) {
-    runtime.windEcho = { id: 'wind-echo', x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') };
+    runtime.windEcho = { id: 'wind-echo', x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, material: 'rubber', physicsBody: createBall({ x: position.x, y: position.y, vx: velocity.x, vy: velocity.y, mass: .012, radius: .06, material: 'rubber' }), lifetime: ELEMENTAL_BUDGETS.wind.lifetime, distance: 0, ignoredResponses: 1, hitObjects: new Set(), burnTrail: hasPair(effects, 'Fire', 'Wind') };
     events.push({ type: 'wind-echo' });
   }
   return events[0] || { type: 'none' };
@@ -134,16 +137,28 @@ export function onMiniBallContact(runtime, id, { normal = { x: 0, y: 0 }, contac
   if (!ball.contactKeys) ball.contactKeys = new Set();
   if (ball.contactKeys.has(contactKey)) return null;
   ball.contactKeys.add(contactKey);
-  const length = Math.hypot(normal.x, normal.y) || 1;
-  const nx = normal.x / length, ny = normal.y / length;
-  const approach = ball.vx * nx + ball.vy * ny;
-  if (approach >= 0) return { type: 'mini-ball-separating-contact', id: ball.id, counted: false };
-  ball.vx -= (1 + restitution) * approach * nx;
-  ball.vy -= (1 + restitution) * approach * ny;
+  const contact = resolveElementalBodyContact(ball, normal, { restitution, surfaceMaterial: 'steel' });
+  if (contact.separating) return { type: 'mini-ball-separating-contact', id: ball.id, counted: false, impactSpeed: 0, impactEnergy: 0 };
   const bounced = onMiniBallBounce(runtime, id);
   return bounced
-    ? { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: bounced.bouncesRemaining }
-    : { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: 0 };
+    ? { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: bounced.bouncesRemaining, impactSpeed: contact.impactSpeed, impactEnergy: contact.impactEnergy }
+    : { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: 0, impactSpeed: contact.impactSpeed, impactEnergy: contact.impactEnergy };
+}
+
+// Shared Physics V2 seam for elemental bodies. The table adapter remains responsible
+// for broad-phase geometry; this keeps mass/material/restitution response identical.
+export function resolveElementalBodyContact(body, normal, { restitution = null, surfaceMaterial = 'steel' } = {}) {
+  const physicsBody = body.physicsBody ?? createBall({ x: body.x, y: body.y, vx: body.vx, vy: body.vy, mass: body.mass ?? .01, radius: body.radius ?? .05, material: body.material ?? 'rubber' });
+  physicsBody.position.x = body.x;
+  physicsBody.position.y = body.y;
+  physicsBody.velocity.x = body.vx;
+  physicsBody.velocity.y = body.vy;
+  const surface = { material: surfaceMaterial, inverseMass: 0 };
+  const contact = resolveContact({ ball: physicsBody, surface, point: physicsBody.position, normal, penetration: 0 });
+  body.physicsBody = physicsBody;
+  body.vx = physicsBody.velocity.x;
+  body.vy = physicsBody.velocity.y;
+  return contact;
 }
 
 // Reduced-mask structure response: mini-balls may damage a destructible once,
@@ -151,11 +166,10 @@ export function onMiniBallContact(runtime, id, { normal = { x: 0, y: 0 }, contac
 export function onMiniBallStructureContact(runtime, id, { objectId, position = { x: 0, y: 0 }, normal = { x: 0, y: 0 }, contactKey = 'structure', restitution = .42 } = {}) {
   const ball = runtime.miniBalls.find(item => item.id === id);
   if (!ball || !objectId) return null;
-  const impactSpeed = Math.max(0, -(ball.vx * normal.x + ball.vy * normal.y));
   const response = onMiniBallContact(runtime, id, { normal, contactKey: `${contactKey}:${objectId}`, restitution });
   if (!response?.counted) return response;
   const structure = onStructureContact(runtime, { objectId, position });
-  return { ...response, type: 'mini-ball-structure-contact', objectId, impactSpeed, impactEnergy: .5 * ball.mass * impactSpeed ** 2, structure };
+  return { ...response, type: 'mini-ball-structure-contact', objectId, structure };
 }
 
 // Renderer-independent reduced-mask damage policy. Water fragments stay capped and reward-free.
@@ -186,10 +200,11 @@ export function onWindEchoStructureContact(runtime, { objectId, position = { x: 
   echo.hitObjects.add(objectId);
   const length = Math.hypot(normal.x, normal.y) || 1;
   const nx = normal.x / length, ny = normal.y / length;
-  const impactSpeed = Math.max(0, -(echo.vx * nx + echo.vy * ny));
+  const contact = resolveElementalBodyContact(echo, { x: nx, y: ny }, { surfaceMaterial: 'steel' });
+  const impactSpeed = contact.impactSpeed;
   const ignoreResponse = echo.ignoredResponses > 0;
   if (ignoreResponse) echo.ignoredResponses -= 1;
-  return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: impactEnergyFromMassSpeed(echo.mass || .012, impactSpeed) };
+  return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: contact.impactEnergy };
 }
 
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {

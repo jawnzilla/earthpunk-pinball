@@ -10,6 +10,7 @@ import {
   onMiniBallStructureContact,
   onStructureContact,
   onWindEchoStructureContact,
+  resolveElementalBodyContact,
   resolveMiniBallStructureDamage,
   resolveWindEchoStructureDamage
 } from '../src/elemental-effects.mjs';
@@ -70,6 +71,15 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   ball.vx = 120;
   assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'separating' }).counted, false);
   assert.equal(ball.bouncesRemaining, 2);
+}
+
+{
+  const miniBall = { x: 0, y: 0, vx: -120, vy: 18, mass: .008, radius: .045, material: 'water' };
+  const contact = resolveElementalBodyContact(miniBall, { x: 1, y: 0 }, { restitution: .42 });
+  assert.equal(contact.separating, false);
+  assert.ok(contact.impactEnergy > 0);
+  assert.ok(miniBall.vx > 0);
+  assert.equal(miniBall.physicsBody.material, 'water');
 }
 
 {

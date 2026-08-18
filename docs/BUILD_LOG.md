@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: elemental bodies enter Physics V2 contact seam
+
+### Implemented
+
+- Added renderer-independent `resolveElementalBodyContact()` in `src/elemental-effects.js`, using the shared Physics V2 `createBall()` and `resolveContact()` path for Water mini-balls and Wind echoes.
+- Elemental bodies now carry explicit mass/material physics bodies and report solver-derived impact speed/energy while preserving the reduced broad-phase mask, bounce budgets, ignored-first-response rule, and reward-free structure semantics.
+- Added deterministic coverage for shared elemental contact response, material identity, separating-contact behavior, and positive impact energy.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `node --check src/elemental-effects.js` and `node --check src/physics-core.js` pass.
+- `git diff --check` passes (only Git's LF/CRLF normalization warnings).
+- Local exact 320x568 and 390x844 Playwright Chromium checks pass: canvas/touch controls present, `RUN 1/4` transition succeeds, CSS/document widths match, and zero console/page errors.
+- Hosted Pages verification and deployment run are pending this tick's push.
+
 ## 2026-08-18 — Overhaul tick: shared elemental impact primitives
 
 ### Implemented
