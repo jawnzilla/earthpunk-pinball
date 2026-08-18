@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: measured flipper-contact series
+
+### Implemented
+
+- Extended `summarizeFlipperContact()` with signed speed delta (`afterSpeed - beforeSpeed`) so launch response can be tuned from response change, not only absolute speed.
+- Added deterministic `summarizeFlipperContactSeries()` aggregation for launch count, mean post-contact speed, mean speed delta, and peak impact speed; catch contacts are intentionally excluded from launch tuning.
+- Wired the live flipper collision path to retain the latest 24 released-contact samples and expose `N` plus mean delta in the existing developer physics readout. Collision math, input, progression, and renderer geometry are unchanged.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures, including launch-series aggregation and empty-series behavior.
+- `node --check src/flipper-contact.js` and `git diff --check` passed.
+- Browser/Pages verification is required after commit and deployment; no hosted result is claimed in this entry.
+
+### Next gate
+
+- Commit/push this bounded measurement slice to `prototype`, wait for GitHub Pages, then run exact 320×568 and 390×844 hosted checks and capture a repeatable active flipper contact showing the new `N`/`μΔ` readout.
+
+
 ## 2026-08-18 — Overhaul tick: measured flipper-contact telemetry seam
 
 ### Implemented

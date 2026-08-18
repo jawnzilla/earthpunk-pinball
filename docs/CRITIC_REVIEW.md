@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 36
+
+## Overhaul tick 36 verdict
+
+**Playable hackathon slice: PASS for measured flipper-contact series. AAA-ready: FAIL.** Released flipper contacts now accumulate a bounded launch sample and report mean speed change, making repeated tuning evidence possible. This is instrumentation, not proof that launch feel is correct or that the overhaul is complete.
+
+### Observed evidence
+
+- `summarizeFlipperContact()` now reports signed `speedDelta`; `summarizeFlipperContactSeries()` ignores catches and deterministically returns count, mean post-contact speed, mean delta, and peak impact speed.
+- The real `resolveFlipperCollision()` path retains the latest 24 non-held contacts and the developer readout exposes `N` and `μΔ` while leaving collision response unchanged.
+- `npm test` passes 9 tests; `node --check src/flipper-contact.js` and `git diff --check` pass.
+
+### Remaining risk / next smallest slice
+
+- The aggregate is not yet backed by a hosted capture containing an actual active flipper contact; the initial READY state correctly shows no sample.
+- After deployment, use exact 320×568 and 390×844 checks plus a repeatable flipper interaction to record the new readout. Then tune one measured response property rather than adding more decoration.
+
 # Deadlight Critic Review — Overhaul tick 35
 
 ## Overhaul tick 35 verdict

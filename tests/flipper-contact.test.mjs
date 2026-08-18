@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact } from '../src/flipper-contact.js';
+import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -48,4 +48,18 @@ test('flipper telemetry reports response in stable units', () => {
   assert.equal(summary.impactSpeed, 2.4);
   assert.equal(summary.impactEnergy, 0.09);
   assert.ok(summary.impulseMagnitude > 0.111 && summary.impulseMagnitude < 0.112);
+  assert.equal(summary.speedDelta, summary.afterSpeed - summary.beforeSpeed);
+});
+
+test('flipper telemetry aggregates launches and ignores catches', () => {
+  const report = summarizeFlipperContactSeries([
+    { mode: 'catch', afterSpeed: 10, speedDelta: 10, impactSpeed: 8 },
+    { mode: 'launch', afterSpeed: 400, speedDelta: 120, impactSpeed: 3 },
+    { mode: 'launch', afterSpeed: 500, speedDelta: 180, impactSpeed: 5 }
+  ]);
+  assert.equal(report.count, 2);
+  assert.equal(report.meanAfterSpeed, 450);
+  assert.equal(report.meanSpeedDelta, 150);
+  assert.equal(report.peakImpactSpeed, 5);
+  assert.deepEqual(summarizeFlipperContactSeries([]), { count: 0, meanAfterSpeed: 0, meanSpeedDelta: 0, peakImpactSpeed: 0 });
 });

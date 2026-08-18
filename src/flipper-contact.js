@@ -65,14 +65,30 @@ export function summarizeFlipperContact({ side = 'unknown', held = false, before
     Number.isFinite(velocity?.x) ? velocity.x : 0,
     Number.isFinite(velocity?.y) ? velocity.y : 0
   );
+  const beforeSpeed = speed(beforeVelocity);
+  const afterSpeed = speed(afterVelocity);
   return {
     side,
     mode: held ? 'catch' : 'launch',
-    beforeSpeed: speed(beforeVelocity),
-    afterSpeed: speed(afterVelocity),
+    beforeSpeed,
+    afterSpeed,
+    speedDelta: afterSpeed - beforeSpeed,
     impactSpeed: Number.isFinite(contact?.impactSpeed) ? contact.impactSpeed : 0,
     impactEnergy: Number.isFinite(contact?.impactEnergy) ? contact.impactEnergy : 0,
     impulseMagnitude: Math.hypot(contact?.impulse?.x || 0, contact?.impulse?.y || 0)
+  };
+}
+
+// Aggregate real contacts without mixing catch events into launch tuning. The
+// result is intentionally descriptive: it does not alter the collision solver.
+export function summarizeFlipperContactSeries(samples = []) {
+  const launches = samples.filter(sample => sample?.mode === 'launch');
+  if (!launches.length) return { count: 0, meanAfterSpeed: 0, meanSpeedDelta: 0, peakImpactSpeed: 0 };
+  return {
+    count: launches.length,
+    meanAfterSpeed: launches.reduce((sum, sample) => sum + (Number.isFinite(sample.afterSpeed) ? sample.afterSpeed : 0), 0) / launches.length,
+    meanSpeedDelta: launches.reduce((sum, sample) => sum + (Number.isFinite(sample.speedDelta) ? sample.speedDelta : 0), 0) / launches.length,
+    peakImpactSpeed: Math.max(...launches.map(sample => Number.isFinite(sample.impactSpeed) ? sample.impactSpeed : 0))
   };
 }
 
