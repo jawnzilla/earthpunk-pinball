@@ -11,7 +11,8 @@
 
 - Before the change, `npm test` was red because `package.json` had no test script; the direct command `node --test tests/*.test.mjs` was already green with 5 tests.
 - After the change, `npm test` is the tight regression command for this repository and is required in the verification record for subsequent slices.
-- Exact local and hosted 320x568/390x844 browser checks, plus Pages deployment verification, are required after commit.
+- Hosted exact Playwright checks passed after deployment at 320x568 and 390x844: HTTP 200, Canvas present, active `RUN 1/4`, two 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors. GitHub Actions run `32126957942` completed `success`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32126957942.
+- Local HTTP browser verification was blocked by the runner's occupied/intercepted ports; a `file://` fallback loaded the document but correctly exposed module CORS errors, so it is not counted as a passing local browser run.
 
 ## 2026-08-18 — Overhaul tick: extracted swept flipper contact seam
 

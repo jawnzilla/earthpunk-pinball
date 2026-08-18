@@ -11,7 +11,7 @@
 
 ### Remaining risk / next smallest slice
 
-- The game still needs the mandated hosted exact mobile checks after this commit, and the visual overhaul remains below the AAA reference bar pending grayscale/depth evidence.
+- Hosted exact mobile checks now pass after deployment at 320x568 and 390x844; the visual overhaul remains below the AAA reference bar pending grayscale/depth evidence. Local HTTP browser verification was blocked by the runner's occupied/intercepted ports, so the file:// fallback's CORS errors are not counted as local gameplay evidence.
 - Next implementation slice should be selected from fresh hosted evidence; do not broaden mechanics and visuals together.
 
 ## Overhaul tick 22 verdict
