@@ -12,7 +12,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Local and hosted exact 320×568 / 390×844 browser evidence plus Pages deployment are still required for this commit.
+- Local and hosted exact Playwright checks at 320×568 and 390×844 pass HTTP 200, complete documents, exact CSS widths with no horizontal overflow, Canvas, the `flipper-contact` marker, and zero console/page/request errors. Pages run `32167069072` completed successfully for commit `7e1e33a`.
 - This is an observability correction, not proof that ordinary human flipper launches have the desired distribution. Next: capture the corrected hosted fixture readout and compare it with a normal-play sample before tuning one solver property.
 
 ## Overhaul tick 41 verdict

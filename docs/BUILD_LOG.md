@@ -10,7 +10,9 @@
 ### Verification
 
 - `npm test`: 9 tests passed, 0 failures; `git diff --check` passed.
-- Browser and hosted Pages checks are pending until this commit is pushed.
+- Local exact Playwright checks at 320×568 and 390×844: HTTP 200, `document.readyState === complete`, exact CSS widths (`innerWidth === clientWidth === scrollWidth`), Canvas present, `flipper-contact` fixture marker, and zero console/page/request errors.
+- Pushed commit `7e1e33a` to `prototype`. GitHub Pages run `32167069072` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32167069072.
+- Hosted exact Playwright checks against `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact` passed at both widths with the same HTTP, readiness, width, Canvas, fixture, and zero-error gates. The served body remains the normal non-overlay table state; the fixture is opt-in and leaves the table running.
 
 ### Decision / next gate
 
