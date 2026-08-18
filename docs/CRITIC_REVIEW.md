@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 16
 
+## Overhaul tick 18 verdict
+
+**Playable hackathon slice: PASS for route/drain hardware readability. AAA-ready: FAIL.** The foreground drain and route chutes now share the mine-table's restrained static contact-light treatment. This is a bounded renderer-only improvement, not a complete lighting system or production-readiness claim.
+
+### Observed evidence
+
+- `drawEdgeMachinery()` applies the material-tinted contact-light ramp to the drain/stability throat in both sprite-backed and procedural fallback paths.
+- `drawRouteChutes()` applies the same treatment beneath each open route chute while preserving route color, labels, sprite selection, and click geometry.
+- Deterministic tests and inline-module syntax checks pass before browser/deployment verification.
+
+### Remaining risk / next smallest slice
+
+- The table still relies on procedural Canvas geometry and has not passed a grayscale screenshot audit or physical-device feel test.
+- Sprite-backed surfaces remain authored-image dependent; the contact-light pass is intentionally static rather than dynamic illumination.
+- Next bounded slice: pause renderer additions for a true grayscale/depth screenshot audit at 320/360/390 CSS widths, then target only the single largest measured readability failure.
+
 ## Overhaul tick 17 verdict
 
 **Playable hackathon slice: PASS for table-hardware contact readability. AAA-ready: FAIL.** Salvage targets and active bumpers now share the mine-table's restrained contact-light language: material-tinted body values, a consistent upper-left key, and edge accents. This is a renderer-only phase and does not claim full production visual readiness.

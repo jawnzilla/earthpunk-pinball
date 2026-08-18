@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: route and drain hardware contact-light pass
+
+### Implemented
+
+- Extended the restrained static contact-light language to the foreground drain/stability throat and open route chutes.
+- Applied the same upper-left material-tinted value ramp and edge accent already used by salvage targets and bumpers; sprite-backed hardware, silhouettes, collision geometry, route selection, drain behavior, and gameplay state remain unchanged.
+- Kept this as a renderer-only slice with no new assets or runtime dependencies.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- Extracted inline module passes `node --check`.
+- `git diff --check` passes.
+- Exact local 320x568 and 390x844 Chromium checks are required after commit: canvas, active transition, 52px touch controls, no horizontal overflow, and zero console/page errors.
+- Hosted Pages verification is required after deployment.
+
 ## 2026-08-18 — Overhaul tick: shared contact-light language for hardware
 
 ### Implemented
