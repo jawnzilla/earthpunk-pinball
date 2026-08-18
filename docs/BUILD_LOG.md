@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: hosted repeatable flipper-contact capture
+
+### Implemented
+
+- Added an opt-in `?review=flipper-contact` fixture that exercises the production `resolveFlipperCollision()` path with four deterministic approaching contacts, then leaves the normal table running for screenshot/readout inspection.
+- Kept the fixture review-only: normal reset and player progression are unchanged; no collision solver or renderer behavior was retuned.
+- Added renderer-contract coverage so the fixture remains explicitly gated and callable.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures; `git diff --check` passed.
+- The first fixture probe exposed zero impulse / zero delta because its injected velocity was separating from the flipper. Corrected the fixture input to approach the surface, then reran the full suite successfully.
+- Local HTTP Playwright was attempted at 320×568 and 390×844 but the runner again returned `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+- Pushed commit `14ba954` to `prototype`. GitHub Pages run `32157762397` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32157762397.
+- Hosted exact Playwright checks at `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact` passed at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas, two 52px controls, zero console/page/request errors, fixture marker, and live `N 4` telemetry. Readout measured `J 0.125`, `241→149px/s`, and `μΔ -81px/s` at both widths.
+- Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-flipper-320.png` and `earthpunk-hosted-flipper-390.png`.
+
+### Decision / next gate
+
+- The telemetry seam is now visibly exercised, but the measured negative mean delta is evidence for tuning—not proof of good launch feel. The next physics slice should compare a small, explicit flipper response hypothesis against this baseline before changing gameplay constants.
+
 ## 2026-08-18 — Overhaul tick: measured flipper-contact series
 
 ### Implemented

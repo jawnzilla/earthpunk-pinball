@@ -1,3 +1,23 @@
+# Deadlight Critic Review — Overhaul tick 37
+
+## Overhaul tick 37 verdict
+
+**Playable hackathon slice: PASS for repeatable hosted flipper telemetry capture. AAA-ready: FAIL.** A review-only fixture now makes the real flipper response path observable at the required portrait widths. The resulting negative mean speed delta is useful tuning evidence, not a claim that launch feel is correct or that the overhaul is complete.
+
+### Observed evidence
+
+- `?review=flipper-contact` calls production `resolveFlipperCollision()` four times with deterministic approaching velocities, reports `N 4`, and leaves the normal table visible for capture.
+- Hosted exact Playwright at 320×568 and 390×844 reports HTTP 200, complete documents, exact CSS widths, `scrollWidth === clientWidth`, Canvas, two 52px controls, zero console/page/request errors, and the review marker.
+- The hosted readout is live at both widths: `LEFT launch 241→149px/s · J 0.125 · N 4 · μΔ -81px/s`.
+- `npm test` passes 9 tests and `git diff --check` passes. Screenshots are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-hosted-flipper-320.png` and `earthpunk-hosted-flipper-390.png`.
+- GitHub Pages run `32157762397` completed successfully for commit `14ba954`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32157762397.
+
+### Remaining risk / next smallest slice
+
+- The negative `μΔ` means the current measured fixture response loses speed in this contact configuration. It does not isolate whether the cause is surface-relative response, restitution, geometry/orientation, or the injected baseline; no gameplay constant should be changed without a ranked hypothesis and regression probe.
+- Local HTTP browser verification remains blocked by the runner's `ERR_EMPTY_RESPONSE`; hosted evidence is the counted browser result.
+- Next slice: add a renderer-independent response calibration probe/test that compares approaching flipper contacts across one controlled normal-speed range, then tune at most one solver property if the evidence supports it. Do not add more decorative rendering this tick.
+
 # Deadlight Critic Review — Overhaul tick 36
 
 ## Overhaul tick 36 verdict
