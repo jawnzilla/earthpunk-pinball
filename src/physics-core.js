@@ -1,0 +1,165 @@
+export const MATERIALS = Object.freeze({
+  steel: Object.freeze({ density: 7850, restitution: 0.62, friction: 0.18, hardness: 1.0, drag: 0.002 }),
+  rubber: Object.freeze({ density: 1100, restitution: 0.88, friction: 0.72, hardness: 0.35, drag: 0.010 }),
+  timber: Object.freeze({ density: 650, restitution: 0.28, friction: 0.62, hardness: 0.42, drag: 0.012 }),
+  stone: Object.freeze({ density: 2600, restitution: 0.18, friction: 0.78, hardness: 0.88, drag: 0.018 }),
+  copper: Object.freeze({ density: 8960, restitution: 0.48, friction: 0.32, hardness: 0.72, drag: 0.004 }),
+  water: Object.freeze({ density: 1000, restitution: 0.06, friction: 0.12, hardness: 0.05, drag: 0.080 })
+});
+
+export const PX_PER_M = 100;
+export const FIXED_DT = 1 / 120;
+
+const EPSILON = 1e-8;
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const dot = (a, b) => a.x * b.x + a.y * b.y;
+const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
+const scale = (a, scalar) => ({ x: a.x * scalar, y: a.y * scalar });
+const subtract = (a, b) => ({ x: a.x - b.x, y: a.y - b.y });
+const magnitude = value => Math.hypot(value.x, value.y);
+const normalize = value => {
+  const length = magnitude(value);
+  return length > EPSILON ? scale(value, 1 / length) : { x: 0, y: -1 };
+};
+
+export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius = 0.08, material = 'steel' } = {}) {
+  return {
+    position: { x, y },
+    velocity: { x: vx, y: vy },
+    radius,
+    mass,
+    inverseMass: mass > 0 ? 1 / mass : 0,
+    material,
+    spin: 0,
+    angularInertia: 0.5 * mass * radius * radius,
+    effects: {},
+    contactsThisStep: new Set(),
+    pierceLedger: new Set()
+  };
+}
+
+export function integrateBall(ball, { force = { x: 0, y: 0 }, gravity = { x: 0, y: 9.81 }, dt = FIXED_DT } = {}) {
+  const acceleration = add(scale(force, ball.inverseMass), gravity);
+  ball.velocity = add(ball.velocity, scale(acceleration, dt));
+  ball.position = add(ball.position, scale(ball.velocity, dt));
+  const drag = MATERIALS[ball.material]?.drag ?? MATERIALS.steel.drag;
+  const dragFactor = Math.exp(-drag * dt);
+  ball.velocity = scale(ball.velocity, dragFactor);
+  return ball;
+}
+
+export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, point = { x: 0, y: 0 }, origin = { x: 0, y: 0 } } = {}) {
+  const offset = subtract(point, origin);
+  return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };
+}
+
+export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001 }) {
+  const ballMaterial = MATERIALS[ball.material] ?? MATERIALS.steel;
+  const surfaceMaterial = MATERIALS[surface.material] ?? MATERIALS.steel;
+  const n = normalize(normal);
+  const relativeVelocity = subtract(ball.velocity, surfaceVelocity);
+  const normalSpeed = dot(relativeVelocity, n);
+  const result = {
+    hit: true,
+    point: { ...point },
+    normal: n,
+    relativeVelocity,
+    impulse: { x: 0, y: 0 },
+    impactSpeed: Math.max(0, -normalSpeed),
+    impactEnergy: 0,
+    separating: normalSpeed >= 0,
+    materialA: ball.material,
+    materialB: surface.material ?? 'steel'
+  };
+
+  if (penetration > slop && ball.inverseMass > 0) {
+    ball.position = add(ball.position, scale(n, (penetration - slop) * correctionPercent));
+  }
+  if (result.separating) return result;
+
+  const restitution = Math.min(ballMaterial.restitution, surfaceMaterial.restitution);
+  const inverseMassSum = ball.inverseMass + (surface.inverseMass ?? 0);
+  if (inverseMassSum <= EPSILON) return result;
+  const impulseMagnitude = -(1 + restitution) * normalSpeed / inverseMassSum;
+  let impulse = scale(n, impulseMagnitude);
+
+  const tangentVelocity = subtract(relativeVelocity, scale(n, normalSpeed));
+  const tangentLength = magnitude(tangentVelocity);
+  if (tangentLength > EPSILON) {
+    const tangent = scale(tangentVelocity, 1 / tangentLength);
+    const frictionMagnitude = clamp(-dot(relativeVelocity, tangent) / inverseMassSum, -impulseMagnitude * Math.min(ballMaterial.friction, surfaceMaterial.friction), impulseMagnitude * Math.min(ballMaterial.friction, surfaceMaterial.friction));
+    impulse = add(impulse, scale(tangent, frictionMagnitude));
+  }
+
+  ball.velocity = add(ball.velocity, scale(impulse, ball.inverseMass));
+  result.impulse = impulse;
+  result.impactEnergy = 0.5 * ball.mass * result.impactSpeed ** 2;
+  return result;
+}
+
+export function damageFromContact(contact, { objectMaterial = 'timber', damageScale = 1, threshold = 1.2, weaknesses = {}, elementEffects = {} } = {}) {
+  if (!contact?.hit || contact.separating || contact.impactSpeed < threshold) return 0;
+  const material = MATERIALS[objectMaterial] ?? MATERIALS.timber;
+  const ballMaterial = MATERIALS[contact.materialA] ?? MATERIALS.steel;
+  const speedFactor = clamp(contact.impactSpeed / threshold, 0.25, 2.5);
+  const materialFactor = clamp(ballMaterial.hardness / Math.max(material.hardness, EPSILON), 0.25, 2.5);
+  const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => {
+    const stacks = effect?.stacks ?? 0;
+    const weakness = weaknesses[element] ?? 1;
+    return factor * (1 + Math.max(0, stacks) * (weakness - 1) * 0.5);
+  }, 1);
+  return contact.impactEnergy * damageScale * speedFactor * materialFactor * elementFactor;
+}
+
+export function advanceFixed(world, elapsedSeconds, step = FIXED_DT, maxSteps = 4) {
+  world.accumulator = Math.min((world.accumulator ?? 0) + elapsedSeconds, step * maxSteps);
+  let steps = 0;
+  while (world.accumulator >= step && steps < maxSteps) {
+    world.step(step);
+    world.accumulator -= step;
+    steps += 1;
+  }
+  return steps;
+}
+
+export function advanceFlipperMotor(motor, inputHeld, dt = FIXED_DT) {
+  const target = inputHeld ? motor.activeAngle : motor.restAngle;
+  const error = target - motor.angle;
+  const torque = clamp(error * motor.stiffness - motor.damping * motor.angularVelocity, -motor.maxTorque, motor.maxTorque);
+  const angularAcceleration = torque / Math.max(motor.inertia, EPSILON);
+  motor.angularVelocity = clamp(motor.angularVelocity + angularAcceleration * dt, -motor.maxSpeed, motor.maxSpeed);
+  const previousAngle = motor.angle;
+  motor.angle += motor.angularVelocity * dt;
+  if (error !== 0 && (target - motor.angle) * error < 0) {
+    motor.angle = target;
+    motor.angularVelocity = 0;
+  }
+  return { previousAngle, angle: motor.angle, angularVelocity: motor.angularVelocity, target };
+}
+
+const ELEMENTS = Object.freeze(['Fire', 'Water', 'Wind', 'Earth']);
+
+export function addElementStack(effects = {}, element, amount = 1, maxStacks = 3, duration = 90) {
+  if (!ELEMENTS.includes(element) || amount <= 0) return effects;
+  const current = effects[element] ?? { stacks: 0, timer: 0 };
+  effects[element] = { stacks: clamp(current.stacks + amount, 0, maxStacks), timer: Math.max(current.timer, duration) };
+  return effects;
+}
+
+export function decayElementStacks(effects = {}, ticks = 1) {
+  Object.entries(effects).forEach(([element, effect]) => {
+    effect.timer = Math.max(0, (effect.timer ?? 0) - ticks);
+    if (effect.timer === 0) effect.stacks = 0;
+    if (effect.stacks === 0) delete effects[element];
+  });
+  return effects;
+}
+
+export function resolveHybrid(effects = {}) {
+  const active = new Set(Object.entries(effects).filter(([, effect]) => (effect?.stacks ?? 0) > 0).map(([element]) => element));
+  const pairs = [['Fire', 'Water', 'steam-fracture'], ['Fire', 'Wind', 'thermal-lance'], ['Water', 'Earth', 'slurry-bind'], ['Earth', 'Wind', 'root-sling']];
+  const match = pairs.find(([a, b]) => active.has(a) && active.has(b));
+  return match ? { id: match[2], elements: match.slice(0, 2) } : null;
+}
+
+export { add, clamp, dot, magnitude, normalize, scale, subtract };

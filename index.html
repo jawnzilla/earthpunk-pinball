@@ -308,7 +308,8 @@
     <label class="cheat-row"><input id="cheat-infinite" type="checkbox"><span>∞ Stability / lives</span></label>
     <div id="physics-readout" class="physics-readout" aria-live="polite">Profile: POP · Peak height: — px · Upper bank: 0/1 · Solver: relative contact · Last launch speed: —</div>
   </section>
-<script>
+<script type="module">
+import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -360,12 +361,12 @@
     reach: { gravity: .105, activeKick: 12, catchRestitution: .08, movingRestitution: .44, passiveRestitution: .08, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .15, maxSpeed: 9.5, surfaceRebound: .1, bumperRebound: .9 },
     pop: { gravity: .115, activeKick: 12, catchRestitution: .12, movingRestitution: .5, passiveRestitution: .1, cradleCaptureSpeed: 2.2, passiveHingeSlide: .08, contactSeparation: .18, maxSpeed: 10, surfaceRebound: .12, bumperRebound: .96 }
   };
-  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-solver-value]'); if (angleEl) angleEl.textContent = 'rolling + surface velocity'; if (state) state.maxSpeed = debugConfig.maxSpeed; if (physicsReadout && state) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak height: ${Math.max(0, H - state.peakY).toFixed(0)} px · Upper bank: ${getUpperBumpers().length ? `${state.topHits}/1` : '—'} · Solver: relative contact · Last launch speed: ${state.lastLaunchSpeed.toFixed(2)}`; }
+  function syncTuningControls() { debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => { const key = inputEl.dataset.tune; inputEl.value = debugConfig[key]; const valueEl = debugPanel.querySelector(`[data-value="${key}"]`); if (valueEl) valueEl.textContent = Number(debugConfig[key]).toFixed(2); }); const angleEl = debugPanel.querySelector('[data-solver-value]'); if (angleEl) angleEl.textContent = 'V2 materials + motor'; if (physicsReadout && state) physicsReadout.textContent = `V2 core · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Upper bank: ${state.topHits}/1 · Contact energy · Launch: ${(state.lastLaunchSpeed / LEGACY_FRAME_RATE).toFixed(2)} px/frame`; }
   function syncDeveloperFocusability() { const debugHidden = !debugEnabled || debugPanel.hidden || state.running; debugPanel.inert = debugHidden; debugPanel.setAttribute('aria-hidden', debugHidden ? 'true' : 'false'); debugPanel.querySelectorAll('button,input,select,[tabindex]').forEach(control => { if (debugHidden) { if (!control.dataset.playerTabIndex) control.dataset.playerTabIndex = String(control.tabIndex); control.tabIndex = -1; } else if (control.dataset.playerTabIndex) control.tabIndex = Number(control.dataset.playerTabIndex); }); const overlayHidden = overlay.hidden; overlay.inert = overlayHidden; overlay.querySelectorAll('button,input,select,[tabindex]').forEach(control => { if (overlayHidden) { if (!control.dataset.overlayTabIndex) control.dataset.overlayTabIndex = String(control.tabIndex); control.tabIndex = -1; } else if (control.dataset.overlayTabIndex) control.tabIndex = Number(control.dataset.overlayTabIndex); }); debugToggle.tabIndex = debugToggle.hidden ? -1 : 0; resetButton.tabIndex = resetButton.hidden || overlay.hidden ? -1 : 0; objectiveTipDismiss.tabIndex = objectiveTip.hidden ? -1 : 0; }
   debugPanel.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.toggle('is-active', presetButton === button); presetButton.setAttribute('aria-pressed', presetButton === button ? 'true' : 'false'); }); Object.assign(debugConfig, physicsPresets[button.dataset.preset]); debugConfig.profile = button.textContent.trim(); syncTuningControls(); }));
   debugToggle.addEventListener('click', () => { debugPanel.hidden = !debugPanel.hidden; syncDeveloperFocusability(); });
   debugPanel.querySelectorAll('[data-tune]').forEach(inputEl => inputEl.addEventListener('input', () => {
-    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.remove('is-active'); presetButton.setAttribute('aria-pressed', 'false'); }); if (state && key === 'maxSpeed') state.maxSpeed = debugConfig.maxSpeed; debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
+    const key = inputEl.dataset.tune; debugConfig[key] = Number(inputEl.value); debugConfig.profile = 'CUSTOM'; debugPanel.querySelectorAll('[data-preset]').forEach(presetButton => { presetButton.classList.remove('is-active'); presetButton.setAttribute('aria-pressed', 'false'); }); debugPanel.querySelector(`[data-value="${key}"]`).textContent = debugConfig[key].toFixed(2); syncTuningControls();
   }));
   cheatInfinite.addEventListener('change', () => { if (state) state.immortal = cheatInfinite.checked; updateHud(); });
   testLevelButton.addEventListener('click', () => loadTestLevel(testLevelSelect.value));
@@ -388,6 +389,11 @@
   const elementImages = {}; upgradePool.forEach(upgrade => { if (!elementImages[upgrade.element]) { elementImages[upgrade.element] = new Image(); elementImages[upgrade.element].src = upgrade.image; } });
   const spriteImages = { warden: new Image(), edgePod: new Image(), ball: new Image(), bumperStandard: new Image(), bumperPulse: new Image(), bumperArmor: new Image(), targetFire: new Image(), targetWater: new Image(), targetEarth: new Image(), targetAir: new Image(), hingeHousing: new Image(), flipperBlade: new Image(), drainTrough: new Image(), meterRail: new Image(), sideGuard: new Image(), tableShell: new Image(), reactorRail: new Image(), deckInset: new Image(), midDeckCassette: new Image(), upperApproachManifold: new Image(), lowerReturnChannel: new Image(), centralTransferSpine: new Image(), bankTargetAssembly: new Image(), upperCrownInsert: new Image(), lowerMidTransferPanel: new Image(), corridorTelemetrySpine: new Image(), drainThroatAssembly: new Image(), relayGate: new Image(), reachBand: new Image(), lowerEdgeMachinery: new Image(), tableIdentity: new Image(), aimReticle: new Image(), chuteFree: new Image(), chuteHazard: new Image(), chuteBoss: new Image(), chuteReward: new Image() }; spriteImages.warden.src = 'assets/sprites/warden-shell.svg'; spriteImages.edgePod.src = 'assets/sprites/edge-pod.svg'; spriteImages.ball.src = 'assets/sprites/probe-ball.svg'; spriteImages.bumperStandard.src = 'assets/sprites/bumper-standard.svg'; spriteImages.bumperPulse.src = 'assets/sprites/bumper-pulse.svg'; spriteImages.bumperArmor.src = 'assets/sprites/bumper-armor.svg'; spriteImages.targetFire.src = 'assets/sprites/target-fire.svg'; spriteImages.targetWater.src = 'assets/sprites/target-water.svg'; spriteImages.targetEarth.src = 'assets/sprites/target-earth.svg'; spriteImages.targetAir.src = 'assets/sprites/target-air.svg'; spriteImages.hingeHousing.src = 'assets/sprites/hinge-housing.svg'; spriteImages.flipperBlade.src = 'assets/sprites/flipper-blade.svg'; spriteImages.drainTrough.src = 'assets/sprites/drain-trough.svg'; spriteImages.meterRail.src = 'assets/sprites/meter-rail.svg'; spriteImages.sideGuard.src = 'assets/sprites/side-guard.svg'; spriteImages.tableShell.src = 'assets/sprites/table-shell.svg'; spriteImages.reactorRail.src = 'assets/sprites/reactor-rail.svg'; spriteImages.deckInset.src = 'assets/sprites/deck-inset.svg'; spriteImages.midDeckCassette.src = 'assets/sprites/mid-deck-cassette.svg'; spriteImages.upperApproachManifold.src = 'assets/sprites/upper-approach-manifold.svg'; spriteImages.lowerReturnChannel.src = 'assets/sprites/lower-return-channel.svg'; spriteImages.centralTransferSpine.src = 'assets/sprites/central-transfer-spine.svg'; spriteImages.bankTargetAssembly.src = 'assets/sprites/bank-target-assembly.svg'; spriteImages.upperCrownInsert.src = 'assets/sprites/upper-crown-insert.svg'; spriteImages.lowerMidTransferPanel.src = 'assets/sprites/lower-mid-transfer-panel.svg'; spriteImages.corridorTelemetrySpine.src = 'assets/sprites/corridor-telemetry-spine.svg'; spriteImages.drainThroatAssembly.src = 'assets/sprites/drain-throat-assembly.svg'; spriteImages.relayGate.src = 'assets/sprites/relay-gate.svg'; spriteImages.reachBand.src = 'assets/sprites/reach-band.svg'; spriteImages.lowerEdgeMachinery.src = 'assets/sprites/lower-edge-machinery.svg'; spriteImages.tableIdentity.src = 'assets/sprites/table-identity.svg'; spriteImages.aimReticle.src = 'assets/sprites/aim-reticle.svg'; spriteImages.chuteFree.src = 'assets/sprites/chute-free.svg'; spriteImages.chuteHazard.src = 'assets/sprites/chute-hazard.svg'; spriteImages.chuteBoss.src = 'assets/sprites/chute-boss.svg'; spriteImages.chuteReward.src = 'assets/sprites/chute-reward.svg';
   const W = canvas.width, H = canvas.height;
+  const PX_PER_M = 100;
+  const LEGACY_FRAME_RATE = 60;
+  const GRAVITY_M_S2 = 4.14;
+  const MAX_BALL_SPEED_PX_S = 600;
+  const CRADLE_CAPTURE_SPEED_PX_S = 132;
   const table = { left: 18, right: W - 18, top: 18, bottom: H - 18 };
   const levelLayouts = [
     { name: 'Generator Well', targetPositions: [[90, 164, 17], [180, 134, 17], [270, 164, 17], [77, 274, 15], [283, 274, 15], [180, 242, 14]], bumpers: [{ id: 'generator-upper-left', x: 112, y: 350, r: 25, type: 'standard', element: 'Fire', upper: true }, { id: 'generator-upper-right', x: 248, y: 350, r: 25, type: 'standard', element: 'Earth', upper: true }], gate: null },
@@ -429,23 +435,22 @@
   let activePointerSide = null;
   let state;
   const targets = [
-    { x: 90, y: 164, r: 17, hit: false }, { x: 180, y: 134, r: 17, hit: false }, { x: 270, y: 164, r: 17, hit: false },
-    { x: 77, y: 274, r: 15, hit: false }, { x: 283, y: 274, r: 15, hit: false }, { x: 180, y: 242, r: 14, hit: false }
+    { x: 90, y: 164, r: 17, hit: false, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, material: 'timber' }, { x: 270, y: 164, r: 17, hit: false, material: 'timber' },
+    { x: 77, y: 274, r: 15, hit: false, material: 'timber' }, { x: 283, y: 274, r: 15, hit: false, material: 'timber' }, { x: 180, y: 242, r: 14, hit: false, material: 'timber' }
   ];
   const bumpers = levelLayouts[0].bumpers;
   const flippers = {
-    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: .16, active: -.5, angle: .16, angularVelocity: 0 },
-        right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0 },
+    left: { pivotX: 60, pivotY: H - 75, length: 104, width: 17, rest: .16, active: -.5, angle: .16, angularVelocity: 0, inertia: .25, stiffness: 26, damping: 6, maxTorque: 12, maxAngularSpeed: 15 },
+    right: { pivotX: 300, pivotY: H - 75, length: 104, width: 17, rest: Math.PI - .16, active: Math.PI + .5, angle: Math.PI - .16, angularVelocity: 0, inertia: .25, stiffness: 26, damping: 6, maxTorque: 12, maxAngularSpeed: 15 }
   };
   const sideGuards = [
     { x1: table.left + 8, y1: H - 95, x2: 48, y2: H - 82 },
     { x1: W - table.left - 8, y1: H - 95, x2: W - 48, y2: H - 82 }
   ];
-  const MAX_BALL_SPEED = 8;
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: debugConfig.maxSpeed, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
     cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
@@ -458,9 +463,29 @@
   function spawnBall() {
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
-    state.ball = { x: W / 2, y: H - 108, vx: launchSide * (1.1 + Math.random() * .7), vy: -5.2, r: 8, trail: [], prevX: W / 2, prevY: H - 108, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {} };
+    const x = W / 2, y = H - 108, vx = launchSide * (66 + Math.random() * 42), vy = -312;
+    state.ball = { x, y, vx, vy, r: 8, trail: [], prevX: x, prevY: y, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {}, physics: createPhysicsBall({ x: x / PX_PER_M, y: y / PX_PER_M, vx: vx / PX_PER_M, vy: vy / PX_PER_M, mass: .032, radius: .08, material: 'steel' }) };
     state.peakY = state.ball.y; state.lastLaunchSpeed = Math.hypot(state.ball.vx, state.ball.vy);
     state.launched = true;
+  }
+  function syncPhysicsBallFromPixels(ball) {
+    const physics = ball.physics;
+    physics.position.x = ball.x / PX_PER_M; physics.position.y = ball.y / PX_PER_M;
+    physics.velocity.x = ball.vx / PX_PER_M; physics.velocity.y = ball.vy / PX_PER_M;
+    return physics;
+  }
+  function syncPixelsFromPhysics(ball) {
+    const physics = ball.physics;
+    ball.x = physics.position.x * PX_PER_M; ball.y = physics.position.y * PX_PER_M;
+    ball.vx = physics.velocity.x * PX_PER_M; ball.vy = physics.velocity.y * PX_PER_M;
+  }
+  function integratePrimaryBall(ball, gravityMps2, dt) {
+    syncPhysicsBallFromPixels(ball);
+    integratePhysicsBall(ball.physics, { gravity: { x: 0, y: gravityMps2 }, dt });
+    syncPixelsFromPhysics(ball);
+  }
+  function materialFor(item, fallback = 'steel') {
+    return MATERIALS[item.material] ? item.material : fallback;
   }
   function updateHud() {
     stageEl.textContent = state.running ? `RUN ${state.stage}/${state.stageCount}` : (state.stability > 0 ? `RUN ${state.stage}/${state.stageCount} · READY` : 'COLLAPSE');
@@ -480,30 +505,32 @@
     debugToggle.hidden = state.running || !debugEnabled;
     if (state.running) debugPanel.hidden = true;
     syncDeveloperFocusability();
-    if (physicsReadout) physicsReadout.textContent = `Profile: ${debugConfig.profile} · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Top: ${state.topHits}/1 · Solver: relative contact · Launch: ${state.lastLaunchSpeed.toFixed(2)}`;
+    if (physicsReadout) physicsReadout.textContent = `V2 core · Peak: ${Math.max(0, H - state.peakY).toFixed(0)}px · Upper: ${state.topHits}/1 · Contact energy · Launch: ${(state.lastLaunchSpeed / LEGACY_FRAME_RATE).toFixed(2)} px/frame`;
   }
   function setMessage(text) { state.message = text; updateHud(); }
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1, element = null) { state.effects.push({ x, y, color, power, element, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
   function emitScorePopup(x, y, value, color = '#ffd083') { if (!value || !state?.scorePops) return; state.scorePops.push({ x, y, value: `+${Math.round(value)}`, color, life: 1 }); if (state.scorePops.length > 12) state.scorePops.shift(); }
-  function refreshElement(element, source = 'hinge') { const effect = state.ball.elementEffects[element] || { stacks: 0, timer: 0 }; effect.stacks = Math.min(3, effect.stacks + 1); effect.timer = 360; state.ball.elementEffects[element] = effect; state.elementalCharge[element] = Math.min(3, state.elementalCharge[element] + 1); emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15, element); setMessage(`${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
+  function refreshElement(element, source = 'hinge') { addElementStack(state.ball.elementEffects, element, 1, 3, 360); const effect = state.ball.elementEffects[element]; state.ball.hybrid = resolveHybrid(state.ball.elementEffects); state.elementalCharge[element] = Math.min(3, state.elementalCharge[element] + 1); emitImpact(state.ball.x, state.ball.y, elementColors[element], .7 + effect.stacks * .15, element); setMessage(state.ball.hybrid ? `${element} imprint ${effect.stacks}/3 · ${state.ball.hybrid.id}.` : `${element} imprint ${effect.stacks}/3 applied by ${source}.`); }
   function activeElement(element) { const effect = state.ball.elementEffects[element]; return effect && effect.stacks > 0 && effect.timer > 0; }
   function reactWithEnvironment(element, x, y, label) { if (!activeElement(element)) return false; const effect = state.ball.elementEffects[element]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; emitScorePopup(x, y, 15 * effect.stacks, elementColors[element]); state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[element], .9 + effect.stacks * .2, element); setMessage(`${element} reaction: ${label} · stack ${effect.stacks}.`); return true; }
   function hingeCradle(side) { return state.ball?.cradleSide === side && input[side]; }
   function imprintFromHinge(side) { const element = state.hingeElements[side]; if (element) refreshElement(element, `${element} hinge`); }
-  function decayElementEffects() { Object.entries(state.ball.elementEffects).forEach(([element, effect]) => { effect.timer -= 1; if (effect.timer <= 0) { effect.timer = 0; effect.stacks = 0; } }); }
-  function resolveBoss(ball) {
+  function decayElementEffects(frameScale = 1) { decayElementStacks(state.ball.elementEffects, frameScale); state.ball.hybrid = resolveHybrid(state.ball.elementEffects); }
+  function resolveBoss(ball, frameScale = 1) {
     if (!state.boss.active || state.boss.hp <= 0) return;
-    state.boss.cooldown -= 1;
+    state.boss.cooldown -= frameScale;
     if (state.boss.cooldown <= 0) state.boss.cooldown = 120;
     state.boss.exposed = state.boss.cooldown < 72;
     const boss = state.layout.boss;
-    if (!boss || !circleCollision(ball, boss, state.boss.exposed ? .85 : 1.15)) return;
+    if (!boss) return;
+    const contact = circleCollision(ball, { ...boss, material: 'stone' });
+    if (!contact || contact.separating) return;
     const empowered = Object.values(ball.elementEffects).some(effect => effect.stacks > 0 && effect.timer > 0) || state.charge >= 1;
     if (state.boss.exposed && empowered) {
       state.boss.hp -= 1; state.boss.cooldown = 120; state.boss.exposed = false; state.score += 250; emitScorePopup(boss.x, boss.y, 250, '#ef8b45'); state.charge = Math.min(99, state.charge + 1); state.flash = 5; emitImpact(boss.x, boss.y, '#ef8b45', 1.8); setMessage(state.boss.hp > 0 ? `Warden armor ruptured. ${state.boss.hp} core${state.boss.hp === 1 ? '' : 's'} remain.` : 'Reactor Warden disabled. Finish mapping the core.');
     } else {
-      ball.vx *= -1.15; ball.vy = Math.abs(ball.vy) + .8; emitImpact(boss.x, boss.y, state.boss.exposed ? '#f1b35b' : '#67c8d5', .9); setMessage(state.boss.exposed ? 'Exposure wasted. Charge an elemental imprint first.' : 'Warden shield active. Wait for the exposure window.');
+      emitImpact(boss.x, boss.y, state.boss.exposed ? '#f1b35b' : '#67c8d5', .9); setMessage(state.boss.exposed ? 'Exposure wasted. Charge an elemental imprint first.' : 'Warden shield active. Wait for the exposure window.');
     }
   }
   function hitTarget(target) {
@@ -557,19 +584,18 @@
   }
   function win() { routeMapPanel.hidden = true; routePreviewSlot.hidden = true; overlay.classList.remove('route-decision', 'upgrade-decision', 'outcome-failure'); overlay.classList.add('terminal-outcome'); overlayKicker.hidden = false; overlayTitle.hidden = false; overlayCopy.hidden = false; overlayScrollCue.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; resetLabel.textContent = 'Start another descent'; resetButton.onclick = reset; outcomeSalvage.textContent = Math.floor(state.charge); outcomeScore.textContent = Math.round(state.score); overlayKicker.textContent = 'Route complete'; overlayTitle.textContent = 'Surface signal acquired'; overlayCopy.textContent = 'The probe found a route through the buried machine.'; overlay.hidden = false; updateHud(); }
   function lose() { routeMapPanel.hidden = true; routePreviewSlot.hidden = true; overlay.classList.remove('route-decision', 'upgrade-decision'); overlay.classList.add('terminal-outcome', 'outcome-failure'); overlayKicker.hidden = false; overlayTitle.hidden = false; overlayCopy.hidden = false; overlayScrollCue.hidden = true; choices.hidden = true; choices.replaceChildren(); resetButton.hidden = false; resetLabel.textContent = 'Retry descent'; resetButton.onclick = reset; state.running = false; outcomeSalvage.textContent = Math.floor(state.charge); outcomeScore.textContent = Math.round(state.score); overlayKicker.textContent = 'Run ended'; overlayTitle.textContent = 'Probe lost in the dark'; overlayCopy.textContent = 'The tunnel collapsed before the route was mapped.'; overlay.hidden = false; updateHud(); }
-  function circleCollision(ball, item, restitution = 1) {
+  function circleCollision(ball, item, legacyRestitution = 1) {
     const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
     const dist = Math.hypot(dx, dy);
-    if (dist < min && dist > 0) {
-      const nx = dx / dist, ny = dy / dist;
-      ball.x = item.x + nx * min; ball.y = item.y + ny * min;
-      const dot = ball.vx * nx + ball.vy * ny;
-      ball.vx -= (1 + restitution) * dot * nx; ball.vy -= (1 + restitution) * dot * ny;
-      return true;
-    }
-    return false;
+    if (dist >= min) return null;
+    const normal = dist > .001 ? { x: dx / dist, y: dy / dist } : { x: 0, y: -1 };
+    const physics = syncPhysicsBallFromPixels(ball);
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'rubber'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: (min - dist) / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    syncPixelsFromPhysics(ball);
+    ball.lastContact = contact;
+    return contact;
   }
-  function capBallSpeed(ball, maxSpeed = state?.maxSpeed || MAX_BALL_SPEED) {
+  function capBallSpeed(ball, maxSpeed = MAX_BALL_SPEED_PX_S) {
     const speed = Math.hypot(ball.vx, ball.vy);
     if (speed > maxSpeed) { const scale = maxSpeed / speed; ball.vx *= scale; ball.vy *= scale; }
   }
@@ -580,24 +606,22 @@
     return { x1: flipper.pivotX, y1: flipper.pivotY, x2: flipper.pivotX + Math.cos(angle) * (flipper.length + (state?.flipperLengthBonus || 0)), y2: flipper.pivotY + Math.sin(angle) * (flipper.length + (state?.flipperLengthBonus || 0)) };
   }
   function edgeSegment(item) { const half = item.length / 2; if (item.vertical) { const inward = item.inward * (item.x < W / 2 ? 1 : -1); return { x1: item.x - inward / 2, y1: item.y - half, x2: item.x + inward / 2, y2: item.y + half, width: item.width }; } const rise = Math.tan(item.angle || 0) * half; return { x1: item.x - half, y1: item.y - rise, x2: item.x + half, y2: item.y + rise, width: item.width }; }
-  function segmentCollision(ball, segment, restitution = .82, kick = 0, tipWeighted = false) {
+  function segmentCollision(ball, segment, legacyRestitution = .82, legacyKick = 0, tipWeighted = false) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
     const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
     const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
     let nx = ball.x - closestX, ny = ball.y - closestY;
     const distance = Math.hypot(nx, ny), radius = ball.r + (segment.width || 0) / 2;
-    if (distance >= radius) return false;
+    if (distance >= radius) return null;
     if (distance < .001) { nx = -dy; ny = dx; }
     const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
-    ball.x = closestX + nx * radius; ball.y = closestY + ny * radius;
-    const incoming = ball.vx * nx + ball.vy * ny;
-    if (incoming < 0) { ball.vx -= (1 + restitution) * incoming * nx; ball.vy -= (1 + restitution) * incoming * ny; }
-    const launchFactor = tipWeighted ? .18 + projection * .82 : 1;
-    if (tipWeighted) ball.lastFlipperLaunchFactor = launchFactor;
-    ball.vx += nx * kick * launchFactor; ball.vy += ny * kick * launchFactor;
-    capBallSpeed(ball);
-    return true;
+    const physics = syncPhysicsBallFromPixels(ball);
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(segment, 'steel'), inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: (segment.surfaceVelocity?.x || 0) / PX_PER_M, y: (segment.surfaceVelocity?.y || 0) / PX_PER_M }, penetration: (radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    syncPixelsFromPhysics(ball);
+    ball.lastContact = contact;
+    if (tipWeighted) ball.lastFlipperLaunchFactor = .18 + projection * .82;
+    return contact;
   }
   function sweptSegmentContact(ball, segment, radius) {
     const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const travel = Math.hypot(ball.x - startX, ball.y - startY); if (travel < .01) return null;
@@ -611,59 +635,91 @@
     for (let index = 0; index <= angleSteps; index += 1) { const ratio = index / angleSteps; const angle = previousAngle + (flipper.angle - previousAngle) * ratio; const segment = { ...flipperEndpointsAt(flipper, angle), width: flipper.width }; const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1; const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(ball.x - closestX, ball.y - closestY) < radius) return { x: ball.x, y: ball.y, segment }; const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, radius); if (swept) return { x: swept.x, y: swept.y, segment }; }
     return null;
   }
-  function resolveFlipperCollision(ball, flipper, side, restitution, activeFresh, activeKick, held) {
-    let segment = { ...flipperEndpoints(flipper), width: flipper.width }; let dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1; let lengthSquared = dx * dx + dy * dy || 1; let projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); let closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; let nx = ball.x - closestX, ny = ball.y - closestY; let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
-    if (distance >= radius && ball.cradleSide !== side) { const swept = sweptFlipperContact(ball, flipper, radius); if (!swept) return false; ball.x = swept.x; ball.y = swept.y; segment = swept.segment; dx = segment.x2 - segment.x1; dy = segment.y2 - segment.y1; lengthSquared = dx * dx + dy * dy || 1; projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared)); closestX = segment.x1 + projection * dx; closestY = segment.y1 + projection * dy; nx = ball.x - closestX; ny = ball.y - closestY; distance = Math.hypot(nx, ny); }
-    const tangentLength = Math.hypot(dx, dy) || 1; const tx = dx / tangentLength, ty = dy / tangentLength; if (distance < .001) { nx = side === 'left' ? -Math.sin(flipper.angle) : Math.sin(flipper.angle); ny = side === 'left' ? Math.cos(flipper.angle) : -Math.cos(flipper.angle); } const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
-    const rx = closestX - flipper.pivotX, ry = closestY - flipper.pivotY; const surfaceVx = -flipper.angularVelocity * ry, surfaceVy = flipper.angularVelocity * rx; const relativeVx = ball.vx - surfaceVx, relativeVy = ball.vy - surfaceVy; const relativeSpeed = Math.hypot(relativeVx, relativeVy); const nearHinge = projection <= .34;
-    if (held && ball.cradleSide === side) { const cradleProjection = .14; const cradleX = segment.x1 + tx * tangentLength * cradleProjection; const cradleY = segment.y1 + ty * tangentLength * cradleProjection; ball.x = cradleX + nx * radius; ball.y = cradleY + ny * radius; ball.vx = surfaceVx; ball.vy = surfaceVy; ball.lastFlipperLaunchFactor = 0; return true; }
-    if (held && nearHinge && relativeSpeed <= debugConfig.cradleCaptureSpeed && ball.y < flipper.pivotY + 10) { const cradleProjection = .14; const cradleX = segment.x1 + tx * tangentLength * cradleProjection; const cradleY = segment.y1 + ty * tangentLength * cradleProjection; ball.cradleSide = side; ball.cradleNormalX = nx; ball.cradleNormalY = ny; ball.x = cradleX + nx * radius; ball.y = cradleY + ny * radius; ball.vx = surfaceVx; ball.vy = surfaceVy; ball.lastFlipperLaunchFactor = 0; return true; }
+  function resolveFlipperCollision(ball, flipper, side, held) {
+    let segment = { ...flipperEndpoints(flipper), width: flipper.width, material: 'rubber' };
+    let dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
+    let lengthSquared = dx * dx + dy * dy || 1;
+    let projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
+    let closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+    let nx = ball.x - closestX, ny = ball.y - closestY;
+    let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
+    if (distance >= radius && ball.cradleSide !== side) {
+      const swept = sweptFlipperContact(ball, flipper, radius);
+      if (!swept) return false;
+      ball.x = swept.x; ball.y = swept.y; segment = { ...swept.segment, material: 'rubber' };
+      dx = segment.x2 - segment.x1; dy = segment.y2 - segment.y1; lengthSquared = dx * dx + dy * dy || 1;
+      projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
+      closestX = segment.x1 + projection * dx; closestY = segment.y1 + projection * dy; nx = ball.x - closestX; ny = ball.y - closestY; distance = Math.hypot(nx, ny);
+    }
+    const tangentLength = Math.hypot(dx, dy) || 1; const tx = dx / tangentLength, ty = dy / tangentLength;
+    if (distance < .001) { nx = side === 'left' ? -Math.sin(flipper.angle) : Math.sin(flipper.angle); ny = side === 'left' ? Math.cos(flipper.angle) : -Math.cos(flipper.angle); }
+    const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
+    const rx = closestX - flipper.pivotX, ry = closestY - flipper.pivotY;
+    const surfaceVx = -flipper.angularVelocity * ry, surfaceVy = flipper.angularVelocity * rx;
+    const relativeVx = ball.vx - surfaceVx, relativeVy = ball.vy - surfaceVy;
+    const relativeSpeed = Math.hypot(relativeVx, relativeVy), nearHinge = projection <= .34;
+    if (held && ball.cradleSide === side) {
+      const cradleProjection = .14, cradleX = segment.x1 + tx * tangentLength * cradleProjection, cradleY = segment.y1 + ty * tangentLength * cradleProjection;
+      ball.x = cradleX + nx * radius; ball.y = cradleY + ny * radius; ball.vx = surfaceVx; ball.vy = surfaceVy; ball.lastFlipperLaunchFactor = 0; syncPhysicsBallFromPixels(ball); return true;
+    }
+    if (held && nearHinge && relativeSpeed <= CRADLE_CAPTURE_SPEED_PX_S && ball.y < flipper.pivotY + 10) {
+      const cradleProjection = .14, cradleX = segment.x1 + tx * tangentLength * cradleProjection, cradleY = segment.y1 + ty * tangentLength * cradleProjection;
+      ball.cradleSide = side; ball.cradleNormalX = nx; ball.cradleNormalY = ny; ball.x = cradleX + nx * radius; ball.y = cradleY + ny * radius; ball.vx = surfaceVx; ball.vy = surfaceVy; ball.lastFlipperLaunchFactor = 0; syncPhysicsBallFromPixels(ball); return true;
+    }
     if (ball.cradleSide === side) ball.cradleSide = null;
-    ball.x = closestX + nx * radius; ball.y = closestY + ny * radius; const effectiveRestitution = nearHinge ? restitution * .28 : restitution; let nextVx = relativeVx, nextVy = relativeVy; const normalSpeed = nextVx * nx + nextVy * ny; if (normalSpeed < 0) { nextVx -= (1 + effectiveRestitution) * normalSpeed * nx; nextVy -= (1 + effectiveRestitution) * normalSpeed * ny; }
-    if (activeFresh) { const launchFactor = .18 + projection * .82; ball.lastFlipperLaunchFactor = launchFactor; nextVx += nx * activeKick * launchFactor; nextVy += ny * activeKick * launchFactor; } else if (!held && nearHinge) { const passiveSlide = debugConfig.passiveHingeSlide * (1 - projection / .34); nextVx += tx * passiveSlide; nextVy += ty * passiveSlide; }
-    ball.vx = nextVx + surfaceVx; ball.vy = nextVy + surfaceVy; capBallSpeed(ball); return true;
+    const physics = syncPhysicsBallFromPixels(ball);
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'rubber', inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: surfaceVx / PX_PER_M, y: surfaceVy / PX_PER_M }, penetration: Math.max(0, radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    syncPixelsFromPhysics(ball); ball.lastContact = contact; ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); return true;
   }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
-  function updateFlippers() {
-    const leftTarget = input.left ? flippers.left.active : flippers.left.rest;
-    const rightTarget = input.right ? flippers.right.active : flippers.right.rest;
-    const leftPrevious = flippers.left.angle, rightPrevious = flippers.right.angle;
-    flippers.left.previousAngle = leftPrevious;
-    flippers.right.previousAngle = rightPrevious;
-    flippers.left.angle += (leftTarget - flippers.left.angle) * .28;
-    flippers.right.angle += (rightTarget - flippers.right.angle) * .28;
-    flippers.left.angularVelocity = flippers.left.angle - leftPrevious;
-    flippers.right.angularVelocity = flippers.right.angle - rightPrevious;
+  function updateFlippers(dt) {
+    [flippers.left, flippers.right].forEach(flipper => {
+      const motor = { angle: flipper.angle, restAngle: flipper.rest, activeAngle: flipper.active, angularVelocity: flipper.angularVelocity, inertia: flipper.inertia, stiffness: flipper.stiffness, damping: flipper.damping, maxTorque: flipper.maxTorque, maxSpeed: flipper.maxAngularSpeed };
+      const result = advanceFlipperMotor(motor, flipper === flippers.left ? input.left : input.right, dt);
+      flipper.previousAngle = result.previousAngle; flipper.angle = result.angle; flipper.angularVelocity = result.angularVelocity;
+    });
   }
-  function update() {
+  function update(dt = FIXED_DT) {
     if (!state.running) return;
     const b = state.ball;
-    state.pulse += .08; state.flash = Math.max(0, state.flash - 1); state.topHitCooldown = Math.max(0, state.topHitCooldown - 1); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - 1); state.relayCooldown = Math.max(0, state.relayCooldown - 1); state.comboTimer = Math.max(0, state.comboTimer - 1); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(); state.effects.forEach(effect => effect.life -= .045); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035; pop.y -= .42; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
-    updateFlippers();
+    const frameScale = dt * LEGACY_FRAME_RATE;
+    state.pulse += .08 * frameScale; state.flash = Math.max(0, state.flash - frameScale); state.topHitCooldown = Math.max(0, state.topHitCooldown - frameScale); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - frameScale); state.relayCooldown = Math.max(0, state.relayCooldown - frameScale); state.comboTimer = Math.max(0, state.comboTimer - frameScale); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(frameScale); state.effects.forEach(effect => effect.life -= .045 * frameScale); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035 * frameScale; pop.y -= .42 * frameScale; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
+    updateFlippers(dt);
     b.prevX = b.x; b.prevY = b.y;
-    const routeGravity = state.routeModifier === 'Water' ? debugConfig.gravity * .72 : state.routeModifier === 'Earth' ? debugConfig.gravity * 1.08 : debugConfig.gravity;
-    b.vy += routeGravity; b.vx *= .999; b.vy *= .999;
-    b.x += b.vx; b.y += b.vy;
+    const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
+    integratePrimaryBall(b, routeGravity, dt);
     state.peakY = Math.min(state.peakY, b.y);
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
-    const wallRebound = Math.max(0, Math.min(1, debugConfig.surfaceRebound));
+    const wallRebound = MATERIALS.steel.restitution;
     if (b.x - b.r < table.left) { b.x = table.left + b.r; b.vx = Math.abs(b.vx) * wallRebound; }
     if (b.x + b.r > table.right) { b.x = table.right - b.r; b.vx = -Math.abs(b.vx) * wallRebound; }
     if (b.y - b.r < table.top) { b.y = table.top + b.r; b.vy = Math.abs(b.vy) * wallRebound; }
-    resolveBoss(b);
-    targets.filter(t => !t.hit).forEach(t => { if (circleCollision(b, t, 1.05)) hitTarget(t); });
+    resolveBoss(b, frameScale);
+    targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) hitTarget(t); });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
-    state.layout.bumpers.forEach(item => { const baseRestitution = item.type === 'pulse' ? Math.min(1, debugConfig.bumperRebound + .1) : item.type === 'armor' ? Math.min(1, debugConfig.bumperRebound + .04) : debugConfig.bumperRebound; const energetic = !item.oneWay || (b.y < item.y && b.vy > 0); if (item.type === 'edge') { const segment = edgeSegment(item); if (segmentCollision(b, segment, energetic ? baseRestitution : wallRebound)) { if (item.oneWay && !energetic) return; if (energetic) { b.vx += (item.x < W / 2 ? 1 : -1) * (item.inwardForce || .5); b.vy -= item.upward || .7; capBallSpeed(b); } } return; } const restitution = item.oneWay && !energetic ? wallRebound : baseRestitution; if (circleCollision(b, item, restitution)) { if (item.oneWay && !energetic) return; if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitScorePopup(item.x, item.y, 75, '#ffd083'); emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); } if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitScorePopup(item.x, item.y, 10, '#f1b35b'); emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; } const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse rebound. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.'); } });
-    if (state.layout.gate && state.relayCooldown === 0 && segmentCollision(b, state.layout.gate, wallRebound, .35)) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
-    sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12 }, wallRebound));
+    state.layout.bumpers.forEach(item => {
+      const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);
+      if (item.type === 'edge') {
+        if (item.oneWay && !energetic) return;
+        const segment = { ...edgeSegment(item), material: 'steel' }, contact = segmentCollision(b, segment);
+        if (contact && !contact.separating && energetic) { b.vx += (item.x < W / 2 ? 1 : -1) * (item.inwardForce || .5) * LEGACY_FRAME_RATE; b.vy -= (item.upward || .7) * LEGACY_FRAME_RATE; capBallSpeed(b); }
+        return;
+      }
+      if (item.oneWay && !energetic) return;
+      const surface = { ...item, material: item.material || (item.type === 'armor' ? 'steel' : 'rubber') }, contact = circleCollision(b, surface);
+      if (contact && !contact.separating) {
+        if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitScorePopup(item.x, item.y, 75, '#ffd083'); emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); }
+        if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitScorePopup(item.x, item.y, 10, '#f1b35b'); emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; }
+        const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse impact. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.');
+      }
+    });
+    if (state.layout.gate && state.relayCooldown === 0 && (() => { const contact = segmentCollision(b, { ...state.layout.gate, material: 'copper' }); return Boolean(contact && !contact.separating); })()) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
+    sideGuards.forEach(guard => segmentCollision(b, { ...guard, width: 12, material: 'steel' }));
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
-    const leftRestitution = input.left ? (Math.abs(flippers.left.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
-    const rightRestitution = input.right ? (Math.abs(flippers.right.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution;
-    const launchKick = debugConfig.activeKick * (state.routeModifier === 'Fire' ? 1.28 : state.routeModifier === 'Air' ? 1.12 : 1);
     const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
-    const leftHit = resolveFlipperCollision(b, flippers.left, 'left', leftRestitution, leftActiveFresh, launchKick, input.left);
-    const rightHit = resolveFlipperCollision(b, flippers.right, 'right', rightRestitution, rightActiveFresh, launchKick, input.right);
+    const leftHit = resolveFlipperCollision(b, flippers.left, 'left', input.left);
+    const rightHit = resolveFlipperCollision(b, flippers.right, 'right', input.right);
     const freshActiveHit = (leftHit && leftActiveFresh) || (rightHit && rightActiveFresh);
     if (freshActiveHit) { state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, '#ffd083', .35 + (b.lastFlipperLaunchFactor || .18) * .25); }
     if (!leftHit && !rightHit) b.cradleSide = null;
@@ -678,7 +734,7 @@
     const drainOpening = b.x > 156 && b.x < 204;
     if (b.y > H - 35 && drainOpening) {
       const lateFlipper = [flippers.left, flippers.right].find(flipper => sweptFlipperContact(b, flipper, b.r + flipper.width / 2));
-      if (lateFlipper) { const side = lateFlipper === flippers.left ? 'left' : 'right'; const held = side === 'left' ? input.left : input.right; const restitution = held ? (Math.abs(lateFlipper.angularVelocity) < .04 ? debugConfig.catchRestitution : debugConfig.movingRestitution) : debugConfig.passiveRestitution; resolveFlipperCollision(b, lateFlipper, side, restitution, false, 0, held); state.flipperContacts[side] = true; updateHud(); return; }
+      if (lateFlipper) { const side = lateFlipper === flippers.left ? 'left' : 'right'; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, lateFlipper, side, held); state.flipperContacts[side] = true; updateHud(); return; }
       if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
       if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
       state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
@@ -894,13 +950,15 @@
     if (spriteImages.ball.complete && spriteImages.ball.naturalWidth) { ctx.drawImage(spriteImages.ball, b.x - b.r - 2, b.y - b.r - 2, (b.r + 2) * 2, (b.r + 2) * 2); } else { const metal = ctx.createRadialGradient(b.x + motionX * 2 - 2, b.y + motionY * 2 - 2, 1, b.x, b.y, b.r); metal.addColorStop(0, '#fff8d6'); metal.addColorStop(.35, '#d8e6d0'); metal.addColorStop(.78, '#8ba99c'); metal.addColorStop(1, '#2d5149'); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
+  const MAX_CATCHUP_STEPS = 4;
   let previousTime = 0;
   let timeAccumulator = 0;
   function loop(timestamp = 0) {
     if (!previousTime) previousTime = timestamp;
-    timeAccumulator += Math.min(3, (timestamp - previousTime) / (1000 / 60));
+    timeAccumulator = Math.min(FIXED_DT * (MAX_CATCHUP_STEPS * 2), timeAccumulator + Math.min(.25, (timestamp - previousTime) / 1000));
     previousTime = timestamp;
-    while (timeAccumulator >= 1) { update(); timeAccumulator -= 1; }
+    let steps = 0;
+    while (timeAccumulator >= FIXED_DT && steps < MAX_CATCHUP_STEPS) { update(FIXED_DT); timeAccumulator -= FIXED_DT; steps += 1; }
     draw(); requestAnimationFrame(loop);
   }
   function setControl(side, value) { touchInput[side] = value; syncInput(); }

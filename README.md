@@ -31,7 +31,7 @@ The current prototype is being reset toward physics-forward earthpunk mine/tunne
 - [Physics V2 spec](docs/PHYSICS_V2_SPEC.md) — units, materials, contact response, damage, CCD, and deterministic gates.
 - [AAA-mobile reference bar](docs/AAA_REFERENCE_BAR.md) — named reference games, touch guidance, anti-patterns, and measurable acceptance criteria.
 
-The first implementation slice adds a renderer-independent Physics V2 core under `src/` with deterministic tests under `tests/`. It is not yet wired into the live table; integration is a separate verified phase.
+The first implementation slice adds a renderer-independent Physics V2 core under `src/` with deterministic tests under `tests/`. The current live table now uses that core for primary-ball integration, fixed-step timing, flipper motor motion, and material-aware circle/segment contacts; destructible mine objects and the renderer reset remain separate phases.
 
 ## Run locally
 

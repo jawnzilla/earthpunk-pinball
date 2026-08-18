@@ -8,7 +8,8 @@ import {
   damageFromContact,
   integrateBall,
   resolveContact,
-  resolveHybrid
+  resolveHybrid,
+  advanceFlipperMotor
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -68,6 +69,19 @@ assert.equal(FIXED_DT, 1 / 120);
   const effects = {};
   addElementStack(effects, 'Unknown', 1);
   assert.deepEqual(effects, {});
+}
+
+{
+  const motor = { angle: 0, restAngle: 0, activeAngle: -0.7, angularVelocity: 0, inertia: 0.25, stiffness: 26, damping: 6, maxTorque: 12, maxSpeed: 15 };
+  const before = motor.angle;
+  const first = advanceFlipperMotor(motor, true, 1 / 120);
+  assert.ok(first.angle < before);
+  assert.ok(first.angularVelocity < 0);
+  for (let step = 0; step < 60; step += 1) advanceFlipperMotor(motor, true, 1 / 120);
+  assert.ok(Math.abs(motor.angle - motor.activeAngle) < 0.08);
+  const beforeReleaseVelocity = motor.angularVelocity;
+  const release = advanceFlipperMotor(motor, false, 1 / 120);
+  assert.ok(release.angularVelocity > beforeReleaseVelocity);
 }
 
 console.log('physics-core: all deterministic tests passed');

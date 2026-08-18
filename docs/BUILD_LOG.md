@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-17 — Overhaul tick: live Physics V2 contact slice
+
+### Implemented
+
+- Added `src/physics-core.js` as the browser-safe Physics V2 module; retained `src/physics-core.mjs` as a Node-test re-export and declared the module boundary in `package.json`.
+- Converted the live primary ball to physical units at the table adapter boundary: meters/second, force-based gravity, material drag, steel mass, and a bounded 120Hz fixed-step loop with four-step catch-up.
+- Replaced legacy circle/segment velocity edits with Physics V2 contact results for targets, bumpers, rails, gates, boss shell, and flippers. Separating contacts now correct position without injecting bounce or gameplay rewards.
+- Replaced flipper target interpolation and active-kick launch power with motor torque, inertia, damping, maximum angular speed, and moving-surface contact velocity.
+- Wired the capped element-stack/hybrid primitives into live hinge imprint and decay state; the stacked visual effects themselves remain a later bounded phase.
+- Removed direct boss velocity injection and stopped live gameplay from reading legacy rebound/kick/catch/separation values for collision response. The old debug panel remains only as a compatibility surface until the visual/debug cleanup phase.
+
+### Verification
+
+- `node --test tests/physics-core.test.mjs` passes, including motor responsiveness, contact energy, separating-contact behavior, stack caps/expiry, hybrid selection, and material damage.
+- Extracted inline module syntax passes `node --check`.
+- Playwright Chromium smoke test passes at exact `320×568` and `390×844`: module loads, route overlay enters play, both touch controls press/release, `scrollWidth === innerWidth`, and page/console errors are empty.
+- Active-play screenshots show no rendering corruption. They also confirm the known remaining visual gap: the table still reads as a dense cyberpunk instrument rather than the planned mine/tunnel reset.
+- Python's default static server rejects `.mjs` as `text/plain`; the browser entry now imports `.js` so the offline local path is MIME-safe.
+
 ## 2026-08-17 — Overhaul tick: bounded elemental state core
 
 ### Implemented

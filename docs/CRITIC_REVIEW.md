@@ -1,8 +1,8 @@
-# Deadlight Critic Review — Overhaul tick 01
+# Deadlight Critic Review — Overhaul tick 02
 
 ## Verdict
 
-**Playable hackathon slice: PASS. AAA-ready: FAIL.** This tick hardens the renderer-independent elemental state seam, but the live table still uses legacy collision callbacks and has no destructible mine objects. The overhaul is not complete.
+**Playable hackathon slice: PASS. AAA-ready: FAIL.** This tick makes the primary ball, fixed-step loop, flippers, and table contacts materially physics-driven. The live build still lacks the planned destructible mine-object taxonomy and still visibly reads as an over-dense cyberpunk instrument; the overhaul is not complete.
 
 ## Findings
 
@@ -10,14 +10,15 @@
 - **Elemental loop — PASS:** Hinge cradling applies stacks, matching targets/generators/relays react, and route modifiers change gravity or launch kick. Fire, Water, Earth, and Air have distinct hooks, but the reactions still share a common feedback language.
 - **Visual direction — WEAK:** The table has stronger depth planes, edge machinery, local glows, and impact rings. It remains primarily procedural Canvas geometry; authored silhouettes, animation language, and asset variety are not yet at AAA quality.
 - **Mobile UX — PASS/WEAK:** Touch controls are dedicated, 48px minimum, keyboard-compatible, and responsive at narrow widths. The route/module list is information-dense on very short screens and needs a focused card carousel or two-step choice flow.
-- **Physics/readability — WEAK:** Fixed-step physics and debug tuning remain useful. Real-device testing is still required for cradle timing, drain fairness, and route-modifier feel.
+- **Physics/readability — PASS/WEAK:** The primary ball now integrates through the Physics V2 material/contact core, the loop is fixed at 120Hz with bounded catch-up, and flippers use motor surface velocity instead of active-kick/rebound presets. The remaining weakness is that non-flipper object damage is not yet driven by impact energy and the physical feel still needs device playtesting.
 - **Delivery — PASS with evidence gap:** Hosted URL responds HTTP 200 and the static build is offline-safe. The browser harness was unavailable in one attempt because of a missing `oci` dependency; a later critic run did verify the hosted 320px layout with `scrollWidth === clientWidth`.
 
 ## Current tick evidence
 
-- Physics V2 deterministic test suite passes after adding bounded element-stack and hybrid primitives.
-- `node --check index.html` is not a valid command because Node does not parse `.html` as a JavaScript module; use extracted-script syntax checks or a browser smoke test for the page.
-- No browser capture was claimed this tick; hosted parity and exact-width checks remain delivery gates.
+- Physics V2 deterministic tests pass, including motor responsiveness, separating-contact no-bounce behavior, material contact energy, stack caps/expiry, hybrid selection, and material damage.
+- Extracted inline module syntax passes `node --check`; the browser module is served from `.js` because Python's default server rejects `.mjs` as `text/plain`.
+- Playwright Chromium smoke test passes at exact 320×568 and 390×844: module import, route-to-active transition, touch press/release, overflow, and console/page-error gates.
+- Active screenshots show the physics slice did not corrupt rendering. They also visibly confirm the next largest gap: the table is still too dense and cyan/console-led to read as a mine/tunnel.
 
 ## Next-pass blockers
 
@@ -26,7 +27,7 @@
 3. Give each elemental reaction a distinct animation/audio cue while preserving offline-safe assets.
 4. Playtest on physical phones at 320/360/390 CSS widths and record screenshots plus touch interruption behavior.
 5. Add one boss or threat table and one explicit resource/free-pass table so progression is not only a choice screen.
-6. Wire the new element primitives into live ContactResult consumers; do not duplicate stack caps in `index.html`.
+6. Add the first destructible mine-object slice: timber crate, copper pipe, stone plug, and salvage drum with impact-energy damage and material/element weaknesses.
 
 ## Simplified changelog
 
