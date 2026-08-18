@@ -9,8 +9,9 @@
 
 ### Verification
 
-- `node --test tests/*.test.mjs` and inline-module syntax check pass locally.
-- Exact local and hosted 320x568/360x844/390x844 Chromium verification is required after deployment; no mechanics were changed.
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures; extracted inline module passes `node --check`; `git diff --check` passes.
+- Hosted Pages HTTP 200 verification passes after deployment; served HTML contains `drawDirectionalRim`, the Deadlight title, and the game canvas.
+- Exact local/hosted 320x568/360x844/390x844 Chromium checks remain blocked this tick because no Chromium executable or Playwright browser is installed in the runner; no mechanics were changed.
 
 ## 2026-08-18 — Overhaul tick: side-guard edge-light pass
 
