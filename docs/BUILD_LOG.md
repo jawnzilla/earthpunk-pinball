@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: bounded hybrid consequence slice
+
+### Implemented
+
+- Added one-shot hybrid runtime state to the elemental effect budget. Fire + Water now produces a Steam Fracture event with a bounded 1.35x destructible damage modifier; Water + Earth, Earth + Wind, and Fire + Wind now expose deterministic Slurry Bind, Root Sling, and thermal-lance wake state respectively.
+- Wired hybrid structure-contact events into the live destructible path so Steam Fracture changes integrity loss rather than only score/feedback. The remaining hybrid events emit short contextual feedback and remain capped by a per-run runtime ledger.
+- Preserved the existing fixed-step elemental runtime, mini-ball lifetime/bounce budgets, wind echo hit ledger, and earth-link crossing budget.
+
+### Verification
+
+- Deterministic elemental and Physics V2 tests are the required gate; the test command was attempted during this tick but the Windows shell reported temporary process-resource exhaustion after the code changes. Re-run `node --test tests/*.test.mjs` before treating this tick as release-ready.
+- `git diff --check` passes.
+
 ## 2026-08-17 — Overhaul tick: live Physics V2 contact slice
 
 ### Implemented

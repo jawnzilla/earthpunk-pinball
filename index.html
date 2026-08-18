@@ -312,6 +312,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallBounce, onStructureContact } from './src/elemental-effects.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -476,7 +477,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
     const x = W / 2, y = H - 108, vx = launchSide * (66 + Math.random() * 42), vy = -312;
-    state.ball = { x, y, vx, vy, r: 8, trail: [], prevX: x, prevY: y, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {}, physics: createPhysicsBall({ x: x / PX_PER_M, y: y / PX_PER_M, vx: vx / PX_PER_M, vy: vy / PX_PER_M, mass: .032, radius: .08, material: 'steel' }) };
+    state.ball = { x, y, vx, vy, r: 8, trail: [], prevX: x, prevY: y, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {}, elementalRuntime: createElementalRuntime(), physics: createPhysicsBall({ x: x / PX_PER_M, y: y / PX_PER_M, vx: vx / PX_PER_M, vy: vy / PX_PER_M, mass: .032, radius: .08, material: 'steel' }) };
     state.peakY = state.ball.y; state.lastLaunchSpeed = Math.hypot(state.ball.vx, state.ball.vy);
     state.launched = true;
   }
@@ -523,6 +524,31 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
   function chainHit() { state.combo = state.comboTimer > 0 ? state.combo + 1 : 1; state.comboTimer = 90; return 1 + (state.combo - 1) * .25; }
   function emitImpact(x, y, color, power = 1, element = null) { state.effects.push({ x, y, color, power, element, life: 1 }); if (state.effects.length > 36) state.effects.shift(); }
   function emitScorePopup(x, y, value, color = '#ffd083') { if (!value || !state?.scorePops) return; state.scorePops.push({ x, y, value: `+${Math.round(value)}`, color, life: 1 }); if (state.scorePops.length > 12) state.scorePops.shift(); }
+  function handleElementalEvent(event) {
+    if (event.type === 'water-split') { emitImpact(state.ball.x, state.ball.y, elementColors.Water, .9, 'Water'); setMessage('Water split: two mini-balls will carry three bounces.'); }
+    else if (event.type === 'wind-echo') { emitImpact(state.ball.x, state.ball.y, elementColors.Wind, .85, 'Wind'); setMessage('Wind echo launched along the current path.'); }
+    else if (event.type === 'earth-link') { emitImpact(state.ball.x, state.ball.y, elementColors.Earth, 1, 'Earth'); setMessage('Earth link formed between the first two struck structures.'); }
+    else if (event.type === 'steam-fracture') { emitImpact(state.ball.x, state.ball.y, '#d7e8d0', 1.1, 'Water'); setMessage('Steam fracture: the next structure impact is amplified.'); }
+    else if (event.type === 'slurry-bind') { emitImpact(state.ball.x, state.ball.y, elementColors.Water, .8, 'Water'); setMessage('Slurry bind: the struck structure will redirect the probe.'); }
+    else if (event.type === 'root-sling') { emitImpact(state.ball.x, state.ball.y, elementColors.Earth, .8, 'Earth'); setMessage('Root sling: stored force returns a directional assist.'); }
+  }
+  function observeHardBounce(ball, contact) {
+    if (ball !== state.ball || !contact || contact.separating || contact.impactSpeed < 2) return;
+    const event = onHardBounce(ball.elementalRuntime, { effects: ball.elementEffects, position: { x: ball.x, y: ball.y }, velocity: { x: ball.vx, y: ball.vy }, impactSpeed: contact.impactSpeed });
+    if (event.type !== 'none') handleElementalEvent(event);
+  }
+  function observeStructureContact(objectId, position) {
+    const event = onStructureContact(state.ball.elementalRuntime, { effects: state.ball.elementEffects, objectId, position });
+    if (event.type !== 'none') handleElementalEvent(event);
+    return event;
+  }
+  function advanceElementalEffects(dt) {
+    const ball = state.ball;
+    const events = advanceElementalRuntime(ball.elementalRuntime, { effects: ball.elementEffects, position: { x: ball.x, y: ball.y }, velocity: { x: ball.vx, y: ball.vy }, dt });
+    events.filter(event => event.type !== 'fire-trail-tick').forEach(handleElementalEvent);
+    const crossing = checkEarthLinkCrossing(ball.elementalRuntime, { x: ball.prevX, y: ball.prevY }, { x: ball.x, y: ball.y });
+    if (crossing.powerMultiplier > 1) { ball.vx *= crossing.powerMultiplier; ball.vy *= crossing.powerMultiplier; syncPhysicsBallFromPixels(ball); emitImpact(ball.x, ball.y, elementColors.Earth, .9, 'Earth'); setMessage('Earth link powered the probe once.'); }
+  }
   function refreshElement(element, source = 'hinge') { const canonical = canonicalElement(element); addElementStack(state.ball.elementEffects, canonical, 1, 3, 360); const effect = state.ball.elementEffects[canonical]; state.ball.hybrid = resolveHybrid(state.ball.elementEffects); state.elementalCharge[canonical] = Math.min(3, (state.elementalCharge[canonical] || 0) + 1); emitImpact(state.ball.x, state.ball.y, elementColors[canonical], .7 + effect.stacks * .15, canonical); setMessage(state.ball.hybrid ? `${displayElement(canonical)} imprint ${effect.stacks}/3 · ${state.ball.hybrid.id}.` : `${displayElement(canonical)} imprint ${effect.stacks}/3 applied by ${source}.`); }
   function activeElement(element) { const effect = state.ball.elementEffects[canonicalElement(element)]; return effect && effect.stacks > 0 && effect.timer > 0; }
   function reactWithEnvironment(element, x, y, label) { const canonical = canonicalElement(element); if (!activeElement(canonical)) return false; const effect = state.ball.elementEffects[canonical]; effect.timer = Math.min(420, effect.timer + 60); state.score += 15 * effect.stacks; emitScorePopup(x, y, 15 * effect.stacks, elementColors[canonical]); state.charge = Math.min(99, state.charge + .1 * effect.stacks); emitImpact(x, y, elementColors[canonical], .9 + effect.stacks * .2, canonical); setMessage(`${displayElement(canonical)} reaction: ${label} · stack ${effect.stacks}.`); return true; }
@@ -546,15 +572,18 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     }
   }
   function hitTarget(target) {
+    observeStructureContact(target.id || `target-${targets.indexOf(target)}`, { x: target.x, y: target.y });
     const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); const points = Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.score += points; emitScorePopup(target.x, target.y, points, reaction ? elementColors[target.element] : '#ffd083'); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? (state.tableKind === 'boss' ? `Armor core ${state.bossHits}/3 exposed.` : 'Descent mapped. Choose a modification.') : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
   function applyDestructibleContact(item, contact) {
+    const elementalEvent = observeStructureContact(item.id, { x: item.x, y: item.y });
     if (item.destroyed || item.damageCooldown > 0 || contact.separating) return;
     const damage = damageFromContact(contact, { objectMaterial: item.material, damageScale: item.damageScale, threshold: item.threshold, weaknesses: item.weaknesses, elementEffects: state.ball.elementEffects });
-    if (damage <= 0) return;
-    item.integrity = Math.max(0, item.integrity - damage);
+    const hybridDamage = elementalEvent.type === 'steam-fracture' ? damage * elementalEvent.damageMultiplier : damage;
+    if (hybridDamage <= 0) return;
+    item.integrity = Math.max(0, item.integrity - hybridDamage);
     item.damageCooldown = 8;
     item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
     const activeDamageElement = Object.entries(state.ball.elementEffects).find(([, effect]) => effect.stacks > 0 && effect.timer > 0)?.[0];
@@ -621,6 +650,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'rubber'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: (min - dist) / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
     ball.lastContact = contact;
+    observeHardBounce(ball, contact);
     return contact;
   }
   function capBallSpeed(ball, maxSpeed = MAX_BALL_SPEED_PX_S) {
@@ -653,6 +683,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(segment, 'steel'), inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: (segment.surfaceVelocity?.x || 0) / PX_PER_M, y: (segment.surfaceVelocity?.y || 0) / PX_PER_M }, penetration: (radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
     ball.lastContact = contact;
+    observeHardBounce(ball, contact);
     return contact;
   }
   function sweptSegmentContact(ball, segment, radius) {
@@ -715,7 +746,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     if (ball.cradleSide === side) ball.cradleSide = null;
     const physics = syncPhysicsBallFromPixels(ball);
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'rubber', inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: surfaceVx / PX_PER_M, y: surfaceVy / PX_PER_M }, penetration: Math.max(0, radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
-    syncPixelsFromPhysics(ball); ball.lastContact = contact; ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); return true;
+    syncPixelsFromPhysics(ball); ball.lastContact = contact; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); return true;
   }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function updateFlippers(dt) {
@@ -735,6 +766,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
     integratePrimaryBall(b, routeGravity, dt);
+    advanceElementalEffects(dt);
     state.peakY = Math.min(state.peakY, b.y);
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
     if (b.x - b.r < table.left) resolveBoundaryContact(b, { x: 1, y: 0 }, { x: table.left, y: b.y }, table.left - (b.x - b.r));
@@ -822,7 +854,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     drawMineBackdrop();
 
     drawMineStructures(); if (state.boss.active) drawBoss();
-    drawMineDrain(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawEffects(); drawScorePopups(); drawAimReticle(); drawBall();
+    drawMineDrain(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
   }
   function drawObjectiveCue() {
     if (!state.running) return;
@@ -1017,6 +1049,13 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall a
     ctx.restore();
   }
   function drawReactionMotif(effect, radius) { const { x, y, color, power, element, life } = effect; const fade = life * .9; ctx.save(); ctx.translate(x, y); ctx.globalAlpha = fade; ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2; ctx.lineJoin = 'round'; const phase = state.pulse * .55; if (element === 'Fire') { for (let i = 0; i < 5; i += 1) { const a = -Math.PI * .82 + i * Math.PI * .41 + phase * .08; const d = radius + 3; ctx.beginPath(); ctx.moveTo(Math.cos(a) * d, Math.sin(a) * d); ctx.lineTo(Math.cos(a + .15) * (d + 8 * power), Math.sin(a + .15) * (d + 8 * power)); ctx.lineTo(Math.cos(a + .3) * d, Math.sin(a + .3) * d); ctx.closePath(); ctx.stroke(); } ctx.beginPath(); ctx.moveTo(0, -radius * .7); ctx.lineTo(radius * .28, 0); ctx.lineTo(0, radius * .62); ctx.lineTo(-radius * .28, 0); ctx.closePath(); ctx.fill(); } else if (element === 'Water') { for (let i = 0; i < 3; i += 1) { const a = phase + i * Math.PI * 2 / 3; ctx.beginPath(); ctx.arc(0, 0, radius + i * 5, a, a + Math.PI * .72); ctx.stroke(); } for (let i = 0; i < 4; i += 1) { const a = phase + i * Math.PI / 2; const d = radius + 7; ctx.beginPath(); ctx.moveTo(Math.cos(a) * d, Math.sin(a) * d - 3); ctx.quadraticCurveTo(Math.cos(a) * (d + 7), Math.sin(a) * (d + 7), Math.cos(a) * d, Math.sin(a) * (d + 12)); ctx.stroke(); } } else if (element === 'Earth') { ctx.rotate(phase * .12); for (let i = 0; i < 4; i += 1) { const a = i * Math.PI / 2 + Math.PI / 4; const d = radius + 6; ctx.beginPath(); ctx.moveTo(Math.cos(a) * d, Math.sin(a) * d); ctx.lineTo(Math.cos(a + .2) * (d + 9), Math.sin(a + .2) * (d + 9)); ctx.lineTo(Math.cos(a + .42) * d, Math.sin(a + .42) * d); ctx.stroke(); } ctx.strokeRect(-radius * .52, -radius * .52, radius * 1.04, radius * 1.04); ctx.fillRect(-3, -3, 6, 6); } else if (element === 'Air') { for (let i = 0; i < 3; i += 1) { ctx.beginPath(); ctx.arc(0, 0, radius + i * 6, phase + i * .7, phase + Math.PI * 1.35 + i * .7); ctx.stroke(); } for (let i = 0; i < 3; i += 1) { const d = radius + 8 + i * 5; ctx.beginPath(); ctx.moveTo(-d, 0); ctx.lineTo(-d + 8, -5); ctx.moveTo(-d, 0); ctx.lineTo(-d + 8, 5); ctx.stroke(); } } ctx.restore(); }
+  function drawElementalRuntime() {
+    const runtime = state.ball?.elementalRuntime; if (!runtime) return;
+    runtime.fireTrail.forEach(segment => { const alpha = Math.max(0, 1 - segment.age / .75); ctx.save(); ctx.globalAlpha = alpha * .72; ctx.fillStyle = '#b65f32'; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = segment.damageEnabled ? 2 : 1; ctx.beginPath(); ctx.arc(segment.x, segment.y, segment.damageEnabled ? 4 : 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
+    runtime.miniBalls.forEach(ball => { ctx.save(); ctx.globalAlpha = Math.min(1, ball.lifetime); ctx.fillStyle = '#6f8f88'; ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(ball.x, ball.y, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
+    if (runtime.windEcho) { const echo = runtime.windEcho; const speed = Math.hypot(echo.vx, echo.vy) || 1; const nx = echo.vx / speed, ny = echo.vy / speed; ctx.save(); ctx.globalAlpha = Math.min(.8, echo.lifetime / 1.5); ctx.strokeStyle = '#b5c2a4'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(echo.x - nx * 24, echo.y - ny * 24); ctx.lineTo(echo.x + nx * 11, echo.y + ny * 11); ctx.stroke(); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(echo.x - nx * 12 - ny * 6, echo.y - ny * 12 + nx * 6); ctx.lineTo(echo.x + nx * 9, echo.y + ny * 9); ctx.moveTo(echo.x - nx * 12 + ny * 6, echo.y - ny * 12 - nx * 6); ctx.lineTo(echo.x + nx * 9, echo.y + ny * 9); ctx.stroke(); ctx.restore(); }
+    if (runtime.earthLink) { const link = runtime.earthLink; ctx.save(); ctx.globalAlpha = Math.min(1, link.lifetime / .9); ctx.strokeStyle = '#a47d4d'; ctx.lineWidth = 3; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(link.a.x, link.a.y); ctx.quadraticCurveTo((link.a.x + link.b.x) / 2, (link.a.y + link.b.y) / 2 - 12, link.b.x, link.b.y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = '#a47d4d'; [link.a, link.b].forEach(point => { ctx.beginPath(); ctx.arc(point.x, point.y, 3, 0, Math.PI * 2); ctx.fill(); }); ctx.restore(); }
+  }
   function drawEffects() { state.effects.forEach(effect => { const radius = (1 - effect.life) * 28 * effect.power + 5; ctx.save(); ctx.globalAlpha = effect.life; ctx.strokeStyle = effect.color; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = effect.life * .8; ctx.fillStyle = effect.color; for (let i = 0; i < 6; i += 1) { const angle = state.pulse * .4 + i * Math.PI / 3; const distance = radius + 4; ctx.beginPath(); ctx.arc(effect.x + Math.cos(angle) * distance, effect.y + Math.sin(angle) * distance, 2 * effect.power, 0, Math.PI * 2); ctx.fill(); } if (effect.element) drawReactionMotif(effect, radius); ctx.restore(); }); }
   function drawScorePopups() { state.scorePops.forEach(pop => { ctx.save(); ctx.globalAlpha = Math.min(1, pop.life * 1.5); ctx.font = '900 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#081012'; ctx.strokeText(pop.value, pop.x, pop.y); ctx.fillStyle = pop.color; ctx.fillText(pop.value, pop.x, pop.y); ctx.restore(); }); }
   function drawAimReticle() {
