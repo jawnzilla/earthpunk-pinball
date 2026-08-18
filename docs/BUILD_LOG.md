@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: directional contact-light pass
+
+### Implemented
+
+- Replaced the flat Water mini-ball and Wind echo body reads with a shared directional contact-light renderer: motion drives highlight placement, edge value, and a restrained contact shadow.
+- Kept the existing elemental trails, echo motion language, Physics V2 integration, collision ledgers, lifetimes, and reward-free semantics unchanged.
+- The pass is intentionally renderer-only and limited to the two elemental body families; primary-ball physics and gameplay behavior are untouched.
+
+### Verification
+
+- Extracted inline module passes `node --check`.
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `git diff --check` passes.
+- Local Chromium exact 320x568 and 390x844 checks pass: canvas present, `#reset` enters `RUN 1/4`, 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages verification pending push/deployment.
+
+
 ## 2026-08-18 — Overhaul tick: destructible material renderer pass
 
 ### Implemented

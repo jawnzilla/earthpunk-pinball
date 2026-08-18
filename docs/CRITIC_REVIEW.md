@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 13
+# Deadlight Critic Review — Overhaul tick 16
+
+## Overhaul tick 16 verdict
+
+**Playable hackathon slice: PASS for directional elemental body readability. AAA-ready: FAIL.** Water mini-balls and Wind echoes now carry a shared motion-driven highlight, edge value, and contact shadow instead of reading as flat dots/lines. This is a narrow renderer phase; the larger mine/tunnel lighting language, full-table elemental collision parity, and physical-device feel remain incomplete.
+
+### Observed evidence
+
+- `drawDirectionalContactLight()` derives the light vector from each body's current velocity and is used by both elemental body families.
+- Water fragments now have a visible ground-contact shadow and nested highlight/edge treatment; Wind echoes retain their directional wake and gain a lit core.
+- Deterministic tests pass: 2 files, 2 tests, 0 failures. Local exact 320x568/390x844 Chromium checks pass with active transition, 52px controls, matching widths, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- The primary ball and destructibles still use separate renderer paths, so this is not yet a complete table-wide lighting language.
+- Hosted Pages exact 320x568/390x844 checks are pending this push.
+- Next bounded slice: extend the same restrained contact-light language to the primary ball/major table hardware, without changing collision or reward behavior.
 
 ## Overhaul tick 15 verdict
 
