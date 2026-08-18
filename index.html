@@ -877,9 +877,14 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   function draw() {
     ctx.clearRect(0, 0, W, H);
     drawMineBackdrop();
-
-    drawMineStructures(); if (state.boss.active) drawBoss();
-    drawMineDrain(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers(); drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
+    // Compose the authored mine/deck planes before gameplay objects. These layers
+    // were previously defined but orphaned from the live renderer, leaving the
+    // table on the procedural fallback despite the authored assets being loaded.
+    drawReactor(); drawDeckDetails(); drawMineStructures(); drawLowerMidLandmarks();
+    if (state.boss.active) drawBoss();
+    drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers();
+    drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
+    drawReachBand(); drawTableIdentity(); drawObjectiveCue();
   }
   function drawObjectiveCue() {
     if (!state.running) return;

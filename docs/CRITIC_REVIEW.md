@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 24 verdict
+
+**Playable hackathon slice: PASS for authored-layer composition. AAA-ready: FAIL.** The live renderer now actually composes the authored mine/deck planes and HUD cues that were already defined and loaded but unreachable from `draw()`. This is the smallest coherent visual correction for the measured “procedural fallback despite authored assets” gap; it is not a claim of complete lighting or production readiness.
+
+### Observed evidence
+
+- `draw()` now calls the authored reactor, deck, lower-mid landmark, edge-machinery, route-band, table-identity, and objective-cue layers in an explicit back-to-front order.
+- The previous `drawMineDrain()` call was replaced by `drawEdgeMachinery()`, preserving its procedural fallback branch while allowing the authored lower-edge/drain art to render when available.
+- Local exact Playwright checks passed at 320x568 and 390x844 with `RUN 1/4 · READY`, Canvas, 52px controls, matching document widths, and zero console/page errors.
+- Deterministic tests passed: 5 tests, 0 failures.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages must be rechecked after deployment; this tick has no hosted evidence until the Pages workflow completes.
+- The renderer still needs screenshot-based grayscale/depth review at 320/360/390 CSS widths. Authored layers improve depth, but their contrast and occlusion have not yet been judged from captured pixels.
+- Next bounded slice: perform the post-deploy screenshot audit and target only the largest observed readability failure; do not broaden mechanics and visuals together.
+
 ## Overhaul tick 23 verdict
 
 **Playable hackathon slice: PASS for regression-command hygiene. AAA-ready: FAIL.** The deterministic suite now has a canonical `npm test` entry point, removing the repository's misleading missing-script failure without changing the playable path. This is maintenance infrastructure, not a visual, physics, or production-readiness claim.

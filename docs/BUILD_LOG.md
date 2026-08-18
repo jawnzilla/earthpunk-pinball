@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: reconnect authored mine/deck render layers
+
+### Implemented
+
+- Reconnected the existing authored renderer layers (`drawReactor`, `drawDeckDetails`, `drawLowerMidLandmarks`, `drawEdgeMachinery`, `drawReachBand`, `drawTableIdentity`, and the live objective cue) to the actual `draw()` composition path.
+- Kept this slice renderer-only: physics, collision geometry, input, progression, and elemental/reward state are unchanged.
+- Replaced the procedural-only drain call with the authored-aware edge machinery path, which retains its procedural fallback when assets are unavailable.
+
+### Verification
+
+- `npm test`: 5 deterministic tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
+- Local exact Playwright checks passed at 320x568 and 390x844: `RUN 1/4 · READY`, Canvas present, two 52px touch controls, `scrollWidth === clientWidth`, and zero console/page errors. Screenshots were captured outside the repository under `%LOCALAPPDATA%/Temp/deadlight-*.png`.
+- Hosted Pages verification is pending the prototype push and GitHub Actions deployment.
+
 ## 2026-08-18 — Overhaul tick: make the deterministic suite the package test command
 
 ### Implemented
