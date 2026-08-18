@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 04
 
+## Overhaul tick 06 verdict
+
+**Playable hackathon slice: PASS for the bounded Water structure seam. AAA-ready: FAIL.** Water mini-balls now participate in a deliberately reduced destructible path: deterministic reflected contacts, impact-energy damage, integrity stages, and no score/charge/chain leakage. The larger visual mine/tunnel reset and shared-solver parity for wind echoes remain incomplete.
+
+### Observed evidence
+
+- `onMiniBallStructureContact()` consumes one valid bounce and suppresses duplicate object contacts within the mini-ball step ledger.
+- Generator Well destructibles use their existing `r`, threshold, damage scale, and integrity fields; mini-ball damage is capped at 22% of max integrity per valid contact.
+- The adapter does not call `hitTarget()`, `chainHit()`, or salvage reward code for mini-ball structure contacts.
+- Deterministic module tests, inline syntax, and exact 320x568/390x844 local browser checks pass with zero page/console errors.
+
+### Remaining risk / next smallest slice
+
+- Mini-balls still use a reduced kinematic adapter rather than the full Physics V2 body/contact solver; wind echo remains structure-aware but not shared-solver.
+- The hosted build must be checked after deployment before this tick is release-ready.
+- Next bounded slice: move the mini-ball object-mask response to a renderer-independent contact adapter with explicit object material and damage tests, then apply the same seam to wind echoes.
+
 ## Overhaul tick 05 verdict
 
 **Playable hackathon slice: PASS for the bounded physics seam. AAA-ready: FAIL.** Water split mini-balls now have deterministic reduced-mask wall contacts rather than purely kinematic motion. The contact path is intentionally narrow: it covers table boundary reflection and bounce budgeting, not the full primary-ball gameplay graph. The larger overhaul remains incomplete because destructible contact participation, wind echo shared-solver parity, physical-device feel, and the mine/tunnel visual/material bar still need evidence.

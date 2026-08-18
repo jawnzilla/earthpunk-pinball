@@ -7,6 +7,7 @@ import {
   onHardBounce,
   onMiniBallBounce,
   onMiniBallContact,
+  onMiniBallStructureContact,
   onStructureContact
 } from '../src/elemental-effects.mjs';
 
@@ -66,6 +67,18 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   ball.vx = 120;
   assert.equal(onMiniBallContact(runtime, ball.id, { normal: { x: 1, y: 0 }, contactKey: 'separating' }).counted, false);
   assert.equal(ball.bouncesRemaining, 2);
+}
+
+{
+  const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Water', 3), position: { x: 10, y: 20 }, velocity: { x: -120, y: 0 }, impactSpeed: 2.1 });
+  const ball = runtime.miniBalls[0];
+  const hit = onMiniBallStructureContact(runtime, ball.id, { objectId: 'timber-crate', position: { x: 10, y: 20 }, normal: { x: 1, y: 0 } });
+  assert.equal(hit.type, 'mini-ball-structure-contact');
+  assert.equal(hit.structure.type, 'none');
+  assert.ok(hit.impactSpeed > 80);
+  assert.equal(ball.bouncesRemaining, 2);
+  assert.equal(onMiniBallStructureContact(runtime, ball.id, { objectId: 'timber-crate', normal: { x: 1, y: 0 } }), null);
 }
 
 {

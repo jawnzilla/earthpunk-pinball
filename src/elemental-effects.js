@@ -144,6 +144,18 @@ export function onMiniBallContact(runtime, id, { normal = { x: 0, y: 0 }, contac
     : { type: 'mini-ball-bounce', id, counted: true, bouncesRemaining: 0 };
 }
 
+// Reduced-mask structure response: mini-balls may damage a destructible once,
+// but never award score, charge, target progress, or chain hits.
+export function onMiniBallStructureContact(runtime, id, { objectId, position = { x: 0, y: 0 }, normal = { x: 0, y: 0 }, contactKey = 'structure', restitution = .42 } = {}) {
+  const ball = runtime.miniBalls.find(item => item.id === id);
+  if (!ball || !objectId) return null;
+  const impactSpeed = Math.max(0, -(ball.vx * normal.x + ball.vy * normal.y));
+  const response = onMiniBallContact(runtime, id, { normal, contactKey: `${contactKey}:${objectId}`, restitution });
+  if (!response?.counted) return response;
+  const structure = onStructureContact(runtime, { objectId, position });
+  return { ...response, type: 'mini-ball-structure-contact', objectId, impactSpeed, impactEnergy: .5 * ball.mass * impactSpeed ** 2, structure };
+}
+
 export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {
   const events = [];
   const echo = runtime.windEcho;

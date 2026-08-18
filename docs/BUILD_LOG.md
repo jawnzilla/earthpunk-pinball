@@ -1,5 +1,21 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: Water mini-ball destructible contact slice
+
+### Implemented
+
+- Added a reduced-mask `onMiniBallStructureContact()` response that reuses deterministic mini-ball reflection/bounce budgeting and emits impact energy without entering the primary-ball scoring, charge, target, or combo path.
+- Wired Water stack-3 mini-balls into Generator Well destructibles using the existing object radius/material thresholds, bounded per-object contact keys, integrity stages, and a hard per-hit damage cap.
+- Mini-ball structure hits now produce Water impact feedback and may crack/destroy salvage objects without awarding salvage directly; primary-ball destructible behavior is unchanged.
+
+### Verification
+
+- `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
+- `git diff --check` passes.
+- Extracted inline module passes `node --check`.
+- Local Playwright Chromium smoke passes at exact 320x568 and 390x844: canvas/reset present, active transition succeeds, CSS/document widths match, and no console/page errors.
+- Hosted Pages verification and Actions status are recorded after push below.
+
 ## 2026-08-17 — Overhaul tick: Water mini-ball reduced-mask contact slice
 
 ### Implemented
