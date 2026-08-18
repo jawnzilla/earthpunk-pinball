@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: geometry-correct active flipper fixture
+
+### Implemented
+
+- Corrected the opt-in `?review=flipper-contact` fixture so it places the probe on the ball-facing side of the left flipper and drives it into the surface instead of injecting it at the exact closest point with a separating/upward velocity.
+- Added a deterministic `-8 rad/s` flipper angular velocity during the four review contacts, then restores the live flipper state. Normal gameplay, progression, collision code, and player-facing tuning are unchanged.
+- Strengthened the renderer contract test so the fixture cannot regress to the degenerate normal/zero-motion setup.
+
+### Verification
+
+- `npm test`: 9 tests passed, 0 failures; `git diff --check` passed.
+- Local exact Playwright checks at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths, `scrollWidth === clientWidth`, Canvas, fixture marker, zero console/page/request errors. Readout: `N 4`, `241→973px/s`, `μΔ +746px/s` at both widths.
+- Pushed commit `b6f83ac` to `prototype`.
+- GitHub Pages run `32165293211` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32165293211.
+- Hosted exact Playwright checks at `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact` passed at 320×568 and 390×844: HTTP 200, complete documents, exact CSS widths, no horizontal overflow, Canvas, fixture marker, and zero console/page/request errors. Readout: `N 4`, `241→973px/s`, `μΔ +746px/s`. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-fixture-320.png` and `earthpunk-hosted-fixture-390.png`.
+
+### Decision / next gate
+
+- Root cause of the prior negative `μΔ` was the review harness, not the live solver: the fixture's exact-point injection selected the degenerate fallback normal and its upward velocity was separating from the ball-facing flipper side. The corrected active-contact capture now measures a positive launch response without changing gameplay constants.
+- The next slice should use this corrected fixture as a baseline for real play-path flipper telemetry before any solver tuning. AAA-ready remains unclaimed.
+
 ## 2026-08-18 — Overhaul tick: geometry-matched flipper calibration probe
 
 ### Implemented

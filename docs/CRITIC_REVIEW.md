@@ -1,3 +1,24 @@
+# Deadlight Critic Review — Overhaul tick 41
+
+## Overhaul tick 41 verdict
+
+**Playable hackathon slice: PASS for corrected active-contact evidence. AAA-ready: FAIL.** The prior negative flipper telemetry was isolated to a malformed review fixture, not treated as a gameplay-solver defect. The opt-in fixture now exercises a ball-facing, approaching, moving flipper contact and produces a positive launch response while leaving live gameplay unchanged.
+
+### Observed evidence
+
+- Fixture correction in `index.html` places the ball 12px along the ball-facing normal, injects downward velocity into the left flipper, and applies deterministic `-8 rad/s` angular velocity for four contacts before restoring it.
+- The renderer contract test asserts the normal, offset, and angular-motion setup.
+- `npm test` passes 9 tests; `git diff --check` passes.
+- Local exact Playwright at 320×568 and 390×844 reports HTTP 200, complete documents, exact CSS widths, no overflow, Canvas, fixture marker, zero console/page/request errors, and `N 4 · μΔ +746px/s`.
+- GitHub Pages run `32165293211` completed successfully for commit `b6f83ac`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32165293211.
+- Hosted exact Playwright at 320×568 and 390×844 reports the same runtime/geometry/error gates and `LEFT launch 241→973px/s · J 0.384 · N 4 · μΔ +746px/s`. Screenshots are outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-hosted-fixture-320.png` and `earthpunk-hosted-fixture-390.png`.
+
+### Remaining risk / next smallest slice
+
+- This proves the review harness now measures an approaching active-contact response; it does not yet prove the same launch distribution is reached in ordinary human play.
+- The large 973px/s post-contact reading still needs comparison against the live capped-speed and real play-path telemetry before any restitution/friction change. Do not tune from this fixture alone.
+- Next slice: capture the corrected fixture alongside a deterministic normal-play contact or add a narrow production telemetry gate, then assess responsiveness against the canon. Visual completion and AAA claims remain unsupported.
+
 # Deadlight Critic Review — Overhaul tick 40
 
 ## Overhaul tick 40 verdict
