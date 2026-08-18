@@ -1135,6 +1135,12 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     ctx.globalAlpha = alpha; ctx.fillStyle = light; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
     ctx.globalAlpha = alpha * .72; ctx.strokeStyle = edge; ctx.lineWidth = Math.max(1, radius * .12); ctx.beginPath(); ctx.arc(x, y, radius * .86, Math.PI * .78, Math.PI * 1.72); ctx.stroke(); ctx.globalAlpha = 1;
   }
+  function drawDirectionalRim(x, y, radius, vx, vy, color, alpha = 1) {
+    const speed = Math.hypot(vx, vy) || 1; const nx = -vx / speed; const ny = -vy / speed;
+    ctx.save(); ctx.globalAlpha = alpha * .72; ctx.strokeStyle = color; ctx.lineWidth = Math.max(1, radius * .14); ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(x, y, radius * 1.02, Math.atan2(ny, nx) - 1.05, Math.atan2(ny, nx) + 1.05); ctx.stroke();
+    ctx.globalAlpha = alpha * .5; ctx.fillStyle = '#fff4c4'; ctx.beginPath(); ctx.arc(x + nx * radius * .48, y + ny * radius * .48, Math.max(1, radius * .13), 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
   function drawElementalRuntime() {
     const runtime = state.ball?.elementalRuntime; if (!runtime) return;
     runtime.fireTrail.forEach(segment => { const alpha = Math.max(0, 1 - segment.age / .75); ctx.save(); ctx.globalAlpha = alpha * .72; ctx.fillStyle = '#b65f32'; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = segment.damageEnabled ? 2 : 1; ctx.beginPath(); ctx.arc(segment.x, segment.y, segment.damageEnabled ? 4 : 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
@@ -1159,6 +1165,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(215,223,202,.12)'; ctx.fill();
     if (spriteImages.ball.complete && spriteImages.ball.naturalWidth) { ctx.drawImage(spriteImages.ball, b.x - b.r - 2, b.y - b.r - 2, (b.r + 2) * 2, (b.r + 2) * 2); } else { const metal = ctx.createRadialGradient(b.x + motionX * 2 - 2, b.y + motionY * 2 - 2, 1, b.x, b.y, b.r); metal.addColorStop(0, '#fff8d6'); metal.addColorStop(.35, '#d8e6d0'); metal.addColorStop(.78, '#8ba99c'); metal.addColorStop(1, '#2d5149'); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    drawDirectionalRim(b.x, b.y, b.r, b.vx, b.vy, '#f1b35b', .82);
   }
   const MAX_CATCHUP_STEPS = 4;
   let previousTime = 0;

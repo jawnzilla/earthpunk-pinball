@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 21 verdict
+
+**Playable hackathon slice: PASS for primary probe edge readability. AAA-ready: FAIL.** The primary probe now has a small velocity-aligned rim that survives the authored sprite path as well as the procedural fallback. This is a bounded renderer-only pass, not a complete lighting system or production-readiness claim.
+
+### Observed evidence
+
+- `drawDirectionalRim()` is called after the primary probe body is drawn, so both render paths receive the same travel-oriented edge cue.
+- The rim uses the inverse velocity as its key direction and leaves collision geometry, physics, input, and elemental state unchanged.
+
+### Remaining risk / next smallest slice
+
+- A true grayscale screenshot audit at 320/360/390 CSS widths and physical-device feel test remain outstanding; the small probe rim may still over-emphasize color rather than silhouette.
+- Next bounded slice: capture post-deploy grayscale/depth evidence and target only the largest measured readability failure. Do not add mechanics in that pass.
+
 ## Overhaul tick 20 verdict
 
 **Playable hackathon slice: PASS for side-guard edge readability. AAA-ready: FAIL.** Side guards now carry a restrained directional edge highlight in both sprite-backed and procedural paths. This is a narrow renderer-only extension of the existing mine-table light language, not a complete dynamic lighting system or production-readiness claim.

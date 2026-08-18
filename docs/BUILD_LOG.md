@@ -1,5 +1,17 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: primary probe directional rim pass
+
+### Implemented
+
+- Added a renderer-only directional rim to the primary probe after both sprite-backed and procedural body paths.
+- The rim follows the probe's travel vector, reinforcing a consistent mine-table key light and preserving the existing shadow, highlight, sprite, collision, input, and physics paths.
+
+### Verification
+
+- `node --test tests/*.test.mjs` and inline-module syntax check pass locally.
+- Exact local and hosted 320x568/360x844/390x844 Chromium verification is required after deployment; no mechanics were changed.
+
 ## 2026-08-18 — Overhaul tick: side-guard edge-light pass
 
 ### Implemented
