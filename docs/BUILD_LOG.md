@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: explicit mass-scaled impulse seam
+
+### Implemented
+
+- Added the standalone `applyImpulse()` physics primitive to the Physics V2 core.
+- Routed contact response through that primitive so discrete collision impulses stay separate from continuous force/gravity integration and scale only through inverse mass.
+- Added deterministic coverage for light/heavy response, zero-quality numeric input sanitization, and the existing contact path.
+- No player-facing renderer, progression, input, or asset behavior changed.
+
+### Verification
+
+- `npm test`: 6 tests passed, 0 failures.
+- `node --check src/physics-core.js` and `git diff --check` passed.
+- Browser and Pages deployment are required after this source change; no hosted result is claimed in this entry.
+
 ## 2026-08-18 — Overhaul tick: compact upgrade-card density
 
 ### Implemented

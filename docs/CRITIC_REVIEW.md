@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 29
 
+## Overhaul tick 33 verdict
+
+**Playable hackathon slice: PASS for explicit mass-scaled impulse plumbing. AAA-ready: FAIL.** The Physics V2 contact solver now exposes a named discrete impulse seam instead of embedding velocity mutation inside contact resolution. This is a foundation correction, not visible gameplay proof or production readiness.
+
+### Observed evidence
+
+- `applyImpulse()` sanitizes non-finite impulse components, ignores immovable bodies, and applies `impulse * inverseMass` to velocity.
+- `resolveContact()` uses the same seam, preserving contact point, normal, relative velocity, impulse, energy, and separating-state outputs.
+- `npm test` passes 6 tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- The live game still needs a measured contact/launch telemetry pass to verify that discrete impulses feel responsive at 320×568 and 390×844; this tick intentionally did not retune gameplay.
+- After deployment, run exact hosted portrait checks and return to one evidence-backed physics behavior (likely flipper impulse response) rather than adding another renderer layer.
+
 ## Overhaul tick 32 verdict
 
 **Playable hackathon slice: PASS for hosted upgrade-card density. AAA-ready: FAIL.** The upgrade decision surface no longer stretches four cards into oversized panels on tall portrait screens. This is a bounded hierarchy correction; it does not establish visual completion or production readiness.

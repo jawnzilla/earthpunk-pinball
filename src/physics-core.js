@@ -58,6 +58,18 @@ export function integrateBall(ball, { force = { x: 0, y: 0 }, gravity = { x: 0, 
   return ball;
 }
 
+// Impulses are discrete contact/tool events; keep them separate from the
+// continuous force integration path so mass remains the only response scale.
+export function applyImpulse(ball, impulse = { x: 0, y: 0 }) {
+  if (!ball || ball.inverseMass <= 0) return ball;
+  const safeImpulse = {
+    x: Number.isFinite(impulse.x) ? impulse.x : 0,
+    y: Number.isFinite(impulse.y) ? impulse.y : 0
+  };
+  ball.velocity = add(ball.velocity, scale(safeImpulse, ball.inverseMass));
+  return ball;
+}
+
 export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, point = { x: 0, y: 0 }, origin = { x: 0, y: 0 } } = {}) {
   const offset = subtract(point, origin);
   return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };
@@ -103,7 +115,7 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
     impulse = add(impulse, scale(tangent, frictionMagnitude));
   }
 
-  ball.velocity = add(ball.velocity, scale(impulse, ball.inverseMass));
+  applyImpulse(ball, impulse);
   result.impulse = impulse;
   result.impactEnergy = impactEnergyFromMassSpeed(ball.mass, result.impactSpeed);
   return result;

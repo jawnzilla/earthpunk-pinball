@@ -11,7 +11,8 @@ import {
   resolveHybrid,
   advanceFlipperMotor,
   impactEnergyFromMassSpeed,
-  materialHardness
+  materialHardness,
+  applyImpulse
 } from '../src/physics-core.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => {
@@ -55,6 +56,17 @@ assert.equal(MATERIALS.steel.restitution < 1, true);
 assert.equal(FIXED_DT, 1 / 120);
 assert.equal(impactEnergyFromMassSpeed(.012, 10), .6);
 assert.equal(materialHardness('timber'), MATERIALS.timber.hardness);
+
+{
+  const light = createBall({ mass: 1 });
+  const heavy = createBall({ mass: 2 });
+  applyImpulse(light, { x: 4, y: -2 });
+  applyImpulse(heavy, { x: 4, y: -2 });
+  assert.deepEqual(light.velocity, { x: 4, y: -2 });
+  assert.deepEqual(heavy.velocity, { x: 2, y: -1 });
+  applyImpulse(heavy, { x: Number.NaN, y: Number.POSITIVE_INFINITY });
+  assert.deepEqual(heavy.velocity, { x: 2, y: -1 });
+}
 
 {
   const effects = {};
