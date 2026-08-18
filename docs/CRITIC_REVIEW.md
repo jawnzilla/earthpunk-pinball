@@ -160,3 +160,4 @@
 - Loop 100 visual pass: replaced the wide center objective card with a 48–52px icon-led signal badge capped at 20% canvas width, preserving lane visibility and gameplay geometry.
 - Collision fix: flipper sweep now samples the previous ball position during activation, preventing tip pass-through and preserving the effective flipper length.
 - Follow-up correction: restored moving-ball sweep semantics and added a current-position check across interpolated flipper poses to prevent false held-flipper sticking.
+- Overhaul kickoff: physics/UI/visual reset canonized with material-force physics, mine/tunnel depth, object damage taxonomy, element stack budgets, and AAA-mobile reference gates.

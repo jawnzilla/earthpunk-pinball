@@ -3281,3 +3281,25 @@ Charge now supports a second between-level decision besides flipper hardware: re
 - Focused regression probe passes: current tip contact is caught while a clear ball is not falsely captured.
 - Extracted JavaScript `node --check` and `git diff --check` pass.
 - The first `936644a` fix was not sufficient and is superseded by this correction; physical-device and high-speed feel validation remain pending.
+
+## 2026-08-17 — Physics-forward overhaul kickoff
+
+- Declared a full reset direction: the game is an ascent through an earthpunk mine/tunnel, not a cyan console layered over a pinball approximation.
+- Added `docs/OVERHAUL_CANON.md` with the keep/rebuild boundary, mine/tunnel depth system, object taxonomy, Fire/Water/Wind/Earth stack effects, hybrids, HUD rules, and delivery phases.
+- Added `docs/PHYSICS_V2_SPEC.md` with SI-like units, mass/material/contact data, flipper motor behavior, bounded CCD, impact-energy damage, effect budgets, migration seams, and deterministic test gates.
+- Added `docs/AAA_REFERENCE_BAR.md` with named references: Zen/Williams Pinball for physics credibility, PinOut for ascent structure, Vampire Survivors/Archero for low-friction build communication, The Room for material depth, and Apple touch guidance for responsive controls.
+- Explicitly rejected the current player-facing physics vocabulary of kick/rebound/catch/separation as the long-term model.
+
+### Phase 1 implementation slice
+
+- Added renderer-independent `src/physics-core.mjs` with material definitions, ball mass/integration, force and gravity handling, moving-surface contact response, restitution/friction, contact impact energy, object damage calculation, and bounded fixed-step advancement.
+- Added `tests/physics-core.test.mjs` covering gravity displacement, separating-contact no-bounce behavior, material-bounded response, impact energy, and elemental weakness damage.
+- The core is intentionally not wired into the live table yet; integration follows after the contract is reviewed and the current renderer/gameplay seams are mapped.
+
+### Verification notes
+
+- `node tests/physics-core.test.mjs` passes: `physics-core: all deterministic tests passed`.
+- `node --check src/physics-core.mjs` passes.
+- `git diff --check` passes.
+- No existing route, canvas, HUD, asset, or gameplay behavior was changed in this slice.
+- Browser memory pressure remains a verification risk; failed local browser harnesses are recorded rather than treated as evidence.

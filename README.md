@@ -23,6 +23,16 @@ Prototype 01 answers one question: **is moving a probe through an underground in
 - [Presentation build log](docs/BUILD_LOG.html) — readable timeline, current mechanics, validation evidence, and hackathon compliance checklist.
 - [Detailed engineering log](docs/BUILD_LOG.md) — source-level iteration history.
 
+## Overhaul canon
+
+The current prototype is being reset toward physics-forward earthpunk mine/tunnel pinball. The living design contracts are:
+
+- [Overhaul canon](docs/OVERHAUL_CANON.md) — visual, UI, object, element-stack, and delivery decisions.
+- [Physics V2 spec](docs/PHYSICS_V2_SPEC.md) — units, materials, contact response, damage, CCD, and deterministic gates.
+- [AAA-mobile reference bar](docs/AAA_REFERENCE_BAR.md) — named reference games, touch guidance, anti-patterns, and measurable acceptance criteria.
+
+The first implementation slice adds a renderer-independent Physics V2 core under `src/` with deterministic tests under `tests/`. It is not yet wired into the live table; integration is a separate verified phase.
+
 ## Run locally
 
 ```bash
