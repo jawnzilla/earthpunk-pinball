@@ -127,7 +127,7 @@
     .choices.upgrade-scroll { max-height: 252px; overflow-y: auto; overscroll-behavior: contain; padding: 2px 4px 28px 0; position: relative; }
     .choices.upgrade-scroll::after { content: 'SWIPE FOR MORE'; position: sticky; bottom: 0; display: block; grid-column: 1 / -1; margin: 0; padding: 5px 0 3px; color: #ffd083; background: linear-gradient(180deg, transparent, #18282a 42%); font-size: 9px; font-weight: 900; letter-spacing: .16em; text-align: center; pointer-events: none; }
     #overlay:not(.route-decision) .card { height: calc(100dvh - 32px); max-height: calc(100dvh - 32px); overflow: hidden; display: flex; flex-direction: column; }
-    #overlay:not(.route-decision) .choices.upgrade-scroll { flex: 1 1 auto; min-height: 280px; max-height: none; overflow: visible; padding-bottom: 0; grid-template-rows: repeat(4, minmax(0, 1fr)); }
+    #overlay:not(.route-decision) .choices.upgrade-scroll { flex: 0 1 auto; min-height: 280px; max-height: none; overflow: visible; padding-bottom: 0; grid-template-rows: repeat(4, minmax(58px, 104px)); align-content: start; }
     #overlay:not(.route-decision) .choices.upgrade-scroll button { min-height: 48px; }
     #overlay:not(.route-decision) .choices.upgrade-scroll::after { display: none; }
     .choices button:disabled { opacity: .42; filter: saturate(.45); cursor: not-allowed; }

@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 29
 
+## Overhaul tick 32 verdict
+
+**Playable hackathon slice: PASS pending hosted deployment. AAA-ready: FAIL.** The upgrade decision surface no longer stretches four cards into oversized panels on tall portrait screens. This is a bounded hierarchy correction; it does not establish visual completion or production readiness.
+
+### Observed evidence
+
+- The real `showModuleChoices()` renderer now uses four rows capped at 104px, with a 58px minimum row and top alignment. At 320px the existing 98px measured cards remain within the cap; the intended correction targets 360/390px tall-card inflation.
+- `npm test` passes 6 tests; module syntax checks and `git diff --check` pass.
+- Local HTTP browser verification returned `ERR_EMPTY_RESPONSE`, so no local screenshot or local runtime pass is claimed.
+
+### Remaining risk / next smallest slice
+
+- Hosted exact `?review=upgrade` checks at 320×568, 360×844, and 390×844 must verify four visible choices, 16px modal gutters, no overflow, zero browser errors, and the new 104px ceiling after deployment.
+- Human color/grayscale inspection of the captured overlay remains separate evidence; automated bounds do not prove visual quality.
+
 ## Overhaul tick 30 verdict
 
 **Playable hackathon slice: PASS for hosted portrait runtime health. AAA-ready: FAIL.** The deployed build remains stable at the required portrait widths, but this tick deliberately did not change gameplay or renderer code because the upgrade overlay still lacks an evidence-backed gameplay reachability capture.

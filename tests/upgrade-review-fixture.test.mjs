@@ -7,4 +7,5 @@ test('upgrade review fixture is opt-in and routes through the real renderer', as
   assert.match(source, /get\('review'\) !== 'upgrade'/);
   assert.match(source, /showModuleChoices\(\);\s*overlay\.dataset\.reviewFixture = 'upgrade'/);
   assert.match(source, /reset\(\); activateUpgradeReviewFixture\(\); loop\(\);/);
+  assert.match(source, /grid-template-rows: repeat\(4, minmax\(58px, 104px\)\)/);
 });

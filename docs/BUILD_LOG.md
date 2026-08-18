@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: compact upgrade-card density
+
+### Implemented
+
+- Capped the four upgrade decision cards at 104px each and aligned the stack to the top of the modal instead of stretching cards to consume the full tall viewport.
+- Preserved the real upgrade renderer, four choices, 48px minimum touch height, 16px modal gutters, and all gameplay/progression semantics.
+- Added a deterministic source regression assertion for the card-density contract.
+
+### Verification
+
+- `npm test`: 6 tests passed, 0 failures; Physics V2, elemental-effects, flipper-contact, and opt-in upgrade-fixture coverage remain green.
+- `node --check` passed for the extracted physics modules; `git diff --check` passed.
+- Local exact browser check was attempted at 320×568/360×844/390×844 but the runner's local HTTP server returned `ERR_EMPTY_RESPONSE`; it is not counted as passing local browser evidence.
+- Hosted post-deploy exact fixture checks are required before this tick is release-ready.
+
 ## 2026-08-18 — Overhaul tick: hosted portrait audit and route-overlay reachability check
 
 ### Audited
