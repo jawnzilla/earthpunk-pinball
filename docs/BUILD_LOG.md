@@ -12,7 +12,7 @@
 
 - `npm test`: 9 tests passed, 0 failures, including launch-series aggregation and empty-series behavior.
 - `node --check src/flipper-contact.js` and `git diff --check` passed.
-- Browser/Pages verification is required after commit and deployment; no hosted result is claimed in this entry.
+- Hosted exact Playwright checks after deployment at 320×568 and 390×844: HTTP 200, `document.readyState === complete`, exact CSS width, `scrollWidth === clientWidth`, Canvas present, two 52px flipper controls, served `summarizeFlipperContactSeries` marker, and zero console/page/request errors. GitHub Pages run `32155276135` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32155276135. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ### Next gate
 

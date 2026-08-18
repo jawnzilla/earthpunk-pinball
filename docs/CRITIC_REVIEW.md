@@ -13,7 +13,8 @@
 ### Remaining risk / next smallest slice
 
 - The aggregate is not yet backed by a hosted capture containing an actual active flipper contact; the initial READY state correctly shows no sample.
-- After deployment, use exact 320×568 and 390×844 checks plus a repeatable flipper interaction to record the new readout. Then tune one measured response property rather than adding more decoration.
+- Hosted exact Playwright checks after Pages run `32155276135` pass at 320×568 and 390×844: HTTP 200, complete documents, exact widths, no overflow, Canvas, two 52px controls, deployed series marker, and zero browser errors.
+- The next evidence target remains a repeatable active flipper interaction that exposes `N`/`μΔ`, followed by tuning one measured response property rather than adding more decoration.
 
 # Deadlight Critic Review — Overhaul tick 35
 
