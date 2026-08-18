@@ -13,7 +13,8 @@
 ### Remaining risk / next smallest slice
 
 - The probe still does not reproduce the hosted fixture's negative `μΔ -81px/s`, because live flippers add orientation, tangent friction, swept contact sampling, and the motor's actual surface velocity.
-- Browser and Pages evidence is pending for this commit. After deployment, run exact hosted checks at 320×568 and 390×844, then add one geometry-matched flipper calibration before tuning one solver property.
+- Hosted exact Playwright checks at 320×568 and 390×844 pass with HTTP 200, complete documents, exact CSS widths, `scrollWidth === clientWidth`, Canvas, two 52px touch controls, and zero console/page/request errors. GitHub Pages run `32161473400` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32161473400.
+- The next slice remains one geometry-matched flipper calibration before tuning one solver property; this probe alone does not justify changing live constants.
 
 ## Overhaul tick 38 verdict
 

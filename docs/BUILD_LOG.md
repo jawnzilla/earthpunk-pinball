@@ -13,7 +13,7 @@
 - `npm test`: 9 tests passed, 0 failures.
 - `node --check src/physics-core.js` and `git diff --check` passed.
 - Direct calibration output matched the expected stationary/moving pair: response ratios `0.6200000000000001`, impact speeds `4` / `6`, and outgoing speeds `2.4800000000000004` / `5.720000000000001` m/s.
-- Browser and GitHub Pages verification remain pending until this commit is pushed.
+- Hosted exact Playwright checks after deployment at `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact` passed at 320×568 and 390×844: HTTP 200, complete document, exact CSS width, `scrollWidth === clientWidth`, Canvas, exactly two 52px touch controls, and zero console/page/request errors. GitHub Pages run `32161473400` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32161473400. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-moving-320.png` and `earthpunk-moving-390.png`.
 
 ### Decision / next gate
 
