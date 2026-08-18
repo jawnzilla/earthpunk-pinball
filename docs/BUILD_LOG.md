@@ -1,5 +1,18 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: grayscale-safe silhouette cues
+
+### Implemented
+
+- Added renderer-only nested value cues for the primary probe and all four Generator Well destructible families (crate, pipe, drum, stone plug).
+- Cues use dark outer containment plus restrained light-facing rims so silhouettes remain legible when hue is removed; authored sprites, physics, collision, input, progression, and assets are unchanged.
+
+### Verification
+
+- `npm test`: 5 deterministic tests passed, 0 failures.
+- Extracted inline module `node --check` passed; `git diff --check` passed.
+- Exact hosted 320×568 / 390×844 browser verification and grayscale screenshot audit are required after deployment; no hosted result is claimed before that run.
+
 ## 2026-08-18 — Overhaul tick: hosted grayscale/depth audit
 
 ### Audited

@@ -989,6 +989,39 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     sheen.addColorStop(1, palette.dark);
     ctx.fillStyle = sheen;
   }
+  function drawDestructibleSilhouette(item, palette) {
+    // A restrained value cue that keeps each mine family legible when hue is removed.
+    const r = item.r || 16;
+    ctx.save();
+    ctx.globalAlpha = .86;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = Math.max(2, r * .14);
+    ctx.lineJoin = 'round';
+    if (item.kind === 'crate') {
+      ctx.strokeRect(-r * .78, -r * .66, r * 1.56, r * 1.28);
+      ctx.strokeStyle = palette.light;
+      ctx.lineWidth = Math.max(1, r * .07);
+      ctx.beginPath(); ctx.moveTo(-r * .62, -r * .58); ctx.lineTo(r * .62, -r * .58); ctx.stroke();
+    } else if (item.kind === 'pipe') {
+      ctx.strokeRect(-r * .9, -r * .62, r * 1.8, r * 1.24);
+      ctx.strokeStyle = palette.light;
+      ctx.lineWidth = Math.max(1, r * .07);
+      ctx.beginPath(); ctx.moveTo(-r * .76, -r * .5); ctx.lineTo(r * .76, -r * .5); ctx.stroke();
+    } else if (item.kind === 'drum') {
+      ctx.beginPath(); ctx.ellipse(0, 0, r * .78, r * 1.06, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = palette.light;
+      ctx.lineWidth = Math.max(1, r * .07);
+      ctx.beginPath(); ctx.ellipse(0, -r * .7, r * .62, r * .16, 0, 0, Math.PI * 2); ctx.stroke();
+    } else {
+      ctx.beginPath();
+      for (let i = 0; i < 8; i += 1) { const a = i * Math.PI / 4 - .2, rr = r * (i % 2 ? .78 : .9); const x = Math.cos(a) * rr, y = Math.sin(a) * rr; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = palette.light;
+      ctx.lineWidth = Math.max(1, r * .07);
+      ctx.beginPath(); ctx.moveTo(-r * .5, -r * .18); ctx.lineTo(r * .38, -r * .4); ctx.stroke();
+    }
+    ctx.restore();
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
@@ -1009,6 +1042,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       } else {
         drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
       }
+      drawDestructibleSilhouette(item, palette);
       if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }
       ctx.globalAlpha = 1; ctx.fillStyle = '#d7a45a'; for (let index = 0; index < 3; index += 1) { ctx.beginPath(); ctx.arc(-7 + index * 7, item.r + 5, 2, 0, Math.PI * 2); ctx.fillStyle = index < stage ? '#d7a45a' : '#44372b'; ctx.fill(); }
@@ -1137,6 +1171,19 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     const angle = Math.atan2(target.y - b.y, target.x - b.x); ctx.save(); if (spriteImages.aimReticle.complete && spriteImages.aimReticle.naturalWidth) { ctx.globalAlpha = .84; ctx.translate(b.x, b.y); ctx.rotate(angle + Math.PI / 2); ctx.drawImage(spriteImages.aimReticle, -40, -40, 80, 80); ctx.restore(); return; }
     const span = .58; ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 2; ctx.globalAlpha = .82; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(b.x, b.y, 24, angle - span, angle + span); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = .55; for (const side of [-1, 1]) { const tick = angle + side * span; ctx.beginPath(); ctx.moveTo(b.x + Math.cos(tick) * 20, b.y + Math.sin(tick) * 20); ctx.lineTo(b.x + Math.cos(tick) * 28, b.y + Math.sin(tick) * 28); ctx.stroke(); } ctx.restore();
   }
+  function drawBallSilhouette(b, motionX, motionY) {
+    ctx.save();
+    ctx.globalAlpha = .9;
+    ctx.strokeStyle = '#101815';
+    ctx.lineWidth = Math.max(2, b.r * .18);
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r * 1.04, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = .7;
+    ctx.strokeStyle = '#f4e8bd';
+    ctx.lineWidth = Math.max(1, b.r * .1);
+    const angle = Math.atan2(motionY, motionX);
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r * .9, angle - 1.05, angle + 1.05); ctx.stroke();
+    ctx.restore();
+  }
   function drawBall() {
     const b = state.ball; const speed = Math.hypot(b.vx, b.vy); const motionX = speed > .05 ? -b.vx / speed : -.35; const motionY = speed > .05 ? -b.vy / speed : -.55;
     const activeEffects = Object.entries(b.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0);
@@ -1145,6 +1192,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     ctx.save(); ctx.globalAlpha = .32; ctx.fillStyle = '#020608'; ctx.beginPath(); ctx.ellipse(b.x + 2, b.y + 4, b.r * 1.35, b.r * .55, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = .22; const well = ctx.createRadialGradient(b.x, b.y + 2, b.r * .4, b.x, b.y + 2, b.r * 2.5); well.addColorStop(0, '#9fc8b1'); well.addColorStop(1, 'rgba(20,44,40,0)'); ctx.fillStyle = well; ctx.beginPath(); ctx.arc(b.x, b.y + 2, b.r * 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(215,223,202,.12)'; ctx.fill();
     if (spriteImages.ball.complete && spriteImages.ball.naturalWidth) { ctx.drawImage(spriteImages.ball, b.x - b.r - 2, b.y - b.r - 2, (b.r + 2) * 2, (b.r + 2) * 2); } else { const metal = ctx.createRadialGradient(b.x + motionX * 2 - 2, b.y + motionY * 2 - 2, 1, b.x, b.y, b.r); metal.addColorStop(0, '#fff8d6'); metal.addColorStop(.35, '#d8e6d0'); metal.addColorStop(.78, '#8ba99c'); metal.addColorStop(1, '#2d5149'); ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#f1b35b'; ctx.stroke(); }
+    drawBallSilhouette(b, motionX, motionY);
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     drawDirectionalRim(b.x, b.y, b.r, b.vx, b.vy, '#f1b35b', .82);
   }

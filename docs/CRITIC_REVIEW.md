@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 26 verdict
+
+**Playable hackathon slice: PASS for bounded silhouette readability implementation. AAA-ready: FAIL.** The primary probe and destructible mine families now have a grayscale-safe nested rim cue. This is a renderer-only correction aimed at the measured 320px-table risk, not visual completion.
+
+### Observed evidence
+
+- `drawDestructibleSilhouette()` adds family-specific containment and highlight geometry after each intact material body.
+- `drawBallSilhouette()` adds a dark outer ring and motion-aligned light arc after both sprite-backed and procedural probe paths.
+- Deterministic tests and inline-module syntax checks pass; no gameplay or collision code changed.
+
+### Remaining risk / next smallest slice
+
+- Hosted exact browser checks and post-deploy grayscale screenshots are still required; no visual improvement is claimed as screenshot-verified yet.
+- Next step is evidence collection at true 320×568, 360×844, and 390×844 CSS viewports. If the cue is too heavy or still insufficient, target only the largest measured silhouette failure.
+
 ## Overhaul tick 25 verdict
 
 **Playable hackathon slice: PASS for hosted mobile geometry and runtime health. AAA-ready: FAIL.** The deployed authored-layer build holds its playable path at all requested portrait widths, but the grayscale audit still lacks human silhouette/material judgment. This is evidence collection, not a claim of production visual readiness.
