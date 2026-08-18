@@ -312,6 +312,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { sweptFlipperContact, sweptSegmentContact } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
 (() => {
   "use strict";
@@ -735,32 +736,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     observeHardBounce(ball, contact);
     return contact;
   }
-  function sweptSegmentContact(ball, segment, radius) {
-    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x; const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y; const travel = Math.hypot(ball.x - startX, ball.y - startY); if (travel < .01) return null;
-    const steps = Math.min(12, Math.max(2, Math.ceil(travel / Math.max(2, radius * .45)))); const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1;
-    for (let index = 1; index <= steps; index += 1) { const ratio = index / steps; const sampleX = startX + (ball.x - startX) * ratio, sampleY = startY + (ball.y - startY) * ratio; const projection = Math.max(0, Math.min(1, ((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared)); const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy; if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY }; }
-    return null;
-  }
-  function sweptFlipperContact(ball, flipper, radius) {
-    const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
-    const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
-    const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle;
-    const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + (state?.flipperLengthBonus || 0));
-    const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
-    if (Math.max(ballTravel, tipTravel) < .01) return null;
-    const queryRadius = radius + Math.min(10, tipTravel * .28);
-    const angles = [previousAngle, (previousAngle + flipper.angle) / 2, flipper.angle];
-    for (const angle of angles) {
-      const segment = { ...flipperEndpointsAt(flipper, angle), width: flipper.width, material: 'rubber' };
-      const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1, lengthSquared = dx * dx + dy * dy || 1;
-      const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
-      const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
-      if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, segment };
-      const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, queryRadius);
-      if (swept) return { x: swept.x, y: swept.y, segment };
-    }
-    return null;
-  }
+
   function resolveFlipperCollision(ball, flipper, side, held) {
     let segment = { ...flipperEndpoints(flipper), width: flipper.width, material: 'rubber' };
     let dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
@@ -770,7 +746,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     let nx = ball.x - closestX, ny = ball.y - closestY;
     let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
     if (distance >= radius && ball.cradleSide !== side) {
-      const swept = sweptFlipperContact(ball, flipper, radius);
+      const swept = sweptFlipperContact(ball, flipper, radius, { lengthBonus: state?.flipperLengthBonus || 0 });
       if (!swept) return false;
       ball.x = swept.x; ball.y = swept.y; segment = { ...swept.segment, material: 'rubber' };
       dx = segment.x2 - segment.x1; dy = segment.y2 - segment.y1; lengthSquared = dx * dx + dy * dy || 1;
@@ -861,7 +837,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     capBallSpeed(b);
     const drainOpening = b.x > 156 && b.x < 204;
     if (b.y > H - 35 && drainOpening) {
-      const lateFlipper = [flippers.left, flippers.right].find(flipper => sweptFlipperContact(b, flipper, b.r + flipper.width / 2));
+      const lateFlipper = [flippers.left, flippers.right].find(flipper => sweptFlipperContact(b, flipper, b.r + flipper.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 }));
       if (lateFlipper) { const side = lateFlipper === flippers.left ? 'left' : 'right'; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, lateFlipper, side, held); state.flipperContacts[side] = true; updateHud(); return; }
       if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
       if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }

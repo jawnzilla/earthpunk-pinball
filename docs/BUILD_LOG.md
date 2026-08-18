@@ -1,5 +1,20 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: extracted swept flipper contact seam
+
+### Implemented
+
+- Moved the renderer-independent swept segment and moving-flipper query out of `index.html` into `src/flipper-contact.js`.
+- Preserved the existing three-angle moving-flipper sampling, travel-radius expansion, material identity, length-bonus behavior, and late drain recovery call path; collision response and cradle behavior remain in the live adapter.
+- Added deterministic coverage for intermediate-angle contact, swept-path hit/miss behavior, stationary no-contact behavior, and repeat-query determinism in `tests/flipper-contact.test.mjs`.
+
+### Verification
+
+- `node --test tests/*.test.mjs`: 5 tests passed, 0 failures.
+- `node --check src/flipper-contact.js` and direct module import passed.
+- Local exact Playwright checks passed at 320x568 and 390x844: HTTP 200, canvas present, `RUN 1/4`, 52px controls, `scrollWidth === innerWidth`, and zero page/console/request errors.
+- Hosted Pages verification and deployment workflow result are pending this push.
+
 ## 2026-08-18 — Overhaul tick: primary probe directional rim pass
 
 ### Implemented

@@ -1,0 +1,60 @@
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+function segmentAt(flipper, angle, lengthBonus = 0) {
+  const length = flipper.length + lengthBonus;
+  return {
+    x1: flipper.pivotX,
+    y1: flipper.pivotY,
+    x2: flipper.pivotX + Math.cos(angle) * length,
+    y2: flipper.pivotY + Math.sin(angle) * length,
+    width: flipper.width,
+    material: 'rubber'
+  };
+}
+
+export function sweptSegmentContact(ball, segment, radius) {
+  const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
+  const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
+  const travel = Math.hypot(ball.x - startX, ball.y - startY);
+  if (travel < 0.01) return null;
+  const steps = Math.min(12, Math.max(2, Math.ceil(travel / Math.max(2, radius * 0.45))));
+  const dx = segment.x2 - segment.x1;
+  const dy = segment.y2 - segment.y1;
+  const lengthSquared = dx * dx + dy * dy || 1;
+  for (let index = 1; index <= steps; index += 1) {
+    const ratio = index / steps;
+    const sampleX = startX + (ball.x - startX) * ratio;
+    const sampleY = startY + (ball.y - startY) * ratio;
+    const projection = clamp(((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared, 0, 1);
+    const closestX = segment.x1 + projection * dx;
+    const closestY = segment.y1 + projection * dy;
+    if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY };
+  }
+  return null;
+}
+
+export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } = {}) {
+  const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
+  const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
+  const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle;
+  const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + lengthBonus);
+  const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
+  if (Math.max(ballTravel, tipTravel) < 0.01) return null;
+  const queryRadius = radius + Math.min(10, tipTravel * 0.28);
+  const angles = [previousAngle, (previousAngle + flipper.angle) / 2, flipper.angle];
+  for (const angle of angles) {
+    const segment = segmentAt(flipper, angle, lengthBonus);
+    const dx = segment.x2 - segment.x1;
+    const dy = segment.y2 - segment.y1;
+    const lengthSquared = dx * dx + dy * dy || 1;
+    const projection = clamp(((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared, 0, 1);
+    const closestX = segment.x1 + projection * dx;
+    const closestY = segment.y1 + projection * dy;
+    if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, segment };
+    const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, queryRadius);
+    if (swept) return { x: swept.x, y: swept.y, segment };
+  }
+  return null;
+}
+
+export { segmentAt as flipperSegmentAt };

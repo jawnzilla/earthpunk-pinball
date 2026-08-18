@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 19
 
+## Overhaul tick 22 verdict
+
+**Playable hackathon slice: PASS for flipper collision seam isolation. AAA-ready: FAIL.** The moving-flipper swept query is now independently testable without changing the solver, cradle rules, or renderer. This is an infrastructure/physics-boundary slice, not a claim of complete first-principles table collision parity.
+
+### Observed evidence
+
+- `src/flipper-contact.js` owns deterministic swept segment and three-angle moving-flipper queries; `index.html` now delegates both normal and late-drain flipper probes while retaining response and state mutation.
+- Deterministic tests pass: 5 tests, 0 failures, including an intermediate-angle moving-flipper hit and repeat-query equality.
+- Local exact 320x568 and 390x844 checks pass with Canvas, active `RUN 1/4`, 52px controls, matching document/viewport widths, and zero page/console/request errors.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages must be re-verified after this push.
+- The query remains a sampled approximation over three flipper poses and does not yet represent a continuous swept capsule or full primary-ball collision test seam.
+- Next bounded slice: deploy and capture grayscale/depth evidence, or add a focused continuous flipper-contact refinement only if gameplay telemetry demonstrates sampled misses; do not broaden mechanics and visuals together.
+
 ## Overhaul tick 21 verdict
 
 **Playable hackathon slice: PASS for primary probe edge readability. AAA-ready: FAIL.** The primary probe now has a small velocity-aligned rim that survives the authored sprite path as well as the procedural fallback. This is a bounded renderer-only pass, not a complete lighting system or production-readiness claim.
