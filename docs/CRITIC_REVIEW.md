@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - Swept queries improve destructible broad phase, but elemental bodies still do not participate in the full table geometry or flippers/targets.
-- Hosted Pages must be redeployed and rechecked after this commit is pushed.
+- Hosted Pages exact 320x568/390x844 checks pass after deployment; workflow run `32107753656` completed success.
 - Next bounded slice: add contact-time positional correction for swept destructible hits, or begin the mine/tunnel visual/material phase; do not broaden gameplay rewards in the same change.
 
 ## Overhaul tick 11 verdict
