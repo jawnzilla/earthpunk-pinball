@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 49
 
+## Overhaul tick 50 verdict
+
+**Playable hackathon slice: PASS pending hosted visual recheck. AAA-ready: FAIL.** The authored deck well now recedes one controlled value step (`.78` alpha instead of `.92`) so grayscale review can distinguish the shell/well plane from gameplay silhouettes. This is a narrow renderer correction, not visual completion.
+
+### Observed evidence
+
+- `drawDeckDetails()` names `deckInsetOpacity = .78` and uses it only for the authored deck inset image.
+- The renderer-contract suite asserts that seam; no physics, input, progression, or geometry code changed.
+- Local deterministic suite: 11 tests passed; syntax and whitespace checks passed.
+
+### Remaining risk / next smallest slice
+
+- The new commit still requires GitHub Pages deployment and exact hosted checks at 320×568 and 390×844, including `?review=grayscale`, zero console/page/request errors, and screenshot inspection.
+- If the hosted grayscale frame still shows a plane collision, change only that named layer next. Do not stack additional opacity changes without evidence.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 49 verdict
 
 **Playable hackathon slice: PASS for repeatable value-only review. AAA-ready: FAIL.** The new opt-in grayscale fixture makes the production table inspectable without hue carrying the read. It is an evidence tool, not a visual completion claim.

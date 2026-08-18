@@ -1044,7 +1044,10 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   function drawDeckDetails() {
     ctx.save();
     if (spriteImages.upperCrownInsert.complete && spriteImages.upperCrownInsert.naturalWidth) { ctx.globalAlpha = .9; ctx.drawImage(spriteImages.upperCrownInsert, 18, 18, W - 36, 74); ctx.globalAlpha = 1; }
-    if (spriteImages.deckInset.complete && spriteImages.deckInset.naturalWidth) { ctx.globalAlpha = .92; ctx.drawImage(spriteImages.deckInset, 0, 92, W, 420); ctx.globalAlpha = 1; }
+    // Keep the authored well one value step below gameplay silhouettes in the
+    // grayscale audit; the procedural shell remains the darker outer plane.
+    const deckInsetOpacity = .78;
+    if (spriteImages.deckInset.complete && spriteImages.deckInset.naturalWidth) { ctx.globalAlpha = deckInsetOpacity; ctx.drawImage(spriteImages.deckInset, 0, 92, W, 420); ctx.globalAlpha = 1; }
     else { ctx.globalAlpha = .8; ctx.fillStyle = '#0a1315'; [[44, 112, 8, 88], [W - 52, 112, 8, 88], [44, 390, 8, 112], [W - 52, 390, 8, 112]].forEach(([x, y, w, h]) => { ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#45645a'; ctx.strokeRect(x, y, w, h); }); ctx.strokeStyle = 'rgba(159,212,192,.18)'; ctx.lineWidth = 1; for (let x = 54; x < W - 54; x += 44) { ctx.beginPath(); ctx.moveTo(x, 108); ctx.lineTo(x - 10, 190); ctx.stroke(); } }
     if (spriteImages.upperApproachManifold.complete && spriteImages.upperApproachManifold.naturalWidth) { ctx.globalAlpha = .82; ctx.drawImage(spriteImages.upperApproachManifold, 0, 96, W, 120); ctx.globalAlpha = 1; }
     if (spriteImages.centralTransferSpine.complete && spriteImages.centralTransferSpine.naturalWidth) { ctx.globalAlpha = .78; ctx.drawImage(spriteImages.centralTransferSpine, 0, 208, W, 78); ctx.globalAlpha = 1; }

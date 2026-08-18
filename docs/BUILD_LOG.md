@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: separate the authored well from gameplay silhouettes
+
+### Implemented
+
+- Reduced the live authored `deckInset` draw alpha from `.92` to `.78` in `drawDeckDetails()`.
+- This is a renderer-only value hierarchy correction: the mine shell stays the darker outer plane while the well texture recedes behind targets, destructibles, bumpers, and the ball in the grayscale review.
+- Added a renderer-contract assertion for the named opacity seam. Physics, collision response, input, progression, and geometry are unchanged.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
+- Exact local and hosted 320×568 / 390×844 browser verification remains the deployment gate for this commit; no result is claimed until Pages serves the new commit.
+
+### Decision / next gate
+
+- This is one bounded value-hierarchy change, not a general art pass. Re-check the hosted grayscale fixture before changing another layer.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: add an opt-in grayscale value audit
 
 ### Implemented
