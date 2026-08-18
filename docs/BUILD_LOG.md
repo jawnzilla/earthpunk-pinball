@@ -11,7 +11,7 @@
 
 - `npm test`: 5 deterministic tests passed, 0 failures.
 - Extracted inline module `node --check` passed; `git diff --check` passed.
-- Pre-deploy hosted exact checks at 320×568, 360×844, and 390×844 passed: HTTP 200, complete document, Canvas present, matching document widths, 52px controls, and zero console/page errors. Post-deploy Pages verification is required after push.
+- Post-deploy hosted exact checks passed at 320×568, 360×844, and 390×844: HTTP 200, complete document, Canvas present, `READY` active-state chip with `aria-label="READY"`, matching document widths, two 52px controls, zero console/page errors, and zero failed requests. Pages run `32136359367` completed success: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32136359367. Hosted URL: https://jawnzilla.github.io/earthpunk-pinball/.
 
 ## 2026-08-18 — Overhaul tick: mobile HUD legibility pass
 

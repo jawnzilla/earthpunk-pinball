@@ -8,11 +8,11 @@
 
 - `updateHud()` filters out uninstalled hinge slots, renders concise side/element/stack chips, preserves active imprint and Warden chips, and exposes the expanded meaning through `aria-label`/`title`.
 - `npm test`, extracted inline-module syntax checking, and `git diff --check` pass.
-- Pre-deploy hosted exact 320×568, 360×844, and 390×844 checks pass with Canvas, 52px controls, matching document widths, and zero console/page errors.
+- Post-deploy hosted exact 320×568, 360×844, and 390×844 checks pass with HTTP 200, Canvas, `READY` active-state chip, 52px controls, matching document widths, zero console/page errors, and zero failed requests. Pages run `32136359367` completed success.
 
 ### Remaining risk / next smallest slice
 
-- Post-deploy hosted verification is still required for this commit. Screenshot-based human inspection of grayscale silhouettes, material separation, and the upgrade overlay remains outstanding; automated DOM/runtime checks do not prove the AAA reference bar.
+- Screenshot-based human inspection of grayscale silhouettes, material separation, and the upgrade overlay remains outstanding; automated DOM/runtime checks do not prove the AAA reference bar.
 - Next bounded slice should be selected from fresh hosted screenshot evidence, not another broad mechanics/visual bundle.
 
 ## Overhaul tick 27 verdict
