@@ -13,7 +13,8 @@
 - `node --test tests/*.test.mjs` passes: 2 files, 2 tests, 0 failures.
 - `git diff --check` passes.
 - `src/elemental-effects.js` imports successfully as an ES module.
-- Hosted Pages endpoint was checked before this change and returned HTTP 200; post-push deployment verification is recorded below after the commit.
+- Hosted Pages endpoint after push returned HTTP 200 and served the new `onMiniBallContact` / `miniBallContactResolver` source markers. GitHub Actions run `32098398025` completed `success` for commit `355a7146a0b383c4e72009e4ced25420a44b282f` at `https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32098398025`.
+- Hosted Playwright Chromium smoke at exact 320x568 and 390x844 reported matching CSS and document widths, required canvas/reset nodes present, and zero console/page errors.
 
 ## 2026-08-18 — Overhaul tick: bounded hybrid consequence slice
 
