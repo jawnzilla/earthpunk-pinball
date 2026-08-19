@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: swept destructible CCD
+
+### Implemented
+
+- Added a production-only swept circle contact path for Generator Well destructibles. A fast primary ball crossing a crate, pipe, stone plug, or drum between fixed-step endpoints now rewinds to the first contact boundary before Physics V2 response.
+- Replays the residual fixed-step time after the material impulse, preserving post-impact travel instead of dropping the remainder of the step.
+- Kept targets, bumpers, boss, rails, and flipper paths unchanged; existing destructible damage/cooldown/stage/reward contracts remain the consumer.
+- Added renderer-contract coverage for the destructible swept query, residual replay seam, and live update call site.
+
+### Verification
+
+- The new contract test was intentionally red before implementation: `npm test` failed because the production destructible CCD seam was absent.
+- `npm test`: 18 tests passed, 0 failures.
+- `node --check src/elemental-effects.js` and `git diff --check`: passed.
+- Local Playwright against `127.0.0.1:8765` reproduced the existing runner `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+- Pre-deploy hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=ccd` passed the prior artifact at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, hidden overlay, depth fixture, expected grayscale filter, and zero browser/request errors. It necessarily does not contain this unpushed slice yet.
+
+### Decision / next gate
+
+- Push only to `prototype`, wait for GitHub Pages, then verify the deployed artifact at both exact portrait sizes and confirm the deployed HTML contains `function destructibleCollision`.
+- This closes a concrete live-play tunneling gap; it does not claim final visual quality or AAA readiness.
+
 ## 2026-08-19 — Overhaul tick: deterministic live destruction-run evidence
 
 ### Implemented

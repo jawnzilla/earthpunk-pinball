@@ -897,6 +897,36 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     observeHardBounce(ball, contact);
     return contact;
   }
+  function destructibleCollision(ball, item) {
+    const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
+    const dist = Math.hypot(dx, dy);
+    let contactX = ball.x, contactY = ball.y, penetration = min - dist;
+    let normal;
+    let swept = null;
+    if (dist >= min) {
+      swept = sweptCircleContact({ x: ball.prevX, y: ball.prevY }, { x: ball.x, y: ball.y }, { x: item.x, y: item.y }, min);
+      if (!swept.hit) return null;
+      normal = swept.normal;
+      contactX = item.x + normal.x * min;
+      contactY = item.y + normal.y * min;
+      ball.x = contactX; ball.y = contactY; penetration = 0;
+    } else {
+      normal = dist > .001 ? { x: dx / dist, y: dy / dist } : { x: 0, y: -1 };
+    }
+    const physics = syncPhysicsBallFromPixels(ball);
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'steel'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    syncPixelsFromPhysics(ball);
+    contact.sweptT = swept?.t ?? 1;
+    ball.lastContact = contact;
+    if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
+    observeHardBounce(ball, contact);
+    return contact;
+  }
+  function advancePrimaryBallResidual(ball, gravityMps2, dt, contactFraction) {
+    const residualDt = Math.max(0, dt * (1 - Math.max(0, Math.min(1, contactFraction))));
+    if (residualDt > 0) integratePrimaryBall(ball, gravityMps2, residualDt);
+    return residualDt;
+  }
   function capBallSpeed(ball, maxSpeed = MAX_BALL_SPEED_PX_S) {
     const capped = capVelocity({ x: ball.vx, y: ball.vy }, maxSpeed);
     ball.vx = capped.x; ball.vy = capped.y;
@@ -1009,7 +1039,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
     targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) hitTarget(t); });
-    state.destructibles.forEach(item => { if (item.destroyed) return; const contact = circleCollision(b, item); if (contact && !contact.separating) applyDestructibleContact(item, contact); });
+    state.destructibles.forEach(item => { if (item.destroyed) return; const contact = destructibleCollision(b, item); if (contact && !contact.separating) { applyDestructibleContact(item, contact); if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT); } });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
