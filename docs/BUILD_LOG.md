@@ -10,9 +10,10 @@
 
 ### Verification
 
-- `npm test`: 44 passed, 0 failed.
-- `git diff --check` passed.
-- No browser or Pages deployment claim is made until this docs-only canon is committed and the hosted artifact is rechecked.
+- `npm test`: 44 passed, 0 failed; `git diff --check` passed before commit.
+- GitHub Pages run `32313928807` completed successfully for commit `7a24938`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32313928807.
+- Hosted probe returned HTTP 200, 212586 bytes, one `<canvas>`, `sweptSegmentContact`, `drawWellFrontLip`, and `drawObjectiveCue` markers.
+- Hosted Playwright exact CSS 320×568 and 390×844 checks confirmed HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, and the active `depth` fixture. Both runs emitted `ERR_INSUFFICIENT_RESOURCES` for sprite requests, so zero-console-error and image-complete claims are blocked in this environment.
 
 ### Remaining risk / next smallest slice
 

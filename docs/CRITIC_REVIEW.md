@@ -9,7 +9,7 @@
 - `docs/ROTATING_FLIPPER_CCD_CANON.md` preserves the current `{ x, y, t, segment }` query contract and isolates response/state ownership from the future query.
 - The canon requires stationary-ball, combined-motion, endpoint-cap, seam, near-miss, ordering, degenerate-input, and performance fixtures before replacing the sampler.
 - `npm test` passes 44/44 on the unchanged runtime path; no renderer, input, progression, or asset behavior changed.
-- This tick is docs-only. No subjective visual verdict, exact viewport verdict, hosted runtime parity, or AAA claim is inferred from source text.
+- This tick is docs-only. Pages run `32313928807` succeeded for commit `7a24938`; hosted HTTP/source markers were present. Exact hosted Playwright checks at CSS 320×568 and 390×844 confirmed width parity, one Canvas, no horizontal overflow, and the active `depth` fixture, but both emitted `ERR_INSUFFICIENT_RESOURCES` sprite-load errors. No zero-console-error, image-complete, subjective visual, or AAA claim is made.
 
 ### Remaining risk / next smallest slice
 
