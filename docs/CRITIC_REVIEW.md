@@ -8,11 +8,12 @@
 
 - The destroyed branch keeps its existing debris geometry and contact shadow, then adds a restrained amber dashed perimeter, a top diamond marker, and a centered `SALVAGE` label driven by the existing pulse clock.
 - The renderer contract locks both the destroyed-state intent and label call; `npm test` passes all 21 tests.
-- Local exact browser verification was attempted at both required portrait sizes but was blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`; hosted verification is required after deployment.
+- Local exact browser verification was attempted at both required portrait sizes but was blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+- GitHub Pages run `32221563086` completed successfully for commit `0d5258c`; hosted `destruction-run` checks passed at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, 7 contacts, stages `1,2,2,2,2,3,3`, one reward transition, deployed `SALVAGE` marker, and zero console/page/request errors. Captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-390.png`.
 
 ### Remaining risk / next smallest slice
 
-- The cue is source-level evidence until the hosted `destruction-run` fixture is checked at 320×568 and 390×844 with fresh captures and zero browser/request errors.
+- The cue is deployed and verified in the deterministic production destruction fixture, but not yet in human-steered motion.
 - The label may be too small or compete with nearby geometry in motion; inspect the hosted still before adding more destruction polish.
 - AAA-ready remains unsupported.
 

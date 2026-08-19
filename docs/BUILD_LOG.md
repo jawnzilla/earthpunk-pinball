@@ -14,10 +14,15 @@
 - `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
 - Exact local Playwright was attempted at 320×568 and 390×844, but the repository's known `127.0.0.1:8765` runner returned `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
 
+### Deployment verification
+
+- GitHub Pages run `32221563086` completed successfully for commit `0d5258c`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32221563086.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=destruction-run&cacheBust=0d5258c` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas present, exact CSS width parity, fixture `destruction-run`, 7 contacts, stages `1,2,2,2,2,3,3`, one reward transition, deployed `SALVAGE` cue marker, and zero console/page/request errors. Fresh captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-390.png`.
+
 ### Decision / next gate
 
-- Deploy this narrow visual readability slice, then verify `?review=destruction-run` on GitHub Pages at exact 320×568 and 390×844 with zero console/page/request errors and fresh captures outside the repository.
-- AAA readiness remains unsupported; this is a salvage affordance pass, not a final visual verdict.
+- Deployment/runtime evidence for this bounded cue is closed. The hosted fixture confirms the production destruction state path, not human-steered salvage readability in motion.
+- AAA readiness remains unsupported; inspect the fresh stills before another destruction polish change.
 
 ## 2026-08-19 — Overhaul tick: bilateral flipper calibration fixture
 
