@@ -153,6 +153,18 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
 
 {
   const runtime = createElementalRuntime();
+  onHardBounce(runtime, { effects: effects('Wind', 3), position: { x: 0, y: 0 }, velocity: { x: 300, y: 0 }, impactSpeed: 2.4 });
+  const separating = onWindEchoStructureContact(runtime, { objectId: 'crate-a', normal: { x: 1, y: 0 } });
+  assert.equal(separating.type, 'wind-echo-separating-contact');
+  assert.equal(separating.counted, false);
+  assert.equal(runtime.windEcho.hitObjects.has('crate-a'), false);
+  const impact = onWindEchoStructureContact(runtime, { objectId: 'crate-a', normal: { x: -1, y: 0 } });
+  assert.equal(impact.type, 'wind-echo-structure-contact');
+  assert.equal(impact.counted, true);
+}
+
+{
+  const runtime = createElementalRuntime();
   const earthEffects = effects('Earth', 3);
   onStructureContact(runtime, { effects: earthEffects, objectId: 'crate-a', position: { x: 20, y: 40 } });
   const second = onStructureContact(runtime, { effects: earthEffects, objectId: 'plug-b', position: { x: 80, y: 40 } });

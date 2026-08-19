@@ -286,11 +286,12 @@ export function resolveWindEchoStructureDamage({ impactSpeed = 0, impactEnergy =
 
 export function onWindEchoStructureContact(runtime, { objectId, position = { x: 0, y: 0 }, normal = { x: 0, y: 0 }, contactKey = 'structure' } = {}) {
   const echo = runtime.windEcho;
-  if (!echo || !objectId || !Number.isFinite(normal.x) || !Number.isFinite(normal.y) || echo.hitObjects.has(objectId)) return null;
-  echo.hitObjects.add(objectId);
-  const length = Math.hypot(normal.x, normal.y) || 1;
+  const length = Math.hypot(normal.x, normal.y);
+  if (!echo || !objectId || !Number.isFinite(normal.x) || !Number.isFinite(normal.y) || length <= 1e-8 || echo.hitObjects.has(objectId)) return null;
   const nx = normal.x / length, ny = normal.y / length;
   const contact = resolveElementalBodyContact(echo, { x: nx, y: ny }, { surfaceMaterial: 'steel' });
+  if (contact.separating) return { type: 'wind-echo-separating-contact', id: echo.id, counted: false, ignoreResponse: false, damage: false, objectId, contactKey, impactSpeed: 0, impactEnergy: 0 };
+  echo.hitObjects.add(objectId);
   const impactSpeed = contact.impactSpeed;
   const ignoreResponse = echo.ignoredResponses > 0;
   if (ignoreResponse) echo.ignoredResponses -= 1;

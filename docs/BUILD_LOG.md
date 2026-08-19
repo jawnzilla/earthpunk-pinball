@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: separating Wind Echo contacts
+
+### Implemented
+
+- Tightened the renderer-independent `onWindEchoStructureContact()` seam so a Wind Echo moving away from a salvage object is reported as a non-counting separating contact instead of consuming its once-per-object hit budget.
+- Normalized contact normals before entering Physics V2 and rejected zero-length normals without mutating echo state.
+- Added a deterministic regression proving a separating pass leaves the object eligible, while the subsequent approaching pass counts once and preserves impact energy/response behavior.
+- This is a bounded elemental-contact correctness slice; no table geometry, input, progression, renderer, or asset behavior changed.
+
+### Verification
+
+- Red-capable regression was exercised against the pre-change contact policy before restoring the implementation; the focused separating-contact assertion is the seam being protected.
+- `npm test`: 18 tests passed, 0 failures.
+- `node --check src/elemental-effects.js` and `git diff --check`: passed.
+
+### Decision / next gate
+
+- Commit and Pages deployment must be verified before selecting another physics/effects slice.
+- Exact hosted Playwright checks remain required at 320×568 and 390×844; AAA-ready remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: deterministic destructible-contact contract
 
 ### Implemented

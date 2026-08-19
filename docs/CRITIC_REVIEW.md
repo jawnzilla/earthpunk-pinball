@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 64
+# Deadlight Critic Review — Overhaul tick 65
+
+## Overhaul tick 65 verdict
+
+**Playable hackathon slice: PASS for separating Wind Echo contact gating. AAA-ready: FAIL / unverified.** The Wind Echo now follows the shared contact solver's approach/separation result before consuming its once-per-object structure-hit budget.
+
+### Observed evidence
+
+- `onWindEchoStructureContact()` normalizes valid normals, rejects zero-length normals, and returns `wind-echo-separating-contact` without adding the object to `hitObjects` when relative motion is separating.
+- The focused regression then approaches the same object and proves the real structure-contact event counts once; the full deterministic suite passes 18 tests.
+- No renderer, table geometry, input, progression, or asset behavior changed.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and exact hosted portrait checks are still the release gate for this tick.
+- This fixes contact accounting; it does not establish final Wind Echo feel, salvage readability, or AAA readiness.
 
 ## Overhaul tick 64 verdict
 
