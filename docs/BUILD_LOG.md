@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: mass-weighted dynamic-contact separation
+
+### Implemented
+
+- Updated the renderer-independent Physics V2 positional correction so penetration is split by inverse mass when both contact bodies are dynamic.
+- Static and kinematic table geometry retain the previous full correction behavior; dynamic bodies now move in opposite directions in proportion to their inverse masses instead of teleporting only the ball.
+- Added a deterministic regression for a 1:3 mass pair, asserting the ball receives 75% and the dynamic surface 25% of the separation correction.
+- No live table geometry, flipper tuning, input, progression, renderer, or asset behavior changed.
+
+### Verification
+
+- Red-capable regression initially failed with the old solver (`ball.position.y === -1`, expected `-0.75`), isolating the missing dynamic-surface positional response.
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js` and `git diff --check` passed.
+- Deployment and hosted exact portrait checks are still pending for this commit.
+
+### Decision / next gate
+
+- This is a bounded foundation slice toward first-principles mass/material response. Push and verify the GitHub Pages artifact at 320×568 and 390×844 before selecting another physics or renderer change.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: dynamic-contact momentum seam
 
 ### Implemented

@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 59
+# Deadlight Critic Review — Overhaul tick 60
+
+## Overhaul tick 60 verdict
+
+**Playable hackathon slice: PASS for the bounded mass-weighted separation seam. AAA-ready: FAIL / unverified.** Physics V2 now applies penetration correction to both dynamic contact bodies according to inverse mass, matching the equal/opposite momentum seam added previously.
+
+### Observed evidence
+
+- The regression was red before implementation: the old solver moved the ball by the full unit penetration (`-1`) and left the dynamic surface at `0`.
+- The corrected solver passes the 1:3 mass regression: the ball moves `-0.75`, the surface `+0.25`, and the existing dynamic momentum test remains green.
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js` and `git diff --check` passed.
+
+### Remaining risk / next smallest slice
+
+- The live table still uses static/kinematic geometry, so this seam is not proof of flipper feel, moving-body gameplay, or final collision tuning.
+- Deploy this commit and run hosted exact portrait checks at 320×568 and 390×844 before selecting another implementation slice.
+- AAA-ready remains unsupported.
 
 ## Overhaul tick 59 verdict
 

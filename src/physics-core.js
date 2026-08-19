@@ -108,8 +108,18 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
     materialB: surface.material ?? 'steel'
   };
 
-  if (penetration > slop && ball.inverseMass > 0) {
-    ball.position = add(ball.position, scale(n, (penetration - slop) * correctionPercent));
+  if (penetration > slop) {
+    const correction = (penetration - slop) * correctionPercent;
+    const surfaceInverseMass = surface.inverseMass ?? 0;
+    const correctionMass = ball.inverseMass + surfaceInverseMass;
+    if (correctionMass > EPSILON) {
+      if (ball.inverseMass > 0) {
+        ball.position = add(ball.position, scale(n, correction * ball.inverseMass / correctionMass));
+      }
+      if (surfaceInverseMass > 0 && surface.position) {
+        surface.position = add(surface.position, scale(n, -correction * surfaceInverseMass / correctionMass));
+      }
+    }
   }
   if (result.separating) return result;
 

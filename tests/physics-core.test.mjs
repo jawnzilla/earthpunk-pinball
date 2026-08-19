@@ -60,6 +60,22 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const ball = createBall({ mass: 1, x: 0, y: 0, vx: 0, vy: 3 });
+  const surface = createBall({ mass: 3, x: 0, y: 0, vx: 0, vy: 0, material: 'rubber' });
+  resolveContact({
+    ball,
+    surface,
+    point: { x: 0, y: 0 },
+    normal: { x: 0, y: -1 },
+    penetration: 1,
+    correctionPercent: 1,
+    slop: 0
+  });
+  approx(ball.position.y, -0.75);
+  approx(surface.position.y, 0.25);
+}
+
+{
   const ball = createBall({ mass: 0.032, vx: 0, vy: -6 });
   const contact = resolveContact({ ball, surface: { material: 'timber' }, point: { x: 0, y: 0 }, normal: { x: 0, y: 1 } });
   const plain = damageFromContact(contact, { objectMaterial: 'timber', threshold: 1.2, damageScale: 1 });
