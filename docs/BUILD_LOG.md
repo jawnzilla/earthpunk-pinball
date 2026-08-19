@@ -14,7 +14,8 @@
 - Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
 - `git diff --check`: passed.
 - Exact local Playwright checks at CSS 320×568 and 390×844: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
-- Hosted Pages verification and deployment run are pending this push.
+- GitHub Pages run `32301774849` completed successfully for `26b2f3b`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32301774849.
+- Hosted exact 320×568 and 390×844 checks passed: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, zero console/page errors, and deployed HTML contains the `HOLD HINGE` tutorial code.
 
 ### Remaining risk / next smallest slice
 

@@ -15,7 +15,7 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages verification is pending deployment of this commit.
+- GitHub Pages run `32301774849` completed successfully for `26b2f3b`; hosted exact 320×568 and 390×844 checks passed with the deployed `HOLD HINGE` tutorial code present, no overflow, and zero console/page errors.
 - The tutorial is renderer/input affordance only; physical-phone touch interruption, grayscale still-frame review, and distinct reaction audio remain unverified.
 - Portrait visual hierarchy and human grayscale readability remain the largest product gap.
 
