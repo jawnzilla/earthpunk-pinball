@@ -10,8 +10,10 @@
 ### Verification
 
 - `npm test`: 11 tests passed, 0 failures.
-- `git diff --check`: passed before commit `7b8f0bf29abc11ebece5149ffe8afb77b0c64b1c`.
-- Local HTTP server browser attempt at 320×568 and 390×844 hit the existing runner `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed. Hosted Pages verification is required after deployment.
+- `git diff --check`: passed before commit `6002b261fd03be853002fa2c08d61b4735287b3b`.
+- GitHub Pages run `32200509230` completed successfully for `6002b261fd03be853002fa2c08d61b4735287b3b`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32200509230.
+- Hosted exact Playwright at `?review=active-elements` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS/document width parity, body height within 0.4px of viewport, hidden overlay, `active-elements` fixture marker, active HUD text `FIRE 3WATER 2`, and zero console/page/request errors. Captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-active-320.png` and `earthpunk-active-390.png`.
+- The local HTTP server browser attempt still hit the existing runner `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed.
 
 ### Decision / next gate
 

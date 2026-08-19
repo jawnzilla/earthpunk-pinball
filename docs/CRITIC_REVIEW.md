@@ -8,7 +8,9 @@
 
 - `?review=active-elements` seeds the real ball state with Fire 3/3 and Water 2/3 timers, freezes motion, hides the overlay, and marks `body.dataset.reviewFixture = 'active-elements'`.
 - Renderer-contract coverage asserts the guard, seeded stacks/timers, marker, and boot hook. `npm test` passes 11 tests; `git diff --check` passes.
-- The local browser runner again returned `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed. Hosted exact Playwright verification remains the deployment gate.
+- The local browser runner again returned `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed.
+- Hosted exact Playwright at `?review=active-elements` passed at 320×568 and 390×844: HTTP 200, exact CSS width parity, hidden overlay, `active-elements` marker, active HUD text `FIRE 3WATER 2`, and zero console/page/request errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-active-320.png` and `earthpunk-active-390.png`.
+- GitHub Pages run `32200509230` for commit `6002b261fd03be853002fa2c08d61b4735287b3b` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32200509230.
 
 ### Remaining risk / next smallest slice
 
