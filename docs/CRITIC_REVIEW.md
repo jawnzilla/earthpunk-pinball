@@ -10,6 +10,7 @@
 - `tests/renderer-contract.test.mjs` asserts the re-anchoring contract, preventing regression to stale sweep origins.
 - `npm test` passes all 22 tests; syntax checks and `git diff --check` pass.
 - Local Playwright matrix passes 8/8 exact portrait checks at 320×568 and 390×844 across the four review fixtures: HTTP 200, canvas present, no horizontal overflow, console errors, page errors, or failed requests.
+- GitHub Pages run `32269042960` completed successfully for `a2ad88f`; the hosted 8-check matrix also passed at both exact portrait viewports.
 
 ### Remaining risk / next smallest slice
 

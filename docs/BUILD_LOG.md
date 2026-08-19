@@ -14,7 +14,7 @@
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed (Git reports the existing LF→CRLF normalization warning for the edited test file).
 - Exact local browser matrix: 8/8 checks passed at 320×568 and 390×844 across `depth`, `destruction-run`, `active-elements`, and `upgrade`; HTTP 200, canvas present, no horizontal overflow, console errors, page errors, or failed requests.
-- Hosted parity and Pages run are pending this push.
+- GitHub Pages run `32269042960` completed successfully for `a2ad88f`; hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=a2ad88f` returned HTTP 200 and passed the same 8-check runtime matrix.
 
 ### Remaining risk / next smallest slice
 
