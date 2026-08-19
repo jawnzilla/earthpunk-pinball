@@ -13,3 +13,12 @@ export function decideDrainRecoveryOutcome({ candidate = null, tableKind = 'stan
     nextCharge: Math.max(0, Math.floor(charge) - 1)
   };
 }
+
+// Headless state application for the live drain seam. Keeping this separate
+// from DOM/game-loop code makes the recovery contract executable in tests.
+export function applyDrainRecoveryOutcome({ outcome, stability = 1, stabilityMax = 3, charge = 0 } = {}) {
+  if (!outcome || outcome.kind === 'flipper') return { stability, charge };
+  if (outcome.kind === 'free-pass') return { stability, charge: Math.min(99, charge + outcome.chargeDelta) };
+  if (outcome.kind === 'immortal') return { stability: stabilityMax, charge };
+  return { stability: outcome.nextStability, charge: outcome.nextCharge };
+}

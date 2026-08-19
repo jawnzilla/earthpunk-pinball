@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 116
 
+## Overhaul tick 117 verdict
+
+**Playable hackathon slice: PASS for headless drain state application; global manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** Stability and charge mutation for non-flipper drain outcomes now have one renderer-independent application seam, reducing duplicated live-loop policy.
+
+### Observed evidence
+
+- `src/drain-recovery.js` exports `applyDrainRecoveryOutcome()` for free-pass, immortal, ordinary recovery, terminal loss, and no-op flipper outcomes.
+- `index.html` delegates live stability/charge mutation to that helper before retaining renderer-only messages, respawn, and loss handling.
+- `tests/drain-recovery.test.mjs` exercises all four non-flipper transitions as a headless fixture; `npm test` passes 36/36.
+- Syntax checks, `git diff --check`, and exact local Playwright checks at 320×568 and 390×844 pass: canvas present, no horizontal overflow, zero console/page errors.
+- Hosted Pages deployment and hosted parity are pending this push. No screenshot or subjective grayscale verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- The emergency flipper winner still resolves outside the primary manifold and does not replay residual time. A focused headless fixture must combine selected flipper recovery with state ownership before changing that boundary.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
+
 ## Overhaul tick 116 verdict
 
 **Playable hackathon slice: PASS for explicit drain outcome policy; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The no-contact drain branch now has a pure, testable state-policy seam instead of embedding free-pass, immortal, recovery, and loss rules directly in the renderer.

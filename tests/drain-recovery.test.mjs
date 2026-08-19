@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { decideDrainRecoveryOutcome } from '../src/drain-recovery.js';
+import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome } from '../src/drain-recovery.js';
 
 test('drain outcome preserves a selected flipper winner as the first action', () => {
   const candidate = { side: 'right', contact: { t: 0.2 } };
@@ -27,4 +27,18 @@ test('standard drain decrements one stability and floors one charge', () => {
 
 test('last standard stability is classified as loss', () => {
   assert.equal(decideDrainRecoveryOutcome({ stability: 1, charge: 0 }).kind, 'loss');
+});
+
+test('headless drain fixture applies each non-flipper outcome without renderer state', () => {
+  const free = decideDrainRecoveryOutcome({ tableKind: 'free', stability: 2, charge: 4 });
+  assert.deepEqual(applyDrainRecoveryOutcome({ outcome: free, stability: 2, charge: 4 }), { stability: 2, charge: 4.5 });
+
+  const immortal = decideDrainRecoveryOutcome({ immortal: true, stability: 1, charge: 2 });
+  assert.deepEqual(applyDrainRecoveryOutcome({ outcome: immortal, stability: 1, stabilityMax: 3, charge: 2 }), { stability: 3, charge: 2 });
+
+  const recover = decideDrainRecoveryOutcome({ stability: 3, charge: 2.8 });
+  assert.deepEqual(applyDrainRecoveryOutcome({ outcome: recover, stability: 3, charge: 2.8 }), { stability: 2, charge: 1 });
+
+  const loss = decideDrainRecoveryOutcome({ stability: 1, charge: 0 });
+  assert.deepEqual(applyDrainRecoveryOutcome({ outcome: loss, stability: 1, charge: 0 }), { stability: 0, charge: 0 });
 });

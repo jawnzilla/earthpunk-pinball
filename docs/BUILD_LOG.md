@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 117: headless drain state application
+
+### Decision
+
+- Extracted the non-flipper drain state application into renderer-independent `applyDrainRecoveryOutcome()`.
+- The live renderer now delegates stability/charge mutation to that pure seam; loss/free-pass/immortal messaging and respawn policy remain in the renderer.
+- Added one deterministic headless fixture covering free-pass, immortal, ordinary recovery, and terminal loss state transitions. No contact-manifold ownership change is claimed.
+
+### Verification
+
+- `npm test`: 36 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Local Playwright checks at exact CSS 320×568 and 390×844: both HTTP 200, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
+- GitHub Pages deployment and hosted parity verification are pending this push.
+
+### Remaining risk / next smallest slice
+
+- The emergency flipper winner still resolves outside the main manifold and does not replay residual time. The next safe physics packet remains a headless drain integration fixture that exercises selected recovery contact plus state ownership.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 116: drain outcome policy seam
 
 ### Decision
