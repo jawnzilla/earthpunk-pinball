@@ -13,6 +13,7 @@
 - `npm test`: 22 tests passed, 0 failures.
 - `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=7892f47'`: HTTP 200, `Content-Length: 201085`, Pages artifact reachable.
 - No exact hosted Playwright matrix was run in this tick because this checkout contains no browser verification harness and no browser automation tool is available in the scheduled environment. No screenshot, console, or viewport-parity claim is made here.
+- GitHub Pages run `32233058504` completed successfully for commit `136f539`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32233058504. This verifies deployment of the documentation-gate commit, not visual quality.
 
 ### Next implementation-ready action
 
