@@ -44,7 +44,11 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
   if (Math.max(ballTravel, tipTravel) < 0.01) return null;
   const queryRadius = radius + Math.min(10, tipTravel * 0.28);
-  const angles = [previousAngle, (previousAngle + flipper.angle) / 2, flipper.angle];
+  // Sample the rotating blade at radius-sized arc intervals. Three poses are
+  // enough for ordinary motion but can skip a stationary ball during a large
+  // angular jump; keep the query bounded for pathological review inputs.
+  const angularSteps = Math.min(64, Math.max(2, Math.ceil(tipTravel / Math.max(2, queryRadius * 0.45))));
+  const angles = Array.from({ length: angularSteps + 1 }, (_, index) => previousAngle + (flipper.angle - previousAngle) * (index / angularSteps));
   for (const angle of angles) {
     const segment = segmentAt(flipper, angle, lengthBonus);
     const dx = segment.x2 - segment.x1;

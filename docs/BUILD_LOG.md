@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: bounded flipper angular CCD
+
+### Implemented
+
+- Replaced the three-pose rotating-flipper sweep with a radius-spaced angular sampler capped at 64 poses.
+- The production `sweptFlipperContact()` query now catches a stationary ball crossed by a large flipper rotation instead of only checking previous, midpoint, and final blade angles.
+- Added a deterministic regression for a 3-radian sweep that previously tunneled across the contact arc. No solver constants, input, progression, renderer, or asset behavior changed.
+
+### Verification
+
+- The new regression was red before the implementation: the three-pose query returned no contact for the large angular sweep.
+- `npm test`: 21 tests passed, 0 failures.
+- `node --check src/flipper-contact.js` and `git diff --check`: passed.
+- Browser/deployment verification remains pending until the pushed prototype commit is served by GitHub Pages.
+
+### Decision / next gate
+
+- This closes a bounded rotating-flipper tunneling case without replacing the query with unbounded sampling. The 64-pose cap remains an explicit pathological-input bound.
+- No claim of final flipper feel, visual quality, or AAA readiness.
+
 ## 2026-08-18 — Overhaul tick: renderer-independent Physics V2 calibration fixture
 
 ### Implemented

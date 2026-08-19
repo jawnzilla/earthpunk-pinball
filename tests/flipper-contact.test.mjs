@@ -19,6 +19,20 @@ test('moving flipper query detects a ball at an intermediate angle once', () => 
   assert.equal(first.segment.material, 'rubber');
 });
 
+test('moving flipper query does not tunnel across a large angular sweep', () => {
+  const flipper = {
+    pivotX: 100,
+    pivotY: 100,
+    length: 100,
+    width: 17,
+    previousAngle: 0,
+    angle: 3
+  };
+  const ball = { prevX: 154, prevY: 184, x: 154, y: 184 };
+  const hit = sweptFlipperContact(ball, flipper, 8);
+  assert.ok(hit, 'a stationary ball in the swept arc must not be skipped');
+});
+
 test('swept segment rejects a path that misses and detects a crossing path', () => {
   const segment = { x1: 100, y1: 100, x2: 200, y2: 100 };
   assert.equal(sweptSegmentContact({ prevX: 120, prevY: 40, x: 120, y: 60 }, segment, 8), null);

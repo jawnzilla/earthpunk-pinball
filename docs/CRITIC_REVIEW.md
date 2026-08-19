@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 70 verdict
+
+**Playable hackathon slice: PASS for bounded rotating-flipper CCD. AAA-ready: FAIL / unverified.** A large flipper rotation no longer skips a stationary ball solely because the old query inspected only three angular poses.
+
+### Observed evidence
+
+- The new regression was red before implementation and green after the angular sampler change.
+- `sweptFlipperContact()` now spaces samples by contact radius and caps the count at 64; ordinary ball travel still uses the existing swept-segment query.
+- `npm test` passes 21 tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- The change protects contact continuity, not launch tuning, human-steered feel, or visual hierarchy. Hosted portrait checks and Pages deployment evidence are still required for this commit.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 69 verdict
 
 **Playable hackathon slice: PASS for renderer-independent Physics V2 calibration gates. AAA-ready: FAIL / unverified.** This tick adds measurement, not another tuning guess: existing contact seams now produce repeatable material, flipper, damage, and speed-cap evidence.
