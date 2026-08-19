@@ -15,6 +15,8 @@
 - `git diff --check`: passed.
 - Tight regression seam: `tests/renderer-contract.test.mjs` requires `primaryCircleCandidates`, `selectEarliestSweptContact(primaryCircleCandidates)`, and selected target/destructible dispatch in the live update loop.
 - Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- GitHub Pages run `32261182153` for commit `1e630b2` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32261182153.
+- Hosted `?review=depth&cacheBust=1e630b2` returned HTTP 200 with a 203125-byte body containing `selectEarliestSweptContact` and `<canvas`; this confirms deployed artifact parity, not subjective visual quality.
 
 ### Remaining risk / next smallest slice
 

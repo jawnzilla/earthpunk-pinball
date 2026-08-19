@@ -9,6 +9,7 @@
 - `index.html` gathers swept candidates for unhit targets, live destructibles, and eligible circular bumpers, then dispatches only the selected earliest candidate through the existing collision resolvers.
 - `tests/renderer-contract.test.mjs` pins the candidate collection and selected-contact seam; `npm test` passes all 22 tests, syntax checks pass, and `git diff --check` passes.
 - Exact 320×568/390×844 browser and screenshot checks are not claimed because this scheduled environment has no runnable browser executable. No grayscale or subjective visual verdict is claimed.
+- GitHub Pages run `32261182153` for commit `1e630b2` completed successfully; hosted `?review=depth&cacheBust=1e630b2` returned HTTP 200 and retained `selectEarliestSweptContact` plus `<canvas` markers.
 
 ### Remaining risk / next smallest slice
 
