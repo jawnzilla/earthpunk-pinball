@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 71 verdict
+
+**Playable hackathon slice: PASS for deployed flipper CCD evidence. AAA-ready: FAIL / unverified.** The current prototype commit is live and the required portrait browser path is healthy after the bounded rotating-flipper tunneling fix.
+
+### Observed evidence
+
+- HEAD is `617bd04ceb03f704abf821776e0dc3f12614da8e`; Pages run `32215448616` completed successfully.
+- `npm test` passes 21 tests; `node --check src/flipper-contact.js` and `git diff --check` pass.
+- Hosted exact Playwright passes at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, `depth` fixture, hidden overlay, grayscale review filter, and zero console/page/request errors.
+- The hosted build's body heights are 568px at 320×568 and 846.390625px at 390×844. Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-depth-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-depth-390.png`.
+
+### Remaining risk / next smallest slice
+
+- This closes deployment evidence for the CCD query; it does not prove the flipper is pleasant under human steering, that the visual hierarchy meets the canvas direction bar, or that the game is AAA-ready.
+- The largest unresolved product gap remains observed motion/visual feel rather than another unmeasured collision patch. Next slice should be one measured live-play calibration or one coherent depth/material phase.
+
 ## Overhaul tick 70 verdict
 
 **Playable hackathon slice: PASS for bounded rotating-flipper CCD. AAA-ready: FAIL / unverified.** A large flipper rotation no longer skips a stationary ball solely because the old query inspected only three angular poses.

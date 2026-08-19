@@ -1,5 +1,19 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: flipper CCD deployment closure
+
+### Verification-only slice
+
+- Re-checked the current `prototype` HEAD (`617bd04ceb03f704abf821776e0dc3f12614da8e`) and hosted artifact after the bounded rotating-flipper CCD change. No gameplay or renderer code changed in this tick.
+- `npm test`: 21 tests passed, 0 failures; `node --check src/flipper-contact.js` and `git diff --check` passed.
+- GitHub Pages run `32215448616` completed successfully for HEAD: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32215448616.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=617bd04` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture, hidden overlay, grayscale filter, and zero console/page/request errors. Body heights were 568px and 846.390625px. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-depth-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-depth-390.png`.
+
+### Decision / next gate
+
+- Deployment/runtime evidence for the current flipper CCD commit is closed. This confirms route health and contact-query deployment, not final human-steered flipper feel or visual/AAA readiness.
+- Next implementation should be a measured live-play calibration or a single visual plane/object readability slice; do not stack another unmeasured physics change.
+
 ## 2026-08-19 — Overhaul tick: bounded flipper angular CCD
 
 ### Implemented
