@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: flipper-feel calibration packet
+
+### Authored
+
+- Added `docs/FLIPPER_FEEL_CALIBRATION.md` as the implementation-ready gate for the next live-play tuning slice.
+- The packet separates human launches from held catches and review fixtures, requires exact portrait hosted checks, and locks a one-variable tuning order around the existing Physics V2 contact seams.
+- No gameplay constants or renderer behavior changed in this tick; the current evidence is not sufficient to justify another unmeasured feel change.
+
+### Verification before deployment
+
+- `npm test`: 21 tests passed, 0 failures.
+- `git diff --check`: passed.
+- Hosted exact Playwright against the current Pages artifact passed `flipper-contact` at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, fixture marker, and zero console/page/request errors.
+
+### Decision / next gate
+
+- The next implementation tick may tune one flipper variable only after collecting the live-vs-fixture telemetry described in the packet. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: active-status HUD separation
 
 ### Implemented

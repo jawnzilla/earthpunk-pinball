@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 73 verdict
+
+**Playable hackathon slice: PASS for implementation-ready flipper calibration canon; AAA-ready: FAIL / unverified.** The next feel change now has explicit telemetry separation and portrait deployment gates instead of another unmeasured constant edit.
+
+### Observed evidence
+
+- `docs/FLIPPER_FEEL_CALIBRATION.md` defines the production seams, exact 320×568 and 390×844 hosted checks, live/fixture provenance split, catch exclusion, symmetry threshold, and one-variable tuning order.
+- `npm test` passes 21 tests with no failures; whitespace validation passes.
+- Current hosted `flipper-contact` route is healthy at both required portrait sizes with HTTP 200, complete documents, Canvas, exact CSS width parity, fixture marker, and zero console/page/request errors.
+
+### Remaining risk / next smallest slice
+
+- This tick intentionally does not claim that human-steered flipper feel is tuned; fixture continuity is not human-play evidence.
+- Next slice is measured live launch capture and, only if a gate fails, one isolated tuning change. AAA-ready remains unsupported.
+
 ## Overhaul tick 72 verdict
 
 **Playable hackathon slice: PASS for bounded HUD hierarchy correction; AAA-ready: FAIL / unverified.** Active elemental chips no longer occupy the same vertical band as the objective cue in the production canvas renderer.
