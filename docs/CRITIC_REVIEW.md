@@ -10,6 +10,7 @@
 - `npm test` passes all 22 tests; `git diff --check` passes.
 - Hosted `?review=depth&cacheBust=0da9049` returns HTTP 200 with a 201085-byte artifact; the body contains the expected current renderer markers.
 - GitHub Pages run `32238327049` completed successfully for `0da9049`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32238327049.
+- The documentation commit `7786530` also deployed successfully in Pages run `32239794962`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32239794962; post-deploy hosted HEAD returned HTTP 200 with `Content-Length: 201085`.
 - No screenshot, grayscale inspection, exact hosted Playwright matrix, or human visual verdict is claimed for this tick.
 
 ### Remaining risk / next smallest slice

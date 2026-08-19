@@ -15,6 +15,7 @@
 - Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=0da9049'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 09:35:37 GMT`.
 - Hosted body fetch returned 200961 bytes and retained the expected `review=upgrade`, `drawForegroundMechanismPlane`, and `drawWellWallBevel` markers.
 - GitHub Actions Pages run `32238327049` completed successfully for `0da9049`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32238327049.
+- The documentation commit `7786530` also deployed successfully in Pages run `32239794962`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32239794962. Post-deploy hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=7786530'` returned HTTP 200, `Content-Length: 201085`, and `Last-Modified: Wed, 19 Aug 2026 09:52:10 GMT`.
 - No screenshot, grayscale verdict, exact hosted Playwright matrix, or subjective visual-quality claim is made here. This scheduled environment has no legitimate still-frame inspection surface.
 
 ### Gate / next slice
