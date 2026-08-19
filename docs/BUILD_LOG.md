@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 105: flipper manifold investigation held
+
+### Decision
+
+- No product-code change was made. The next candidate physics slice was investigated: selecting the earliest swept contact when both rotating flippers are crossed in one fixed step.
+- The candidate was rejected before implementation because the existing `sweptFlipperContact()` result has no shared `hit` contract for `selectEarliestSweptContact()`, does not yet provide comparable combined ball/angle timing, and the resolver would need contact rewind plus residual-time replay rather than merely choosing a side.
+- This preserves the current stable flipper/cradle behavior instead of shipping a selector that appears wired but silently falls back or suppresses an independent cradle contact. The next implementation packet must add a renderer-independent flipper candidate query with explicit normalized timing, then resolve one candidate with residual replay and retain cradle maintenance for non-selected overlap state.
+
+### Verification
+
+- `git fetch origin prototype`, `git rev-parse HEAD`, and `git rev-parse origin/prototype` confirmed clean `prototype` at `ab6aba2e59eb4810aeb9ceabc91f565c8bd7462c` before this documentation update.
+- `npm test`: 22 passed, 0 failed after reverting the unsafe experiment.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check \"$f\" || exit 1; done`: passed.
+- `git diff --check`: passed before this documentation update.
+- Hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=ab6aba2` returned HTTP 200 with `Content-Length: 205487`; this confirms hosted availability, not subjective visual quality.
+- No exact 320×568/390×844 browser matrix or screenshot verdict is claimed because this scheduled environment has no runnable browser executable.
+
+### Remaining risk / next smallest slice
+
+- Flipper contacts remain a separate sequential seam; do not claim a global contact manifold until the candidate query, rewind, residual replay, and cradle-preservation contracts are implemented together.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; no visual layer was stacked without still-frame evidence.
+
 ## 2026-08-19 — Overhaul tick 104: residual sweep origin
 
 ### Decision

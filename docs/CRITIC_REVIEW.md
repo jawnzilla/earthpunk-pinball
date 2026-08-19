@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 105 verdict
+
+**Playable hackathon slice: PASS for evidence discipline; flipper manifold: NOT IMPLEMENTED; visual quality: source/host verified only; AAA-ready: FAIL / unverified.** Investigation found that a superficial earliest-flipper selector would be unsound: the current query/resolver seam lacks a shared timing contract, contact rewind, residual replay, and cradle-preservation behavior.
+
+### Observed evidence
+
+- The repository is clean at `ab6aba2e59eb4810aeb9ceabc91f565c8bd7462c` before this documentation commit.
+- The rejected experiment was reverted; `npm test` passes 22/22, syntax checks pass, and `git diff --check` passes before docs changes.
+- Hosted `?review=depth&cacheBust=ab6aba2` returns HTTP 200 and 205487 bytes.
+- No exact 320×568/390×844 browser or screenshot check is claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- Implement the flipper manifold as one bounded packet: explicit normalized candidate timing across ball and rotating-blade motion, selected-contact rewind, residual fixed-step replay, and a regression proving an unselected cradle/overlap is not dropped.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; no subjective still-frame verdict is claimed.
+
 ## Overhaul tick 104 verdict
 
 **Playable hackathon slice: PASS for residual swept-contact correctness; visual quality: source-verified / no new subjective visual verdict; AAA-ready: FAIL / unverified.** Residual integration now begins a fresh swept segment at the resolved contact boundary instead of the original fixed-step origin.
