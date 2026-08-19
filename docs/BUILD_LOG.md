@@ -14,11 +14,12 @@
 - The new focused loop was red before implementation: `npm test` failed with `ERR_MODULE_NOT_FOUND` for `src/physics-calibration.mjs`.
 - After the single fixture implementation, `npm test`: 20 tests passed, 0 failures.
 - `node --check src/physics-calibration.js`, `node --check src/physics-calibration.mjs`, and `git diff --check`: passed.
-- Hosted portrait checks and Pages deployment are still pending for this commit.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth` and `destruction-run` at both 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), expected fixture markers, and zero console/page/request errors.
+- GitHub Pages run `32214034302` completed successfully for commit `7f8ff1f266a0ad9f2d1207658f79850630bbe7cb`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32214034302.
 
 ### Decision / next gate
 
-- The calibration evidence seam is now green without tuning live constants. Next gate is exact hosted `depth` and `destruction-run` browser verification at 320×568 and 390×844, then deploy only to `prototype`.
+- The calibration evidence seam is green and deployed without tuning live constants. Next gate is to use these measurements for one-variable live tuning only after a human-steered motion capture; no tuning is made in this tick.
 - AAA-ready remains unsupported.
 
 ## 2026-08-19 — Overhaul tick: Physics V2 calibration gate authored
