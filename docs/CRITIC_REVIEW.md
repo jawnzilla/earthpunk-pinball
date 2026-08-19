@@ -12,7 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted Pages verification for this commit is still required before treating the projection as deployed evidence.
+- GitHub Pages run `32206420600` completed successfully for commit `1c808e77fe60ff999b9fd00e31a14a7aba8caae8`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32206420600.
+- Hosted exact Playwright at 320×568 and 390×844 passed HTTP 200, complete documents, exact CSS width parity, `active-elements`, hidden overlay, DOM `△ FIRE 3 / ▽ WATER 2`, accessible label `Fire 3, Water 2`, and zero console/page errors. Captures are outside the repo at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-status-320.png` and `earthpunk-hosted-status-390.png`.
 - The projection prevents status truncation, but does not certify final visual hierarchy, touch ergonomics, or AAA readiness. Inspect the hosted active-elements frames before adding another HUD layer.
 
 ## Overhaul tick 62 verdict

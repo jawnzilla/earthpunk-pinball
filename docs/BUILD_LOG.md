@@ -16,7 +16,8 @@
 
 ### Decision / next gate
 
-- This closes the status duplication/truncation seam with one shared, bounded projection. Push and verify the GitHub Pages artifact at both required portrait widths before selecting another slice.
+- GitHub Pages run `32206420600` completed successfully for commit `1c808e77fe60ff999b9fd00e31a14a7aba8caae8`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32206420600.
+- Exact hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=active-elements&cacheBust=1c808e7` passed at 320×568 and 390×844 with HTTP 200, complete documents, exact CSS width parity, Canvas, hidden overlay, `active-elements` marker, DOM `△ FIRE 3 / ▽ WATER 2`, accessible label `Fire 3, Water 2`, and zero console/page errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-status-320.png` and `earthpunk-hosted-status-390.png`.
 - AAA-ready remains unsupported.
 
 ## 2026-08-18 — Overhaul tick: high-speed swept-contact stress seam
