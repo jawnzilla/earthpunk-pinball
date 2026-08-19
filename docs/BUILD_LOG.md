@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: renderer-independent Physics V2 calibration fixture
+
+### Implemented
+
+- Added `src/physics-calibration.js` plus the `.mjs` test import bridge as a deterministic, renderer-independent report over the existing Physics V2 contact seams.
+- The fixture records contact response, moving-flipper response, impact energy, threshold damage, and capped outgoing speed without changing live constants, fixed timestep, collision paths, HUD, input, or progression.
+- Added six explicit gates: no manufactured stationary/parallel energy, monotonic response, rubber above timber/stone response, moving-flipper boost, thresholded damage, and the 6 m/s live speed cap.
+- Added repeatability and gate coverage in `tests/physics-calibration.test.mjs`.
+
+### Verification
+
+- The new focused loop was red before implementation: `npm test` failed with `ERR_MODULE_NOT_FOUND` for `src/physics-calibration.mjs`.
+- After the single fixture implementation, `npm test`: 20 tests passed, 0 failures.
+- `node --check src/physics-calibration.js`, `node --check src/physics-calibration.mjs`, and `git diff --check`: passed.
+- Hosted portrait checks and Pages deployment are still pending for this commit.
+
+### Decision / next gate
+
+- The calibration evidence seam is now green without tuning live constants. Next gate is exact hosted `depth` and `destruction-run` browser verification at 320×568 and 390×844, then deploy only to `prototype`.
+- AAA-ready remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: Physics V2 calibration gate authored
 
 ### Implemented

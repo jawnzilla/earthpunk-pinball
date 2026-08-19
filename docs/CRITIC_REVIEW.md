@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 69 verdict
+
+**Playable hackathon slice: PASS for renderer-independent Physics V2 calibration gates. AAA-ready: FAIL / unverified.** This tick adds measurement, not another tuning guess: existing contact seams now produce repeatable material, flipper, damage, and speed-cap evidence.
+
+### Observed evidence
+
+- `runPhysicsCalibration()` reports deterministic contact samples, moving-flipper samples, stationary/parallel energy, threshold damage, and capped outgoing speeds.
+- All six gates pass: no manufactured energy, monotonic response, rubber above timber/stone response, moving-flipper boost, thresholded damage, and the 6 m/s cap.
+- The new regression loop was red while the fixture module was absent, then `npm test` passed 20 tests after the narrow implementation. Syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- This validates the calibration seams, not human-steered motion feel or final material tuning. No live constants changed.
+- Exact hosted `depth` and `destruction-run` checks at 320×568 and 390×844 plus the GitHub Pages run are required before this slice is closed.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 68 verdict
 
 **Playable hackathon slice: PASS for physics-calibration canon and hosted route health. AAA-ready: FAIL / unverified.** This tick intentionally made no gameplay tuning change. It closes the evidence loop for the current hosted artifact and turns the next first-principles physics change into a bounded, testable packet.
