@@ -1220,6 +1220,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       state.charge = drainOutcome.nextCharge;
       if (drainOutcome.kind === 'loss') { lose(); return; }
       setMessage(state.tableKind === 'boss' ? 'Warden backlash. Stability lost.' : 'Probe recovered. Stability lost.'); spawnBall(); return;
+    }
     updateHud();
   }
   function drawMineBackdrop() {
