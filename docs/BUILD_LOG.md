@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: Physics V2 calibration gate authored
+
+### Implemented
+
+- Authored `docs/PHYSICS_CALIBRATION.md` as the next implementation-ready canon slice. It records the current material/response source-of-truth, the one-variable calibration plan, measurable gates, required evidence, and explicit non-goals.
+- No gameplay or renderer code changed this tick because the current production contact seams are green and the remaining tuning risk is cross-layer calibration, not another unmeasured visual layer.
+
+### Verification
+
+- `npm test`: 18 tests passed, 0 failures.
+- Hosted exact Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth`, `destruction-run`, and `upgrade` review routes at both exact 320×568 and 390×844. All returned HTTP 200, complete documents, Canvas, exact CSS width parity, and zero console/page/request errors.
+- Hosted fixture evidence: `depth` and `destruction-run` overlays hidden; `upgrade` overlay visible through the real upgrade renderer; body heights 568px / 846.39px for the normal portrait routes.
+- `git diff --check`: passed.
+
+### Decision / next gate
+
+- This tick deliberately converts the next physics change into a measurable calibration packet instead of guessing at live constants.
+- The next implementation tick should add the renderer-independent calibration fixture and red/green gates described in `docs/PHYSICS_CALIBRATION.md`, then deploy before any constant tuning.
+- AAA-ready remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: swept destructible CCD
 
 ### Implemented

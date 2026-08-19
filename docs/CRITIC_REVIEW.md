@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 67
+# Deadlight Critic Review — Overhaul tick 68
+
+## Overhaul tick 68 verdict
+
+**Playable hackathon slice: PASS for physics-calibration canon and hosted route health. AAA-ready: FAIL / unverified.** This tick intentionally made no gameplay tuning change. It closes the evidence loop for the current hosted artifact and turns the next first-principles physics change into a bounded, testable packet.
+
+### Observed evidence
+
+- `docs/PHYSICS_CALIBRATION.md` records the current 120 Hz Physics V2 material table, impact-energy damage path, calibration sequence, measurable gates, and non-goals.
+- `npm test` passes 18 tests.
+- Hosted exact Playwright passes `depth`, `destruction-run`, and `upgrade` at 320×568 and 390×844 with HTTP 200, exact CSS width parity, Canvas, expected fixture/overlay state, and zero console/page/request errors.
+- The upgrade route was verified through the real renderer with its overlay visible; destruction-run was verified through the production destructible fixture with its overlay hidden.
+
+### Remaining risk / next smallest slice
+
+- This is a canon/evidence slice, not proof of tuned motion feel. The live table still needs a renderer-independent calibration fixture that compares material, flipper, and destructible response bands before constants are changed.
+- No human-steered destruction run or final visual pixel verdict is claimed. AAA-ready remains unsupported.
 
 ## Overhaul tick 67 verdict
 
