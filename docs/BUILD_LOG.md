@@ -12,7 +12,9 @@
 
 - `npm test`: 22 tests passed, 0 failures.
 - `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
-- Hosted smoke `curl -I -L` against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=foreground-plane`: HTTP 200. This is pre-deployment health only; no hosted visual/runtime claim is made for this unpushed change.
+- Hosted smoke `curl -I -L` against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=foreground-plane`: HTTP 200 before deployment.
+- GitHub Pages run `32228469907` completed successfully for commit `aa247e2`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32228469907.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=<route>&cacheBust=aa247e2` passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: all 8 checks returned HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), expected fixture/overlay state, four visible upgrade choices, `foreground` source marker present, and zero console/page/request errors.
 - Exact local browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
 
 ### Decision / next gate

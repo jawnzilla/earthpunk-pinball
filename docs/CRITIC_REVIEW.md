@@ -8,7 +8,7 @@
 
 - `drawForegroundMechanismPlane()` uses a fixed `H - 154` to `H - 106` band and is called immediately before `drawFlippers()`, preserving the intended foreground z-order without touching gameplay geometry.
 - The renderer contract was extended for the helper, gradient, band, and draw order; `npm test` passes all 22 tests, syntax checks pass, and `git diff --check` passes.
-- Pre-deployment hosted smoke returned HTTP 200. This does not certify the changed artifact.
+- GitHub Pages run `32228469907` completed successfully for commit `aa247e2`. Exact hosted Playwright passed all 8 route/viewport checks: HTTP 200, complete document, Canvas, exact CSS width parity, expected fixture/overlay state, four visible upgrade choices, foreground source marker, and zero console/page/request errors.
 
 ### Remaining risk / next smallest slice
 
