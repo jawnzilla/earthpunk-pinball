@@ -18,7 +18,9 @@
 ### Decision / next gate
 
 - This closes the fixture-side symmetry/provenance gap; it does not substitute for the 10-per-side human-steered launch capture required by `docs/FLIPPER_FEEL_CALIBRATION.md`.
-- Deploy and verify the same bilateral fixture on Pages before any tuning. AAA readiness remains unsupported.
+- GitHub Pages run `32220390886` completed successfully for `aed780f`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32220390886.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact&cacheBust=aed780f` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, fixture marker, both side buckets with 4 samples each, equal mean after-speed (`600`) and mean delta (`388.3252626522945`), and zero console/page/request errors.
+- Deploy evidence is closed for this slice. AAA readiness remains unsupported.
 
 ## 2026-08-19 — Overhaul tick: flipper-feel calibration packet
 
