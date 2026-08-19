@@ -9,7 +9,8 @@
 - `src/flipper-contact.js` exports `selectEarliestFlipperContact()` and deterministically chooses the smallest normalized `contact.t`, with a left-before-right tie break.
 - `tests/flipper-contact.test.mjs` covers nearest, tie, empty, and invalid candidates; `npm test` passes 23/23 and syntax checks pass.
 - `index.html` imports the selector, but the live update path still resolves left then right sequentially. This import is a contract marker, not evidence of a completed manifold.
-- No exact 320×568/390×844 browser or screenshot claim is made for this tick.
+- Exact hosted Playwright checks at CSS 320×568 and 390×844 across `depth` and `upgrade` passed 4/4 with canvas present, no horizontal overflow, and no console/page errors. This is runtime evidence, not a human grayscale verdict.
+- GitHub Pages run `32275044825` completed successfully for commit `990ff936a6cb587da329b39899bc796f743e23cc`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32275044825. Hosted HTML/module parity was verified at `?review=flipper-selector&cacheBust=990ff93`.
 
 ### Remaining risk / next smallest slice
 

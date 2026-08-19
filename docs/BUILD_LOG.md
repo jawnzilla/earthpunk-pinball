@@ -13,8 +13,9 @@
 - `npm test`: 23 passed, 0 failed.
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
-- Exact 320×568/390×844 browser checks: not claimed until a runnable browser executable is available; this environment's package has no browser harness script.
-- Pages deployment and hosted parity: pending push for this tick.
+- Exact hosted Playwright checks at CSS 320×568 and 390×844 across `depth` and `upgrade`: 4/4 passed; canvas present, exact viewport dimensions, no horizontal overflow, and no console/page errors.
+- GitHub Pages run `32275044825` completed successfully for `990ff936a6cb587da329b39899bc796f743e23cc`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32275044825.
+- Hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-selector&cacheBust=990ff93` returned HTTP 200; the HTML contained `<canvas`, and the imported `src/flipper-contact.js` module contained `selectEarliestFlipperContact`.
 
 ### Remaining risk / next smallest slice
 
