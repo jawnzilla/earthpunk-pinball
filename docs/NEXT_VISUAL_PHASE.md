@@ -4,7 +4,7 @@ Status: implementation-ready visual packet; still-frame evidence gate held on ov
 
 ## Evidence boundary
 
-The current `prototype` HEAD is `f47d650` (full SHA `f47d650fe7f151a28a5614b2e467eca5a21d40d7`). The hosted `depth` URL remains reachable with HTTP 200 and a 201085-byte response; the exact 8-check portrait matrix and fresh captures are recorded in the tick 88 build log. This is runtime evidence only; no human still-frame visual verdict is claimed.
+The current `prototype` HEAD is `af4f75e` (full SHA `af4f75e70a9e033db543782e04533eeac0c3b139`). The hosted `depth` URL remains reachable with HTTP 200 and a 201085-byte response; the latest exact 8-check portrait matrix and fresh captures are recorded in the tick 88 build log. This is runtime evidence only; no human still-frame visual verdict is claimed.
 
 This packet deliberately does **not** infer final visual quality from DOM health or from the deterministic fixtures. It is the smallest coherent visual phase to execute next when a fresh still-frame review or human-play capture is available.
 

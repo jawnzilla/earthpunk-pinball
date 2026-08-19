@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 86
 
+## Overhaul tick 89 verdict
+
+**Playable hackathon slice: PASS for hosted availability and evidence hygiene; AAA-ready: FAIL / unverified.** The clean `prototype` build is deployed, but the next visual change remains blocked because this scheduled environment cannot make a legitimate still-frame or grayscale judgment.
+
+### Observed evidence
+
+- `prototype` and `origin/prototype` are clean at `af4f75e70a9e033db543782e04533eeac0c3b139`.
+- `npm test` passes all 22 tests; `git diff --check` passes.
+- Hosted `?review=depth&cacheBust=af4f75e` returns HTTP 200 with a 201085-byte artifact and Pages run `32241453541` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32241453541.
+- No new browser matrix, screenshot, or human visual verdict is claimed for this tick.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is whether shell → deck → recessed well → foreground mechanism and the major object families separate clearly in a human-inspected grayscale still.
+- Do not stack another renderer layer until a fresh 320×568 still identifies exactly one concrete hierarchy defect. Then implement only that seam and rerun both portrait sizes plus the upgrade fixture.
+- Physics, input, progression, and elemental behavior remain untouched. AAA-ready remains unsupported.
+
 ## Overhaul tick 88 verdict
 
 **Playable hackathon slice: PASS for hosted runtime/evidence health; AAA-ready: FAIL / unverified.** The clean `prototype` build is deployed and passes the exact portrait matrix, but the next visual change remains blocked because this scheduled environment cannot make a legitimate still-frame or grayscale judgment.

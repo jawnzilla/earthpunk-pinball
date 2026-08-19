@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 89: hosted evidence gate refreshed
+
+### Decision
+
+- No product-code change was made this tick. The visual phase remains correctly blocked on a human-inspected still frame naming one concrete hierarchy defect; adding another renderer seam from source inspection alone would be unmeasured polish.
+- Refreshed repository, hosted artifact, and Pages workflow evidence against the clean `prototype` HEAD (`af4f75e`). This is an evidence tick, not a completion claim.
+
+### Verification
+
+- `git fetch origin prototype`, `npm test`, and `git diff --check` passed. The test suite reports 22 passed, 0 failed.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=af4f75e'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 10:11:36 GMT`.
+- Hosted body fetch returned 201085 bytes. GitHub Actions Pages run `32241453541` completed successfully for `af4f75e`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32241453541.
+- No new browser matrix or still-frame/grayscale inspection is claimed in this scheduled tick. Existing tick 88 hosted matrix evidence remains the latest exact route/viewport packet.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes.
+- When a human still-frame review is available, name exactly one defect at 320×568, implement only that renderer seam, and rerun the full hosted portrait packet plus the upgrade fixture.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 88: hosted portrait evidence gate refreshed
 
 ### Decision
