@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 119
+# Deadlight Critic Review — Overhaul tick 124
+
+## Overhaul tick 124 verdict
+
+**Playable hackathon slice: PASS for a bounded renderer wiring correction; global visual manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame pending; AAA-ready: FAIL / unverified.** The live renderer now paints the authored drain throat that was previously defined but orphaned from composition, restoring a manufactured lower-plane silhouette without touching gameplay.
+
+### Observed evidence
+
+- `index.html` defines `drawMineDrain()` and now calls it from `draw()` immediately before `drawForegroundMechanismPlane()` and `drawFlippers()`.
+- `tests/renderer-contract.test.mjs` asserts both the function and live composition call.
+- The change is renderer-only: no solver constants, collision geometry, fixed timestep, input ownership, progression, or asset loading changed.
+- Post-change local and hosted exact portrait browser checks, test output, and Pages deployment are recorded below after execution; no subjective grayscale claim is made without a still-frame inspection.
+
+### Remaining risk / next smallest slice
+
+- This closes one visible lower-plane wiring gap, not the complete earthpunk mine-table visual overhaul.
+- Human grayscale still-frame review remains the largest unverified visual gate. The next visual work should target only the largest gap observed in that review.
 
 # Deadlight Critic Review — Overhaul tick 123
 

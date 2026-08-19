@@ -109,6 +109,8 @@ assert.match(source, /ctx\.fillStyle = wellGradient;/);
 assert.match(source, /ctx\.globalAlpha = \.42/);
 assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(spriteImages\.deckInset/);
 assert.match(source, /function drawForegroundMechanismPlane\(\)/);
+assert.match(source, /function drawMineDrain\(\)/);
+assert.match(source, /drawMineDrain\(\); drawForegroundMechanismPlane\(\);/);
 assert.match(source, /const top = H - 154, bottom = H - 106/);
 assert.match(source, /ledge\.addColorStop\(\.18, '#526e63'\)/);
 assert.match(source, /function drawWellWallBevel\(\)/);

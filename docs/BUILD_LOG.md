@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 124: restore the authored drain throat
+
+### Decision
+
+- Reconnected the existing `drawMineDrain()` foreground drain-throat renderer in the live `draw()` composition, immediately before the foreground mechanism plane and flippers.
+- This closes a renderer wiring gap: the authored drain geometry, inset opening, side lips, and warm edge hardware were defined but never painted, leaving the lower table plane visually incomplete.
+- No physics constants, collision geometry, input ownership, progression, asset loading, or gameplay state changed.
+- Added a renderer contract assertion so the drain throat cannot silently become orphaned again.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed; `git diff --check`: passed.
+- Exact local and current-hosted Playwright checks at CSS 320×568 and 390×844: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, and zero console/page errors. The hosted probe is pre-deployment and therefore does not yet prove this source change is live there.
+- Post-change still-frame screenshots were captured outside the repository at `%LOCALAPPDATA%/Temp/deadlight-tick124-local-320.png`, `...-local-390.png`, `...-host-320.png`, and `...-host-390.png`; no subjective grayscale verdict is claimed without visual inspection.
+
+### Remaining risk / next smallest slice
+
+- The reconnect is a bounded depth/readability fix, not evidence of complete visual overhaul or AAA parity.
+- Human grayscale still-frame review remains the largest unverified visual gate.
+
 ## 2026-08-19 — Overhaul tick 123: portrait objective hierarchy
 
 ### Decision
