@@ -15,6 +15,8 @@
 - `npm test`: 43 passed, 0 failed.
 - `node --check src/flipper-contact.js`: passed; `git diff --check`: passed.
 - Exact 320×568 / 390×844 browser checks are not claimed in this tick because this checkout has no `node_modules` or runnable browser harness; the required hosted HTTP/parity probe is run after Pages deployment.
+- GitHub Pages run `32311247012` completed successfully for commit `6ee7999`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32311247012.
+- Post-deployment hosted probe at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=6ee7999` returned HTTP 200, 212462 bytes, and contained `sweptSegmentContact`, `drawWellFrontLip`, and `<canvas>` markers. This confirms reachability and source-artifact parity only; it does not substitute for exact viewport/console/pixel checks.
 
 ### Remaining risk / next smallest slice
 

@@ -10,6 +10,7 @@
 - The regression was red before implementation (`got 93.75` rather than the expected first contact y=92), then passed after the analytic query was installed.
 - `node --test tests/flipper-contact.test.mjs`: 13/13 passed; `npm test`: 43/43 passed; syntax and whitespace checks passed.
 - No renderer, input, progression, or asset behavior changed. Exact browser viewport checks were not run because no local browser harness is installed in this checkout; no visual verdict is inferred.
+- Pages run `32311247012` completed successfully for commit `6ee7999`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32311247012. The hosted `?review=depth&cacheBust=6ee7999` probe returned HTTP 200 and retained `sweptSegmentContact`, `drawWellFrontLip`, and `<canvas>` markers; exact viewport/console/pixel checks remain unclaimed.
 
 ### Remaining risk / next smallest slice
 
