@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 84: still-frame evidence gate held
+
+### Decision
+
+- No product-code change was made this tick. The current visual packet already contains the ordered recessed-well, wall-bevel, foreground-plane, authored-silhouette, contact-shadow, HUD-spacing, and upgrade-overlay seams; without a human-inspected still frame, adding another renderer layer would be unmeasured polish.
+- Refreshed the implementation-ready packet pointer to the current `prototype` HEAD and recorded fresh hosted availability evidence. This is a canon/evidence tick, not a completion claim.
+
+### Verification
+
+- `prototype` was inspected at clean HEAD `eceac2d` (`Refresh visual packet HEAD pointer`).
+- `npm test`: 22 tests passed, 0 failures.
+- `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=eceac2d'`: HTTP 200, `Content-Length: 201085`, GitHub Pages artifact reachable.
+- No exact hosted Playwright matrix, screenshot, grayscale inspection, console assertion, or viewport-parity claim is made in this scheduled tick. The repository has no browser verification harness and no browser automation tool is available here.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human still-frame read of shell → deck → recessed well → foreground mechanism and major silhouettes in grayscale. Do not stack another visual seam until one concrete defect is named.
+- Physics, collision geometry, fixed timestep, input, progression, and elemental behavior remain untouched. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: still-frame gate held
 
 ### Decision

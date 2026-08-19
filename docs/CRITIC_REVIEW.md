@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 82
+# Deadlight Critic Review — Overhaul tick 84
+
+## Overhaul tick 84 verdict
+
+**Playable hackathon slice: PASS for evidence-gated visual direction; AAA-ready: FAIL / unverified.** The repository is clean and the hosted Pages artifact is reachable, but this scheduled environment still cannot make a legitimate still-frame or grayscale visual judgment. Holding the next renderer change is the correct result.
+
+### Observed evidence
+
+- `prototype` HEAD is `eceac2d`; the implementation-ready visual packet now points at that HEAD.
+- `npm test` passes all 22 tests.
+- Hosted `?review=depth&cacheBust=eceac2d` returned HTTP 200 with `Content-Length: 201085`.
+- No screenshot, exact hosted Playwright matrix, console assertion, viewport-parity claim, or human still-frame verdict is made for this tick.
+
+### Remaining risk / next smallest slice
+
+- The largest unresolved gap is still whether the implemented depth planes and major object families separate clearly in a human-inspected grayscale still. Runtime availability and source contracts cannot certify that visual bar.
+- Do not add another shadow, glow, opacity, material, or HUD layer until a fresh 320×568 still identifies exactly one concrete hierarchy defect. AAA-ready remains unsupported.
 
 ## Overhaul tick 83 verdict
 
