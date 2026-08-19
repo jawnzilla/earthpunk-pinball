@@ -15,11 +15,12 @@
 - `npm test`: 18 tests passed, 0 failures.
 - `node --check src/elemental-effects.js` and `git diff --check`: passed.
 - Local Playwright against `127.0.0.1:8765` reproduced the existing runner `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
-- Pre-deploy hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=ccd` passed the prior artifact at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, hidden overlay, depth fixture, expected grayscale filter, and zero browser/request errors. It necessarily does not contain this unpushed slice yet.
+- GitHub Pages run `32211667329` completed successfully for commit `ab30609`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32211667329.
+- Exact hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=ab30609` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), hidden overlay, depth fixture, expected grayscale filter, deployed `function destructibleCollision` and `advancePrimaryBallResidual` markers, and zero console/page/request errors.
 
 ### Decision / next gate
 
-- Push only to `prototype`, wait for GitHub Pages, then verify the deployed artifact at both exact portrait sizes and confirm the deployed HTML contains `function destructibleCollision`.
+- Deployment/runtime evidence for this slice is closed. The local runner still returns `ERR_EMPTY_RESPONSE`, so hosted evidence is the claimed browser path.
 - This closes a concrete live-play tunneling gap; it does not claim final visual quality or AAA readiness.
 
 ## 2026-08-19 — Overhaul tick: deterministic live destruction-run evidence

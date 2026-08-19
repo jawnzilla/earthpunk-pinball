@@ -9,12 +9,12 @@
 - The regression loop was red before the implementation because the renderer-contract test could not find a production destructible CCD seam; after the narrow change, `npm test` passes 18 tests.
 - `destructibleCollision()` is restricted to the four Generator Well destructibles. Targets, bumpers, boss, rails, and flippers retain their existing paths.
 - The contact carries a normalized swept fraction and `advancePrimaryBallResidual()` preserves residual travel after impact. Existing damage, cooldown, integrity-stage, and exactly-once salvage behavior remains delegated to `resolveDestructibleContact()`.
-- Pre-deploy hosted checks passed at 320×568 and 390×844 with HTTP 200, Canvas, exact CSS width parity, hidden depth overlay, expected grayscale filter, and zero browser/request errors. The hosted artifact was the previous commit and therefore is not evidence of the new code yet.
+- GitHub Pages run `32211667329` completed successfully for commit `ab30609`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32211667329.
+- Exact hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=ab30609` passed at 320×568 and 390×844 with HTTP 200, Canvas, exact CSS width parity, hidden depth overlay, expected grayscale filter, deployed CCD/residual markers, and zero browser/request errors.
 
 ### Remaining risk / next smallest slice
 
-- Local Playwright remains blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`; no local runtime result is claimed.
-- Pages deployment and hosted checks for the new commit are still pending. Until then, this slice is not deployed evidence.
+- Local Playwright remains blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`; hosted evidence is the claimed browser path.
 - This addresses tunneling through destructibles, not final impact feel, visual hierarchy, or AAA readiness.
 
 ## Overhaul tick 66 verdict
