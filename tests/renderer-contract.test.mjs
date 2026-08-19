@@ -41,6 +41,9 @@ assert.match(source, /const fixtureNormal = \{ x: Math\.sin\(flipper\.angle\), y
 assert.match(source, /flipper\.angularVelocity = -8/);
 assert.match(source, /contactPoint\.x \+ fixtureNormal\.x \* 12/);
 assert.match(source, /review=flipper-contact/);
+assert.match(source, /for \(const side of \['left', 'right'\]\)/);
+assert.match(source, /dataset\.reviewFlipperSamples/);
+assert.match(source, /dataset\.reviewFlipperSides/);
 assert.match(source, /activateFlipperContactReviewFixture\(\);/);
 assert.match(source, /activateDamagePulseReviewFixture\(\);/);
 assert.match(source, /function activateDestructionRunReviewFixture\(\)/);

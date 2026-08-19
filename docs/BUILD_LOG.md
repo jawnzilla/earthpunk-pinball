@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: bilateral flipper calibration fixture
+
+### Implemented
+
+- Extended `?review=flipper-contact` to run the production flipper response path on both left and right flippers instead of certifying only the left motor.
+- Added machine-readable `reviewFlipperSamples` aggregate and `reviewFlipperSides` provenance-separated side buckets for hosted calibration capture. Fixture output remains explicitly separate from human-steered launch data.
+- Added a renderer-contract regression requiring both-side coverage and side telemetry markers. No live solver constants, collision geometry, input, progression, or normal-play behavior changed.
+
+### Verification before deployment
+
+- The new contract was red before the fixture change and green after it.
+- `npm test`: 21 tests passed, 0 failures.
+- `node --check src/flipper-contact.js`, `node --check src/physics-core.js`, and `git diff --check`: passed.
+- Local exact Playwright against `?review=flipper-contact` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, fixture marker, both side buckets with 4 samples each, identical mean after-speed (`600`) and mean delta (`388.3252626522945`), and zero console/page/request errors.
+
+### Decision / next gate
+
+- This closes the fixture-side symmetry/provenance gap; it does not substitute for the 10-per-side human-steered launch capture required by `docs/FLIPPER_FEEL_CALIBRATION.md`.
+- Deploy and verify the same bilateral fixture on Pages before any tuning. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: flipper-feel calibration packet
 
 ### Authored

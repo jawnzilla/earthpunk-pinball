@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 74 verdict
+
+**Playable hackathon slice: PASS for bilateral flipper fixture calibration evidence; AAA-ready: FAIL / unverified.** The opt-in calibration route now exercises and reports both physical flippers, eliminating a false sense of coverage from a left-only fixture.
+
+### Observed evidence
+
+- The fixture loops over `left` and `right`, records `source=fixture`, and publishes independent side summaries through `document.body.dataset.reviewFlipperSides`.
+- Local exact Playwright passed at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, fixture marker, 4 samples per side, equal mean after-speed `600`, equal mean speed delta `388.3252626522945`, and zero console/page/request errors.
+- The contract suite was intentionally red before the bilateral markers existed, then `npm test` passed all 21 tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- Fixture parity is not human-play evidence. The required next feel gate remains 10 live launches per side plus held-catch exclusions, followed by one-variable tuning only if a measured gate fails.
+- Pages deployment and hosted bilateral fixture checks are still required for this commit. AAA-ready remains unsupported.
+
 ## Overhaul tick 73 verdict
 
 **Playable hackathon slice: PASS for implementation-ready flipper calibration canon; AAA-ready: FAIL / unverified.** The next feel change now has explicit telemetry separation and portrait deployment gates instead of another unmeasured constant edit.
