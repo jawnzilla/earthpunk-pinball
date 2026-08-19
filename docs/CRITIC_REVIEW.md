@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 119
 
+## Overhaul tick 120 verdict
+
+**Playable hackathon slice: PASS for a headless drain replay-window contract; global manifold: IMPROVED / not complete; visual quality: runtime smoke pending; AAA-ready: FAIL / unverified.** The late-drain path now has one renderer-independent remainder calculation, and a focused fixture proves a selected rescue preserves state while replaying the residual fixed-step duration.
+
+### Observed evidence
+
+- `src/drain-recovery.js` exports `drainRecoveryResidualDt(dt, candidate)` with bounded contact timing.
+- `index.html` uses that helper to integrate the remainder after a non-separating selected drain-flipper response.
+- `tests/drain-recovery.test.mjs` covers quarter-step contact, 75% residual duration, and unchanged stability/charge; `npm test` passes 40/40.
+- Syntax checks and `git diff --check` pass.
+
+### Remaining risk / next smallest slice
+
+- This is an arithmetic/state fixture, not a full runtime opening trajectory or cradle fixture; drain recovery remains outside the primary manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 119 verdict
 
 **Playable hackathon slice: PASS for bounded drain residual replay; global manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** A selected late-drain flipper rescue now replays the remainder of its fixed timestep, while state ownership remains explicit.

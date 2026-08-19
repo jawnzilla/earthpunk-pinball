@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 120: headless drain replay-window contract
+
+### Decision
+
+- Added renderer-independent `drainRecoveryResidualDt(dt, candidate)` so the selected late-drain contact produces an explicit fixed-step remainder.
+- The live emergency rescue now consumes that helper before integrating the remainder, while selected-flipper recovery remains state-neutral and outside the primary manifold.
+- Added a focused headless fixture proving a quarter-step opening contact preserves stability/charge and replays the remaining 75% of the step.
+
+### Verification
+
+- `npm test`: 40 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
+- `git diff --check`: passed.
+- Exact local Playwright checks and hosted Pages verification remain pending until after push.
+
+### Remaining risk / next smallest slice
+
+- The helper proves replay-window arithmetic and state ownership, not full opening trajectory/cradle behavior inside the runtime. Do not claim drain recovery is part of the primary manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 119: replay residual time after drain flipper rescue
 
 ### Decision

@@ -328,7 +328,7 @@ import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEar
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
-import { drainRecoveryResidualFraction, resolveDrainRecovery } from './src/drain-recovery.js';
+import { drainRecoveryResidualDt, resolveDrainRecovery } from './src/drain-recovery.js';
 import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
 (() => {
   "use strict";
@@ -1213,7 +1213,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       // array order as a hidden side priority.
       const lateFlipperCandidate = selectDrainRecoveryCandidate(collectDrainRecoveryCandidates(b, flippers, b.r + flippers.left.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 }));
       const drainResolution = resolveDrainRecovery({ candidate: lateFlipperCandidate, tableKind: state.tableKind, immortal: state.immortal, stability: state.stability, stabilityMax: state.stabilityMax, charge: state.charge });
-      if (lateFlipperCandidate) { const { side, flipper, contact } = lateFlipperCandidate; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, flipper, side, held, contact); if (b.lastContact && !b.lastContact.separating) advancePrimaryBallResidual(b, routeGravity, dt, drainRecoveryResidualFraction(lateFlipperCandidate)); state.flipperContacts[side] = true; updateHud(); return; }
+      if (lateFlipperCandidate) { const { side, flipper, contact } = lateFlipperCandidate; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, flipper, side, held, contact); if (b.lastContact && !b.lastContact.separating) { const residualDt = drainRecoveryResidualDt(dt, lateFlipperCandidate); if (residualDt > 0) { b.prevX = b.x; b.prevY = b.y; integratePrimaryBall(b, routeGravity, residualDt); } } state.flipperContacts[side] = true; updateHud(); return; }
       const drainOutcome = drainResolution.outcome;
       state.stability = drainResolution.state.stability;
       state.charge = drainResolution.state.charge;

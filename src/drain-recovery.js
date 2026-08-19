@@ -32,6 +32,13 @@ export function drainRecoveryResidualFraction(candidate = null) {
     : 1;
 }
 
+// Keep the fixed-step remainder calculation renderer-independent so a drain
+// fixture can prove that rescue contact does not discard the rest of the step.
+export function drainRecoveryResidualDt(dt = 0, candidate = null) {
+  const safeDt = Number.isFinite(dt) ? Math.max(0, dt) : 0;
+  return safeDt * (1 - drainRecoveryResidualFraction(candidate));
+}
+
 // Complete renderer-independent decision/application seam for the late drain.
 // The selected contact remains an action for the caller; it must not consume
 // stability or charge merely because the emergency query found a blade.

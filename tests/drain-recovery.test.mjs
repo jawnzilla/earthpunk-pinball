@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome, drainRecoveryResidualFraction, resolveDrainRecovery } from '../src/drain-recovery.js';
+import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome, drainRecoveryResidualDt, drainRecoveryResidualFraction, resolveDrainRecovery } from '../src/drain-recovery.js';
 
 test('drain outcome preserves a selected flipper winner as the first action', () => {
   const candidate = { side: 'right', contact: { t: 0.2 } };
@@ -21,6 +21,14 @@ test('drain recovery exposes bounded residual replay timing only for a selected 
   assert.equal(drainRecoveryResidualFraction({ contact: { t: 4 } }), 1);
   assert.equal(drainRecoveryResidualFraction({ contact: { t: -1 } }), 0);
   assert.equal(drainRecoveryResidualFraction(null), 1);
+});
+
+test('headless drain fixture preserves recovery state and replays the opening remainder', () => {
+  const candidate = { side: 'left', contact: { t: 0.25 } };
+  const resolution = resolveDrainRecovery({ candidate, stability: 2, stabilityMax: 3, charge: 1.8 });
+  assert.deepEqual(resolution.state, { stability: 2, charge: 1.8 });
+  assert.equal(drainRecoveryResidualDt(1 / 60, candidate), (1 / 60) * 0.75);
+  assert.equal(drainRecoveryResidualDt(1 / 60, null), 0);
 });
 
 test('complete drain resolution applies ordinary recovery state', () => {
