@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 91: current-host evidence gate refreshed
+
+### Decision
+
+- No product-code change was made this tick. The implementation-ready visual phase remains held at the required human-inspected still-frame gate; adding another renderer seam without one named hierarchy defect would be unmeasured polish.
+- Refreshed repository, hosted artifact, and Pages workflow evidence against the clean `prototype` HEAD (`fc4e504`). This is an evidence tick, not a completion claim.
+
+### Verification
+
+- `git fetch origin prototype`, `git rev-parse HEAD`, and `git rev-parse origin/prototype` confirm local and remote both at `fc4e504c89ff57947fe9dbc4835b91a4d3e7d4cd`.
+- `npm test`: 22 passed, 0 failed. `node --check src/*.js`: passed for all six source modules. `git diff --check`: passed before this documentation update.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=fc4e504'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 10:53:25 GMT`.
+- Hosted body fetch retained `drawForegroundMechanismPlane`, `drawWellWallBevel`, and `review=upgrade` markers. This confirms artifact content/availability, not subjective visual quality.
+- GitHub Actions Pages run `32244861790` completed successfully for `fc4e504`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32244861790.
+- No fresh exact browser matrix, screenshot inspection, grayscale verdict, or subjective visual-quality claim is made in this scheduled tick; Playwright is not installed in the repository.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes.
+- When a human still-frame review is available, name exactly one defect at 320×568, implement only that renderer seam, and rerun the full hosted portrait packet plus the upgrade fixture.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 90: current-host evidence gate refreshed
 
 ### Decision
