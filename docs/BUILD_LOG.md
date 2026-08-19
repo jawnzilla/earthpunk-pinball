@@ -13,8 +13,9 @@
 - `npm test`: 30 passed, 0 failed.
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
-- Exact 320×568/390×844 browser checks are not claimed until a runnable browser is available in this scheduled environment.
-- Hosted Pages verification is pending this push.
+- Hosted Playwright checks at exact CSS 320×568 and 390×844: both returned HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
+- GitHub Pages run `32289196501` completed successfully for `bcf747d`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32289196501.
+- Hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=bcf747d` returned HTTP 200; HTML contained `<canvas` and `collectDrainRecoveryCandidates`.
 
 ### Remaining risk / next smallest slice
 

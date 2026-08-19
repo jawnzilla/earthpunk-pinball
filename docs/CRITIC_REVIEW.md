@@ -10,7 +10,9 @@
 - `index.html` calls the collector once for both sides and passes the selected contact into `resolveFlipperCollision()`.
 - `tests/flipper-contact.test.mjs` proves both-side gathering and deterministic winner identity; `npm test` passes 30/30.
 - Syntax checks and `git diff --check` pass.
-- Exact 320×568/390×844 browser checks, hosted Pages verification, and screenshots are not claimed in this scheduled environment.
+- Hosted Playwright checks at exact CSS 320×568 and 390×844: both returned HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
+- GitHub Pages run `32289196501` completed successfully for `bcf747d`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32289196501.
+- Hosted HTML returned HTTP 200 and contained `<canvas` plus `collectDrainRecoveryCandidates`.
 
 ### Remaining risk / next smallest slice
 
