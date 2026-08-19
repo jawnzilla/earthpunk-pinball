@@ -324,7 +324,7 @@
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { collectRuntimeContactCandidates, selectEarliestContact } from './src/contact-manifold.js';
-import { selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
+import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
@@ -1207,8 +1207,11 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     state.physicsTelemetry.physicsStepMs = performance.now() - physicsStepStart;
     state.physicsTelemetry.activeBodyCount = 1 + (b.elementalRuntime?.miniBalls?.length || 0) + (b.elementalRuntime?.windEcho ? 1 : 0) + (b.elementalRuntime?.earthLink ? 2 : 0);
     if (b.y > H - 35 && drainOpening) {
-      const lateFlipper = [flippers.left, flippers.right].find(flipper => sweptFlipperContact(b, flipper, b.r + flipper.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 }));
-      if (lateFlipper) { const side = lateFlipper === flippers.left ? 'left' : 'right'; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, lateFlipper, side, held); state.flipperContacts[side] = true; updateHud(); return; }
+      // Drain recovery is a separate emergency path, but it now gathers both
+      // blades once and dispatches the earliest candidate instead of accepting
+      // array order as a hidden side priority.
+      const lateFlipperCandidate = selectDrainRecoveryCandidate(collectDrainRecoveryCandidates(b, flippers, b.r + flippers.left.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 }));
+      if (lateFlipperCandidate) { const { side, flipper, contact } = lateFlipperCandidate; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, flipper, side, held, contact); state.flipperContacts[side] = true; updateHud(); return; }
       if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
       if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
       state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
+import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -64,6 +64,18 @@ test('flipper candidate selector chooses earliest timing with stable tie break',
   assert.equal(selectEarliestFlipperContact([late, right, left]), left);
   assert.equal(selectEarliestFlipperContact([]), null);
   assert.equal(selectEarliestFlipperContact([{ side: 'left', contact: null }]), null);
+});
+
+test('drain recovery gathers both flippers and selects one deterministic winner', () => {
+  const ball = { prevX: 150, prevY: 520, x: 180, y: 548 };
+  const flippers = {
+    left: { pivotX: 140, pivotY: 540, length: 42, width: 12, previousAngle: -.4, angle: .2 },
+    right: { pivotX: 220, pivotY: 540, length: 42, width: 12, previousAngle: Math.PI + .4, angle: Math.PI - .2 }
+  };
+  const candidates = collectDrainRecoveryCandidates(ball, flippers, 12);
+  assert.ok(candidates.length >= 1);
+  assert.equal(selectDrainRecoveryCandidate(candidates), selectEarliestFlipperContact(candidates));
+  assert.ok(selectDrainRecoveryCandidate(candidates).contact.t >= 0);
 });
 
 test('flipper telemetry reports response in stable units', () => {

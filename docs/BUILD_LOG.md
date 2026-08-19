@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 115: deterministic drain recovery winner
+
+### Decision
+
+- Replaced the late drain `Array.find()` flipper sweep with a renderer-independent candidate collector that queries both blades from the same post-resolution trajectory and selects the earliest normalized contact with the existing stable left-before-right tie break.
+- Passed the selected contact into `resolveFlipperCollision()` so drain recovery no longer hides an array-order side priority or re-queries one arbitrary blade after the primary manifold.
+- Kept drain recovery explicitly separate from the primary manifold: this packet does not claim contact rewind/residual replay across the emergency recovery boundary.
+
+### Verification
+
+- `npm test`: 30 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed until a runnable browser is available in this scheduled environment.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- The late drain path now has deterministic two-blade selection, but remains an emergency post-dispatch path. A focused runtime fixture should prove the selected contact preserves stability/free-pass behavior before folding drain recovery into the primary manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 114: boundary contacts enter the shared manifold
 
 ### Decision

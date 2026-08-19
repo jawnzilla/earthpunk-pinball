@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 97
+# Deadlight Critic Review — Overhaul tick 115
+
+## Overhaul tick 115 verdict
+
+**Playable hackathon slice: PASS for deterministic drain recovery selection; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** Late drain rescue now compares both flippers from the same post-resolution trajectory and dispatches the earliest candidate instead of taking the first array match.
+
+### Observed evidence
+
+- `src/flipper-contact.js` exports `collectDrainRecoveryCandidates()` and `selectDrainRecoveryCandidate()`; both are pure query/selection seams.
+- `index.html` calls the collector once for both sides and passes the selected contact into `resolveFlipperCollision()`.
+- `tests/flipper-contact.test.mjs` proves both-side gathering and deterministic winner identity; `npm test` passes 30/30.
+- Syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks, hosted Pages verification, and screenshots are not claimed in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- Drain recovery remains deliberately outside the primary manifold and still lacks a runtime fixture proving free-pass/stability state ownership after selected recovery. Do not claim global manifold completion until that seam is exercised.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
 
 ## Overhaul tick 114 verdict
 

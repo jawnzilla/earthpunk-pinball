@@ -79,6 +79,22 @@ export function selectEarliestFlipperContact(candidates = []) {
   return selectEarliestContact(ordered)?.source || null;
 }
 
+// Drain recovery runs after the primary manifold has already resolved. Keep
+// its emergency sweep deterministic and single-source too: both blades are
+// queried from the same post-resolution trajectory, then one winner is
+// returned without mutating either flipper or the ball.
+export function collectDrainRecoveryCandidates(ball, flippersBySide = {}, radius, { lengthBonus = 0 } = {}) {
+  return ['left', 'right'].flatMap(side => {
+    const flipper = flippersBySide[side];
+    const contact = flipper ? sweptFlipperContact(ball, flipper, radius, { lengthBonus }) : null;
+    return contact ? [{ side, flipper, contact }] : [];
+  });
+}
+
+export function selectDrainRecoveryCandidate(candidates = []) {
+  return selectEarliestFlipperContact(candidates);
+}
+
 // Keep launch/contact evidence separate from the collision query.
 // tuning probes deterministic without teaching the renderer how to infer
 // response quality from pixels.
