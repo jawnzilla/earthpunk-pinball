@@ -10,10 +10,11 @@
 - The live draw order is `drawMineDrain(); drawForegroundMechanismPlane(); drawWellFrontLip(); drawFlippers();`; a renderer contract rejects orphaning the new layer.
 - `npm test` passes 42/42; syntax checks and `git diff --check` pass.
 - Local exact CSS 320×568 and 390×844 browser checks pass with HTTP 200, one Canvas, exact widths, no horizontal overflow, active depth fixture, and zero page/console errors. Still frames are captured outside the repository.
+- GitHub Pages run `32309786236` completed successfully for commit `6844141`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32309786236. Hosted exact 320×568 and 390×844 checks pass with the deployed lip present and zero page/console errors.
 
 ### Remaining risk / next smallest slice
 
-- No subjective grayscale or material-read verdict is claimed because this scheduled environment cannot inspect the captured pixels. After deployment, hosted parity must be rerun, then the next change must be selected from actual still-frame evidence rather than source inference.
+- No subjective grayscale or material-read verdict is claimed because this scheduled environment cannot inspect the captured pixels. The next change must be selected from actual still-frame evidence rather than source inference.
 - The complete earthpunk visual overhaul, first-principles physics completion, and AAA bar remain open.
 
 ## Overhaul tick 126 verdict

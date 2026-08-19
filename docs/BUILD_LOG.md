@@ -18,7 +18,9 @@
 ### Remaining risk / next smallest slice
 
 - Subjective grayscale/depth inspection remains unverified in this scheduled environment; this is evidence of capture and runtime correctness, not a visual quality claim.
-- Pages deployment, hosted parity, and the next visual choice remain pending push. Do not claim AAA readiness or LOOP_COMPLETE.
+- GitHub Pages run `32309786236` completed successfully for commit `6844141`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32309786236.
+- Post-deployment hosted Playwright exact CSS 320×568 and 390×844 checks pass: HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, active depth fixture, deployed `drawWellFrontLip` present, and zero page/console errors.
+- The next visual choice remains pending subjective still-frame inspection. Do not claim AAA readiness or LOOP_COMPLETE.
 
 ## 2026-08-19 — Overhaul tick 126: hosted still-frame gate and next-slice canon
 
