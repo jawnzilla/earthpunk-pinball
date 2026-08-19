@@ -16,8 +16,9 @@
 
 ### Deployment verification
 
-- Commit `730d374e74325bc8c0499c29704a9734939a54aa` pushed to `prototype`; Pages verification is pending for this commit.
-- Exact hosted browser checks and the Pages workflow result will be appended after deployment completes.
+- Code commit `730d374e74325bc8c0499c29704a9734939a54aa` and documentation commit `489a7f5b05962ada5f2df96597bf751a8b8883d6` pushed to `prototype`.
+- GitHub Pages run `32224330447` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32224330447.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact&cacheBust=489a7f5` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas present, exact CSS width parity, `flipper-contact` fixture, left/right buckets with 4 samples each, `live` bucket count 0, `fixture` bucket count 8, and zero console/page/request errors.
 
 ### Decision / next gate
 

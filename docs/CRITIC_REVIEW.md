@@ -8,12 +8,14 @@
 
 - The new regression was red before the implementation because `summarizeFlipperContactSources([])` returned an empty object; it is green after the narrow change.
 - `npm test` passes all 22 tests; `node --check src/flipper-contact.js` and `git diff --check` pass.
-- Commit `730d374e74325bc8c0499c29704a9734939a54aa` is pushed to `prototype`.
+- Code commit `730d374e74325bc8c0499c29704a9734939a54aa` and documentation commit `489a7f5b05962ada5f2df96597bf751a8b8883d6` are pushed to `prototype`.
+- GitHub Pages run `32224330447` completed successfully.
+- Exact hosted Playwright passed at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, `flipper-contact`, left/right 4-sample buckets, `live=0`, `fixture=8`, and zero console/page/request errors.
 
 ### Remaining risk / next smallest slice
 
 - This is instrumentation integrity, not live-play feel evidence. No claim is made about launch tuning, final visuals, or AAA readiness.
-- Pages deployment and exact hosted portrait checks for the commit remain pending; complete those before claiming this tick closed.
+- The hosted fixture confirms the missing-live bucket is visible in the deployed runtime; it does not replace the required 10-per-side human-steered capture.
 - Next feel change still requires the 10-per-side human-steered capture defined in `docs/FLIPPER_FEEL_CALIBRATION.md`.
 
 
