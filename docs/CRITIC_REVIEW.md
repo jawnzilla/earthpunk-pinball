@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 65
+# Deadlight Critic Review — Overhaul tick 66
+
+## Overhaul tick 66 verdict
+
+**Playable hackathon slice: PASS for deterministic live destruction-run evidence. AAA-ready: FAIL / unverified.** The production destructible contact consumer now has a repeatable review path proving one timber crate moves from intact through visible damage stages to destroyed, with exactly one salvage reward transition.
+
+### Observed evidence
+
+- `?review=destruction-run` calls the production `applyDestructibleContact()` path seven times with a seeded steel impact and records `contactCount=7`, `impactSpeed=2.4`, stages `1,2,2,2,2,3,3`, and `rewardTransitions=1`.
+- Exact local Playwright passed at 320×568 and 390×844 with HTTP 200, Canvas, exact CSS width parity, hidden overlay, fixture marker, and zero console/page/request errors.
+- `npm test` passes 18 tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- This is evidence of the production state transition and reward contract, not proof that a human-steered ball reliably reaches the crate or that the debris/salvage read is final-quality in motion.
+- Verify the same fixture on the deployed GitHub Pages artifact before selecting the next physics or visual slice. AAA-ready remains unsupported.
 
 ## Overhaul tick 65 verdict
 

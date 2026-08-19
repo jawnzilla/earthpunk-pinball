@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: deterministic live destruction-run evidence
+
+### Implemented
+
+- Added an opt-in `?review=destruction-run` fixture that drives the production `applyDestructibleContact()` consumer for the Generator Well timber crate with a seeded steel impact.
+- The fixture records contact count, impact speed, integrity-stage sequence, and exactly-once salvage reward transition on `document.body.dataset` without adding HUD or gameplay behavior to normal play.
+- Added renderer-contract coverage for the fixture seam and its evidence markers.
+
+### Verification
+
+- `npm test`: 18 tests passed, 0 failures.
+- `node --check src/destructible-contact.js` and `git diff --check`: passed.
+- Exact local Playwright against `?review=destruction-run&cacheBust=final2` passed at 320×568 and 390×844: HTTP 200, Canvas present, exact CSS width parity, hidden overlay, fixture marker, 7 contacts, impact speed 2.4, stages `1,2,2,2,2,3,3`, one reward transition, and zero console/page/request errors.
+
+### Decision / next gate
+
+- This closes the deterministic production-path evidence gap for an authored destructible transitioning from intact through visible damage to destroyed with one salvage payout. It is not a claim of final destruction feel or AAA visual readiness.
+- Push only after the full suite and hosted portrait checks complete; then verify the same fixture on GitHub Pages.
+- AAA-ready remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: separating Wind Echo contacts
 
 ### Implemented

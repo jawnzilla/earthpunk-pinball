@@ -738,6 +738,43 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     document.body.dataset.reviewFixture = 'damage-pulse';
     updateHud();
   }
+  // Review-only fixture: drives the production destructible contact consumer
+  // through intact -> damaged -> destroyed states with a seeded impact. This
+  // is deterministic and opt-in via ?review=destruction-run.
+  function activateDestructionRunReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'destruction-run') return;
+    state.running = false;
+    state.message = 'Review fixture · seeded timber impact run.';
+    routeMapPanel.hidden = true;
+    routePreviewSlot.hidden = true;
+    overlay.hidden = true;
+    debugToggle.hidden = true;
+    const target = state.destructibles[0];
+    if (!target) return;
+    target.integrity = target.maxIntegrity;
+    target.damageStage = 0;
+    target.damageCooldown = 0;
+    target.destroyed = false;
+    const contact = { hit: true, separating: false, impactSpeed: 2.4, impactEnergy: .05, materialA: 'steel' };
+    const stages = [];
+    let contactCount = 0;
+    let rewardTransitions = 0;
+    for (let impact = 0; impact < 7; impact += 1) {
+          target.damageCooldown = 0;
+      const wasDestroyed = target.destroyed;
+      applyDestructibleContact(target, contact);
+      contactCount += 1;
+      if (!wasDestroyed && target.destroyed) rewardTransitions += 1;
+      stages.push(target.damageStage);
+    }
+    state.message = `Timber crate contact run · stage ${stages.join(' → ')} · salvage once.`;
+    document.body.dataset.reviewFixture = 'destruction-run';
+    document.body.dataset.reviewContactCount = String(contactCount);
+    document.body.dataset.reviewImpactSpeed = String(contact.impactSpeed);
+    document.body.dataset.reviewDamageStages = stages.join(',');
+    document.body.dataset.reviewRewardTransitions = String(rewardTransitions);
+    updateHud();
+  }
   // Review-only fixture: puts the production table through a value-only pass.
   // CSS filtering leaves physics and renderer colors untouched while making
   // silhouette, depth planes, and contact-shadow failures easy to audit.
@@ -1525,7 +1562,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateActiveElementsReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateActiveElementsReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture(); activateDestructionRunReviewFixture();
 })();
 </script>
 </body>
