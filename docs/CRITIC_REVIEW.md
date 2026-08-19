@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 102 verdict
+
+**Playable hackathon slice: PASS pending verification for static-segment residual replay; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** The existing swept segment contact now consumes its fractional timing by advancing the remaining fixed-step time for rails, gates, edge guards, and side guards.
+
+### Observed evidence
+
+- `index.html` adds `segmentCollisionWithResidual()` around the existing segment solver and routes the live static-segment consumers through it.
+- This intentionally does not change flipper timing or add a segment earliest-contact manifold.
+- Test, syntax, diff, deployment, and hosted-parity evidence will be appended after execution.
+
+### Remaining risk / next smallest slice
+
+- Sequential segment resolution can still evaluate multiple surfaces after replay; do not claim manifold ordering or full anti-tunneling parity.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; exact 320×568/390×844 browser evidence is unavailable in this scheduled environment.
+
 ## Overhaul tick 101 verdict
 
 **Playable hackathon slice: PASS for deterministic segment-contact timing; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Segment sweeps now carry the first sampled contact fraction through the live segment solver seam without changing collision response.

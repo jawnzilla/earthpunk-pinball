@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 102: segment residual-time replay
+
+### Decision
+
+- Implemented one bounded physics slice: static segment contacts now replay the unused fixed-step residual time after a swept rail, gate, edge-guard, or side-guard impact.
+- The wrapper preserves the existing segment solver and material response; flippers and segment earliest-contact ordering remain separate seams.
+- Added renderer contracts pinning the wrapper and all three live static-segment consumers.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed (only a CRLF normalization warning from Git for the edited test file).
+- Tight regression seam: `tests/renderer-contract.test.mjs` pins wrapper delegation and residual replay for edge segments, the relay gate, and side guards; existing `tests/flipper-contact.test.mjs` covers fractional swept segment timing.
+- Exact 320×568 and 390×844 browser checks are not claimed: no Chromium/Chrome executable is available in this scheduled environment.
+- Pre-push hosted baseline `?review=depth&cacheBust=6e7c273` returned HTTP 200 and `<canvas`, but correctly lacks the new wrapper; post-push parity is required.
+
+### Remaining risk / next smallest slice
+
+- Static segments still resolve sequentially, so this is not a segment earliest-contact manifold and does not establish full anti-tunneling parity.
+- Exact portrait browser checks remain required when a runnable browser is available.
+
 ## 2026-08-19 — Overhaul tick 101: segment sweep contact timing
 
 ### Decision
