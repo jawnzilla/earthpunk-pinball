@@ -1,5 +1,29 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: flipper telemetry provenance closure
+
+### Implemented
+
+- Fixed the renderer-independent `summarizeFlipperContactSources()` seam so the expected `live` and `fixture` buckets are emitted even when one or both have no samples.
+- This prevents an absent live capture from being mistaken for a complete fixture-only report; custom source lists remain supported for future provenance classes.
+- Added a regression test for the empty-bucket contract. No collision query, solver constant, input, progression, or renderer behavior changed.
+
+### Verification before deployment
+
+- The new regression was red before the implementation: an empty sample set returned no provenance keys.
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/flipper-contact.js` and `git diff --check`: passed.
+
+### Deployment verification
+
+- Commit `730d374e74325bc8c0499c29704a9734939a54aa` pushed to `prototype`; Pages verification is pending for this commit.
+- Exact hosted browser checks and the Pages workflow result will be appended after deployment completes.
+
+### Decision / next gate
+
+- The telemetry contract now fails closed for missing provenance instead of silently hiding it. This is evidence infrastructure, not human-steered flipper-feel tuning.
+- Next feel work still requires the 10-per-side live launch capture in `docs/FLIPPER_FEEL_CALIBRATION.md`; AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: salvage label contrast plate
 
 ### Implemented
