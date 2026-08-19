@@ -9,6 +9,7 @@
 - `prototype` was clean at `9b89cb689a30589dae558a4d3130562e1104e73` before this bounded change; only `index.html`, `tests/renderer-contract.test.mjs`, `docs/BUILD_LOG.md`, and this review changed.
 - `npm test` passes all 22 tests; all `src/*.js` files pass `node --check`; `git diff --check` passes.
 - Source evidence: `index.html:893-918` now broad-phases `circleCollision` with `sweptCircleContact(ball.prevX, ball.prevY, item, min)`, rewinds to the swept boundary, and preserves `contact.sweptT`.
+- GitHub Pages run `32253700757` completed successfully for `0d9ef95604c77ad3343b8328a1afcde214584c89`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32253700757. Hosted `?review=depth&cacheBust=0d9ef95` returned HTTP 200 and contained the new collision markers (`circleCollision`, `sweptCircleContact`).
 - No browser executable is installed in this scheduled environment, so exact 320×568/390×844 interactive and screenshot checks are not claimed. No visual-quality or grayscale verdict is claimed.
 
 ### Remaining risk / next smallest slice

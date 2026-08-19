@@ -14,7 +14,9 @@
 - `for f in src/*.js; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
 - Tight regression seam: `tests/elemental-effects.test.mjs` confirms a 100px crossing through a 4px reach reports `hit=true`, an off-path sweep reports `hit=false`, and the renderer contract now requires `circleCollision` to consume `ball.prevX/prevY` through `sweptCircleContact`.
-- Browser executable discovery found no Chromium/Chrome/Firefox binary in this scheduled environment; exact 320×568 and 390×844 interactive checks are therefore not claimed this tick. Hosted HTTP and Pages verification follow deployment.
+- Browser executable discovery found no Chromium/Chrome/Firefox binary in this scheduled environment; exact 320×568 and 390×844 interactive checks are therefore not claimed this tick.
+- GitHub Pages run `32253700757` completed successfully for `0d9ef95604c77ad3343b8328a1afcde214584c89`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32253700757.
+- Hosted `?review=depth&cacheBust=0d9ef95` returned HTTP 200, `Content-Length: 201488`, and a 201364-byte body containing `drawRecessedWellPlane`, `circleCollision`, `sweptCircleContact`, and `<canvas>`. This confirms deployment/artifact parity, not visual quality.
 
 ### Remaining risk / next smallest slice
 
