@@ -22,3 +22,11 @@ export function applyDrainRecoveryOutcome({ outcome, stability = 1, stabilityMax
   if (outcome.kind === 'immortal') return { stability: stabilityMax, charge };
   return { stability: outcome.nextStability, charge: outcome.nextCharge };
 }
+
+// Complete renderer-independent decision/application seam for the late drain.
+// The selected contact remains an action for the caller; it must not consume
+// stability or charge merely because the emergency query found a blade.
+export function resolveDrainRecovery({ candidate = null, tableKind = 'standard', immortal = false, stability = 1, stabilityMax = 3, charge = 0 } = {}) {
+  const outcome = decideDrainRecoveryOutcome({ candidate, tableKind, immortal, stability, charge });
+  return { outcome, state: applyDrainRecoveryOutcome({ outcome, stability, stabilityMax, charge }) };
+}

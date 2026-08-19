@@ -1,10 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome } from '../src/drain-recovery.js';
+import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome, resolveDrainRecovery } from '../src/drain-recovery.js';
 
 test('drain outcome preserves a selected flipper winner as the first action', () => {
   const candidate = { side: 'right', contact: { t: 0.2 } };
   assert.deepEqual(decideDrainRecoveryOutcome({ candidate }), { kind: 'flipper', candidate });
+});
+
+test('complete drain resolution keeps selected flipper recovery state-owned', () => {
+  const candidate = { side: 'left', contact: { t: 0.4 } };
+  assert.deepEqual(resolveDrainRecovery({ candidate, stability: 1, stabilityMax: 3, charge: 2.8 }), {
+    outcome: { kind: 'flipper', candidate },
+    state: { stability: 1, charge: 2.8 }
+  });
+});
+
+test('complete drain resolution applies ordinary recovery state', () => {
+  assert.deepEqual(resolveDrainRecovery({ stability: 3, stabilityMax: 3, charge: 2.8 }), {
+    outcome: { kind: 'recover', stabilityDelta: -1, chargeDelta: -1, nextStability: 2, nextCharge: 1 },
+    state: { stability: 2, charge: 1 }
+  });
 });
 
 test('free tables recover without consuming stability and add half charge', () => {

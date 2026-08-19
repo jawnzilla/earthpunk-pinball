@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 118: complete headless drain resolution seam
+
+### Decision
+
+- Added renderer-independent `resolveDrainRecovery()` to combine late-drain outcome selection with state application in one executable contract.
+- The live renderer now calls that seam once after deterministic flipper candidate selection; selected flipper recovery preserves stability/charge, while non-flipper outcomes apply their state transition through the same helper.
+- Added regressions for selected-flipper state ownership and ordinary recovery application. No claim is made that drain recovery has entered the primary contact manifold.
+
+### Verification
+
+- `npm test`: 38 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Local Playwright checks at exact CSS 320×568 and 390×844: both HTTP 200, canvas present, `scrollWidth === clientWidth`, and zero console/page errors. The first probe hit unrelated services on ports 4173/4174; rerun on an explicit repo-root server at 4175 was the valid result.
+- Hosted Pages pre-push HTTP check: `https://jawnzilla.github.io/earthpunk-pinball/?review=drain-resolution&cacheBust=63af127` returned HTTP 200 for the prior build. Post-push deployment verification remains pending.
+
+### Remaining risk / next smallest slice
+
+- Drain recovery still uses an emergency post-dispatch path; the next physics packet should prove contact timing/residual replay at the opening before folding it into the primary manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 117: headless drain state application
 
 ### Decision

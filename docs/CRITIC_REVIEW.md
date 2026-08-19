@@ -1,4 +1,22 @@
-# Deadlight Critic Review — Overhaul tick 116
+# Deadlight Critic Review — Overhaul tick 118
+
+## Overhaul tick 118 verdict
+
+**Playable hackathon slice: PASS for complete headless drain resolution; global manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** The late-drain policy now has one renderer-independent decision/application seam, and selected flipper recovery is proven not to consume stability or charge.
+
+### Observed evidence
+
+- `src/drain-recovery.js` exports `resolveDrainRecovery()`, combining outcome selection with state application.
+- `index.html` calls the seam once after deterministic drain candidate selection; non-flipper state mutation uses the returned state, while flipper contact remains the caller's action.
+- `tests/drain-recovery.test.mjs` covers selected-flipper state ownership and ordinary recovery; `npm test` passes 38/38.
+- Syntax checks and `git diff --check` pass.
+- Exact local Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, canvas present, no horizontal overflow, and zero console/page errors. No subjective grayscale or still-frame judgment is claimed.
+- Hosted prior-build preflight returned HTTP 200; post-push Pages deployment and hosted parity remain pending.
+
+### Remaining risk / next smallest slice
+
+- Drain recovery remains outside the primary manifold and does not yet prove contact timing/residual replay at the opening. Do not claim global manifold completion.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
 
 ## Overhaul tick 117 verdict
 
