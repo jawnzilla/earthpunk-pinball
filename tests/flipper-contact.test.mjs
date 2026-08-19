@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
+import { selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -55,6 +55,15 @@ test('swept segment catches a high-speed narrow crossing beyond the old sample c
 test('stationary ball and stationary flipper do not manufacture contact', () => {
   const flipper = { pivotX: 0, pivotY: 0, length: 100, width: 17, angle: 0, previousAngle: 0 };
   assert.equal(sweptFlipperContact({ prevX: 50, prevY: 50, x: 50, y: 50 }, flipper, 8), null);
+});
+
+test('flipper candidate selector chooses earliest timing with stable tie break', () => {
+  const right = { side: 'right', contact: { t: .35 } };
+  const left = { side: 'left', contact: { t: .35 } };
+  const late = { side: 'left', contact: { t: .8 } };
+  assert.equal(selectEarliestFlipperContact([late, right, left]), left);
+  assert.equal(selectEarliestFlipperContact([]), null);
+  assert.equal(selectEarliestFlipperContact([{ side: 'left', contact: null }]), null);
 });
 
 test('flipper telemetry reports response in stable units', () => {

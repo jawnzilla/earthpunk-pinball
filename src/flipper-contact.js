@@ -66,7 +66,22 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   return null;
 }
 
-// Keep launch/contact evidence separate from the collision query. This makes
+// Flipper contact selection stays renderer-independent so the live resolver can
+// later gather both rotating surfaces before mutating ball state. A stable side
+// tie-break keeps replay fixtures deterministic when both blades meet at the
+// same normalized time.
+export function selectEarliestFlipperContact(candidates = []) {
+  const valid = candidates.filter(candidate => candidate?.contact && Number.isFinite(candidate.contact.t));
+  if (!valid.length) return null;
+  return valid.reduce((earliest, candidate) => {
+    if (!earliest) return candidate;
+    if (candidate.contact.t < earliest.contact.t) return candidate;
+    if (candidate.contact.t > earliest.contact.t) return earliest;
+    return String(candidate.side || '') < String(earliest.side || '') ? candidate : earliest;
+  }, null);
+}
+
+// Keep launch/contact evidence separate from the collision query.
 // tuning probes deterministic without teaching the renderer how to infer
 // response quality from pixels.
 export function summarizeFlipperContact({ side = 'unknown', held = false, beforeVelocity = { x: 0, y: 0 }, afterVelocity = { x: 0, y: 0 }, contact = null } = {}) {

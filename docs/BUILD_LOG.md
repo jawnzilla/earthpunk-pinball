@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 107: flipper candidate ordering contract
+
+### Decision
+
+- Implemented one bounded physics slice: added renderer-independent `selectEarliestFlipperContact()` to choose the earliest normalized rotating-flipper contact, with a stable left-before-right tie break.
+- The live resolver remains intentionally sequential this tick. Contact rewind, residual replay, and preservation of the non-selected cradle are not claimed; this helper is the tested seam required before changing that path.
+- Added a deterministic selector regression and pinned the live module import in the renderer contract.
+
+### Verification
+
+- `npm test`: 23 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks: not claimed until a runnable browser executable is available; this environment's package has no browser harness script.
+- Pages deployment and hosted parity: pending push for this tick.
+
+### Remaining risk / next smallest slice
+
+- The selector is not yet wired into live collision resolution. The next packet must gather both swept candidates, select one, rewind to its contact, replay residual time, and still run cradle maintenance for a non-selected overlap.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual claim is made.
+
 ## 2026-08-19 — Overhaul tick 106: flipper candidate timing contract
 
 ### Decision

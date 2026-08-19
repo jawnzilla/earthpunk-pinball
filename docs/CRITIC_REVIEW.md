@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 107 verdict
+
+**Playable hackathon slice: PASS for a deterministic flipper-selection seam; flipper manifold: NOT IMPLEMENTED; visual quality: source/host pending; AAA-ready: FAIL / unverified.** The new helper makes earliest rotating-flipper timing selectable without prematurely mutating the live sequential resolver.
+
+### Observed evidence
+
+- `src/flipper-contact.js` exports `selectEarliestFlipperContact()` and deterministically chooses the smallest normalized `contact.t`, with a left-before-right tie break.
+- `tests/flipper-contact.test.mjs` covers nearest, tie, empty, and invalid candidates; `npm test` passes 23/23 and syntax checks pass.
+- `index.html` imports the selector, but the live update path still resolves left then right sequentially. This import is a contract marker, not evidence of a completed manifold.
+- No exact 320×568/390×844 browser or screenshot claim is made for this tick.
+
+### Remaining risk / next smallest slice
+
+- Wire the selector into a single live packet: gather both swept candidates, rewind the selected contact, replay residual fixed-step time, and preserve a non-selected cradle overlap with a focused regression.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual verdict is claimed.
+
 ## Overhaul tick 106 verdict
 
 **Playable hackathon slice: PASS for a renderer-independent flipper timing contract; flipper manifold: NOT IMPLEMENTED; visual quality: source/host verified only; AAA-ready: FAIL / unverified.** The query now exposes normalized timing needed by a future earliest-flipper resolver, without changing live collision behavior prematurely.

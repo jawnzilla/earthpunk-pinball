@@ -49,6 +49,7 @@ assert.match(source, /for \(const side of \['left', 'right'\]\)/);
 assert.match(source, /dataset\.reviewFlipperSamples/);
 assert.match(source, /dataset\.reviewFlipperSides/);
 assert.match(source, /activateFlipperContactReviewFixture\(\);/);
+assert.match(source, /selectEarliestFlipperContact/);
 assert.match(source, /activateDamagePulseReviewFixture\(\);/);
 assert.match(source, /function activateDestructionRunReviewFixture\(\)/);
 assert.match(source, /get\('review'\) !== 'destruction-run'/);
