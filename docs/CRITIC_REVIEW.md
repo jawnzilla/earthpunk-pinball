@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 63
+# Deadlight Critic Review — Overhaul tick 64
+
+## Overhaul tick 64 verdict
+
+**Playable hackathon slice: PASS for the deterministic destructible-contact contract. AAA-ready: FAIL / unverified.** The live Generator Well destructible path now delegates its acceptance, damage, cooldown, stage, hybrid, and destruction-reward decision to a tested renderer-independent seam.
+
+### Observed evidence
+
+- `resolveDestructibleContact()` rejects separating, cooldown, destroyed, and below-threshold contacts; qualifying contacts return deterministic integrity/stage/cooldown state; destruction returns salvage only on the transition into destroyed state.
+- The production `applyDestructibleContact()` consumes that result and remains responsible for presentation, score, Charge, and message side effects.
+- `npm test` passes 18 tests; syntax and whitespace checks pass.
+- Exact local `damage-pulse` browser checks pass at 320×568 and 390×844 with no overflow or browser errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-damage-320.png` and `earthpunk-damage-390.png`.
+
+### Remaining risk / next smallest slice
+
+- Hosted verification is pending this tick's push/deployment; no hosted result is claimed yet.
+- The fixture verifies a damaged object presentation, not a human-steered live destruction sequence. Final visual hierarchy, touch ergonomics, and AAA readiness remain unsupported.
 
 ## Overhaul tick 63 verdict
 

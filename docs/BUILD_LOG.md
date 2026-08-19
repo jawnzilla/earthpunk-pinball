@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: deterministic destructible-contact contract
+
+### Implemented
+
+- Extracted the production destructible impact decision into `src/destructible-contact.js` and routed `applyDestructibleContact()` through it without changing table geometry, physics tuning, input, or progression.
+- Locked threshold rejection, separating/cooldown rejection, material/element damage handoff, Steam hybrid multiplier, integrity-stage progression, and exactly-once destruction salvage outputs behind a renderer-independent contract.
+- Added three focused deterministic tests in `tests/destructible-contact.test.mjs` covering blocked contacts, elemental damage/stage advancement, hybrid damage, destruction, and duplicate reward prevention.
+
+### Verification
+
+- `npm test`: 18 tests passed, 0 failures.
+- `node --check src/destructible-contact.js` and `git diff --check`: passed.
+- Exact local Playwright against `?review=damage-pulse`: 320×568 and 390×844 both returned HTTP 200, complete documents, exact CSS width parity, Canvas present, hidden overlay, `damage-pulse` fixture marker, and zero console/page/request errors. Body heights were 568px and 846.39px. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-damage-320.png` and `earthpunk-damage-390.png`.
+
+### Decision / next gate
+
+- This closes the production destructible-impact evidence seam; it does not claim final AAA visual quality or complete live-play tuning.
+- Push this bounded slice to `prototype`, wait for the Pages workflow, then repeat the exact hosted portrait checks against the deployed `damage-pulse` fixture.
+
 ## 2026-08-18 — Overhaul tick: bounded active-status projection
 
 ### Implemented

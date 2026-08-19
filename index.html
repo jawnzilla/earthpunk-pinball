@@ -326,6 +326,7 @@ import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity,
 import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
+import { resolveDestructibleContact } from './src/destructible-contact.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -641,18 +642,20 @@ import { projectActiveStatus } from './src/status-projection.js';
   }
   function applyDestructibleContact(item, contact) {
     const elementalEvent = observeStructureContact(item.id, { x: item.x, y: item.y });
-    if (item.destroyed || item.damageCooldown > 0 || contact.separating) return;
-    const damage = damageFromContact(contact, { objectMaterial: item.material, damageScale: item.damageScale, threshold: item.threshold, weaknesses: item.weaknesses, elementEffects: state.ball.elementEffects });
-    const hybridDamage = elementalEvent.type === 'steam-fracture' ? damage * elementalEvent.damageMultiplier : damage;
-    if (hybridDamage <= 0) return;
-    item.integrity = Math.max(0, item.integrity - hybridDamage);
-    item.damageCooldown = 8;
-    item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
+    const result = resolveDestructibleContact(item, contact, {
+      elementalEvent,
+      damageResolver: damageFromContact,
+      elementEffects: state.ball.elementEffects
+    });
+    if (!result.accepted) return;
+    item.integrity = result.integrity;
+    item.damageCooldown = result.damageCooldown;
+    item.damageStage = result.damageStage;
     const activeDamageElement = Object.entries(state.ball.elementEffects).find(([, effect]) => effect.stacks > 0 && effect.timer > 0)?.[0];
     const impactColor = activeDamageElement ? elementColors[activeDamageElement] : '#d7a45a';
-    emitImpact(item.x, item.y, impactColor, item.damageStage === 3 ? 1.4 : .65, activeDamageElement || null);
-    if (item.destroyed || item.integrity <= 0) {
-      item.destroyed = true; item.damageStage = 3; state.score += item.salvageValue; state.charge = Math.min(99, state.charge + item.salvageCharge); emitScorePopup(item.x, item.y, item.salvageValue, '#d7a45a'); setMessage(`${item.label} broken. Salvage recovered.`);
+    emitImpact(item.x, item.y, impactColor, result.destroyedNow ? 1.4 : .65, activeDamageElement || null);
+    if (result.destroyedNow) {
+      item.destroyed = true; state.score += result.salvageValue; state.charge = Math.min(99, state.charge + result.salvageCharge); emitScorePopup(item.x, item.y, result.salvageValue, '#d7a45a'); setMessage(`${item.label} broken. Salvage recovered.`);
     } else {
       setMessage(`${item.label} damaged · ${Math.ceil(item.integrity)}/${item.maxIntegrity} integrity.`);
     }
