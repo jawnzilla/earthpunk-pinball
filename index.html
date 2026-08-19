@@ -464,8 +464,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   ]);
   function createDestructibles() { return state.currentNode === 'generator-well' ? destructibleTemplates.map(template => ({ ...template, integrity: template.maxIntegrity, damageStage: 0, damageCooldown: 0, destroyed: false })) : []; }
   const targets = [
-    { x: 90, y: 164, r: 17, hit: false, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, material: 'timber' }, { x: 270, y: 164, r: 17, hit: false, material: 'timber' },
-    { x: 77, y: 274, r: 15, hit: false, material: 'timber' }, { x: 283, y: 274, r: 15, hit: false, material: 'timber' }, { x: 180, y: 242, r: 14, hit: false, material: 'timber' }
+    { x: 90, y: 164, r: 17, hit: false, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, material: 'copper' }, { x: 270, y: 164, r: 17, hit: false, material: 'stone' },
+    { x: 77, y: 274, r: 15, hit: false, material: 'copper' }, { x: 283, y: 274, r: 15, hit: false, material: 'stone' }, { x: 180, y: 242, r: 14, hit: false, material: 'timber' }
   ];
   const bumpers = levelLayouts[0].bumpers;
   const flippers = {
@@ -1585,8 +1585,11 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.fill();
     ctx.restore();
   }
-  function drawTargetMaterialCue(target, index) {
-    const family = index % 3;
+  function targetMaterialFamily(target) {
+    return target.material === 'stone' ? 1 : target.material === 'copper' ? 2 : 0;
+  }
+  function drawTargetMaterialCue(target) {
+    const family = targetMaterialFamily(target);
     ctx.save();
     ctx.globalAlpha *= .82;
     ctx.strokeStyle = '#0d1211';
@@ -1619,12 +1622,14 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       ctx.save(); ctx.translate(target.x, target.y); ctx.globalAlpha = target.hit ? .42 : 1;
       drawTargetContactShadow(target);
       if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.beginPath(); ctx.moveTo(-target.r * .45, -target.r * .35); ctx.lineTo(target.r * .4, target.r * .35); ctx.stroke(); ctx.restore(); return; }
-      ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = index % 3 === 0 ? '#5b3d29' : index % 3 === 1 ? '#51483d' : '#3e4a47';
-      if (index % 3 === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }
-      else if (index % 3 === 1) { ctx.beginPath(); ctx.moveTo(-target.r * .82, target.r * .2); ctx.lineTo(-target.r * .6, -target.r * .56); ctx.lineTo(target.r * .5, -target.r * .62); ctx.lineTo(target.r * .8, target.r * .25); ctx.lineTo(target.r * .36, target.r * .68); ctx.lineTo(-target.r * .5, target.r * .62); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .42, -.1); ctx.lineTo(target.r * .42, .18); ctx.stroke(); }
+      const family = targetMaterialFamily(target);
+      ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = family === 0 ? '#5b3d29' : family === 1 ? '#51483d' : '#3e4a47';
+      if (family === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }
+      else if (family === 1) { ctx.beginPath(); ctx.moveTo(-target.r * .82, target.r * .2); ctx.lineTo(-target.r * .6, -target.r * .56); ctx.lineTo(target.r * .5, -target.r * .62); ctx.lineTo(target.r * .8, target.r * .25); ctx.lineTo(target.r * .36, target.r * .68); ctx.lineTo(-target.r * .5, target.r * .62); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#706656'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .42, -.1); ctx.lineTo(target.r * .42, .18); ctx.stroke(); }
       else { ctx.fillRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeRect(-target.r * .82, -target.r * .48, target.r * 1.64, target.r * .96); ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .58, -target.r * .45); ctx.lineTo(-target.r * .58, target.r * .45); ctx.moveTo(target.r * .58, -target.r * .45); ctx.lineTo(target.r * .58, target.r * .45); ctx.stroke(); }
-      drawTargetMaterialCue(target, index);
-      const targetBase = index % 3 === 0 ? '#8a5b3d' : index % 3 === 1 ? '#817968' : '#667570';
+      drawTargetMaterialCue(target);
+      const family = targetMaterialFamily(target);
+      const targetBase = family === 0 ? '#8a5b3d' : family === 1 ? '#817968' : '#667570';
       drawStaticContactLight(0, 0, target.r * .62, targetBase, '#263936', .78);
       ctx.fillStyle = elementColors[canonicalElement(target.element)] || '#d7a45a'; ctx.beginPath(); ctx.arc(target.r * .52, -target.r * .45, 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });

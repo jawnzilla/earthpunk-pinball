@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 125: target silhouettes follow material data
+
+### Decision
+
+- Reassigned the six Generator Well targets across timber, copper, and stone so the live table contains an intentional material mix instead of six timber records.
+- Replaced target rendering's `index % 3` family selection with `target.material`-derived family selection for both silhouette treatment and material lighting cue.
+- Kept this as a renderer/data-authorship slice: no physics constants, collision geometry, input ownership, progression, fixed timestep, or elemental rules changed.
+- Added renderer-contract assertions that the material field is the source of target family selection and the index-coupled call is absent.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed; `git diff --check`: passed.
+- Local Playwright screenshot commands completed at exact CSS 320×568 and 390×844 using `?review=depth`; captures are outside the repository at `%LOCALAPPDATA%/Temp/deadlight-tick125-local-320.png` and `...-local-390.png`.
+- Current hosted build returned HTTP 200 and contains `drawMineDrain`, `projectActiveStatus`, and `drawActiveElementChips`; this pre-deployment check does not prove tick 125 is live yet.
+
+### Remaining risk / next smallest slice
+
+- This makes material data authoritative for target silhouettes but does not yet constitute a complete still-frame grayscale verdict or full three-plane visual overhaul.
+- Post-push Pages verification at exact 320×568 and 390×844 remains required; subjective screenshot inspection is not claimed.
+
 ## 2026-08-19 — Overhaul tick 124: restore the authored drain throat
 
 ### Decision

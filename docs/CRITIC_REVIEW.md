@@ -1,3 +1,22 @@
+# Deadlight Critic Review — Overhaul tick 125
+
+## Overhaul tick 125 verdict
+
+**Playable hackathon slice: PASS for material-authored target silhouettes; global visual manifold: IMPROVED / not complete; visual quality: browser screenshot capture completed / subjective still-frame pending; AAA-ready: FAIL / unverified.** Target family geometry and lighting cues now follow each target's declared material rather than its array position, so data and visual identity cannot silently drift when layout order changes.
+
+### Observed evidence
+
+- `index.html` assigns the six targets across timber, copper, and stone and derives `targetMaterialFamily(target)` from `target.material`.
+- `drawTargetMaterialCue(target)` and the target base lighting both use the material-derived family; the old `drawTargetMaterialCue(target, index)` contract is rejected by `tests/renderer-contract.test.mjs`.
+- `npm test` passes 42/42; syntax checks and `git diff --check` pass.
+- Local Playwright screenshot commands completed for exact CSS 320×568 and 390×844 `?review=depth` captures outside the repository. No subjective grayscale or hand-play verdict is claimed.
+- The current hosted pre-deployment probe returns HTTP 200 and contains the existing drain and status renderer seams; Pages parity for tick 125 remains pending the push.
+
+### Remaining risk / next smallest slice
+
+- This is a bounded data-to-renderer correction, not completion of the three-plane mine-table phase. Human grayscale inspection remains the largest unverified visual gate.
+- After deployment, rerun exact hosted 320×568 and 390×844 checks and then choose the next visual change from observed still-frame evidence rather than source-only inference.
+
 # Deadlight Critic Review — Overhaul tick 124
 
 ## Overhaul tick 124 verdict
