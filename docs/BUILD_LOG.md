@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 100: earliest primary circle contact
+
+### Decision
+
+- Implemented one bounded physics slice: the primary ball now gathers swept candidates across unhit targets, live destructibles, and eligible circular bumpers, then resolves only the earliest contact in the fixed step. This removes stale sequential multi-contact evaluation and preserves residual-time replay after the selected impact.
+- The change is limited to the primary circle-contact seam. Solver constants, material definitions, input, progression, rendering, and elemental damage rules are unchanged.
+- Extended the renderer contract test to pin the candidate collection, earliest-contact selector, and selected-contact dispatch.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Tight regression seam: `tests/renderer-contract.test.mjs` requires `primaryCircleCandidates`, `selectEarliestSweptContact(primaryCircleCandidates)`, and selected target/destructible dispatch in the live update loop.
+- Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and hosted artifact parity still need to be verified after this commit.
+- Human still-frame/grayscale visual review remains unavailable; no visual-quality claim is made.
+- Segment contacts (rails, gates, side guards, and flippers) remain a separate sequential path and were intentionally not bundled with this circle-contact slice.
+
 ## 2026-08-19 — Overhaul tick 99: earliest elemental salvage contact
 
 ### Decision

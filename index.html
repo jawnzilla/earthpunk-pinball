@@ -1070,8 +1070,29 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     if (b.x + b.r > table.right) resolveBoundaryContact(b, { x: -1, y: 0 }, { x: table.right, y: b.y }, (b.x + b.r) - table.right);
     if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
-    targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) { hitTarget(t); if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT); } });
-    state.destructibles.forEach(item => { if (item.destroyed) return; const contact = destructibleCollision(b, item); if (contact && !contact.separating) { applyDestructibleContact(item, contact); if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT); } });
+    const primaryCircleCandidates = [];
+    targets.filter(t => !t.hit).forEach(item => {
+      const swept = sweptCircleContact({ x: b.prevX, y: b.prevY }, { x: b.x, y: b.y }, { x: item.x, y: item.y }, b.r + item.r);
+      if (swept.hit) primaryCircleCandidates.push({ type: 'target', item, swept });
+    });
+    state.destructibles.filter(item => !item.destroyed).forEach(item => {
+      const swept = sweptCircleContact({ x: b.prevX, y: b.prevY }, { x: b.x, y: b.y }, { x: item.x, y: item.y }, b.r + item.r);
+      if (swept.hit) primaryCircleCandidates.push({ type: 'destructible', item, swept });
+    });
+    state.layout.bumpers.filter(item => item.type !== 'edge' && (!item.oneWay || (b.y < item.y && b.vy > 0))).forEach(item => {
+      const swept = sweptCircleContact({ x: b.prevX, y: b.prevY }, { x: b.x, y: b.y }, { x: item.x, y: item.y }, b.r + item.r);
+      if (swept.hit) primaryCircleCandidates.push({ type: 'bumper', item, swept });
+    });
+    const primaryCircleCandidate = selectEarliestSweptContact(primaryCircleCandidates);
+    if (primaryCircleCandidate) {
+      const { type, item } = primaryCircleCandidate;
+      const contact = type === 'destructible' ? destructibleCollision(b, item) : circleCollision(b, item);
+      if (contact && !contact.separating) {
+        if (type === 'target') hitTarget(item);
+        else if (type === 'destructible') applyDestructibleContact(item, contact);
+        if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT);
+      }
+    }
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
@@ -1082,6 +1103,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
         segmentCollision(b, segment);
         return;
       }
+      if (primaryCircleCandidate) return;
       if (item.oneWay && !energetic) return;
       const surface = { ...item, material: item.material || (item.type === 'armor' ? 'steel' : 'rubber') }, contact = circleCollision(b, surface);
       if (contact && !contact.separating) {

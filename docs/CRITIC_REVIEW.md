@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 100 verdict
+
+**Playable hackathon slice: PASS for deterministic primary-circle contact ordering; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** The primary ball now resolves the earliest swept target, destructible, or circular bumper contact in a fixed step before replaying residual time.
+
+### Observed evidence
+
+- `index.html` gathers swept candidates for unhit targets, live destructibles, and eligible circular bumpers, then dispatches only the selected earliest candidate through the existing collision resolvers.
+- `tests/renderer-contract.test.mjs` pins the candidate collection and selected-contact seam; `npm test` passes all 22 tests, syntax checks pass, and `git diff --check` passes.
+- Exact 320×568/390×844 browser and screenshot checks are not claimed because this scheduled environment has no runnable browser executable. No grayscale or subjective visual verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- Segment contacts remain sequential and need their own geometry-aware earliest-contact seam if tunneling or stale multi-contact evidence appears.
+- Pages run and hosted artifact parity must be recorded after push.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; AAA readiness remains unsupported.
+
 ## Overhaul tick 99 verdict
 
 **Playable hackathon slice: PASS for deterministic elemental-contact health; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Water fragments and Wind echoes now choose the first swept salvage contact in a fixed step, eliminating stale later-contact evaluation.

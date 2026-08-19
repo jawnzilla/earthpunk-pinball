@@ -109,8 +109,10 @@ assert.match(source, /const swept = sweptSegmentContact\(ball, segment, radius\)
 assert.match(source, /function destructibleCollision\(ball, item\)/);
 assert.match(source, /sweptCircleContact\(\{ x: ball\.prevX, y: ball\.prevY \}/);
 assert.match(source, /advancePrimaryBallResidual\(b, routeGravity, dt, contact\.sweptT\)/);
+assert.match(source, /const primaryCircleCandidates = \[\]/);
+assert.match(source, /selectEarliestSweptContact\(primaryCircleCandidates\)/);
+assert.match(source, /const \{ type, item \} = primaryCircleCandidate/);
 assert.match(source, /destructibleCollision\(b, item\)/);
 assert.match(source, /contactX = swept\.x; contactY = swept\.y/);
-assert.match(source, /circleCollision\(b, t\); if \(contact && !contact\.separating\) \{ hitTarget\(t\); if \(contact\.sweptT < 1\) advancePrimaryBallResidual\(b, routeGravity, dt, contact\.sweptT\); \}/);
 assert.match(source, /if \(contact && !contact\.separating\) \{[\s\S]*?if \(contact\.sweptT < 1\) advancePrimaryBallResidual\(b, routeGravity, dt, contact\.sweptT\);/);
 console.log('renderer-contract: target material cues, review fixtures, and physics telemetry present');
