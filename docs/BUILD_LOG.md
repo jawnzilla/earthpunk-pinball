@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 103: earliest static-segment contact
+
+### Decision
+
+- Implemented one bounded physics slice: edge rails, relay gates, and side guards now gather swept candidates and resolve only the earliest static-segment contact in a fixed step.
+- Residual-time replay remains on the selected segment contact; gate scoring/reaction is emitted only when the gate wins selection. Circular bumpers and flippers remain separate seams.
+- Added renderer-contract assertions for candidate collection, earliest selection, and selected-segment dispatch.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed (Git reports the existing LF→CRLF normalization warning for the edited test file).
+- Tight regression seam: `tests/renderer-contract.test.mjs` pins static segment candidate collection, `selectEarliestSweptContact(staticSegmentCandidates)`, and single selected dispatch.
+- Exact 320×568 and 390×844 browser checks are not claimed: no Chromium/Chrome executable is available in this scheduled environment.
+- Hosted parity and Pages run are pending this push.
+
+### Remaining risk / next smallest slice
+
+- The selected static segment is still resolved after the primary circle seam, so a single fixed-step global manifold across circles and segments is not established.
+- Exact portrait browser checks and human grayscale still-frame review remain blocked by the unavailable browser executable.
+
 ## 2026-08-19 — Overhaul tick 102: segment residual-time replay
 
 ### Decision

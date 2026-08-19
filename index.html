@@ -1103,15 +1103,28 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       }
     }
     if (!state.running) return;
+    const staticSegmentCandidates = [];
+    state.layout.bumpers.filter(item => item.type === 'edge' && (!item.oneWay || (b.y < item.y && b.vy > 0))).forEach(item => {
+      const segment = { ...edgeSegment(item), material: 'steel' };
+      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
+      if (swept) staticSegmentCandidates.push({ kind: 'edge', item, segment, swept });
+    });
+    if (state.layout.gate && state.relayCooldown === 0) {
+      const segment = { ...state.layout.gate, material: 'copper' };
+      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
+      if (swept) staticSegmentCandidates.push({ kind: 'gate', item: state.layout.gate, segment, swept });
+    }
+    sideGuards.forEach(guard => {
+      const segment = { ...guard, width: 12, material: 'steel' };
+      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
+      if (swept) staticSegmentCandidates.push({ kind: 'guard', item: guard, segment, swept });
+    });
+    const staticSegmentCandidate = selectEarliestSweptContact(staticSegmentCandidates);
+    if (staticSegmentCandidate) segmentCollisionWithResidual(b, staticSegmentCandidate.segment, routeGravity, dt);
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
       const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);
-      if (item.type === 'edge') {
-        if (item.oneWay && !energetic) return;
-        const segment = { ...edgeSegment(item), material: 'steel' };
-        segmentCollisionWithResidual(b, segment, routeGravity, dt);
-        return;
-      }
+      if (item.type === 'edge') return;
       if (primaryCircleCandidate) return;
       if (item.oneWay && !energetic) return;
       const surface = { ...item, material: item.material || (item.type === 'armor' ? 'steel' : 'rubber') }, contact = circleCollision(b, surface);
@@ -1122,8 +1135,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
         const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse impact. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.');
       }
     });
-    if (state.layout.gate && state.relayCooldown === 0 && (() => { const contact = segmentCollisionWithResidual(b, { ...state.layout.gate, material: 'copper' }, routeGravity, dt); return Boolean(contact && !contact.separating); })()) { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
-    sideGuards.forEach(guard => segmentCollisionWithResidual(b, { ...guard, width: 12, material: 'steel' }, routeGravity, dt));
+    if (staticSegmentCandidate?.kind === 'gate') { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
     const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
     const leftHit = resolveFlipperCollision(b, flippers.left, 'left', input.left);

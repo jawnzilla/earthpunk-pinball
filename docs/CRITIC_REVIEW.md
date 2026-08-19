@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 103 verdict
+
+**Playable hackathon slice: PASS for deterministic static-segment contact ordering; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Edge rails, relay gates, and side guards now choose the earliest swept static-segment contact instead of resolving sequentially against stale movement.
+
+### Observed evidence
+
+- `index.html` gathers swept candidates for eligible edge bumpers, the relay gate, and side guards, selects `selectEarliestSweptContact(staticSegmentCandidates)`, and dispatches one segment through `segmentCollisionWithResidual()`.
+- Gate rewards/reactions now key off the selected candidate, preventing a later sequential gate evaluation from firing after another segment contact.
+- `npm test` passes all 22 tests; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser and screenshot checks are not claimed because no Chromium/Chrome executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- This is not a global contact manifold: circle contacts are resolved in their existing seam before static-segment selection, and flippers remain separate.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; no subjective visual verdict is claimed.
+
 ## Overhaul tick 102 verdict
 
 **Playable hackathon slice: PASS pending verification for static-segment residual replay; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** The existing swept segment contact now consumes its fractional timing by advancing the remaining fixed-step time for rails, gates, edge guards, and side guards.
