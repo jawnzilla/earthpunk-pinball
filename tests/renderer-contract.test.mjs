@@ -14,6 +14,8 @@ assert.match(source, /item\.destroyed \? \.08 : \.14/);
 assert.match(source, /drawDestructibleContactShadow\(item\);/);
 assert.match(source, /Destroyed salvage remains a gameplay-readable object/);
 assert.match(source, /ctx\.fillText\('SALVAGE', 0, item\.r \+ 15\)/);
+assert.match(source, /ctx\.fillRect\(-20, item\.r \+ 8, 40, 11\)/);
+assert.match(source, /ctx\.font = 'bold 7px Trebuchet MS'/);
 assert.match(source, /function drawTargetContactShadow\(target\)/);
 assert.match(source, /ctx\.globalAlpha = \.32/);
 assert.match(source, /ctx\.ellipse\(3, radius \* \.72, radius \* 1\.08, radius \* \.3/);

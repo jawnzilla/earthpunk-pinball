@@ -1332,7 +1332,11 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
         ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
         ctx.beginPath(); ctx.arc(0, 0, item.r + 7, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
         ctx.fillStyle = '#ffd083'; ctx.beginPath(); ctx.moveTo(0, -item.r - 12); ctx.lineTo(5, -item.r - 7); ctx.lineTo(0, -item.r - 2); ctx.lineTo(-5, -item.r - 7); ctx.closePath(); ctx.fill();
-        ctx.globalAlpha = 1; ctx.fillStyle = '#fff0ba'; ctx.font = 'bold 6px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('SALVAGE', 0, item.r + 15);
+        ctx.globalAlpha = 1;
+        // Give the reward label a quiet plate so it survives debris overlap and portrait scaling.
+        ctx.fillStyle = 'rgba(7,13,15,.9)'; ctx.fillRect(-20, item.r + 8, 40, 11);
+        ctx.strokeStyle = 'rgba(255,208,131,.62)'; ctx.lineWidth = 1; ctx.strokeRect(-20, item.r + 8, 40, 11);
+        ctx.fillStyle = '#fff0ba'; ctx.font = 'bold 7px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('SALVAGE', 0, item.r + 15);
         ctx.restore(); return;
       }
       const palette = materialVisual(item.material);
