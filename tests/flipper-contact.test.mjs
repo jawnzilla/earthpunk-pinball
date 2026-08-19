@@ -115,3 +115,10 @@ test('flipper telemetry exposes independent provenance buckets', () => {
   assert.equal(reports.fixture.count, 1);
   assert.equal(reports.fixture.meanSpeedDelta, 220);
 });
+
+test('flipper telemetry keeps missing provenance visible as an empty bucket', () => {
+  const reports = summarizeFlipperContactSources([]);
+  assert.deepEqual(Object.keys(reports), ['live', 'fixture']);
+  assert.equal(reports.live.count, 0);
+  assert.equal(reports.fixture.count, 0);
+});
