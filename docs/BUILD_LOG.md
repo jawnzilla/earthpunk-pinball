@@ -15,7 +15,7 @@
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
 - Hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact&cacheBust=tick106` returned HTTP 200 with 205487 bytes and contained `sweptFlipperContact` plus `<canvas`; it correctly did not contain the unpushed `poseT` implementation.
-- Exact 320×568/390×844 browser checks are not claimed: no runnable browser executable is available in this scheduled environment.
+- Exact Playwright smoke checks at CSS 320×568 and 390×844: both passed with the requested viewport dimensions, canvas present, no horizontal overflow, and no console/page errors.
 
 ### Remaining risk / next smallest slice
 
