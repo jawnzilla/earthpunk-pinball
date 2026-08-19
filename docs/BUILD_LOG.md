@@ -14,8 +14,8 @@
 - Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
 - `git diff --check`: passed.
 - Exact local Playwright checks at CSS 320×568 and 390×844: HTTP 200, `innerWidth` matched requested width, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
-- GitHub Pages run `32299919748` completed successfully for `ba1e317`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32299919748.
-- Hosted retry at `https://jawnzilla.github.io/earthpunk-pinball/?review=tick121-retry&cacheBust=ba1e317`: HTTP 200; exact 320×568 and 390×844 checks passed with canvas present, no horizontal overflow, and zero console/page errors. An earlier 320px probe saw one transient 503 resource response; the clean retry is the accepted evidence.
+- GitHub Pages run `32300034276` completed successfully for `f26c009`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32300034276.
+- Hosted check at `https://jawnzilla.github.io/earthpunk-pinball/?review=f26c009&cacheBust=f26c009`: HTTP 200; exact 320×568 and 390×844 checks passed with canvas present, no horizontal overflow, and zero console/page errors.
 
 
 ### Remaining risk / next smallest slice

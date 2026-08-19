@@ -12,7 +12,7 @@
 - The selected real candidate is passed to `resolveDrainRecovery()`; stability/charge remain unchanged, residual duration is asserted, and existing `cradleSide` remains intact.
 - `npm test` passes 41/41; syntax checks and `git diff --check` pass.
 - Exact local Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
-- GitHub Pages run `32299919748` completed successfully for `ba1e317`; a clean hosted retry at exact 320×568 and 390×844 passed with canvas, no overflow, and zero console/page errors. One earlier 320px probe saw a transient 503 resource response and was rerun successfully.
+- GitHub Pages run `32300034276` completed successfully for `f26c009`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32300034276. Hosted exact 320×568 and 390×844 checks passed with canvas, no overflow, and zero console/page errors.
 
 ### Remaining risk / next smallest slice
 
