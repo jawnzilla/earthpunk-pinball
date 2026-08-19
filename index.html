@@ -893,11 +893,23 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
   function circleCollision(ball, item) {
     const dx = ball.x - item.x, dy = ball.y - item.y, min = ball.r + item.r;
     const dist = Math.hypot(dx, dy);
-    if (dist >= min) return null;
-    const normal = dist > .001 ? { x: dx / dist, y: dy / dist } : { x: 0, y: -1 };
+    let normal;
+    let penetration = min - dist;
+    let swept = null;
+    if (dist >= min) {
+      swept = sweptCircleContact({ x: ball.prevX, y: ball.prevY }, { x: ball.x, y: ball.y }, { x: item.x, y: item.y }, min);
+      if (!swept.hit) return null;
+      normal = swept.normal;
+      ball.x = item.x + normal.x * min;
+      ball.y = item.y + normal.y * min;
+      penetration = 0;
+    } else {
+      normal = dist > .001 ? { x: dx / dist, y: dy / dist } : { x: 0, y: -1 };
+    }
     const physics = syncPhysicsBallFromPixels(ball);
-    const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'rubber'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: (min - dist) / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'rubber'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
+    contact.sweptT = swept?.t ?? 1;
     ball.lastContact = contact;
     if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
     observeHardBounce(ball, contact);

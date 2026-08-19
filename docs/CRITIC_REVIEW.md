@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 92
 
+## Overhaul tick 96 verdict
+
+**Playable hackathon slice: PASS for deterministic physics regression health; AAA-ready: FAIL / unverified.** This tick closes a concrete physics gap: circular targets and bumpers no longer rely only on the ball's final position, so a fast crossing can produce one swept contact.
+
+### Observed evidence
+
+- `prototype` was clean at `9b89cb689a30589dae558a4d3130562e1104e73` before this bounded change; only `index.html`, `tests/renderer-contract.test.mjs`, `docs/BUILD_LOG.md`, and this review changed.
+- `npm test` passes all 22 tests; all `src/*.js` files pass `node --check`; `git diff --check` passes.
+- Source evidence: `index.html:893-918` now broad-phases `circleCollision` with `sweptCircleContact(ball.prevX, ball.prevY, item, min)`, rewinds to the swept boundary, and preserves `contact.sweptT`.
+- No browser executable is installed in this scheduled environment, so exact 320×568/390×844 interactive and screenshot checks are not claimed. No visual-quality or grayscale verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- The largest unresolved product gap remains authored portrait visual hierarchy and human grayscale readability; physics improvement does not imply visual polish.
+- The next physics risk is residual fixed-step replay after mid-step circular impact; it must get its own focused regression seam before implementation.
+- Physics/input/progression/elemental behavior outside the circular collision seam remains unchanged. AAA readiness remains unsupported.
+
 ## Overhaul tick 95 verdict
 
 **Playable hackathon slice: PASS for hosted availability, deterministic runtime health, and evidence hygiene; AAA-ready: FAIL / unverified.** No product code changed because the next visual seam remains blocked on a legitimate human still-frame judgment.

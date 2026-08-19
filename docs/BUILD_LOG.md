@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 96: swept circular contacts for targets and bumpers
+
+### Decision
+
+- Implemented one bounded physics slice: the shared `circleCollision` path now uses the existing renderer-independent swept-circle query when a ball crosses a circular target/bumper between fixed steps.
+- The contact rewinds the ball to the first swept boundary, resolves one material-aware impulse, and records `contact.sweptT`; stationary/overlapping circle behavior is unchanged. Destructibles and segment contacts remain unchanged.
+- Added a renderer contract regression assertion for the live call site. No visual, input, progression, or elemental rules changed.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Tight regression seam: `tests/elemental-effects.test.mjs` confirms a 100px crossing through a 4px reach reports `hit=true`, an off-path sweep reports `hit=false`, and the renderer contract now requires `circleCollision` to consume `ball.prevX/prevY` through `sweptCircleContact`.
+- Browser executable discovery found no Chromium/Chrome/Firefox binary in this scheduled environment; exact 320×568 and 390×844 interactive checks are therefore not claimed this tick. Hosted HTTP and Pages verification follow deployment.
+
+### Remaining risk / next smallest slice
+
+- High-speed circular contacts now have a deterministic swept query, but the live path does not yet replay residual fixed-step time after a mid-step circular impact. That is the next physics slice only if a focused regression seam is authored first.
+- Visual hierarchy still lacks the required human-inspected grayscale verdict; this tick intentionally did not stack renderer polish without that evidence.
+
 ## 2026-08-19 — Overhaul tick 95: current hosted evidence rechecked, visual gate remains held
 
 ### Decision
