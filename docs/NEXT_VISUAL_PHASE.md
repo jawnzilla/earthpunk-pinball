@@ -1,10 +1,10 @@
 # Next visual phase — portrait mine ascent
 
-Status: implementation-ready visual packet; still-frame evidence gate held on overhaul tick 84.
+Status: implementation-ready visual packet; still-frame evidence gate held on overhaul tick 85.
 
 ## Evidence boundary
 
-The current `prototype` HEAD is `eceac2d`. The hosted `depth` URL remains reachable with HTTP 200 and a 201085-byte response; the last complete matrix is recorded in the build log at `7892f47`. This is runtime evidence only; no human still-frame visual verdict is claimed for tick 84.
+The current `prototype` HEAD is `e176591`. The hosted `depth` URL remains reachable with HTTP 200 and a 201085-byte response; the exact 8-check portrait matrix and fresh captures are recorded in the tick 85 build log. This is runtime evidence only; no human still-frame visual verdict is claimed.
 
 This packet deliberately does **not** infer final visual quality from DOM health or from the deterministic fixtures. It is the smallest coherent visual phase to execute next when a fresh still-frame review or human-play capture is available.
 

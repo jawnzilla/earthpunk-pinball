@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 85: hosted portrait evidence refresh
+
+### Decision
+
+- No product-code change was made this tick. The current renderer remains gated on human inspection of a still frame before another visual seam is selected; adding unmeasured polish would violate `docs/NEXT_VISUAL_PHASE.md`.
+- Captured fresh hosted depth and upgrade frames outside the repository and ran the exact hosted portrait matrix with Playwright against the current `prototype` HEAD `e176591`.
+
+### Verification
+
+- `npm test`: 22 tests passed, 0 failures.
+- `git fetch origin prototype`: clean checkout; local `HEAD` equals `origin/prototype` at `e176591214c7f4bb9febc8e8a0ee517da95d7250`.
+- Hosted `curl -I -L` for `?review=depth&cacheBust=e176591`: HTTP 200, `Content-Length: 201085`.
+- Hosted Playwright matrix: `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844 all returned HTTP 200, `document.readyState=complete`, Canvas present, exact CSS width parity (`innerWidth=clientWidth=scrollWidth`), and zero console/page/request errors.
+- Upgrade route specifically exposed the real `overlay upgrade-decision` with 4 buttons at both sizes. At 320×568, cards were 246×98.2px with x=35; at 390×844, 316×104px with x=35. This is layout evidence, not a final visual verdict.
+- Fresh captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick85-depth-320.png`, `earthpunk-tick85-depth-390.png`, `earthpunk-tick85-upgrade-320.png`, and `earthpunk-tick85-upgrade-390.png`.
+
+### Gate / next slice
+
+- Runtime and layout gates are green. The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and major silhouettes. The scheduled environment can capture PNGs but cannot make a legitimate subjective visual verdict from them.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 84: still-frame evidence gate held
 
 ### Decision

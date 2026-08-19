@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 84
 
+## Overhaul tick 85 verdict
+
+**Playable hackathon slice: PASS for hosted portrait/runtime evidence; AAA-ready: FAIL / unverified.** The current Pages artifact is healthy across the required exact viewport matrix, including the real four-choice upgrade overlay. This tick does not claim a human visual or grayscale verdict because the scheduled environment has no legitimate still-frame inspection surface.
+
+### Observed evidence
+
+- `prototype` HEAD and `origin/prototype` are both `e176591214c7f4bb9febc8e8a0ee517da95d7250`.
+- `npm test` passes all 22 tests.
+- Hosted Playwright passed all 8 route/viewport checks for `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, expected fixture state, and zero console/page/request errors.
+- The upgrade fixture was observed as `overlay upgrade-decision`, with four visible choices at both sizes. Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick85-<route>-<width>.png`.
+- Hosted HEAD request returned HTTP 200 with a 201085-byte artifact.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is still whether the three depth planes and major object families separate clearly in a human-inspected grayscale still. Browser health, source contracts, and PNG capture do not certify that subjective bar.
+- Do not add another shadow, glow, opacity, material, or HUD layer until a human names exactly one concrete hierarchy defect from the fresh depth still. Physics and input remain unchanged.
+
 ## Overhaul tick 84 verdict
 
 **Playable hackathon slice: PASS for evidence-gated visual direction; AAA-ready: FAIL / unverified.** The repository is clean and the hosted Pages artifact is reachable, but this scheduled environment still cannot make a legitimate still-frame or grayscale visual judgment. Holding the next renderer change is the correct result.
