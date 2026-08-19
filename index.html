@@ -772,6 +772,33 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     document.body.dataset.reviewFixture = 'depth';
     updateHud();
   }
+  // Review-only fixture: makes the live elemental chip hierarchy observable in
+  // a still frame without relying on a lucky hinge contact. It is opt-in via
+  // ?review=active-elements and never changes ordinary play.
+  function activateActiveElementsReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'active-elements') return;
+    state.running = false;
+    state.message = 'Review fixture · active elemental imprint.';
+    routeMapPanel.hidden = true;
+    routePreviewSlot.hidden = true;
+    overlay.hidden = true;
+    debugToggle.hidden = true;
+    state.ball.elementEffects = {
+      Fire: { stacks: 3, timer: 360 },
+      Water: { stacks: 2, timer: 240 },
+      Earth: { stacks: 0, timer: 0 },
+      Wind: { stacks: 0, timer: 0 }
+    };
+    state.ball.hybrid = resolveHybrid(state.ball.elementEffects);
+    state.ball.x = W / 2;
+    state.ball.y = H * .58;
+    state.ball.prevX = state.ball.x;
+    state.ball.prevY = state.ball.y;
+    state.ball.vx = 0;
+    state.ball.vy = 0;
+    document.body.dataset.reviewFixture = 'active-elements';
+    updateHud();
+  }
   // Review-only fixture: exercises the production flipper response path with
   // repeatable contacts so the hosted tuning readout can be inspected.
   function activateFlipperContactReviewFixture() {
@@ -1489,7 +1516,7 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateActiveElementsReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture();
 })();
 </script>
 </body>

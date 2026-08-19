@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 57
+# Deadlight Critic Review — Overhaul tick 58
+
+## Overhaul tick 58 verdict
+
+**Playable hackathon slice: PASS for deterministic active-element evidence once hosted verification completes. AAA-ready: FAIL / unverified.** This tick adds no new gameplay rule; it closes the prior capture gap with a production-rendered active Fire/Water imprint fixture.
+
+### Observed evidence
+
+- `?review=active-elements` seeds the real ball state with Fire 3/3 and Water 2/3 timers, freezes motion, hides the overlay, and marks `body.dataset.reviewFixture = 'active-elements'`.
+- Renderer-contract coverage asserts the guard, seeded stacks/timers, marker, and boot hook. `npm test` passes 11 tests; `git diff --check` passes.
+- The local browser runner again returned `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed. Hosted exact Playwright verification remains the deployment gate.
+
+### Remaining risk / next smallest slice
+
+- Hosted 320×568 and 390×844 checks must establish HTTP 200, exact CSS width parity, hidden overlay, fixture marker, active chip text, and zero console/page/request errors.
+- Pixel inspection must determine whether the two chips stay subordinate to the portrait table header/objective cue. If clean, return to a measured physics/object interaction gap rather than adding HUD decoration.
+- AAA-ready remains unsupported.
 
 ## Overhaul tick 57 verdict
 

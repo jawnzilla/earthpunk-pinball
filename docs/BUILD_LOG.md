@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: active-element review fixture
+
+### Implemented
+
+- Added opt-in `?review=active-elements` fixture to the production renderer. It freezes the live ball with Fire 3/3 and Water 2/3 imprints, hides route/UI overlays, and marks `body.dataset.reviewFixture = 'active-elements'` for deterministic capture.
+- Added renderer-contract coverage for the fixture guard, seeded stack/timer values, marker, and boot hook. Normal play and physics remain unchanged.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures.
+- `git diff --check`: passed before commit `7b8f0bf29abc11ebece5149ffe8afb77b0c64b1c`.
+- Local HTTP server browser attempt at 320×568 and 390×844 hit the existing runner `ERR_EMPTY_RESPONSE` on `127.0.0.1:8765`; no local browser result is claimed. Hosted Pages verification is required after deployment.
+
+### Decision / next gate
+
+- This is the smallest evidence slice for the prior blocker: live elemental chips can now be captured without lucky gameplay timing. Verify hosted exact portrait widths, no overflow, hidden overlay, marker, chip HUD text, and zero browser errors before judging hierarchy.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: hosted active-element HUD verification
 
 ### Implemented
