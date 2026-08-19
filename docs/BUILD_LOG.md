@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: bounded active-status projection
+
+### Implemented
+
+- Added `src/status-projection.js`, a renderer-independent projection that caps visible run status at two entries and prioritizes active elemental imprints, then hinge modules, then Warden integrity.
+- Canonicalized Air to Wind and clamped displayed stacks to `0–3`; the canvas chips and DOM status rail now consume the same projection instead of independently enumerating state.
+- Replaced the prose/ellipsis-prone DOM status strip with compact symbol + label + value chips and widened its layout allowance without changing physics, input, progression, or table art.
+
+### Verification
+
+- `npm test`: 15 tests passed, 0 failures, including three focused projection tests and the existing renderer/physics suites.
+- `node --check src/status-projection.js` and `git diff --check`: passed.
+- Exact local Playwright at 320×568 and 390×844 against `?review=active-elements`: HTTP 200, complete documents, exact CSS width parity, Canvas present, hidden overlay, fixture marker, DOM status `△ FIRE 3 / ▽ WATER 2`, accessible label `Fire 3, Water 2`, and zero console/page errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-status-320.png` and `earthpunk-status-390.png`.
+
+### Decision / next gate
+
+- This closes the status duplication/truncation seam with one shared, bounded projection. Push and verify the GitHub Pages artifact at both required portrait widths before selecting another slice.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: high-speed swept-contact stress seam
 
 ### Implemented

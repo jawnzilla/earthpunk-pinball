@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 60
+# Deadlight Critic Review — Overhaul tick 63
+
+## Overhaul tick 63 verdict
+
+**Playable hackathon slice: PASS for bounded active-status projection. AAA-ready: FAIL / unverified.** The DOM and canvas now share one two-entry status projection, so active imprint state is no longer independently enumerated or silently truncated behind a prose ellipsis.
+
+### Observed evidence
+
+- `projectActiveStatus()` prioritizes live imprints, canonicalizes Air to Wind, clamps stacks to `0–3`, and caps output at two entries; focused tests cover imprint priority, hinge/boss fallback, and expired effects.
+- Exact local Playwright at 320×568 and 390×844 reports HTTP 200, complete documents, exact CSS width parity, `active-elements` fixture, hidden overlay, DOM `△ FIRE 3 / ▽ WATER 2`, accessible label `Fire 3, Water 2`, Canvas, and zero console/page errors.
+- `npm test` passes 15 tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages verification for this commit is still required before treating the projection as deployed evidence.
+- The projection prevents status truncation, but does not certify final visual hierarchy, touch ergonomics, or AAA readiness. Inspect the hosted active-elements frames before adding another HUD layer.
 
 ## Overhaul tick 62 verdict
 

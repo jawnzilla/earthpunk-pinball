@@ -45,7 +45,7 @@
     .stability-pip { width: 10px; height: 10px; border: 1px solid #789487; border-radius: 50%; background: #263c3a; }
     .stability-pip.is-live { border-color: #f1b35b; background: #f1b35b; box-shadow: 0 0 8px rgba(241,179,91,.45); }
     .resource-row { display: flex; align-items: center; justify-content: space-between; min-height: 16px; }
-    .element-status { display: inline-flex; align-items: center; gap: 3px; box-sizing: border-box; height: 16px; max-width: 64%; min-width: 130px; overflow: hidden; white-space: nowrap; color: #c4ddcf; border: 1px solid rgba(103,200,213,.42); border-radius: 5px; padding: 0 4px; background: linear-gradient(90deg, rgba(20,45,46,.9), rgba(22,31,34,.78)); font-size: 10px; line-height: 14px; letter-spacing: .01em; text-overflow: ellipsis; }
+    .element-status { display: inline-flex; align-items: center; gap: 3px; box-sizing: border-box; height: 18px; max-width: 100%; min-width: 130px; overflow: hidden; white-space: nowrap; color: #c4ddcf; border: 1px solid rgba(103,200,213,.42); border-radius: 5px; padding: 0 4px; background: linear-gradient(90deg, rgba(20,45,46,.9), rgba(22,31,34,.78)); font-size: 10px; line-height: 16px; letter-spacing: .01em; }
     .element-status::before { content: '◇'; color: #67c8d5; font-size: 10px; line-height: 14px; text-shadow: 0 0 6px rgba(103,200,213,.75); }
     .status-chip { display: inline-block; flex: 0 0 auto; color: #c4ddcf; }
     .status-chip + .status-chip { padding-left: 3px; border-left: 1px solid rgba(103,200,213,.35); }
@@ -325,6 +325,7 @@
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
+import { projectActiveStatus } from './src/status-projection.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -522,11 +523,9 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
     progressTrack.setAttribute('aria-valuenow', String(progress));
     stabilityPips.replaceChildren(...Array.from({ length: state.stabilityMax }, (_, index) => { const pip = document.createElement('span'); pip.className = `stability-pip${state.immortal || index < state.stability ? ' is-live' : ''}`; pip.setAttribute('aria-hidden', 'true'); return pip; }));
     stabilityPips.setAttribute('aria-label', state.immortal ? 'Infinite stability enabled' : `${state.stability} of ${state.stabilityMax} stability remaining`);
-    const hingeParts = ['left', 'right'].filter(side => state.hingeElements[side]).map(side => `<span class="status-chip" title="${side} hinge: ${state.hingeElements[side]} stack ${state.hingeLevels[side]}">${side[0].toUpperCase()} ${displayElement(state.hingeElements[side]).toUpperCase()} ${state.hingeLevels[side]}</span>`).join('');
-    const imprintParts = Object.entries(state.ball?.elementEffects || {}).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0).map(([element, effect]) => `<span class="status-chip imprint" title="Active ${displayElement(element)} imprint, ${effect.stacks} of 3 stacks">${displayElement(element).toUpperCase()} ${effect.stacks}</span>`).join('');
-    const bossStatus = state.boss.active ? `<span class="status-chip imprint" title="Warden armor integrity">WARDEN ${state.boss.hp}/${state.boss.maxHp}</span>` : '';
-    const statusMarkup = `${hingeParts}${imprintParts}${bossStatus}` || '<span class="status-chip">READY</span>';
-    elementStatus.setAttribute('aria-label', statusMarkup.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+    const activeStatus = projectActiveStatus({ hingeElements: state.hingeElements, hingeLevels: state.hingeLevels, elementEffects: state.ball?.elementEffects, boss: state.boss });
+    const statusMarkup = activeStatus.map(entry => `<span class="status-chip${entry.kind === 'imprint' || entry.kind === 'boss' ? ' imprint' : ''}" title="${entry.title}">${entry.symbol} ${entry.label.toUpperCase()} ${entry.value}</span>`).join('') || '<span class="status-chip">READY</span>';
+    elementStatus.setAttribute('aria-label', activeStatus.map(entry => `${entry.label} ${entry.value}`).join(', ') || 'Ready');
     elementStatus.innerHTML = statusMarkup;
     renderRouteStrip();
     debugToggle.hidden = state.running || !debugEnabled;
@@ -1061,15 +1060,11 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   }
   function drawActiveElementChips() {
     const effects = state.ball?.elementEffects || {};
-    const active = elementalOrder
-      .map(element => canonicalElement(element))
-      .filter((element, index, list) => list.indexOf(element) === index)
-      .filter(element => activeElement(element))
-      .slice(0, 2);
+    const active = projectActiveStatus({ hingeElements: state.hingeElements, hingeLevels: state.hingeLevels, elementEffects: effects, boss: state.boss }).filter(entry => entry.kind === 'imprint');
     if (!active.length) return;
     const chipWidth = 54, chipHeight = 24;
-    active.forEach((element, index) => {
-      const effect = effects[element];
+    active.forEach((entry, index) => {
+      const element = entry.label;
       const color = elementColors[element] || '#b5d3a1';
       const x = index === 0 ? 28 : W - 28 - chipWidth;
       const y = 52;
@@ -1083,14 +1078,14 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
       ctx.fillStyle = color;
       ctx.font = 'bold 11px Trebuchet MS';
       ctx.textAlign = 'center';
-      ctx.fillText(element === 'Fire' ? '△' : element === 'Water' ? '▽' : element === 'Earth' ? '◆' : '≈', x + 11, y + 16);
+      ctx.fillText(entry.symbol, x + 11, y + 16);
       ctx.fillStyle = '#e9f1df';
       ctx.font = 'bold 7px Trebuchet MS';
       ctx.textAlign = 'left';
       ctx.fillText(displayElement(element).toUpperCase(), x + 20, y + 10);
       ctx.fillStyle = color;
       ctx.font = 'bold 9px Trebuchet MS';
-      ctx.fillText(`${Math.max(0, Math.min(3, effect?.stacks || 0))}/3`, x + 20, y + 19);
+      ctx.fillText(`${entry.value}/3`, x + 20, y + 19);
       ctx.restore();
     });
   }
