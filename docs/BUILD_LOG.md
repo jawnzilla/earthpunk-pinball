@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: next portrait visual phase packet
+
+### Authored
+
+- Added `docs/NEXT_VISUAL_PHASE.md`, an implementation-ready, bounded visual phase for the Generator Well: three depth planes, authored silhouettes, one restrained lighting language, HUD hierarchy, and a readable upgrade treatment.
+- The packet explicitly preserves physics, input, progression, elemental behavior, fixed timestep, collision geometry, and solver constants. It also separates observed hosted health from visual-quality inference.
+
+### Verification before deployment
+
+- `npm test`: 22 tests passed, 0 failures.
+- Hosted exact Playwright against the current Pages artifact passed at 320×568 and 390×844 for `flipper-contact`, `destruction-run`, `active-elements`, and `upgrade`: HTTP 200, Canvas present, exact CSS width parity, expected fixture/overlay state, and zero console/page/request errors.
+- The `upgrade` fixture exposed four visible choices at both sizes.
+- Local exact Playwright was attempted against `127.0.0.1:8765` and remains blocked by the reproducible `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+
+### Decision / next gate
+
+- No renderer or gameplay code changed because the required fresh still-frame verdict for choosing one visual seam is not available in this scheduled tick. The next implementation tick should begin from the packet and a fresh hosted still review, not stack unmeasured polish.
+- AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: flipper telemetry provenance closure
 
 ### Implemented

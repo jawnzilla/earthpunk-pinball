@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 77
+# Deadlight Critic Review — Overhaul tick 78
+
+## Overhaul tick 78 verdict
+
+**Playable hackathon slice: PASS for implementation-ready visual direction; AAA-ready: FAIL / unverified.** The next visual work is now constrained to one coherent portrait mine-table phase instead of another unmeasured polish stack.
+
+### Observed evidence
+
+- `docs/NEXT_VISUAL_PHASE.md` defines measurable gates for three depth planes, authored silhouettes, localized lighting/contact shadows, HUD separation, and the 320×568 upgrade overlay.
+- Hosted exact checks against the current Pages artifact passed at 320×568 and 390×844 for `flipper-contact`, `destruction-run`, `active-elements`, and `upgrade`: HTTP 200, Canvas, exact CSS width parity, expected fixture/overlay state, and zero console/page/request errors.
+- The `upgrade` fixture showed four choices within the viewport at both sizes. This is layout evidence, not a claim that the visual treatment is final.
+- `npm test` passes all 22 tests. Local exact browser verification still fails with `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local pass is claimed.
+
+### Remaining risk / next smallest slice
+
+- The largest unresolved gap remains the visual read of depth/material/silhouette in a still frame and in motion. Source inspection and route health cannot certify that bar.
+- Next implementation should select one named visual defect from a fresh still-frame review, then execute only the corresponding item in `NEXT_VISUAL_PHASE.md`. Physics and flipper tuning remain gated by live telemetry.
+- AAA-ready remains unsupported.
 
 ## Overhaul tick 77 verdict
 
