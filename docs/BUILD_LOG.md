@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 86: evidence gate held on current hosted HEAD
+
+### Decision
+
+- No product-code change was made this tick. The current renderer remains gated on a human-inspected still frame before another visual seam is selected; adding another shadow, glow, material, or HUD layer from source inspection alone would be unmeasured polish.
+- Refreshed the repository/Pages evidence boundary against the actual current `prototype` HEAD (`3232c64`) rather than the stale pointer in the prior packet. This is an evidence tick, not a completion claim.
+
+### Verification
+
+- `git fetch origin prototype`: clean checkout; local `HEAD` equals `origin/prototype` at `3232c644ff34fd2dd339915ed98338485955320e`.
+- `npm test`: 22 tests passed, 0 failures.
+- `git diff --check`: passed before documentation update.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=3232c64'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 09:13:37 GMT`.
+- GitHub Actions Pages run `32236498255` completed successfully for `3232c64`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32236498255.
+- No screenshot, grayscale verdict, exact hosted Playwright matrix, or subjective visual-quality claim is made here. This scheduled environment has no legitimate still-frame inspection surface.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes. Runtime health and contract tests do not certify that visual bar.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+- When a human still-frame review is available, name exactly one defect at 320×568, then make only that renderer seam and rerun the full hosted portrait packet.
+
 ## 2026-08-19 — Overhaul tick 85: hosted portrait evidence refresh
 
 ### Decision
