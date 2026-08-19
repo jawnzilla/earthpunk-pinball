@@ -17,7 +17,10 @@ export function sweptSegmentContact(ball, segment, radius) {
   const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
   const travel = Math.hypot(ball.x - startX, ball.y - startY);
   if (travel < 0.01) return null;
-  const steps = Math.min(12, Math.max(2, Math.ceil(travel / Math.max(2, radius * 0.45))));
+  // Keep sample spacing tied to the contact radius so a fast ball cannot
+  // jump over a narrow rail. The cap is still bounded for pathological
+  // review inputs and keeps the query cheap in the fixed-step loop.
+  const steps = Math.min(64, Math.max(2, Math.ceil(travel / Math.max(2, radius * 0.45))));
   const dx = segment.x2 - segment.x1;
   const dy = segment.y2 - segment.y1;
   const lengthSquared = dx * dx + dy * dy || 1;

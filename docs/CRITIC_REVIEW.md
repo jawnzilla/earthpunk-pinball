@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 60
 
+## Overhaul tick 62 verdict
+
+**Playable hackathon slice: PASS for the bounded high-speed swept-contact stress seam. AAA-ready: FAIL / unverified.** The production static-segment query now has a deterministic regression for a 600px fixed-step crossing that previously exceeded its 12-sample cap.
+
+### Observed evidence
+
+- `sweptSegmentContact()` retains radius-based spacing but raises its bounded cap to 64 samples, so narrow rails are not skipped solely because a test ball travels unusually far in one step.
+- The new regression asserts a crossing at `y=100` is detected for a 600px path with an 8px contact radius; the full suite passes 12 tests.
+- No claim is made about final gameplay feel, exact solver tuning, or visual quality. AAA-ready remains unsupported.
+
+### Remaining risk / next smallest slice
+
+- The sampler is still intentionally bounded at 64 samples and remains an approximation for pathological travel distances. If telemetry exposes ordinary gameplay exceeding that budget, replace the approximation with a geometry-time-of-impact query rather than raising the cap again.
+- Deploy and run the exact hosted 320×568 and 390×844 browser checks before selecting another product slice.
+
 ## Overhaul tick 61 verdict
 
 **Playable hackathon slice: PASS for the bounded static-segment swept-contact seam. AAA-ready: FAIL / unverified.** Fast balls that cross a narrow static segment between fixed steps now enter the existing contact solver at the sampled crossing point instead of being silently missed by an endpoint-only query.

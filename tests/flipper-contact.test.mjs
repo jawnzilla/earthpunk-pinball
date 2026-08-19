@@ -28,6 +28,13 @@ test('swept segment rejects a path that misses and detects a crossing path', () 
   assert.ok(hit.y > 90 && hit.y < 110);
 });
 
+test('swept segment catches a high-speed narrow crossing beyond the old sample cap', () => {
+  const segment = { x1: 100, y1: 100, x2: 200, y2: 100 };
+  const hit = sweptSegmentContact({ prevX: 150, prevY: -250, x: 150, y: 350 }, segment, 8);
+  assert.ok(hit, 'a 600px fixed-step crossing must not tunnel through a narrow rail');
+  assert.ok(hit.y > 90 && hit.y < 110);
+});
+
 test('stationary ball and stationary flipper do not manufacture contact', () => {
   const flipper = { pivotX: 0, pivotY: 0, length: 100, width: 17, angle: 0, previousAngle: 0 };
   assert.equal(sweptFlipperContact({ prevX: 50, prevY: 50, x: 50, y: 50 }, flipper, 8), null);

@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: high-speed swept-contact stress seam
+
+### Implemented
+
+- Increased the bounded `sweptSegmentContact()` sample cap from 12 to 64 while preserving radius-based spacing, preventing unusually fast fixed-step travel from skipping across narrow rails, gates, or guards.
+- Added a deterministic 600px crossing regression that would miss under the former 12-sample cap and now resolves through the production query.
+- No collision response, flipper tuning, input, progression, renderer, or asset behavior changed beyond the contact-query sampling bound.
+
+### Verification
+
+- `npm test`: 12 tests passed, 0 failures.
+- `node --check src/flipper-contact.js` and `git diff --check`: passed.
+- The Pages deployment and exact hosted portrait checks are the remaining release gate for this commit.
+
+### Decision / next gate
+
+- This closes the known high-speed stress case without replacing the sampled query with an unbounded loop. The 64-sample cap remains an approximation for pathological travel distances; ordinary fixed-step gameplay should remain within the bounded query budget.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: swept static-segment contact seam
 
 ### Implemented
