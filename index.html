@@ -1122,6 +1122,21 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     ctx.globalAlpha = .32; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1; ctx.setLineDash([18, 12]); ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
   }
+  function drawForegroundMechanismPlane() {
+    // A low, separate service ledge gives the flipper assembly a physical
+    // foreground plane without changing collision geometry or the drain path.
+    const top = H - 154, bottom = H - 106;
+    const ledge = ctx.createLinearGradient(0, top, 0, bottom);
+    ledge.addColorStop(0, '#293834'); ledge.addColorStop(.18, '#526e63'); ledge.addColorStop(.28, '#1b2928'); ledge.addColorStop(1, '#0b1112');
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(30, top + 10); ctx.lineTo(72, top); ctx.lineTo(W - 72, top); ctx.lineTo(W - 30, top + 10); ctx.lineTo(W - 30, bottom); ctx.lineTo(30, bottom); ctx.closePath();
+    ctx.fillStyle = ledge; ctx.fill();
+    ctx.globalAlpha = .72; ctx.strokeStyle = '#050708'; ctx.lineWidth = 8; ctx.stroke();
+    ctx.globalAlpha = .7; ctx.strokeStyle = '#9c6b45'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(42, top + 9); ctx.lineTo(W - 42, top + 9); ctx.stroke();
+    ctx.globalAlpha = .26; ctx.strokeStyle = '#d7e8d0'; ctx.lineWidth = 1; ctx.setLineDash([8, 12]); ctx.beginPath(); ctx.moveTo(48, top + 21); ctx.lineTo(W - 48, top + 21); ctx.stroke(); ctx.setLineDash([]);
+    [[52, top + 31], [W - 52, top + 31]].forEach(([x, y]) => { ctx.globalAlpha = .8; ctx.fillStyle = '#101a1c'; ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 1; ctx.stroke(); });
+    ctx.restore();
+  }
   function drawMineStructures() {
     ctx.save();
     const beam = (x, y, width, height, angle = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.fillStyle = '#4d3525'; ctx.fillRect(-width / 2, -height / 2, width, height); ctx.fillStyle = '#93613d'; ctx.fillRect(-width / 2 + 2, -height / 2 + 2, width - 4, 4); ctx.strokeStyle = '#241b15'; ctx.lineWidth = 2; ctx.strokeRect(-width / 2, -height / 2, width, height); ctx.restore(); };
@@ -1143,7 +1158,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     // table on the procedural fallback despite the authored assets being loaded.
     drawReactor(); drawDeckDetails(); drawRecessedWellPlane(); drawMineStructures(); drawLowerMidLandmarks();
     if (state.boss.active) drawBoss();
-    drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers();
+    drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawForegroundMechanismPlane(); drawFlippers();
     drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
     drawReachBand(); drawTableIdentity(); drawActiveElementChips(); drawObjectiveCue();
   }

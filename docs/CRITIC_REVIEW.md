@@ -1,3 +1,21 @@
+# Deadlight Critic Review — Overhaul tick 80
+
+## Overhaul tick 80 verdict
+
+**Playable hackathon slice: PASS for a bounded foreground mechanism plane; AAA-ready: FAIL / unverified.** A low service ledge now separates the flipper assembly from the recessed well with explicit value, occlusion, and maintenance cues.
+
+### Observed evidence
+
+- `drawForegroundMechanismPlane()` uses a fixed `H - 154` to `H - 106` band and is called immediately before `drawFlippers()`, preserving the intended foreground z-order without touching gameplay geometry.
+- The renderer contract was extended for the helper, gradient, band, and draw order; `npm test` passes all 22 tests, syntax checks pass, and `git diff --check` passes.
+- Pre-deployment hosted smoke returned HTTP 200. This does not certify the changed artifact.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and exact hosted Playwright still need to run for this commit at 320×568 and 390×844 across `depth`, `destruction-run`, `active-elements`, and `upgrade`; no hosted visual/runtime claim is made yet.
+- Fresh still inspection is required to ensure the ledge does not muddy the flipper silhouette or cover a gameplay affordance. Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`.
+- AAA-ready remains unsupported. Do not stack another visual layer until deployment evidence and the depth still are reviewed.
+
 # Deadlight Critic Review — Overhaul tick 79
 
 ## Overhaul tick 79 verdict

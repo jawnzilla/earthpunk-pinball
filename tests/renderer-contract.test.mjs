@@ -83,6 +83,10 @@ assert.match(source, /drawRecessedWellPlane\(\);/);
 assert.match(source, /ctx\.fillStyle = wellGradient;/);
 assert.match(source, /ctx\.globalAlpha = \.42/);
 assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(spriteImages\.deckInset/);
+assert.match(source, /function drawForegroundMechanismPlane\(\)/);
+assert.match(source, /const top = H - 154, bottom = H - 106/);
+assert.match(source, /ledge\.addColorStop\(\.18, '#526e63'\)/);
+assert.match(source, /drawForegroundMechanismPlane\(\); drawFlippers\(\);/);
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);

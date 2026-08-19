@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: foreground mechanism plane
+
+### Implemented
+
+- Added one bounded renderer-only depth seam: `drawForegroundMechanismPlane()` creates a low service ledge with a dark occluded edge, warm keyline, dashed maintenance seam, and two rivets behind the flippers.
+- The plane is composed after route/chute art and immediately before flippers, making the lower mechanism read as a separate foreground surface without changing collision geometry, drain behavior, physics constants, input, progression, or elemental rules.
+- Added renderer-contract coverage for the helper, fixed portrait-safe band, material gradient, and live draw order.
+
+### Verification before deployment
+
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- Hosted smoke `curl -I -L` against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=foreground-plane`: HTTP 200. This is pre-deployment health only; no hosted visual/runtime claim is made for this unpushed change.
+- Exact local browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+
+### Decision / next gate
+
+- This is the second ordered item in `docs/NEXT_VISUAL_PHASE.md`: establish the foreground mechanism plane before adding more silhouette polish.
+- After Pages deployment, run the full hosted `depth`, `destruction-run`, `active-elements`, and `upgrade` packet at exact 320×568 and 390×844. Inspect the fresh depth still for flipper/ledge occlusion before selecting another seam.
+- AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: recessed Generator Well plane
 
 ### Implemented
