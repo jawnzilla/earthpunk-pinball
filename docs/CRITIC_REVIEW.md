@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 109 verdict
+
+**Playable hackathon slice: PASS for a shared contact-ordering contract; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** A renderer-independent selector now provides the common timing/tie-break primitive needed before cross-family collision dispatch, and the live flipper selector uses it without changing resolver behavior.
+
+### Observed evidence
+
+- `src/contact-manifold.js` validates normalized timing, selects the earliest candidate deterministically, and summarizes valid family coverage without mutating candidates.
+- `src/flipper-contact.js` delegates flipper ordering to the shared primitive and returns the original candidate object, preserving the existing resolver seam.
+- `npm test` passes 26/26; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks, screenshots, and grayscale judgment are not claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- This is an ordering contract, not a global runtime manifold. The next physics packet must gather circles, static segments, and flippers before mutating ball state, dispatch one earliest contact, rewind/replay residual time, and preserve cradle maintenance.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
+
 ## Overhaul tick 108 verdict
 
 **Playable hackathon slice: PASS for the live flipper earliest-contact seam; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** Both rotating flippers now participate in one deterministic candidate selection before the selected response and residual replay.

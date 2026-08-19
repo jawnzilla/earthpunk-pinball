@@ -1,3 +1,5 @@
+import { selectEarliestContact } from './contact-manifold.js';
+
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
 function segmentAt(flipper, angle, lengthBonus = 0) {
@@ -71,14 +73,10 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
 // tie-break keeps replay fixtures deterministic when both blades meet at the
 // same normalized time.
 export function selectEarliestFlipperContact(candidates = []) {
-  const valid = candidates.filter(candidate => candidate?.contact && Number.isFinite(candidate.contact.t));
-  if (!valid.length) return null;
-  return valid.reduce((earliest, candidate) => {
-    if (!earliest) return candidate;
-    if (candidate.contact.t < earliest.contact.t) return candidate;
-    if (candidate.contact.t > earliest.contact.t) return earliest;
-    return String(candidate.side || '') < String(earliest.side || '') ? candidate : earliest;
-  }, null);
+  const ordered = candidates
+    .filter(candidate => candidate?.contact && Number.isFinite(candidate.contact.t))
+    .map(candidate => ({ ...candidate, t: candidate.contact.t, order: candidate.side || '', source: candidate }));
+  return selectEarliestContact(ordered)?.source || null;
 }
 
 // Keep launch/contact evidence separate from the collision query.

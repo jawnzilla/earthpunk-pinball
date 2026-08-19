@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 109: shared cross-family contact ordering contract
+
+### Decision
+
+- Added `src/contact-manifold.js`, a renderer-independent contact-ordering seam that accepts normalized timing from circles, static segments, and rotating flippers without mutating resolver state.
+- The existing live flipper selector now delegates to this shared ordering primitive while preserving its public candidate identity and deterministic left-before-right tie break.
+- Added focused regressions for earliest selection, invalid raw timing rejection, stable ties, timing normalization, and manifold summaries. No live cross-family dispatch was claimed or bundled; circle/segment/flipper resolver ordering remains the next integration packet.
+
+### Verification
+
+- `npm test`: 26 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- The shared selector is now tested and used by the flipper family, but the live update loop still resolves primary circles, static segments, and flippers in separate phases. Do not claim a global manifold until those candidates are gathered before mutation and one selected resolver replays residual time.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 108: live flipper earliest-contact manifold
 
 ### Decision
