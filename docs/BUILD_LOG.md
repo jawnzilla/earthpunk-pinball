@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 130: continuous rotating-flipper CCD canon
+
+### Decision
+
+- No safe solver mutation was made this tick. The current rotating blade query still samples bounded poses; replacing it without a stationary-ball rotational crossing fixture would violate the root-cause debugging gate.
+- Authored `docs/ROTATING_FLIPPER_CCD_CANON.md` as the implementation-ready next physics slice. It defines the preserved contact contract, conservative continuous-rotation algorithm shape, required red/green fixtures, performance budget, and explicit non-goals.
+- This keeps the live physics path unchanged while making the next architectural step testable instead of inflating the sample cap by guesswork.
+
+### Verification
+
+- `npm test`: 44 passed, 0 failed.
+- `git diff --check` passed.
+- No browser or Pages deployment claim is made until this docs-only canon is committed and the hosted artifact is rechecked.
+
+### Remaining risk / next smallest slice
+
+- Implement continuous rotating-segment TOI only after adding the stationary-ball crossing fixture and benchmark described in the canon.
+- Visual overhaul, materials, elemental hybrids, destructible readability, and subjective portrait/grayscale inspection remain open. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 129: rotating flipper angle-seam CCD
 
 ### Decision

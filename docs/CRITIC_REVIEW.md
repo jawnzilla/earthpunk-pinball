@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 128 follow-up
 
+## Overhaul tick 130 verdict
+
+**Physics planning slice: PASS for implementation-ready continuous-CCD canon; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** The live solver was deliberately not changed because its remaining rotating-contact risk is architectural: pose sampling can miss a stationary-ball crossing between samples. The next change now has a concrete, regression-first contract instead of a larger sample cap.
+
+### Observed evidence
+
+- `docs/ROTATING_FLIPPER_CCD_CANON.md` preserves the current `{ x, y, t, segment }` query contract and isolates response/state ownership from the future query.
+- The canon requires stationary-ball, combined-motion, endpoint-cap, seam, near-miss, ordering, degenerate-input, and performance fixtures before replacing the sampler.
+- `npm test` passes 44/44 on the unchanged runtime path; no renderer, input, progression, or asset behavior changed.
+- This tick is docs-only. No subjective visual verdict, exact viewport verdict, hosted runtime parity, or AAA claim is inferred from source text.
+
+### Remaining risk / next smallest slice
+
+- The current rotating blade still uses bounded pose sampling. Implement the canon's continuous rotating-segment TOI only after the required red fixture exists and the benchmark is measured.
+- The earthpunk visual overhaul, material differentiation, elemental hybrids, destructible readability, and portrait/grayscale still-frame inspection remain open. Do not claim LOOP_COMPLETE.
+
 ## Overhaul tick 129 verdict
 
 **Physics slice: PASS for angle-seam normalization; global overhaul: NOT COMPLETE; visual quality: unchanged this tick; AAA-ready: FAIL / unverified.** Rotating flipper CCD now follows the physically short arc when angles cross the +/-PI seam instead of consuming its bounded pose budget on an almost-full revolution.
