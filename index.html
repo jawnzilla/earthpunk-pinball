@@ -1326,6 +1326,13 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (item.destroyed) {
         ctx.fillStyle = item.kind === 'crate' ? '#5b3d29' : item.kind === 'pipe' ? '#3e4a47' : '#51483d'; ctx.strokeStyle = '#171614'; ctx.lineWidth = 3;
         for (let index = 0; index < 3; index += 1) { ctx.save(); ctx.rotate((index - 1) * .45); ctx.fillRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.strokeRect(-item.r * .7 + index * 7, -3 + index * 4, item.r * 1.1, 6); ctx.restore(); }
+        // Destroyed salvage remains a gameplay-readable object, not an ambiguous dark smear.
+        const salvagePulse = .72 + Math.sin(state.pulse * 2.2) * .18;
+        ctx.globalAlpha = salvagePulse;
+        ctx.strokeStyle = '#ffd083'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.arc(0, 0, item.r + 7, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#ffd083'; ctx.beginPath(); ctx.moveTo(0, -item.r - 12); ctx.lineTo(5, -item.r - 7); ctx.lineTo(0, -item.r - 2); ctx.lineTo(-5, -item.r - 7); ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = 1; ctx.fillStyle = '#fff0ba'; ctx.font = 'bold 6px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('SALVAGE', 0, item.r + 15);
         ctx.restore(); return;
       }
       const palette = materialVisual(item.material);

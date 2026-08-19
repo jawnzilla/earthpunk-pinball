@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 75 verdict
+
+**Playable hackathon slice: PASS for destroyed-salvage readability; AAA-ready: FAIL / unverified.** Destroyed objects now retain an explicit reward affordance instead of reading only as dark debris.
+
+### Observed evidence
+
+- The destroyed branch keeps its existing debris geometry and contact shadow, then adds a restrained amber dashed perimeter, a top diamond marker, and a centered `SALVAGE` label driven by the existing pulse clock.
+- The renderer contract locks both the destroyed-state intent and label call; `npm test` passes all 21 tests.
+- Local exact browser verification was attempted at both required portrait sizes but was blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`; hosted verification is required after deployment.
+
+### Remaining risk / next smallest slice
+
+- The cue is source-level evidence until the hosted `destruction-run` fixture is checked at 320×568 and 390×844 with fresh captures and zero browser/request errors.
+- The label may be too small or compete with nearby geometry in motion; inspect the hosted still before adding more destruction polish.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 74 verdict
 
 **Playable hackathon slice: PASS for bilateral flipper fixture calibration evidence; AAA-ready: FAIL / unverified.** The opt-in calibration route now exercises and reports both physical flippers, eliminating a false sense of coverage from a left-only fixture.

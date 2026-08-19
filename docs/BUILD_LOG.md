@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: destroyed-salvage readability cue
+
+### Implemented
+
+- Added a bounded renderer-only cue for destroyed Generator Well salvage: a restrained amber dashed ring, directional diamond marker, and `SALVAGE` label around the existing debris.
+- The cue reuses the existing destruction state and pulse clock; it does not change collision, integrity, reward timing, physics, progression, or input behavior.
+- Added renderer-contract assertions for the destroyed-state cue so the reward read cannot silently regress to an unmarked dark debris patch.
+
+### Verification before deployment
+
+- `npm test`: 21 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- Exact local Playwright was attempted at 320×568 and 390×844, but the repository's known `127.0.0.1:8765` runner returned `ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+
+### Decision / next gate
+
+- Deploy this narrow visual readability slice, then verify `?review=destruction-run` on GitHub Pages at exact 320×568 and 390×844 with zero console/page/request errors and fresh captures outside the repository.
+- AAA readiness remains unsupported; this is a salvage affordance pass, not a final visual verdict.
+
 ## 2026-08-19 — Overhaul tick: bilateral flipper calibration fixture
 
 ### Implemented
