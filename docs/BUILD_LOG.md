@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 116: drain outcome policy seam
+
+### Decision
+
+- Extracted the post-contact drain policy into renderer-independent `src/drain-recovery.js`.
+- The policy now explicitly distinguishes selected flipper recovery, free-table pass, immortal recovery, ordinary stability loss/recovery, and terminal loss; the live renderer applies only the returned state transition and keeps contact selection separate.
+- Added deterministic regressions for every outcome, including fractional charge flooring and last-stability loss. This is a narrow state-ownership slice; it does not claim drain recovery is inside the primary contact manifold.
+
+### Verification
+
+- `npm test`: 35 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks and Pages verification are pending this push.
+
+### Remaining risk / next smallest slice
+
+- The live drain flipper path still does not replay residual time or prove free-pass/stability state through a runtime fixture. The next safe physics packet is a headless drain integration fixture before changing manifold ownership.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 115: deterministic drain recovery winner
 
 ### Decision

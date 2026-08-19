@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 115
+# Deadlight Critic Review — Overhaul tick 116
+
+## Overhaul tick 116 verdict
+
+**Playable hackathon slice: PASS for explicit drain outcome policy; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The no-contact drain branch now has a pure, testable state-policy seam instead of embedding free-pass, immortal, recovery, and loss rules directly in the renderer.
+
+### Observed evidence
+
+- `src/drain-recovery.js` returns deterministic outcomes for flipper winner, free pass, immortal recovery, ordinary recovery, and terminal loss.
+- `tests/drain-recovery.test.mjs` covers all five outcomes; `npm test` passes 35/35.
+- `index.html` applies the policy result while retaining the existing deterministic two-flipper emergency selection.
+- Syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks and GitHub Pages verification are pending this push; no screenshot or subjective grayscale verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- The emergency flipper winner still resolves outside the main manifold and does not replay residual time. Add a headless drain integration fixture before changing that ownership.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
 
 ## Overhaul tick 115 verdict
 

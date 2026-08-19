@@ -328,6 +328,7 @@ import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEar
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
+import { decideDrainRecoveryOutcome } from './src/drain-recovery.js';
 import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
 (() => {
   "use strict";
@@ -1212,11 +1213,13 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       // array order as a hidden side priority.
       const lateFlipperCandidate = selectDrainRecoveryCandidate(collectDrainRecoveryCandidates(b, flippers, b.r + flippers.left.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 }));
       if (lateFlipperCandidate) { const { side, flipper, contact } = lateFlipperCandidate; const held = side === 'left' ? input.left : input.right; resolveFlipperCollision(b, flipper, side, held, contact); state.flipperContacts[side] = true; updateHud(); return; }
-      if (state.tableKind === 'free') { state.charge = Math.min(99, state.charge + .5); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
-      if (state.immortal) { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
-      state.stability -= 1; state.charge = Math.max(0, Math.floor(state.charge - 1));
-      if (state.stability <= 0) { lose(); return; }
-      setMessage(state.tableKind === 'boss' ? 'Warden backlash. Stability lost.' : 'Probe recovered. Stability lost.'); spawnBall(); return;    }
+      const drainOutcome = decideDrainRecoveryOutcome({ tableKind: state.tableKind, immortal: state.immortal, stability: state.stability, charge: state.charge });
+      if (drainOutcome.kind === 'free-pass') { state.charge = Math.min(99, state.charge + drainOutcome.chargeDelta); setMessage('Free pass recovery. Resources secured.'); spawnBall(); return; }
+      if (drainOutcome.kind === 'immortal') { state.stability = state.stabilityMax; setMessage('∞ Stability held the probe in the run.'); spawnBall(); return; }
+      state.stability = drainOutcome.nextStability;
+      state.charge = drainOutcome.nextCharge;
+      if (drainOutcome.kind === 'loss') { lose(); return; }
+      setMessage(state.tableKind === 'boss' ? 'Warden backlash. Stability lost.' : 'Probe recovered. Stability lost.'); spawnBall(); return;
     updateHud();
   }
   function drawMineBackdrop() {
