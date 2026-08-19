@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 122: first-run cradle tutorial
+
+### Decision
+
+- Added a renderer-only, first-run hinge cue that points from the live ball-side toward the corresponding flipper pivot and explains the two-step interaction: `HOLD HINGE` / `CHARGE IMPRINT`.
+- Completion is driven by the existing real cradle-entry seam, so the cue disappears only after a genuine left/right cradle transition; the existing imprint refresh remains authoritative.
+- Persisted completion under `deadlight-cradle-tutorial:v1` with private-browsing-safe failure handling. No physics constants, collision geometry, input ownership, or progression rules changed.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
+- `git diff --check`: passed.
+- Exact local Playwright checks at CSS 320×568 and 390×844: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages verification and deployment run are pending this push.
+
+### Remaining risk / next smallest slice
+
+- The cue is deliberately a first-run interaction affordance, not a full tutorial or audio treatment; it has not been claimed as human-playtested on a physical phone.
+- Portrait visual hierarchy and grayscale readability remain the largest product gap; this slice does not claim AAA parity.
+
 ## 2026-08-19 — Overhaul tick 121: runtime drain-opening fixture
 
 ### Decision

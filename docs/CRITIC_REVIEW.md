@@ -1,5 +1,24 @@
 # Deadlight Critic Review — Overhaul tick 119
 
+# Deadlight Critic Review — Overhaul tick 122
+
+## Overhaul tick 122 verdict
+
+**Playable hackathon slice: PASS for a bounded first-run cradle affordance; global manifold: unchanged / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** The live renderer now teaches the hinge interaction without adding HUD clutter or changing the physics path.
+
+### Observed evidence
+
+- `index.html` draws a ball-side cue with a dashed leader to the actual flipper pivot and the labels `HOLD HINGE` and `CHARGE IMPRINT`.
+- The cue is suppressed after the existing `leftEnteredCradle` / `rightEnteredCradle` transitions and completion is persisted with a versioned local-storage key.
+- `tests/cradle-tutorial-contract.test.mjs` covers the cue, persistence, and real cradle-entry hooks; `npm test` passes 42/42.
+- Exact local Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- Hosted Pages verification is pending deployment of this commit.
+- The tutorial is renderer/input affordance only; physical-phone touch interruption, grayscale still-frame review, and distinct reaction audio remain unverified.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
+
 # Deadlight Critic Review — Overhaul tick 121
 
 ## Overhaul tick 121 verdict

@@ -479,7 +479,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, lastFlipperContact: null, flipperContactSamples: [], flipperContactSource: 'live', physicsTelemetry: { physicsStepMs: 0, contactCount: 0, substepCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null }, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Wind: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], destructibles: [], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, lastFlipperContact: null, flipperContactSamples: [], flipperContactSource: 'live', physicsTelemetry: { physicsStepMs: 0, contactCount: 0, substepCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null }, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Wind: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, tutorialSeen: firstRunCradleTutorialSeen(), immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], destructibles: [], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
     cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
@@ -1196,8 +1196,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const freshActiveHit = (leftHit && leftActiveFresh) || (rightHit && rightActiveFresh);
     if (freshActiveHit) { state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, '#ffd083', .35 + (b.lastFlipperLaunchFactor || .18) * .25); }
     if (!leftHit && !rightHit) b.cradleSide = null;
-    if (leftHit && leftEnteredCradle) imprintFromHinge('left');
-    if (rightHit && rightEnteredCradle) imprintFromHinge('right');
+    if (leftHit && leftEnteredCradle) { imprintFromHinge('left'); completeFirstRunCradleTutorial(); }
+    if (rightHit && rightEnteredCradle) { imprintFromHinge('right'); completeFirstRunCradleTutorial(); }
     state.flipperContacts.left = Boolean(leftHit);
     state.flipperContacts.right = Boolean(rightHit);
     if (state.routeGateOpen) { const chute = state.routeChutes.find(edge => { const point = chutePosition(edge.chute); return Math.hypot(b.x - point.x, b.y - point.y) < 28; }); if (chute) { chooseRouteFromChute(chute); return; } }
@@ -1306,7 +1306,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     if (state.boss.active) drawBoss();
     drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawForegroundMechanismPlane(); drawFlippers();
     drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
-    drawReachBand(); drawTableIdentity(); drawActiveElementChips(); drawObjectiveCue();
+    drawReachBand(); drawTableIdentity(); drawActiveElementChips(); drawObjectiveCue(); drawCradleTutorial();
   }
   function drawActiveElementChips() {
     const effects = state.ball?.elementEffects || {};
@@ -1346,6 +1346,29 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.save(); ctx.fillStyle = 'rgba(7,13,15,.88)'; ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.shadowColor = color; ctx.shadowBlur = 7;
     ctx.beginPath(); ctx.moveTo(x + 5, y); ctx.lineTo(x + width - 5, y); ctx.quadraticCurveTo(x + width, y, x + width, y + 5); ctx.lineTo(x + width, y + height - 5); ctx.quadraticCurveTo(x + width, y + height, x + width - 5, y + height); ctx.lineTo(x + 5, y + height); ctx.quadraticCurveTo(x, y + height, x, y + height - 5); ctx.lineTo(x, y + 5); ctx.quadraticCurveTo(x, y, x + 5, y); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
     ctx.fillStyle = color; ctx.font = 'bold 11px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(cue.icon, x + width / 2, y + 12); ctx.fillStyle = '#e9f1df'; ctx.font = 'bold 7px Trebuchet MS'; ctx.fillText(cue.title, x + width / 2, y + 21); ctx.fillStyle = '#9fb5a7'; ctx.font = '6px Trebuchet MS'; ctx.fillText(cue.copy, x + width / 2, y + 28); ctx.restore();
+  }
+  function firstRunCradleTutorialSeen() {
+    try { return localStorage.getItem('deadlight-cradle-tutorial:v1') === 'seen'; } catch (error) { return false; }
+  }
+  function completeFirstRunCradleTutorial() {
+    if (!state || state.tutorialSeen) return;
+    state.tutorialSeen = true;
+    try { localStorage.setItem('deadlight-cradle-tutorial:v1', 'seen'); } catch (error) { /* private browsing may deny storage */ }
+    setMessage('Hinge charged. Release to launch the probe.');
+  }
+  function drawCradleTutorial() {
+    if (!state.running || state.tutorialSeen || !state.ball || state.ball.cradleSide) return;
+    const side = state.ball.x < W / 2 ? 'left' : 'right';
+    const flipper = flippers[side];
+    const color = side === 'left' ? '#67c8d5' : '#ffd083';
+    const x = side === 'left' ? 78 : W - 78;
+    const y = H - 164;
+    ctx.save();
+    ctx.globalAlpha = .92;
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x, y + 28); ctx.lineTo(flipper.pivotX, flipper.pivotY - 4); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(flipper.pivotX, flipper.pivotY, 13 + Math.sin(state.pulse * 2) * 2, 0, Math.PI * 2); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.font = '900 9px Trebuchet MS'; ctx.fillText('HOLD HINGE', x, y); ctx.font = '7px Trebuchet MS'; ctx.fillStyle = '#e9f1df'; ctx.fillText('CHARGE IMPRINT', x, y + 11); ctx.restore();
   }
   function drawLowerMidLandmarks() {
     const y = 395, pulse = Math.sin(state.pulse * 1.6) * 0.5 + 0.5;
