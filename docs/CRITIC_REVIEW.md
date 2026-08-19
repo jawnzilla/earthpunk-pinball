@@ -1,4 +1,13 @@
-# Deadlight Critic Review — Overhaul tick 58
+# Deadlight Critic Review — Overhaul tick 59
+
+## Overhaul tick 59 verdict
+
+**Playable hackathon slice: PASS pending verification. AAA-ready: FAIL / unverified.** Physics V2 now has an explicit dynamic-contact momentum seam: moving bodies can receive equal/opposite impulses while static table geometry remains unchanged.
+
+### Remaining risk / next smallest slice
+
+- The live table still uses kinematic flippers and static geometry; this core seam is not a claim that flipper feel or impact tuning is complete.
+- Run the deterministic suite, exact hosted portrait checks, and Pages deployment before selecting the next physics/object interaction slice.
 
 ## Overhaul tick 58 verdict
 

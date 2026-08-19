@@ -89,7 +89,7 @@ export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, 
   return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };
 }
 
-export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001, restitution = null }) {
+export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = surface.velocity ?? { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001, restitution = null }) {
   const ballMaterial = MATERIALS[ball.material] ?? MATERIALS.steel;
   const surfaceMaterial = MATERIALS[surface.material] ?? MATERIALS.steel;
   const n = normalize(normal);
@@ -130,6 +130,12 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
   }
 
   applyImpulse(ball, impulse);
+  // Dynamic surfaces receive the equal/opposite contact impulse. Kinematic
+  // table geometry keeps inverseMass=0 and remains unchanged, while future
+  // moving bodies can conserve momentum instead of only borrowing a velocity.
+  if (surface.inverseMass > 0 && surface.velocity) {
+    applyImpulse(surface, scale(impulse, -1));
+  }
   result.impulse = impulse;
   result.impactEnergy = impactEnergyFromMassSpeed(ball.mass, result.impactSpeed);
   return result;

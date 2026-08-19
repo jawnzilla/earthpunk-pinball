@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: dynamic-contact momentum seam
+
+### Implemented
+
+- Extended the renderer-independent Physics V2 contact solver so an explicitly dynamic surface (`inverseMass > 0` with a mutable velocity) receives the equal/opposite contact impulse.
+- Surface velocity now defaults from `surface.velocity` when supplied; existing kinematic table geometry remains unchanged with `inverseMass: 0`.
+- Added a deterministic moving-body regression proving momentum conservation and surface response. No live table geometry, flipper tuning, input, progression, or renderer behavior changed.
+
+### Verification
+
+- `npm test`: pending for this tick.
+- Exact portrait browser and GitHub Pages verification: pending for this tick.
+
+### Decision / next gate
+
+- This is a foundation slice toward first-principles mass/material response, not proof of final gameplay feel. Next gate is the real test/deploy/browser pass before another physics change.
+
 ## 2026-08-18 — Overhaul tick: active-element review fixture
 
 ### Implemented

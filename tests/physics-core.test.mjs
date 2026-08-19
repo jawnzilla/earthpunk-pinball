@@ -49,6 +49,17 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const ball = createBall({ mass: 1, vx: 0, vy: 3 });
+  const surface = createBall({ mass: 3, vx: 0, vy: 0, material: 'rubber' });
+  const beforeMomentum = ball.mass * ball.velocity.y + surface.mass * surface.velocity.y;
+  const contact = resolveContact({ ball, surface, point: { x: 0, y: 0 }, normal: { x: 0, y: -1 } });
+  const afterMomentum = ball.mass * ball.velocity.y + surface.mass * surface.velocity.y;
+  assert.equal(contact.separating, false);
+  approx(afterMomentum, beforeMomentum);
+  assert.ok(surface.velocity.y > 0);
+}
+
+{
   const ball = createBall({ mass: 0.032, vx: 0, vy: -6 });
   const contact = resolveContact({ ball, surface: { material: 'timber' }, point: { x: 0, y: 0 }, normal: { x: 0, y: 1 } });
   const plain = damageFromContact(contact, { objectMaterial: 'timber', threshold: 1.2, damageScale: 1 });
