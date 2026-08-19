@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: still-frame gate held
+
+### Decision
+
+- No product-code change was made this tick. The current visual packet is already implemented through the recessed well, wall bevel, foreground mechanism plane, authored object silhouettes, contact shadows, and portrait HUD spacing. The remaining decision is subjective: choose one largest visual defect from a fresh still frame before stacking another renderer layer.
+- This scheduled environment has no human visual inspection surface, so it would be unsafe to invent a grayscale/depth verdict or select a new shadow, glow, material, or HUD change from source inspection alone. The next safe product slice remains blocked by that evidence gate.
+
+### Fresh repository / hosted evidence
+
+- `prototype` was fetched from `origin`; working tree was clean at start and HEAD was `66d8a48`.
+- `npm test`: 22 tests passed, 0 failures.
+- `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=7892f47'`: HTTP 200, `Content-Length: 201085`, Pages artifact reachable.
+- No exact hosted Playwright matrix was run in this tick because this checkout contains no browser verification harness and no browser automation tool is available in the scheduled environment. No screenshot, console, or viewport-parity claim is made here.
+
+### Next implementation-ready action
+
+- When a still-frame review is available, inspect `depth` and `grayscale` at 320×568 first. Name exactly one defect (plane separation, silhouette/value separation, localized lighting, HUD hierarchy, or overlay density), then make only that renderer seam and rerun the complete hosted 320×568 / 390×844 packet.
+- Physics, collision geometry, fixed timestep, input, progression, and elemental rules remain untouched. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: visual-phase evidence gate refresh
 
 ### Implemented
