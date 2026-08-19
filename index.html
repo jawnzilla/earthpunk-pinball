@@ -1146,24 +1146,11 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       }
     }
     if (!state.running) return;
-    const staticSegmentCandidates = [];
-    state.layout.bumpers.filter(item => item.type === 'edge' && (!item.oneWay || (b.y < item.y && b.vy > 0))).forEach(item => {
-      const segment = { ...edgeSegment(item), material: 'steel' };
-      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
-      if (swept) staticSegmentCandidates.push({ kind: 'edge', item, segment, swept });
-    });
-    if (state.layout.gate && state.relayCooldown === 0) {
-      const segment = { ...state.layout.gate, material: 'copper' };
-      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
-      if (swept) staticSegmentCandidates.push({ kind: 'gate', item: state.layout.gate, segment, swept });
+    // The pre-resolution candidate is authoritative. Re-querying after a circle
+    // response would create a second trajectory and could reward a later gate.
+    if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate) {
+      segmentCollisionWithResidual(b, preStaticSegmentCandidate.segment, routeGravity, dt);
     }
-    sideGuards.forEach(guard => {
-      const segment = { ...guard, width: 12, material: 'steel' };
-      const swept = sweptSegmentContact(b, segment, b.r + (segment.width || 0) / 2);
-      if (swept) staticSegmentCandidates.push({ kind: 'guard', item: guard, segment, swept });
-    });
-    const staticSegmentCandidate = selectEarliestSweptContact(staticSegmentCandidates);
-    if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate) segmentCollisionWithResidual(b, preStaticSegmentCandidate.segment, routeGravity, dt);
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
       const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);

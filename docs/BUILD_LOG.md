@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 112: authoritative pre-resolution segment candidate
+
+### Decision
+
+- Removed the second static-segment candidate collection that ran after circle resolution in the same fixed step.
+- The segment candidate gathered from the shared pre-resolution trajectory is now the only segment candidate eligible for dispatch; this prevents a post-circle trajectory from re-querying a later rail/gate/guard and mutating state from stale geometry.
+- Preserved the existing segment solver, residual replay, gate reward guard, flipper path, geometry, materials, input, and rendering. This is a narrow contact-manifold cleanup, not a new global physics claim.
+- Updated the renderer contract to require the authoritative pre-resolution path and reject the removed compatibility query.
+
+### Verification
+
+- `npm test`: 27 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed until a runnable browser is available in this scheduled environment.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- The primary runtime dispatch now has one authoritative segment candidate, but boundary contacts and late drain recovery still have separate compatibility paths; they need a focused fixture before being folded into the manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 111: live cross-family contact dispatch
 
 ### Decision

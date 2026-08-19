@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 112 verdict
+
+**Playable hackathon slice: PASS for authoritative pre-resolution segment dispatch; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The redundant post-circle static-segment query is removed, so the runtime cannot silently re-query a later rail, guard, or gate from a mutated trajectory in the same fixed step.
+
+### Observed evidence
+
+- `index.html` gathers `preStaticSegmentCandidates` before any circle response and dispatches the selected `preStaticSegmentCandidate` directly through `segmentCollisionWithResidual()`.
+- The former post-circle `staticSegmentCandidates` collection and selector are absent; the renderer contract explicitly rejects both markers.
+- `npm test` passes 27/27; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks and screenshots are not claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- Boundary contacts and late drain recovery remain separate compatibility paths; do not claim those are part of the shared manifold without a focused runtime fixture.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 111 verdict
 
 **Playable hackathon slice: PASS for bounded live cross-family dispatch; global manifold: IMPROVED / not yet fully simplified; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The primary ball now gathers circle, static-segment, and flipper candidates from one pre-resolution trajectory and dispatches only the earliest normalized family winner.
