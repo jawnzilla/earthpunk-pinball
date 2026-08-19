@@ -15,6 +15,8 @@
 - Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed; `git diff --check`: passed.
 - Exact local and current-hosted Playwright checks at CSS 320×568 and 390×844: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, and zero console/page errors. The hosted probe is pre-deployment and therefore does not yet prove this source change is live there.
 - Post-change still-frame screenshots were captured outside the repository at `%LOCALAPPDATA%/Temp/deadlight-tick124-local-320.png`, `...-local-390.png`, `...-host-320.png`, and `...-host-390.png`; no subjective grayscale verdict is claimed without visual inspection.
+- GitHub Pages run `32305044807` completed successfully for `435bf18`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32305044807.
+- Post-deployment hosted Playwright checks at CSS 320×568 and 390×844 passed: HTTP 200, exact `innerWidth`, canvas present, `scrollWidth === clientWidth`, deployed HTML contains `drawMineDrain`, and zero console/page errors.
 
 ### Remaining risk / next smallest slice
 

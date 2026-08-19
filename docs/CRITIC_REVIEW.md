@@ -9,7 +9,9 @@
 - `index.html` defines `drawMineDrain()` and now calls it from `draw()` immediately before `drawForegroundMechanismPlane()` and `drawFlippers()`.
 - `tests/renderer-contract.test.mjs` asserts both the function and live composition call.
 - The change is renderer-only: no solver constants, collision geometry, fixed timestep, input ownership, progression, or asset loading changed.
-- Post-change local and hosted exact portrait browser checks, test output, and Pages deployment are recorded below after execution; no subjective grayscale claim is made without a still-frame inspection.
+- `npm test` passes 42/42; syntax checks and `git diff --check` pass.
+- GitHub Pages run `32305044807` succeeds for commit `435bf18`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32305044807.
+- Post-deployment hosted exact CSS 320×568 and 390×844 checks pass: HTTP 200, exact viewport width, canvas present, no horizontal overflow, deployed `drawMineDrain` present, and zero console/page errors. No subjective grayscale claim is made without visual inspection.
 
 ### Remaining risk / next smallest slice
 
