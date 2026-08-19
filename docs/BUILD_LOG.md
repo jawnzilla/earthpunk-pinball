@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 101: segment sweep contact timing
+
+### Decision
+
+- Implemented one bounded physics slice: swept rail, gate, edge-guard, and other segment queries now retain the normalized first-contact time (`swept.t`) and expose it on the live `segmentCollision()` contact as `contact.sweptT`.
+- The existing sampled broad phase, solver response, geometry, input, progression, rendering, and elemental rules are unchanged. Residual replay for segment contacts is intentionally not bundled into this timing seam.
+- Added a deterministic regression requiring a mid-step segment crossing to report a fractional contact time, plus a renderer contract for the live propagation.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Tight regression seam: `tests/flipper-contact.test.mjs` asserts that a segment crossing returns `t` strictly between 0 and 1; `tests/renderer-contract.test.mjs` pins `segmentCollision()` propagation.
+- Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- Pages deployment and hosted parity remain pending until this commit is pushed.
+
+### Remaining risk / next smallest slice
+
+- Segment contacts now expose timing but still resolve through the existing sequential path without residual-time replay or a segment earliest-contact manifold. That is the next physics seam only with a focused regression.
+- Human still-frame/grayscale visual review remains unavailable; no visual-quality claim is made.
+
 ## 2026-08-19 — Overhaul tick 100: earliest primary circle contact
 
 ### Decision

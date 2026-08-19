@@ -31,7 +31,7 @@ export function sweptSegmentContact(ball, segment, radius) {
     const projection = clamp(((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared, 0, 1);
     const closestX = segment.x1 + projection * dx;
     const closestY = segment.y1 + projection * dy;
-    if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY };
+    if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY, t: ratio };
   }
   return null;
 }

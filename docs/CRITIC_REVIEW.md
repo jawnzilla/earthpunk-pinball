@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 101 verdict
+
+**Playable hackathon slice: PASS for deterministic segment-contact timing; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Segment sweeps now carry the first sampled contact fraction through the live segment solver seam without changing collision response.
+
+### Observed evidence
+
+- `src/flipper-contact.js` returns `{ x, y, t }` from `sweptSegmentContact()` at the first sampled crossing.
+- `index.html` assigns `contact.sweptT = swept?.t ?? 1` in `segmentCollision()`.
+- `tests/flipper-contact.test.mjs` covers a fractional crossing time; `npm test` passes all 22 tests, syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser and screenshot checks are not claimed because this scheduled environment has no runnable browser executable.
+
+### Remaining risk / next smallest slice
+
+- This is timing instrumentation, not residual replay: rails, gates, edge guards, and side guards still use the sequential segment path. Do not claim a segment manifold or full anti-tunneling parity yet.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; AAA readiness remains unsupported.
+
 ## Overhaul tick 100 verdict
 
 **Playable hackathon slice: PASS for deterministic primary-circle contact ordering; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** The primary ball now resolves the earliest swept target, destructible, or circular bumper contact in a fixed step before replaying residual time.

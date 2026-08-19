@@ -40,6 +40,7 @@ test('swept segment rejects a path that misses and detects a crossing path', () 
   assert.ok(hit);
   assert.equal(hit.x, 120);
   assert.ok(hit.y > 90 && hit.y < 110);
+  assert.ok(hit.t > 0 && hit.t < 1, 'segment sweeps must retain first-contact timing');
 });
 
 test('swept segment catches a high-speed narrow crossing beyond the old sample cap', () => {

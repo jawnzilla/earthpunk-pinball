@@ -984,8 +984,9 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     let nx = contactX - closestX, ny = contactY - closestY;
     const radius = ball.r + (segment.width || 0) / 2;
     let distance = Math.hypot(nx, ny);
+    let swept = null;
     if (distance >= radius) {
-      const swept = sweptSegmentContact(ball, segment, radius);
+      swept = sweptSegmentContact(ball, segment, radius);
       if (!swept) return null;
       contactX = swept.x; contactY = swept.y;
       projection = Math.max(0, Math.min(1, ((contactX - segment.x1) * dx + (contactY - segment.y1) * dy) / lengthSquared));
@@ -998,6 +999,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
     const physics = syncPhysicsBallFromPixels(ball);
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(segment, 'steel'), inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: (segment.surfaceVelocity?.x || 0) / PX_PER_M, y: (segment.surfaceVelocity?.y || 0) / PX_PER_M }, penetration: (radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
+    contact.sweptT = swept?.t ?? 1;
     syncPixelsFromPhysics(ball);
     ball.lastContact = contact;
     if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
