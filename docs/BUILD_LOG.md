@@ -1,5 +1,31 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: salvage label contrast plate
+
+### Implemented
+
+- Added a bounded renderer-only contrast plate and 7px label treatment to destroyed salvage markers.
+- The plate is intentionally quiet charcoal with an amber keyline; it improves the reward read over dark debris at portrait scale without changing collision, damage, reward timing, physics, progression, or input.
+- Added renderer-contract assertions for the plate geometry and label size. The focused loop was red before the renderer change and green afterward.
+
+### Verification before deployment
+
+- `npm test`: 21 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- Exact local browser verification was not claimed; the repository's local runner remains blocked by the known `127.0.0.1:8765` `ERR_EMPTY_RESPONSE`.
+
+### Deployment verification
+
+- Commit `03e2f88` pushed to `prototype`.
+- GitHub Pages run `32222829007` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32222829007.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=destruction-run&cacheBust=03e2f88` passed at 320×568 and 390×844: HTTP 200, complete document, Canvas present, exact CSS width parity, fixture `destruction-run`, 7 contacts, stages `1,2,2,2,2,3,3`, one reward transition, and zero console/page/request errors.
+- Fresh captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-contrast-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-contrast-390.png`.
+
+### Decision / next gate
+
+- The deterministic destruction fixture confirms the deployed contrast treatment; it does not prove human-steered salvage readability in motion.
+- AAA readiness remains unsupported. Next work should be measured live flipper calibration or a single named visual defect from fresh evidence, not another unmeasured polish stack.
+
 ## 2026-08-19 — Overhaul tick: destroyed-salvage readability cue
 
 ### Implemented

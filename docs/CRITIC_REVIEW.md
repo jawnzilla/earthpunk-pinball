@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 76 verdict
+
+**Playable hackathon slice: PASS for destroyed-salvage label contrast; AAA-ready: FAIL / unverified.** The reward marker now has a readable local plate instead of relying on pale text over variable debris.
+
+### Observed evidence
+
+- Destroyed salvage retains its amber dashed ring and diamond marker, while `SALVAGE` now sits on a 40×11 logical-pixel charcoal plate with an amber keyline and 7px label.
+- The renderer-contract loop was red before the change and green after it; `npm test` passes all 21 tests.
+- GitHub Pages run `32222829007` completed successfully for commit `03e2f88`.
+- Exact hosted Playwright passed `destruction-run` at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, 7 contacts, stages `1,2,2,2,2,3,3`, one reward transition, and zero console/page/request errors. Fresh captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-contrast-320.png` and `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-salvage-contrast-390.png`.
+
+### Remaining risk / next smallest slice
+
+- This is a deterministic production fixture, not human-steered motion evidence; label legibility under moving occlusion remains unverified.
+- Do not claim final visual quality or AAA readiness. The next slice should be measured live flipper calibration or one separately evidenced visual defect.
+
 ## Overhaul tick 75 verdict
 
 **Playable hackathon slice: PASS for destroyed-salvage readability; AAA-ready: FAIL / unverified.** Destroyed objects now retain an explicit reward affordance instead of reading only as dark debris.
