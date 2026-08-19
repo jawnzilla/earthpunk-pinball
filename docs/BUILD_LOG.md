@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 113: remove duplicate post-manifold flipper query
+
+### Decision
+
+- Removed the stale compatibility query that swept both flippers again after the authoritative pre-resolution family candidates had already been gathered.
+- The live resolver now has one flipper candidate source: `preSelectedFlipperCandidate`, selected before any circle, segment, or flipper response mutates the primary ball.
+- Preserved the selected-flipper residual replay, held-cradle maintenance, input handling, geometry, materials, and gameplay values. This is a narrow contact-dispatch cleanup, not a claim that boundary or drain recovery is complete.
+- Added a renderer-contract regression that rejects reintroduction of the duplicate `flipperCandidates`/`selectedFlipperCandidate` path.
+
+### Verification
+
+- `npm test`: 27 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed until a runnable browser is available in this scheduled environment.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- Boundary contacts are still resolved before manifold gathering, and late drain recovery still has a separate post-dispatch flipper sweep. The next safe packet needs a focused boundary/drain fixture before folding either path into the authoritative candidate set.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 112: authoritative pre-resolution segment candidate
 
 ### Decision

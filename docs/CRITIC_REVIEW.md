@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 113 verdict
+
+**Playable hackathon slice: PASS for single-source flipper candidate dispatch; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The redundant post-manifold flipper sweep is removed, so the selected flipper response cannot be silently replaced by a second candidate query against mutated ball state.
+
+### Observed evidence
+
+- `index.html` dispatches `preSelectedFlipperCandidate` gathered before family response; the later `flipperCandidates` and `selectedFlipperCandidate` compatibility path is absent.
+- `tests/renderer-contract.test.mjs` explicitly rejects both duplicate-query markers while retaining the selected flipper residual-replay and cradle-preservation assertions.
+- `npm test` passes 27/27; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks and screenshots are not claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- Boundary contacts still resolve before shared candidate gathering, and late drain recovery still performs a separate post-dispatch sweep. A focused runtime fixture must establish safe timing and state ownership before either is folded into the manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 112 verdict
 
 **Playable hackathon slice: PASS for authoritative pre-resolution segment dispatch; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The redundant post-circle static-segment query is removed, so the runtime cannot silently re-query a later rail, guard, or gate from a mutated trajectory in the same fixed step.

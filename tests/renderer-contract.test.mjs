@@ -56,8 +56,8 @@ assert.match(source, /if \(runtimeContactWinner\?\.kind === 'segment' && preStat
 assert.match(source, /if \(runtimeContactWinner\?\.kind === 'flipper' && preSelectedFlipperCandidate\)/);
 assert.match(source, /state\.physicsTelemetry\.manifoldFamily = runtimeContactWinner\?\.kind \|\| null/);
 assert.match(source, /selectEarliestFlipperContact/);
-assert.match(source, /const flipperCandidates = \[\]/);
-assert.match(source, /const selectedFlipperCandidate = selectEarliestFlipperContact\(flipperCandidates\)/);
+assert.doesNotMatch(source, /const flipperCandidates = \[\]/);
+assert.doesNotMatch(source, /const selectedFlipperCandidate = selectEarliestFlipperContact\(flipperCandidates\)/);
 assert.match(source, /resolveFlipperCollision\(b, flipper, side, side === 'left' \? input\.left : input\.right, contact\)/);
 assert.match(source, /contact\.t < 1\) advancePrimaryBallResidual\(b, routeGravity, dt, contact\.t\)/);
 assert.match(source, /b\.cradleSide === otherSide && hingeCradle\(otherSide\)/);
