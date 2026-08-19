@@ -13,7 +13,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Hosted verification is pending this tick's push/deployment; no hosted result is claimed yet.
+- GitHub Pages run `32207656051` / #373 completed successfully for commit `1432d0f232fba413dc5eb8dda3ba07798a25008b`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32207656051.
+- Exact hosted `damage-pulse` checks pass at 320×568 and 390×844 with HTTP 200, exact CSS width parity, Canvas, hidden overlay, fixture marker, and zero console/page/request errors. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-damage-320.png` and `earthpunk-hosted-damage-390.png`.
 - The fixture verifies a damaged object presentation, not a human-steered live destruction sequence. Final visual hierarchy, touch ergonomics, and AAA readiness remain unsupported.
 
 ## Overhaul tick 63 verdict

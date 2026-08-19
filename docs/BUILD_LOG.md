@@ -17,7 +17,8 @@
 ### Decision / next gate
 
 - This closes the production destructible-impact evidence seam; it does not claim final AAA visual quality or complete live-play tuning.
-- Push this bounded slice to `prototype`, wait for the Pages workflow, then repeat the exact hosted portrait checks against the deployed `damage-pulse` fixture.
+- GitHub Pages run `32207656051` / #373 completed successfully for commit `1432d0f232fba413dc5eb8dda3ba07798a25008b`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32207656051.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=damage-pulse&cacheBust=1432d0f` passed at 320×568 and 390×844: HTTP 200, complete documents, exact CSS width parity, Canvas present, hidden overlay, `damage-pulse` marker, and zero console/page/request errors. Body heights were 568px and 846.39px. Captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-damage-320.png` and `earthpunk-hosted-damage-390.png`.
 
 ## 2026-08-18 — Overhaul tick: bounded active-status projection
 
