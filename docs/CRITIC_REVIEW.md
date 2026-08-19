@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The live table still uses static/kinematic geometry, so this seam is not proof of flipper feel, moving-body gameplay, or final collision tuning.
-- Deploy this commit and run hosted exact portrait checks at 320×568 and 390×844 before selecting another implementation slice.
+- GitHub Pages run `32202956902` completed successfully for commit `364774ff055a18e1ffb8f77ae79e81c3edc01fe5`; hosted exact Playwright at 320×568 and 390×844 passed HTTP 200, complete documents, Canvas, exact CSS width parity, hidden `depth` overlay, expected grayscale filter, and zero console/page/request errors.
 - AAA-ready remains unsupported.
 
 ## Overhaul tick 59 verdict

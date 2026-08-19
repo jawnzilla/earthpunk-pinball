@@ -13,7 +13,8 @@
 
 - Red-capable regression initially failed with the old solver (`ball.position.y === -1`, expected `-0.75`), isolating the missing dynamic-surface positional response.
 - `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js` and `git diff --check` passed.
-- Deployment and hosted exact portrait checks are still pending for this commit.
+- GitHub Pages run `32202956902` completed successfully for commit `364774ff055a18e1ffb8f77ae79e81c3edc01fe5`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32202956902.
+- Hosted exact Playwright at `?review=depth&cacheBust=364774f` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), body heights 568px / 844.39px, `depth` fixture, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, and zero console/page/request errors.
 
 ### Decision / next gate
 
