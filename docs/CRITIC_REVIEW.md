@@ -14,7 +14,7 @@
 
 - This validates the calibration seams, not human-steered motion feel or final material tuning. No live constants changed.
 - Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth` and `destruction-run` at 320×568 and 390×844: HTTP 200, complete documents, Canvas, exact CSS width parity, expected fixture markers, and zero console/page/request errors.
-- GitHub Pages run `32214034302` completed successfully for commit `7f8ff1f266a0ad9f2d1207658f79850630bbe7cb`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32214034302.
+- GitHub Pages run `32214111918` completed successfully for commit `ef4793bb494adeff9fd4906a161db493cbf925ab`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32214111918.
 - AAA-ready remains unsupported.
 
 ## Overhaul tick 68 verdict

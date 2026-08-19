@@ -15,7 +15,7 @@
 - After the single fixture implementation, `npm test`: 20 tests passed, 0 failures.
 - `node --check src/physics-calibration.js`, `node --check src/physics-calibration.mjs`, and `git diff --check`: passed.
 - Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth` and `destruction-run` at both 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), expected fixture markers, and zero console/page/request errors.
-- GitHub Pages run `32214034302` completed successfully for commit `7f8ff1f266a0ad9f2d1207658f79850630bbe7cb`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32214034302.
+- GitHub Pages run `32214111918` completed successfully for commit `ef4793bb494adeff9fd4906a161db493cbf925ab`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32214111918.
 
 ### Decision / next gate
 
