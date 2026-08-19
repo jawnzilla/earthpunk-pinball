@@ -12,7 +12,7 @@
 - The existing active-element chips remain at `y = 78`, leaving a documented separation between objective and elemental status bands.
 - `tests/renderer-contract.test.mjs` asserts the new geometry and scaling rationale; `npm test` passes 42/42.
 - Syntax checks and `git diff --check` pass.
-- No screenshot, true CSS viewport run, or human phone read was available for this source-only slice; hosted post-push parity is pending.
+- Hosted exact Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, requested `innerWidth`, canvas present, no horizontal overflow, grayscale fixture active, objective code present, and zero console/page errors. No screenshot or human phone read is claimed.
 
 ### Remaining risk / next smallest slice
 

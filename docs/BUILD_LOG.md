@@ -13,7 +13,8 @@
 - `npm test`: 42 passed, 0 failed.
 - Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
 - `git diff --check`: passed.
-- Hosted pre-change check: GitHub Pages returned HTTP 200, 211093 bytes, canvas present, and the deployed cradle tutorial code present. Post-push deployment and exact hosted viewport checks remain pending.
+- GitHub Pages run `32303404627` completed successfully for `3ee529e`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32303404627.
+- Hosted exact Playwright checks at CSS 320×568 and 390×844: HTTP 200, requested `innerWidth`, canvas present, `scrollWidth === clientWidth`, grayscale fixture active, objective code present, and zero console/page errors.
 
 ### Remaining risk / next smallest slice
 
