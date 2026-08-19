@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 128 follow-up
+# Deadlight Critic Review — Overhaul tick 131
+
+## Overhaul tick 131 verdict
+
+**Physics slice: PASS for a bounded continuous rotating-segment query; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** Rotating flipper contact now searches the continuous combined-motion distance function rather than accepting the first pose-sampled hit. The resolver contract and state ownership are preserved.
+
+### Observed evidence
+
+- `src/flipper-contact.js` uses a conservative interval lower bound and binary-refines the earliest verified contact; the old 64-pose sampler is absent from the rotating path.
+- `tests/flipper-contact.test.mjs` adds a stationary-ball rotational-crossing timing regression; `npm test`: 45/45 passed.
+- `node --check src/flipper-contact.js`, `git diff --check`, and the deterministic 10,000-query benchmark passed (19 ms in this checkout).
+- No renderer or gameplay presentation changed. This checkout has no Chromium executable, so exact 320×568/390×844 browser and screenshot checks are not claimed locally.
+
+### Remaining risk / next smallest slice
+
+- Add the remaining canon fixtures for linear-plus-rotational motion, endpoint-cap contact, near misses, degenerate inputs, and benchmark allocation/work accounting before calling the CCD manifold complete.
+- The earthpunk mine/tunnel visual overhaul, materials, elemental hybrids, destructible readability, and subjective portrait/grayscale still-frame review remain open. Do not claim LOOP_COMPLETE.
 
 ## Overhaul tick 130 verdict
 

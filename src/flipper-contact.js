@@ -86,26 +86,45 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
   if (Math.max(ballTravel, tipTravel) < 0.01) return null;
   const queryRadius = radius + Math.min(10, tipTravel * 0.28);
-  // Sample the rotating blade at radius-sized arc intervals. Three poses are
-  // enough for ordinary motion but can skip a stationary ball during a large
-  // angular jump; keep the query bounded for pathological review inputs.
-  const angularSteps = Math.min(64, Math.max(2, Math.ceil(tipTravel / Math.max(2, queryRadius * 0.45))));
-  const angles = Array.from({ length: angularSteps + 1 }, (_, index) => previousAngle + angleDelta * (index / angularSteps));
-  for (let angleIndex = 0; angleIndex < angles.length; angleIndex += 1) {
-    const angle = angles[angleIndex];
-    const poseT = angleIndex / angularSteps;
-    const segment = segmentAt(flipper, angle, lengthBonus);
+  // Continuous rotating-segment query. The distance function is Lipschitz
+  // bounded by linear ball travel plus tip travel, so an interval can be
+  // discarded only when its conservative lower bound is outside the capsule.
+  const distanceAt = time => {
+    const segment = segmentAt(flipper, previousAngle + angleDelta * time, lengthBonus);
+    const ballX = startX + (ball.x - startX) * time;
+    const ballY = startY + (ball.y - startY) * time;
     const dx = segment.x2 - segment.x1;
     const dy = segment.y2 - segment.y1;
-    const lengthSquared = dx * dx + dy * dy || 1;
-    const projection = clamp(((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared, 0, 1);
-    const closestX = segment.x1 + projection * dx;
-    const closestY = segment.y1 + projection * dy;
-    if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, t: poseT, segment };
-    const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, queryRadius);
-    if (swept) return { x: swept.x, y: swept.y, t: Math.max(poseT, swept.t), segment };
-  }
-  return null;
+    const projection = clamp(((ballX - segment.x1) * dx + (ballY - segment.y1) * dy) / (dx * dx + dy * dy || 1), 0, 1);
+    return Math.hypot(ballX - (segment.x1 + projection * dx), ballY - (segment.y1 + projection * dy));
+  };
+  const relativeTravel = ballTravel + tipTravel;
+  const maxDepth = 14;
+  const findContact = (from, to, fromDistance, toDistance, depth) => {
+    if (fromDistance <= queryRadius) return from;
+    const span = to - from;
+    if (Math.min(fromDistance, toDistance) - relativeTravel * span > queryRadius) return null;
+    const middle = (from + to) * 0.5;
+    const middleDistance = distanceAt(middle);
+    if (middleDistance <= queryRadius) {
+      let low = from;
+      let high = middle;
+      for (let step = 0; step < 18; step += 1) {
+        const probe = (low + high) * 0.5;
+        if (distanceAt(probe) <= queryRadius) high = probe;
+        else low = probe;
+      }
+      return high;
+    }
+    if (depth >= maxDepth) return null;
+    return findContact(from, middle, fromDistance, middleDistance, depth + 1)
+      ?? findContact(middle, to, middleDistance, toDistance, depth + 1);
+  };
+  const contactTime = findContact(0, 1, distanceAt(0), distanceAt(1), 0);
+  if (contactTime === null) return null;
+  const angle = previousAngle + angleDelta * contactTime;
+  const segment = segmentAt(flipper, angle, lengthBonus);
+  return { x: startX + (ball.x - startX) * contactTime, y: startY + (ball.y - startY) * contactTime, t: contactTime, segment };
 }
 
 // Flipper contact selection stays renderer-independent so the live resolver can

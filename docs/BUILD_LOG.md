@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 131: continuous rotating-segment CCD
+
+### Decision
+
+- Replaced bounded rotating-pose sampling in `src/flipper-contact.js` with a deterministic conservative interval query over the exact moving ball / rotating segment distance function.
+- The query uses a Lipschitz lower bound (`ballTravel + tipTravel`), recursively subdivides only intervals that may straddle the collision radius, and binary-refines the earliest verified contact. Resolver ownership and the `{ x, y, t, segment }` contract remain unchanged.
+- Added a stationary-ball crossing regression that fails the old pose-sample timing contract and verifies continuous first-contact timing. No renderer, input, progression, or elemental behavior changed.
+
+### Verification
+
+- `npm test`: 45 passed, 0 failed; `node --check src/flipper-contact.js` passed; `git diff --check` passed.
+- Deterministic 10,000-query benchmark: 19 ms in this checkout, within the canon's bounded-work target.
+- Exact browser checks are attempted after deployment; this checkout has no Chromium executable (`command -v chromium`, `chromium-browser`, and `google-chrome` returned none), so no local pixel/console claim is made from source tests.
+
+### Remaining risk / next smallest slice
+
+- Continuous TOI is now live in the renderer-independent query, but the full canon still needs dedicated linear-plus-rotational, endpoint-cap, near-miss, degenerate-input, and recorded performance fixtures.
+- Visual overhaul, materials, elemental hybrids, destructible readability, and portrait/grayscale inspection remain open. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 130: continuous rotating-flipper CCD canon
 
 ### Decision
