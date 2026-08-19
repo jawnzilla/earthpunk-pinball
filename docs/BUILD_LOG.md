@@ -14,6 +14,8 @@
 - `git diff --check`: passed before documentation update.
 - Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=3232c64'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 09:13:37 GMT`.
 - GitHub Actions Pages run `32236498255` completed successfully for `3232c64`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32236498255.
+- The documentation-only tick commit `d268e8537567ede7fa867bdf044af45f4dd8b9d5` also deployed successfully in Pages run `32238145588`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32238145588.
+- Post-deploy hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=d268e85'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 09:33:58 GMT`.
 - No screenshot, grayscale verdict, exact hosted Playwright matrix, or subjective visual-quality claim is made here. This scheduled environment has no legitimate still-frame inspection surface.
 
 ### Gate / next slice
