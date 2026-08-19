@@ -59,6 +59,19 @@ export function sweptCircleContact(start, end, center, reach) {
   return { hit: true, t, point, normal: { x: (offset.x || fallback.x) / length, y: (offset.y || fallback.y) / length } };
 }
 
+// Resolve only the first swept candidate in a fixed step. Later contacts must
+// wait for residual time replay so they are not evaluated against stale state.
+export function selectEarliestSweptContact(candidates) {
+  if (!Array.isArray(candidates)) return null;
+  let earliest = null;
+  candidates.forEach(candidate => {
+    const swept = candidate?.swept;
+    if (!swept?.hit || !Number.isFinite(swept.t)) return;
+    if (!earliest || swept.t < earliest.swept.t) earliest = candidate;
+  });
+  return earliest;
+}
+
 // Rewind an elemental body to the first swept contact point before resolving
 // the impulse. This prevents a fast fragment from ending the fixed step inside
 // a salvage object after the broad phase has correctly found a mid-step hit.

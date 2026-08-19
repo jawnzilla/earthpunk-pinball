@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 99: earliest elemental salvage contact
+
+### Decision
+
+- Implemented one bounded physics slice: Water mini-balls and Wind echoes now gather swept destructible candidates and resolve only the earliest hit in a fixed step. This prevents later objects from being evaluated against stale pre-impact coordinates while preserving the existing residual-time replay seam.
+- Added the renderer-independent `selectEarliestSweptContact()` helper and a deterministic ordering regression. Solver constants, material response, input, progression, visuals, and elemental damage rules are unchanged.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `node --check src/elemental-effects.js`, `node --check tests/elemental-effects.test.mjs`, and `git diff --check`: passed.
+- Tight regression seam: `tests/elemental-effects.test.mjs` asserts a nearer valid swept contact wins over a farther hit and misses, with empty input returning null.
+- Hosted artifact was checked before this change at https://jawnzilla.github.io/earthpunk-pinball/ and returned the current Deadlight page; post-push Pages evidence is recorded below once the workflow completes.
+- Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+
+### Remaining risk / next smallest slice
+
+- The primary ball's target/bumper loop remains a separate sequential multi-contact path; it should receive the same earliest-contact treatment only with its own focused regression seam.
+- Human still-frame/grayscale visual review remains unavailable; no new visual polish was stacked from source-only evidence.
+
 ## 2026-08-19 — Overhaul tick 98: authored bumper hardware pass
 
 ### Decision

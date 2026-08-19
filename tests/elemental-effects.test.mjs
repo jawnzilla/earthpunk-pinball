@@ -14,6 +14,7 @@ import {
   resolveElementalBodyContact,
   resolveMiniBallStructureDamage,
   resolveWindEchoStructureDamage,
+  selectEarliestSweptContact,
   sweptCircleContact,
   rewindElementalBodyToContact
 } from '../src/elemental-effects.mjs';
@@ -217,6 +218,14 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.ok(advanceElementalBodyResidual(ball, 1 / 60, .25) > 0);
   assert.ok(ball.x > before);
   assert.equal(advanceElementalBodyResidual(ball, 1 / 60, 1), 0);
+}
+
+{
+  const near = { id: 'near', swept: { hit: true, t: 0.2 } };
+  const far = { id: 'far', swept: { hit: true, t: 0.8 } };
+  const miss = { id: 'miss', swept: { hit: false, t: 0.01 } };
+  assert.equal(selectEarliestSweptContact([far, miss, near]), near);
+  assert.equal(selectEarliestSweptContact([]), null);
 }
 
 console.log('elemental-effects: all deterministic tests passed');

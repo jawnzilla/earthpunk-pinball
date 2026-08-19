@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 99 verdict
+
+**Playable hackathon slice: PASS for deterministic elemental-contact health; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Water fragments and Wind echoes now choose the first swept salvage contact in a fixed step, eliminating stale later-contact evaluation.
+
+### Observed evidence
+
+- `index.html` now collects elemental destructible candidates and calls `selectEarliestSweptContact()` before rewinding, resolving damage, and replaying residual time.
+- `src/elemental-effects.js` provides the renderer-independent earliest-contact selector; `tests/elemental-effects.test.mjs` covers near/far/miss ordering.
+- `npm test` passes all 22 tests; targeted syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser and screenshot checks are not claimed because this scheduled environment has no runnable browser executable. No grayscale or subjective visual verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- Primary-ball circular target/bumper contacts still need an independent earliest-contact manifold seam; do not bundle that with visual work.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; AAA readiness remains unsupported.
+
 ## Overhaul tick 98 verdict
 
 **Playable hackathon slice: PASS for deterministic regression health; visual quality: source-verified improvement / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Bumpers now have a clearer earthpunk hardware read without touching gameplay.

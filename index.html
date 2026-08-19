@@ -324,7 +324,7 @@
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
-import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, sweptCircleContact } from './src/elemental-effects.js';
+import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
 (() => {
@@ -572,40 +572,54 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
           if (contact.normal.y > 0) miniBall.y = table.top + miniBall.radius;
         }
       });
+      const structureCandidates = [];
       state.destructibles.forEach(item => {
         if (item.destroyed) return;
         const reach = miniBall.radius + (item.r || 11);
         const swept = sweptCircleContact({ x: miniBall.previousX, y: miniBall.previousY }, { x: miniBall.x, y: miniBall.y }, { x: item.x, y: item.y }, reach);
-        if (!swept.hit) return;
+        if (swept.hit) structureCandidates.push({ item, reach, swept });
+      });
+      const earliestStructure = selectEarliestSweptContact(structureCandidates);
+      if (earliestStructure) {
+        const { item, reach, swept } = earliestStructure;
         rewindElementalBodyToContact(miniBall, swept, Math.max(0, reach - (item.r || 11)));
         const response = onMiniBallStructureContact(ball.elementalRuntime, miniBall.id, { objectId: item.id, position: { x: item.x, y: item.y }, normal: swept.normal, contactKey: 'destructible' });
-        if (!response?.counted || response.impactSpeed < item.threshold) return;
-        if (!residualReplayed) { advanceElementalBodyResidual(miniBall, dt, swept.t); residualReplayed = true; }
-        const damageResult = resolveMiniBallStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects });
-        const damage = damageResult.damage;
-        if (damage <= 0) return;
-        item.integrity = Math.max(0, item.integrity - damage);
-        item.damageCooldown = 8;
-        item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
-        emitImpact(item.x, item.y, elementColors.Water, item.damageStage === 3 ? 1.1 : .45, 'Water');
-        setMessage(item.integrity <= 0 ? `${item.label} cracked by water fragment.` : `${item.label} struck by water fragment.`);
-        if (item.integrity <= 0) item.destroyed = true;
-      });
+        if (response?.counted && response.impactSpeed >= item.threshold) {
+          if (!residualReplayed) { advanceElementalBodyResidual(miniBall, dt, swept.t); residualReplayed = true; }
+          const damageResult = resolveMiniBallStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects });
+          const damage = damageResult.damage;
+          if (damage > 0) {
+            item.integrity = Math.max(0, item.integrity - damage);
+            item.damageCooldown = 8;
+            item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
+            emitImpact(item.x, item.y, elementColors.Water, item.damageStage === 3 ? 1.1 : .45, 'Water');
+            setMessage(item.integrity <= 0 ? `${item.label} cracked by water fragment.` : `${item.label} struck by water fragment.`);
+            if (item.integrity <= 0) item.destroyed = true;
+          }
+        }
+      }
       }, windEchoContactResolver: echo => {
         let residualReplayed = false;
+        const structureCandidates = [];
         state.destructibles.forEach(item => {
           if (item.destroyed) return;
           const swept = sweptCircleContact({ x: echo.previousX, y: echo.previousY }, { x: echo.x, y: echo.y }, { x: item.x, y: item.y }, 8 + (item.r || 11));
-          if (!swept.hit) return;
+          if (swept.hit) structureCandidates.push({ item, swept });
+        });
+        const earliestStructure = selectEarliestSweptContact(structureCandidates);
+        if (earliestStructure) {
+          const { item, swept } = earliestStructure;
           rewindElementalBodyToContact(echo, swept, 8);
           const response = onWindEchoStructureContact(ball.elementalRuntime, { objectId: item.id, position: { x: item.x, y: item.y }, normal: swept.normal });
-          if (!response?.counted || response.impactSpeed < item.threshold) return;
-          if (!residualReplayed) { advanceElementalBodyResidual(echo, dt, swept.t); residualReplayed = true; }
-          const damage = resolveWindEchoStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects }).damage;
-          if (damage <= 0) return;
-          item.integrity = Math.max(0, item.integrity - damage); item.damageCooldown = 8; item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
-          emitImpact(item.x, item.y, elementColors.Wind, item.damageStage === 3 ? 1.05 : .4, 'Wind'); setMessage(item.integrity <= 0 ? `${item.label} sheared by wind echo.` : `${item.label} struck by wind echo.`); if (item.integrity <= 0) item.destroyed = true;
-        });
+          if (response?.counted && response.impactSpeed >= item.threshold) {
+            if (!residualReplayed) { advanceElementalBodyResidual(echo, dt, swept.t); residualReplayed = true; }
+            const damage = resolveWindEchoStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects }).damage;
+            if (damage > 0) {
+              item.integrity = Math.max(0, item.integrity - damage); item.damageCooldown = 8; item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
+              emitImpact(item.x, item.y, elementColors.Wind, item.damageStage === 3 ? 1.05 : .4, 'Wind'); setMessage(item.integrity <= 0 ? `${item.label} sheared by wind echo.` : `${item.label} struck by wind echo.`); if (item.integrity <= 0) item.destroyed = true;
+            }
+          }
+        }
       }
     });
     events.filter(event => event.type !== 'fire-trail-tick').forEach(handleElementalEvent);
