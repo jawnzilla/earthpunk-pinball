@@ -1,5 +1,24 @@
 # Deadlight Critic Review — Overhaul tick 86
 
+## Overhaul tick 88 verdict
+
+**Playable hackathon slice: PASS for hosted runtime/evidence health; AAA-ready: FAIL / unverified.** The clean `prototype` build is deployed and passes the exact portrait matrix, but the next visual change remains blocked because this scheduled environment cannot make a legitimate still-frame or grayscale judgment.
+
+### Observed evidence
+
+- `prototype` and `origin/prototype` are clean at `f47d650fe7f151a28a5614b2e467eca5a21d40d7`.
+- `npm test` passes all 22 tests; syntax and whitespace checks pass.
+- Hosted Playwright passed all 8 route/viewport checks for `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: HTTP 200, complete document, Canvas, exact CSS width parity, expected fixture/overlay state, four visible upgrade choices, and zero console/page/request errors.
+- Hosted `depth` returns HTTP 200 with a 201085-byte artifact; Pages run `32239902261` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32239902261.
+- Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick88-<route>-<width>.png`.
+- This is runtime evidence only; no human still-frame verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is whether shell → deck → recessed well → foreground mechanism and the major object families separate clearly in a human-inspected grayscale still.
+- Do not stack another renderer layer until a fresh 320×568 still identifies exactly one concrete hierarchy defect. Then implement only that seam and rerun both portrait sizes plus the upgrade fixture.
+- Physics, input, progression, and elemental behavior remain untouched. AAA-ready remains unsupported.
+
 ## Overhaul tick 87 verdict
 
 **Playable hackathon slice: PASS for current hosted availability and evidence hygiene; AAA-ready: FAIL / unverified.** The repository and Pages artifact are healthy, but the next visual change remains correctly blocked because this scheduled environment cannot make a legitimate still-frame or grayscale judgment.

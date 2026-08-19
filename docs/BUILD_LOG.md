@@ -1,5 +1,30 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 88: hosted portrait evidence gate refreshed
+
+### Decision
+
+- No product-code change was made this tick. The visual phase remains correctly blocked on a human-inspected still frame naming one concrete hierarchy defect; adding another renderer seam from source inspection alone would be unmeasured polish.
+- Refreshed repository, hosted artifact, and Pages workflow evidence against the clean `prototype` HEAD (`f47d650`). This is an evidence tick, not a completion claim.
+
+### Verification
+
+- `git status --short --branch`: clean `prototype`; local HEAD is `f47d650fe7f151a28a5614b2e467eca5a21d40d7` and matches `origin/prototype`.
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, `node --check src/elemental-effects.js`, and `git diff --check`: passed.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=f47d650'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 09:53:27 GMT`.
+- Hosted body fetch returned 201085 bytes and retained `drawForegroundMechanismPlane`, `drawWellWallBevel`, and upgrade-review markers.
+- Exact hosted Playwright matrix passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: all 8 checks returned HTTP 200, `document.readyState=complete`, Canvas present, exact CSS width parity (`innerWidth=clientWidth=scrollWidth`), zero console/page/request errors, and body heights 568px / 846.39px (upgrade 844px). The upgrade route exposed `#overlay.upgrade-decision` with 4 visible choices at both sizes.
+- Fresh captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick88-<route>-<width>.png`.
+- GitHub Actions Pages run `32239902261` completed successfully for `f47d650`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32239902261.
+- No human grayscale inspection or subjective visual-quality claim is made here.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes.
+- When a human still-frame review is available, name exactly one defect at 320×568, implement only that renderer seam, and rerun the full hosted portrait packet plus the upgrade fixture.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 87: hosted evidence gate refreshed
 
 ### Decision
