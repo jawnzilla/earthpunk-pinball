@@ -877,11 +877,22 @@ import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCr
   function segmentCollision(ball, segment) {
     const dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     const lengthSquared = dx * dx + dy * dy || 1;
-    const projection = Math.max(0, Math.min(1, ((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared));
-    const closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
-    let nx = ball.x - closestX, ny = ball.y - closestY;
-    const distance = Math.hypot(nx, ny), radius = ball.r + (segment.width || 0) / 2;
-    if (distance >= radius) return null;
+    let contactX = ball.x, contactY = ball.y;
+    let projection = Math.max(0, Math.min(1, ((contactX - segment.x1) * dx + (contactY - segment.y1) * dy) / lengthSquared));
+    let closestX = segment.x1 + projection * dx, closestY = segment.y1 + projection * dy;
+    let nx = contactX - closestX, ny = contactY - closestY;
+    const radius = ball.r + (segment.width || 0) / 2;
+    let distance = Math.hypot(nx, ny);
+    if (distance >= radius) {
+      const swept = sweptSegmentContact(ball, segment, radius);
+      if (!swept) return null;
+      contactX = swept.x; contactY = swept.y;
+      projection = Math.max(0, Math.min(1, ((contactX - segment.x1) * dx + (contactY - segment.y1) * dy) / lengthSquared));
+      closestX = segment.x1 + projection * dx; closestY = segment.y1 + projection * dy;
+      nx = contactX - closestX; ny = contactY - closestY;
+      distance = Math.hypot(nx, ny);
+      ball.x = contactX; ball.y = contactY;
+    }
     if (distance < .001) { nx = -dy; ny = dx; }
     const normalLength = Math.hypot(nx, ny) || 1; nx /= normalLength; ny /= normalLength;
     const physics = syncPhysicsBallFromPixels(ball);

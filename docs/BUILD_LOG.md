@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-18 — Overhaul tick: swept static-segment contact seam
+
+### Implemented
+
+- Updated the live `segmentCollision()` path for rails, gates, and side guards to reuse the renderer-independent `sweptSegmentContact()` query when a fast ball ends outside the segment radius after crossing it during the fixed step.
+- The collision is resolved at the sampled crossing point, preserving the existing material, surface velocity, restitution, damage, and telemetry paths. Stationary overlaps and miss paths retain their previous behavior.
+- Added renderer-contract coverage for the production swept query and sampled contact handoff. No flipper tuning, input, progression, renderer styling, or asset behavior changed.
+
+### Verification
+
+- `npm test`: 11 tests passed, 0 failures, including the deterministic crossing/miss regression in `tests/flipper-contact.test.mjs`.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
+- Pages/browser verification and deployment are pending this commit; no hosted result is claimed yet.
+
+### Decision / next gate
+
+- This is one bounded collision-continuity slice aimed at preventing fast-ball tunneling through static narrow geometry. After push, run exact hosted checks at 320×568 and 390×844 with zero console/page/request errors before selecting another physics or visual change.
+- AAA-ready remains unsupported.
+
 ## 2026-08-18 — Overhaul tick: mass-weighted dynamic-contact separation
 
 ### Implemented

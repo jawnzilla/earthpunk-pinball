@@ -64,4 +64,6 @@ assert.match(source, /physicsTelemetry: \{ physicsStepMs: 0, contactCount: 0, su
 assert.match(source, /performance\.now\(\)/);
 assert.match(source, /state\.physicsTelemetry\.contactCount \+= 1/);
 assert.match(source, /Step: \$\{telemetry\.physicsStepMs\.toFixed\(2\)\}ms/);
+assert.match(source, /const swept = sweptSegmentContact\(ball, segment, radius\)/);
+assert.match(source, /contactX = swept\.x; contactY = swept\.y/);
 console.log('renderer-contract: target material cues, review fixtures, and physics telemetry present');

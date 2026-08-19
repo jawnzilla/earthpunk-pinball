@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 60
 
+## Overhaul tick 61 verdict
+
+**Playable hackathon slice: PASS for the bounded static-segment swept-contact seam. AAA-ready: FAIL / unverified.** Fast balls that cross a narrow static segment between fixed steps now enter the existing contact solver at the sampled crossing point instead of being silently missed by an endpoint-only query.
+
+### Observed evidence
+
+- `segmentCollision()` now calls `sweptSegmentContact(ball, segment, radius)` only after the current-position overlap test misses, then recomputes the segment projection, normal, and contact distance at the swept sample before resolving the normal material/surface-velocity contact.
+- The deterministic suite passes 11 tests; the existing crossing-path regression proves a crossing is detected while a parallel/missing path remains null. Syntax and whitespace checks pass.
+- Hosted/browser evidence and the GitHub Pages run are intentionally not claimed until the pushed commit is deployed and checked at both required portrait widths.
+
+### Remaining risk / next smallest slice
+
+- The swept sampler is bounded to 12 samples, so extremely long travel relative to the segment radius remains a known approximation; the fixed-step speed cap should keep ordinary gameplay within the intended range, but a high-speed stress regression is still useful.
+- The live browser path still needs exact 320×568 and 390×844 checks after deployment, including zero console/page/request errors. AAA-ready remains unsupported.
+
 ## Overhaul tick 60 verdict
 
 **Playable hackathon slice: PASS for the bounded mass-weighted separation seam. AAA-ready: FAIL / unverified.** Physics V2 now applies penetration correction to both dynamic contact bodies according to inverse mass, matching the equal/opposite momentum seam added previously.
