@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 95: current hosted evidence rechecked, visual gate remains held
+
+### Decision
+
+- No product-code change was made this tick. The implementation-ready visual phase remains blocked on a legitimate human-inspected still frame naming one concrete hierarchy defect; adding renderer polish from source/HTTP evidence alone would be unmeasured.
+- Refreshed the repository/remote state, hosted artifact, and Pages workflow evidence. Updated `docs/NEXT_VISUAL_PHASE.md` to the current product HEAD. This is an evidence/canon-maintenance tick, not a completion claim.
+
+### Verification
+
+- `git fetch origin prototype`, `git rev-parse HEAD`, and `git rev-parse origin/prototype` confirm clean local/remote `prototype` at `a86a7f39b902f08a5ec6831cc52e32d7df02c467` before this documentation update.
+- `npm test`: 22 passed, 0 failed. All `src/*.js` files pass `node --check`; `git diff --check` passes before this documentation update.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=a86a7f3'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 12:03:08 GMT`.
+- Hosted body extraction returned the current page title and retained the Generator Well, Physics V2, and canvas/gameplay markers. This confirms artifact content/availability, not subjective visual quality.
+- GitHub Actions Pages run `32250637488` completed successfully for `a86a7f39b902f08a5ec6831cc52e32d7df02c467`.
+- No human still-frame, grayscale inspection, or subjective visual verdict is claimed. No exact hosted Playwright matrix is claimed for this tick because no runnable browser harness is present in the repository.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is whether shell → deck → recessed well → foreground mechanism and the major object families separate clearly in a human-inspected grayscale still.
+- Do not stack another renderer layer until a fresh 320×568 still identifies exactly one concrete hierarchy defect. Then implement only that seam and rerun both portrait sizes plus the upgrade fixture.
+- Physics, input, progression, and elemental behavior remain untouched. AAA-ready remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 94: visual evidence gate held, hosted artifact refreshed
 
 ### Decision

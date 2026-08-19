@@ -1,5 +1,23 @@
 # Deadlight Critic Review — Overhaul tick 92
 
+## Overhaul tick 95 verdict
+
+**Playable hackathon slice: PASS for hosted availability, deterministic runtime health, and evidence hygiene; AAA-ready: FAIL / unverified.** No product code changed because the next visual seam remains blocked on a legitimate human still-frame judgment.
+
+### Observed evidence
+
+- `prototype` and `origin/prototype` were clean at `a86a7f39b902f08a5ec6831cc52e32d7df02c467` before this documentation update.
+- `npm test` passes all 22 tests; all `src/*.js` modules pass `node --check`; `git diff --check` passes before this documentation update.
+- Hosted `?review=depth&cacheBust=a86a7f3` returns HTTP 200 with a 201085-byte response and the expected Generator Well / Physics V2 / canvas markers.
+- GitHub Pages run `32250637488` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32250637488.
+- No human still-frame, grayscale inspection, or subjective visual verdict is claimed. No exact hosted Playwright matrix is claimed for this tick because no runnable browser harness is present in the repository.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is whether shell → deck → recessed well → foreground mechanism and the major object families separate clearly in a human-inspected grayscale still.
+- Do not stack another renderer layer until a fresh 320×568 still identifies exactly one concrete hierarchy defect. Then implement only that seam and rerun both portrait sizes plus the upgrade fixture.
+- Physics, input, progression, and elemental behavior remain untouched. AAA-ready remains unsupported.
+
 ## Overhaul tick 94 verdict
 
 **Playable hackathon slice: PASS for hosted availability, deterministic runtime health, and evidence hygiene; AAA-ready: FAIL / unverified.** No product code changed because the next visual seam remains blocked on a legitimate human still-frame judgment.
