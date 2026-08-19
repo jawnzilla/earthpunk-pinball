@@ -12,7 +12,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Pages deployment and exact hosted portrait checks are still the release gate for this tick.
+- Commit `07d13ee5715dd1dec51d7298cb3bf3d4266287a7` is deployed by Pages run `32208885613`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32208885613.
+- Exact hosted Playwright passed at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, the `depth` fixture, hidden overlay, expected grayscale filter, deployed Wind Echo marker, and zero console/page/request errors.
 - This fixes contact accounting; it does not establish final Wind Echo feel, salvage readability, or AAA readiness.
 
 ## Overhaul tick 64 verdict

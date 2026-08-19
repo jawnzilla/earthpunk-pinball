@@ -17,8 +17,11 @@
 
 ### Decision / next gate
 
-- Commit and Pages deployment must be verified before selecting another physics/effects slice.
-- Exact hosted Playwright checks remain required at 320×568 and 390×844; AAA-ready remains unsupported.
+- Commit `07d13ee5715dd1dec51d7298cb3bf3d4266287a7` pushed to `origin/prototype`.
+- GitHub Pages run `32208885613` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32208885613.
+- Exact local Playwright at 320×568 and 390×844 passed HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity, `depth` fixture, hidden overlay, `grayscale(1) contrast(1.08)`, and zero console/page/request errors.
+- Exact hosted Playwright at `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=07d13ee` passed the same assertions at 320×568 and 390×844; deployed HTML contains `onWindEchoStructureContact` and browser errors were zero.
+- AAA-ready remains unsupported.
 
 ## 2026-08-19 — Overhaul tick: deterministic destructible-contact contract
 
