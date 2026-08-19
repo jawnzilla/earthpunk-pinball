@@ -1,3 +1,15 @@
+# Deadlight Critic Review — Overhaul tick 125 follow-up
+
+## Follow-up verdict
+
+**Prior browser probe: FAIL, corrected before final delivery.** The first post-push browser probe caught a duplicate `family` declaration that source-text tests could not detect. The duplicate was removed, with no change to the intended material-authored rendering slice. A fresh Pages deployment and browser probe are required before declaring this tick complete.
+
+### Evidence
+
+- Exact hosted probe on commit `8b15ab9` returned HTTP 200, correct 320/390 CSS widths, canvas, and no overflow, but reported `Identifier 'family' has already been declared` as a page error at both widths and both review URLs.
+- `npm test` remained 42/42 because the existing renderer contract is source-text based; this exposes a test coverage gap, not a clean browser result.
+- The correction removes the duplicate binding; post-push Pages verification is explicitly pending.
+
 # Deadlight Critic Review — Overhaul tick 125
 
 ## Overhaul tick 125 verdict

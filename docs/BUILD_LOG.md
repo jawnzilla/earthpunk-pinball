@@ -1,5 +1,19 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 125 follow-up: remove duplicate renderer binding
+
+### Root cause and correction
+
+- The first tick 125 browser probe exposed a real runtime `SyntaxError: Identifier 'family' has already been declared` in `drawTargets()`; the deterministic source-contract suite did not execute the browser module.
+- Removed the duplicate local declaration while keeping the single material-derived family binding.
+- This is a correction to the same bounded target-material slice; no gameplay or solver behavior changed.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks and `git diff --check`: passed.
+- The failed hosted probe is retained as a blocker on the prior commit; post-follow-up deployment verification is required before claiming browser health.
+
 ## 2026-08-19 — Overhaul tick 125: target silhouettes follow material data
 
 ### Decision
