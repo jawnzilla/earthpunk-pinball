@@ -1342,7 +1342,9 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function drawObjectiveCue() {
     if (!state.running) return;
     const cue = state.routeGateOpen ? { icon: '◇', title: 'CHUTE OPEN', copy: 'SEND PROBE' } : state.topHits > 0 ? { icon: '◎', title: 'BANK', copy: 'HIT UPPER' } : state.ball?.cradleSide ? { icon: 'ϟ', title: 'READY', copy: 'HOLD + RELEASE' } : { icon: '⌁', title: 'CRADLE', copy: 'HOLD FLIPPER' };
-    const width = Math.min(52, Math.max(48, W * .2)), x = (W - width) / 2, y = 44, height = 30, color = state.routeGateOpen ? '#67c8d5' : state.topHits > 0 ? '#ffd083' : '#9fd4c0';
+    // Keep the objective legible after the 360px canvas is scaled into a 320px phone.
+    // The cue is a hierarchy anchor, not a tiny status badge.
+    const width = Math.min(104, Math.max(92, W * .28)), x = (W - width) / 2, y = 42, height = 34, color = state.routeGateOpen ? '#67c8d5' : state.topHits > 0 ? '#ffd083' : '#9fd4c0';
     ctx.save(); ctx.fillStyle = 'rgba(7,13,15,.88)'; ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.shadowColor = color; ctx.shadowBlur = 7;
     ctx.beginPath(); ctx.moveTo(x + 5, y); ctx.lineTo(x + width - 5, y); ctx.quadraticCurveTo(x + width, y, x + width, y + 5); ctx.lineTo(x + width, y + height - 5); ctx.quadraticCurveTo(x + width, y + height, x + width - 5, y + height); ctx.lineTo(x + 5, y + height); ctx.quadraticCurveTo(x, y + height, x, y + height - 5); ctx.lineTo(x, y + 5); ctx.quadraticCurveTo(x, y, x + 5, y); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
     ctx.fillStyle = color; ctx.font = 'bold 11px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(cue.icon, x + width / 2, y + 12); ctx.fillStyle = '#e9f1df'; ctx.font = 'bold 7px Trebuchet MS'; ctx.fillText(cue.title, x + width / 2, y + 21); ctx.fillStyle = '#9fb5a7'; ctx.font = '6px Trebuchet MS'; ctx.fillText(cue.copy, x + width / 2, y + 28); ctx.restore();

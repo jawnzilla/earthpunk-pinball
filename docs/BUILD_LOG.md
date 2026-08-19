@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 123: portrait objective hierarchy
+
+### Decision
+
+- Enlarged the live canvas objective cue from a compact 48–52px badge to a 92–104px hierarchy anchor, with a slightly taller panel and lower placement.
+- Kept the cue centered above the existing active-element chips (`y = 78`) so objective, elemental state, and playfield remain separate visual bands when the 360px canvas is scaled into a 320px phone.
+- This is renderer-only: no physics constants, collision geometry, input ownership, progression, or asset loading changed.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
+- `git diff --check`: passed.
+- Hosted pre-change check: GitHub Pages returned HTTP 200, 211093 bytes, canvas present, and the deployed cradle tutorial code present. Post-push deployment and exact hosted viewport checks remain pending.
+
+### Remaining risk / next smallest slice
+
+- The larger cue improves the measurable canvas hierarchy but is not a subjective phone still-frame verdict; no screenshot or human readability claim is made here.
+- Portrait visual hierarchy and grayscale readability remain the largest product gap; physics/manifold completion is also not claimed.
+
 ## 2026-08-19 — Overhaul tick 122: first-run cradle tutorial
 
 ### Decision

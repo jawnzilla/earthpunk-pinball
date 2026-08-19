@@ -1,5 +1,24 @@
 # Deadlight Critic Review — Overhaul tick 119
 
+# Deadlight Critic Review — Overhaul tick 123
+
+## Overhaul tick 123 verdict
+
+**Playable hackathon slice: PASS for a bounded portrait-HUD hierarchy adjustment; global manifold: unchanged / not complete; visual quality: source + contract verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** The objective cue now has enough horizontal room to read as a deliberate instruction band instead of a tiny badge at 320px.
+
+### Observed evidence
+
+- `index.html` now sizes `drawObjectiveCue()` to 92–104 internal canvas pixels, raises its height to 34px, and places it at `y = 42`.
+- The existing active-element chips remain at `y = 78`, leaving a documented separation between objective and elemental status bands.
+- `tests/renderer-contract.test.mjs` asserts the new geometry and scaling rationale; `npm test` passes 42/42.
+- Syntax checks and `git diff --check` pass.
+- No screenshot, true CSS viewport run, or human phone read was available for this source-only slice; hosted post-push parity is pending.
+
+### Remaining risk / next smallest slice
+
+- Verify the cue at exact hosted 320×568 and 390×844 CSS viewports after deployment, then capture a still-frame/grayscale review before claiming visual improvement.
+- The larger cue does not close the broader portrait material/depth gap or the incomplete primary manifold.
+
 # Deadlight Critic Review — Overhaul tick 122
 
 ## Overhaul tick 122 verdict
