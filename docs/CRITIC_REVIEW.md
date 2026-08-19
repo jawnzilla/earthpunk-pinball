@@ -2,7 +2,13 @@
 
 ## Overhaul tick 59 verdict
 
-**Playable hackathon slice: PASS pending verification. AAA-ready: FAIL / unverified.** Physics V2 now has an explicit dynamic-contact momentum seam: moving bodies can receive equal/opposite impulses while static table geometry remains unchanged.
+**Playable hackathon slice: PASS for the bounded dynamic-contact seam. AAA-ready: FAIL / unverified.** Physics V2 now has an explicit dynamic-contact momentum seam: moving bodies can receive equal/opposite impulses while static table geometry remains unchanged.
+
+### Observed evidence
+
+- `npm test`: 11 tests passed, 0 failures; syntax and whitespace checks passed.
+- GitHub Pages run `32201717914` for commit `a2148eeaf250056b8168770c73745367fadf7d71` completed successfully.
+- Hosted exact Playwright at 320×568 and 390×844 passed HTTP 200, complete documents, Canvas, exact CSS width parity, the active-elements fixture, hidden route overlay, `FIRE 3 / WATER 2`, and zero console/page/request errors.
 
 ### Remaining risk / next smallest slice
 

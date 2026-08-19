@@ -10,8 +10,9 @@
 
 ### Verification
 
-- `npm test`: pending for this tick.
-- Exact portrait browser and GitHub Pages verification: pending for this tick.
+- `npm test`: 11 tests passed, 0 failures; `node --check src/physics-core.js` and `git diff --check` passed.
+- GitHub Pages run `32201717914` completed successfully for commit `a2148eeaf250056b8168770c73745367fadf7d71`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32201717914.
+- Hosted exact Playwright at `?review=active-elements&cacheBust=a2148ee` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS width parity, body height within 0.4px of viewport, `active-elements` fixture, hidden route overlay, active HUD text `FIRE 3 / WATER 2`, and zero console/page/request errors.
 
 ### Decision / next gate
 
