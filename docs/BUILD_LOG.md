@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 127: well front lip depth slice
+
+### Decision
+
+- Added the authored `drawWellFrontLip()` renderer layer between the foreground mechanism plane and flippers. The tapered hardware lip, bevel gradient, warm key edge, and rivets establish a near-edge occlusion break at the well mouth before the drain.
+- This is a bounded renderer-only slice: physics constants, collision geometry, fixed timestep, input ownership, progression, and asset loading are unchanged.
+- Added renderer-contract coverage for the function, intent comment, and live composition order.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed; `git diff --check`: passed.
+- Local Playwright exact CSS 320×568 and 390×844 `?review=depth` checks: HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, fixture active, and zero page/console errors.
+- Still frames captured outside the repository: `%LOCALAPPDATA%/Temp/deadlight-tick127-320.png` and `...-390.png`.
+
+### Remaining risk / next smallest slice
+
+- Subjective grayscale/depth inspection remains unverified in this scheduled environment; this is evidence of capture and runtime correctness, not a visual quality claim.
+- Pages deployment, hosted parity, and the next visual choice remain pending push. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 126: hosted still-frame gate and next-slice canon
 
 ### Decision

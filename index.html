@@ -1296,6 +1296,20 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function drawMineDrain() {
     ctx.save(); const y = H - 96; ctx.fillStyle = '#101311'; ctx.beginPath(); ctx.moveTo(28, y + 42); ctx.lineTo(28, y + 6); ctx.lineTo(76, y - 4); ctx.lineTo(126, y + 10); ctx.lineTo(W - 126, y + 10); ctx.lineTo(W - 76, y - 4); ctx.lineTo(W - 28, y + 6); ctx.lineTo(W - 28, y + 42); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 3; ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(34, y + 15); ctx.lineTo(126, y + 25); ctx.moveTo(W - 34, y + 15); ctx.lineTo(W - 126, y + 25); ctx.stroke(); ctx.fillStyle = '#070908'; ctx.beginPath(); ctx.moveTo(146, y + 39); ctx.lineTo(214, y + 39); ctx.lineTo(196, y + 4); ctx.lineTo(164, y + 4); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#8a7760'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#d7a45a'; ctx.beginPath(); ctx.arc(W / 2, y + 20, 5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
+  function drawWellFrontLip() {
+    // The well needs a near edge, not just side walls: this narrow hardware lip
+    // creates a readable occlusion break before the drain and flipper plane.
+    const y = H - 122;
+    const lip = ctx.createLinearGradient(0, y - 7, 0, y + 10);
+    lip.addColorStop(0, '#789487'); lip.addColorStop(.28, '#3d5149'); lip.addColorStop(1, '#0a1011');
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(42, y - 4); ctx.lineTo(76, y - 10); ctx.lineTo(W - 76, y - 10); ctx.lineTo(W - 42, y - 4); ctx.lineTo(W - 48, y + 10); ctx.lineTo(48, y + 10); ctx.closePath();
+    ctx.fillStyle = lip; ctx.fill();
+    ctx.globalAlpha = .8; ctx.strokeStyle = '#050708'; ctx.lineWidth = 4; ctx.stroke();
+    ctx.globalAlpha = .72; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(62, y - 5); ctx.lineTo(W - 62, y - 5); ctx.stroke();
+    ctx.globalAlpha = 1; [[58, y + 3], [W - 58, y + 3]].forEach(([x, rivetY]) => { ctx.fillStyle = '#101a1c'; ctx.beginPath(); ctx.arc(x, rivetY, 2.5, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#9fb5a7'; ctx.lineWidth = 1; ctx.stroke(); });
+    ctx.restore();
+  }
   function draw() {
     ctx.clearRect(0, 0, W, H);
     drawMineBackdrop();
@@ -1304,7 +1318,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     // table on the procedural fallback despite the authored assets being loaded.
     drawReactor(); drawDeckDetails(); drawRecessedWellPlane(); drawWellWallBevel(); drawMineStructures(); drawLowerMidLandmarks();
     if (state.boss.active) drawBoss();
-    drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawMineDrain(); drawForegroundMechanismPlane(); drawFlippers();
+    drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawMineDrain(); drawForegroundMechanismPlane(); drawWellFrontLip(); drawFlippers();
     drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();
     drawReachBand(); drawTableIdentity(); drawActiveElementChips(); drawObjectiveCue(); drawCradleTutorial();
   }

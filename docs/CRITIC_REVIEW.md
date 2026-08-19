@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 125 follow-up
 
+## Overhaul tick 127 verdict
+
+**Playable hackathon slice: PASS for a bounded well-mouth depth cue; global visual manifold: IMPROVED / not complete; visual quality: still-frame captured / subjective inspection pending; AAA-ready: FAIL / unverified.** A near-edge hardware lip is now composed between the service ledge and flippers, giving the lower well a distinct occlusion boundary without touching gameplay.
+
+### Observed evidence
+
+- `index.html` defines `drawWellFrontLip()` with a tapered path, gradient bevel, warm edge highlight, and two rivets.
+- The live draw order is `drawMineDrain(); drawForegroundMechanismPlane(); drawWellFrontLip(); drawFlippers();`; a renderer contract rejects orphaning the new layer.
+- `npm test` passes 42/42; syntax checks and `git diff --check` pass.
+- Local exact CSS 320×568 and 390×844 browser checks pass with HTTP 200, one Canvas, exact widths, no horizontal overflow, active depth fixture, and zero page/console errors. Still frames are captured outside the repository.
+
+### Remaining risk / next smallest slice
+
+- No subjective grayscale or material-read verdict is claimed because this scheduled environment cannot inspect the captured pixels. After deployment, hosted parity must be rerun, then the next change must be selected from actual still-frame evidence rather than source inference.
+- The complete earthpunk visual overhaul, first-principles physics completion, and AAA bar remain open.
+
 ## Overhaul tick 126 verdict
 
 **Playable hackathon slice: PASS for hosted frozen-depth verification; global visual manifold: unchanged / not complete; visual quality: still-frame captured / subjective inspection pending; AAA-ready: FAIL / unverified.** The existing depth-audit fixture is reachable on the current Pages build at both required portrait widths without runtime errors or overflow. This pass intentionally avoids inventing a visual verdict from source inspection alone.

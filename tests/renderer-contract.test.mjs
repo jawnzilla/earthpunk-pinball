@@ -113,14 +113,17 @@ assert.match(source, /ctx\.globalAlpha = \.42/);
 assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(spriteImages\.deckInset/);
 assert.match(source, /function drawForegroundMechanismPlane\(\)/);
 assert.match(source, /function drawMineDrain\(\)/);
-assert.match(source, /drawMineDrain\(\); drawForegroundMechanismPlane\(\);/);
+assert.match(source, /drawMineDrain\(\); drawForegroundMechanismPlane\(\); drawWellFrontLip\(\);/);
+assert.match(source, /function drawWellFrontLip\(\)/);
+assert.match(source, /creates a readable occlusion break before the drain and flipper plane/);
+assert.match(source, /drawForegroundMechanismPlane\(\); drawWellFrontLip\(\); drawFlippers\(\);/);
 assert.match(source, /const top = H - 154, bottom = H - 106/);
 assert.match(source, /ledge\.addColorStop\(\.18, '#526e63'\)/);
 assert.match(source, /function drawWellWallBevel\(\)/);
 assert.match(source, /const bevelTop = 124, bevelBottom = H - 112/);
 assert.match(source, /ctx\.globalAlpha = \.36/);
 assert.match(source, /drawWellWallBevel\(\);/);
-assert.match(source, /drawForegroundMechanismPlane\(\); drawFlippers\(\);/);
+
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);
