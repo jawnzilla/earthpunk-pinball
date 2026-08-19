@@ -12,7 +12,8 @@
 
 - `npm test`: 12 tests passed, 0 failures.
 - `node --check src/flipper-contact.js` and `git diff --check`: passed.
-- The Pages deployment and exact hosted portrait checks are the remaining release gate for this commit.
+- GitHub Pages run `32205211354` completed successfully for commit `398a34bc7cc163833a83f19cb04d96d96f5462cd`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32205211354.
+- Hosted exact Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=398a34b` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas present, exact CSS width parity, body heights 568px / 844.39px, `depth` fixture, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, and zero console/page/request errors.
 
 ### Decision / next gate
 

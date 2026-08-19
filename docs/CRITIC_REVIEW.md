@@ -13,7 +13,7 @@
 ### Remaining risk / next smallest slice
 
 - The sampler is still intentionally bounded at 64 samples and remains an approximation for pathological travel distances. If telemetry exposes ordinary gameplay exceeding that budget, replace the approximation with a geometry-time-of-impact query rather than raising the cap again.
-- Deploy and run the exact hosted 320×568 and 390×844 browser checks before selecting another product slice.
+- GitHub Pages run `32205211354` completed successfully for commit `398a34bc7cc163833a83f19cb04d96d96f5462cd`. Hosted exact Playwright at 320×568 and 390×844 passed HTTP 200, complete documents, Canvas, exact CSS width parity, `depth` fixture, hidden overlay, expected grayscale filter, and zero console/page/request errors before selecting another product slice.
 
 ## Overhaul tick 61 verdict
 
