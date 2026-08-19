@@ -1109,6 +1109,19 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     [[49, 72], [W - 49, 72], [49, H - 112], [W - 49, H - 112]].forEach(([x, y]) => { const glow = ctx.createRadialGradient(x, y, 1, x, y, 26); glow.addColorStop(0, 'rgba(255,228,163,.42)'); glow.addColorStop(1, 'rgba(215,164,90,0)'); ctx.fillStyle = glow; ctx.fillRect(x - 28, y - 28, 56, 56); ctx.fillStyle = '#ffe4a3'; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#895033'; ctx.lineWidth = 2; ctx.stroke(); });
     ctx.save(); ctx.strokeStyle = '#567b7a'; ctx.globalAlpha = .55; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(37, 170); ctx.bezierCurveTo(52, 190, 42, 218, 58, 242); ctx.bezierCurveTo(70, 262, 50, 292, 67, 318); ctx.bezierCurveTo(78, 338, 64, 366, 76, 390); ctx.stroke(); ctx.globalAlpha = .18; ctx.lineWidth = 7; ctx.stroke(); ctx.restore();
   }
+  function drawRecessedWellPlane() {
+    // One explicit recessed plane keeps the mine table from reading as a flat poster.
+    const left = 38, top = 124, right = W - 38, bottom = H - 112;
+    const wellGradient = ctx.createLinearGradient(0, top, 0, bottom);
+    wellGradient.addColorStop(0, '#101b1d'); wellGradient.addColorStop(.55, '#0b1416'); wellGradient.addColorStop(1, '#070b0c');
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(left + 12, top); ctx.lineTo(right - 12, top); ctx.lineTo(right, top + 18); ctx.lineTo(right, bottom - 14); ctx.lineTo(right - 16, bottom); ctx.lineTo(left + 16, bottom); ctx.lineTo(left, bottom - 14); ctx.lineTo(left, top + 18); ctx.closePath();
+    ctx.fillStyle = wellGradient; ctx.fill();
+    ctx.globalAlpha = .42; ctx.strokeStyle = '#050708'; ctx.lineWidth = 10; ctx.stroke();
+    ctx.globalAlpha = .8; ctx.strokeStyle = '#526e63'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.globalAlpha = .32; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1; ctx.setLineDash([18, 12]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.restore();
+  }
   function drawMineStructures() {
     ctx.save();
     const beam = (x, y, width, height, angle = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.fillStyle = '#4d3525'; ctx.fillRect(-width / 2, -height / 2, width, height); ctx.fillStyle = '#93613d'; ctx.fillRect(-width / 2 + 2, -height / 2 + 2, width - 4, 4); ctx.strokeStyle = '#241b15'; ctx.lineWidth = 2; ctx.strokeRect(-width / 2, -height / 2, width, height); ctx.restore(); };
@@ -1128,7 +1141,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     // Compose the authored mine/deck planes before gameplay objects. These layers
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
-    drawReactor(); drawDeckDetails(); drawMineStructures(); drawLowerMidLandmarks();
+    drawReactor(); drawDeckDetails(); drawRecessedWellPlane(); drawMineStructures(); drawLowerMidLandmarks();
     if (state.boss.active) drawBoss();
     drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawFlippers();
     drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();

@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: recessed Generator Well plane
+
+### Implemented
+
+- Added one bounded renderer-only depth seam: `drawRecessedWellPlane()` inserts a dark inset well with a vertical value gradient, heavy inner occlusion, and a restrained broken amber rim between the authored deck and gameplay objects.
+- The new plane is composed before structures and gameplay silhouettes, so it establishes shell → deck → recessed well separation without changing collision geometry, physics constants, input, progression, elemental behavior, or assets.
+- Added renderer-contract coverage for the helper, live draw call, gradient fill, and occlusion alpha. The focused contract was intentionally red before the implementation and green afterward.
+
+### Verification before deployment
+
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- Exact browser verification is pending deployment. The repository's known local runner remains blocked by `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+
+### Decision / next gate
+
+- This is the smallest first item from `docs/NEXT_VISUAL_PHASE.md`: make the portrait table read as a recessed instrument before adding more object polish.
+- After Pages deployment, run hosted `depth`, `destruction-run`, `active-elements`, and `upgrade` checks at exact 320×568 and 390×844. Inspect the depth still for muddy occlusion before selecting another visual seam.
+- AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: next portrait visual phase packet
 
 ### Authored

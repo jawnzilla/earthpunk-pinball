@@ -78,6 +78,10 @@ assert.match(source, /function drawFlipperContactShadow\(end, width\)/);
 assert.match(source, /ctx\.globalAlpha = \.34/);
 assert.match(source, /drawFlipperContactShadow\(end, width\);/);
 assert.match(source, /const deckInsetOpacity = \.78/);
+assert.match(source, /function drawRecessedWellPlane\(\)/);
+assert.match(source, /drawRecessedWellPlane\(\);/);
+assert.match(source, /ctx\.fillStyle = wellGradient;/);
+assert.match(source, /ctx\.globalAlpha = \.42/);
 assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(spriteImages\.deckInset/);
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

@@ -1,3 +1,19 @@
+# Deadlight Critic Review — Overhaul tick 79
+
+## Overhaul tick 79 verdict
+
+**Playable hackathon slice: PASS for a bounded recessed-well depth seam; AAA-ready: FAIL / unverified.** The live renderer now has an explicit dark well plane and occluded rim between the deck artwork and gameplay silhouettes.
+
+### Observed evidence
+
+- `drawRecessedWellPlane()` is called after `drawDeckDetails()` and before mine structures/gameplay objects, preserving the intended z-order.
+- The new contract was red before implementation and green afterward; `npm test` passes all 22 tests, syntax checks pass, and `git diff --check` passes.
+
+### Remaining risk / next smallest slice
+
+- This is source/test evidence only until the new commit is deployed and exact hosted portrait checks plus fresh `depth` stills confirm the rim is visible without muddying the well.
+- No claim is made about final visual quality, human-play feel, or AAA readiness. Do not stack another visual layer until hosted still evidence is inspected.
+
 # Deadlight Critic Review — Overhaul tick 78
 
 ## Overhaul tick 78 verdict
