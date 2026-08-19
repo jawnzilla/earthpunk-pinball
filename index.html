@@ -323,6 +323,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { collectRuntimeContactCandidates, selectEarliestContact } from './src/contact-manifold.js';
 import { selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
@@ -476,7 +477,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
   const keys = { a: false, d: false, ArrowLeft: false, ArrowRight: false };
 
   function reset() {
-    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, lastFlipperContact: null, flipperContactSamples: [], flipperContactSource: 'live', physicsTelemetry: { physicsStepMs: 0, contactCount: 0, substepCount: 0, activeBodyCount: 1 }, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Wind: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], destructibles: [], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
+    state = { stage: 1, stageCount: 4, currentNode: 'generator-well', nextNode: null, routeGateOpen: false, stageComplete: false, routeChutes: [], score: 0, charge: 0, peakY: H - 108, lastLaunchSpeed: 0, lastFlipperContact: null, flipperContactSamples: [], flipperContactSource: 'live', physicsTelemetry: { physicsStepMs: 0, contactCount: 0, substepCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null }, topHits: 0, topHitCooldown: 0, elementalCharge: { Fire: 0, Water: 0, Earth: 0, Wind: 0, Air: 0 }, combo: 0, comboTimer: 0, stability: 3, stabilityMax: 3, salvageBonus: 1, maxSpeed: MAX_BALL_SPEED_PX_S, hingeElements: { left: null, right: null }, hingeLevels: { left: 0, right: 0 }, attunements: [], routeModifier: null, routeTarget: null, tableKind: 'standard', tableLabel: 'STANDARD', bossHits: 0, routeHistory: [], routeDecisionBase: null, pendingRoute: null, immortal: false, boss: { active: false, exposed: false, hp: 0, maxHp: 0, cooldown: 0 }, layout: levelLayouts[0], destructibles: [], relayCooldown: 0, targets: 0, running: false, launched: false, flash: 0, pulse: 0, flipperEffectCooldown: 0, flipperContacts: { left: false, right: false }, effects: [], scorePops: [], message: 'Read the route map, then enter the descent.' };
     cheatInfinite.checked = false;
     input.left = false; input.right = false; touchInput.left = false; touchInput.right = false; Object.values(touchButtons).forEach(button => button.classList.remove('is-pressed')); activePointerId = null; activePointerSide = null; Object.keys(keys).forEach(key => keys[key] = false);
     targets.forEach(t => t.hit = false);
@@ -1150,7 +1151,14 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (contact) flipperCandidates.push({ side, flipper, contact });
     }
     const selectedFlipperCandidate = selectEarliestFlipperContact(flipperCandidates);
-    let leftHit = false; let rightHit = false;
+        // Gather a comparable read-only view across all live geometry families.
+        // Resolution remains in its established seams this tick; telemetry proves
+        // which family would win before the global dispatch packet is enabled.
+        const runtimeContactCandidates = collectRuntimeContactCandidates({ circle: primaryCircleCandidate, segment: staticSegmentCandidate, flipper: selectedFlipperCandidate });
+        const runtimeContactWinner = selectEarliestContact(runtimeContactCandidates);
+        state.physicsTelemetry.manifoldFamily = runtimeContactWinner?.kind || null;
+        state.physicsTelemetry.manifoldT = runtimeContactWinner?.t ?? null;
+        let leftHit = false; let rightHit = false;
     if (selectedFlipperCandidate) {
       const { side, flipper, contact } = selectedFlipperCandidate;
       const hit = resolveFlipperCollision(b, flipper, side, side === 'left' ? input.left : input.right, contact);

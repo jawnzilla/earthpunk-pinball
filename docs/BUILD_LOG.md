@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 110: live cross-family contact readout seam
+
+### Decision
+
+- Added `collectRuntimeContactCandidates()` to adapt circle, static-segment, and rotating-flipper sweep results into one normalized, non-mutating candidate view.
+- The live update loop now assembles that view after all three family queries and records the deterministic earliest family/timing in physics telemetry before the existing resolvers run.
+- This is intentionally a readout/contract slice, not a global dispatch claim: the established circle, segment, and flipper resolution order remains unchanged until a focused residual-replay integration packet can safely replace it.
+- Added a regression covering family adaptation, stable earliest selection, and source immutability.
+
+### Verification
+
+- `npm test`: 27 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- Telemetry now proves the cross-family winner, but the live resolver still mutates through separate circle → segment → flipper seams. The next physics packet must dispatch the selected family, rewind to its contact, replay residual time, and preserve gate rewards/cradle maintenance without double resolution.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 109: shared cross-family contact ordering contract
 
 ### Decision

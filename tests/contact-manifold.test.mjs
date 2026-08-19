@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { contactTiming, normalizeContactCandidate, selectEarliestContact, summarizeContactManifold } from '../src/contact-manifold.js';
+import { collectRuntimeContactCandidates, contactTiming, normalizeContactCandidate, selectEarliestContact, summarizeContactManifold } from '../src/contact-manifold.js';
 
 test('cross-family manifold selects the earliest valid normalized contact', () => {
   const candidates = [
@@ -35,6 +35,18 @@ test('normalization clamps timing without mutating the source candidate', () => 
   assert.equal(normalized.t, 1);
   assert.equal(source.t, 1.4);
   assert.equal(normalizeContactCandidate({ payload: 'missing' }), null);
+});
+
+test('runtime adapter exposes one comparable candidate per geometry family', () => {
+  const segment = { swept: { t: .44, payload: 'rail' } };
+  const candidates = collectRuntimeContactCandidates({
+    circle: { swept: { t: .27, payload: 'bumper' } },
+    segment,
+    flipper: { contact: { t: .12, payload: 'blade' } }
+  });
+  assert.deepEqual(candidates.map(candidate => candidate.kind), ['circle', 'segment', 'flipper']);
+  assert.equal(selectEarliestContact(candidates).payload, 'blade');
+  assert.equal(segment.swept.t, .44);
 });
 
 for (const path of ['../src/contact-manifold.js']) {

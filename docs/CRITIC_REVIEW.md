@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 110 verdict
+
+**Playable hackathon slice: PASS for cross-family contact telemetry; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The live loop now adapts circle, static-segment, and flipper timing into one shared read-only candidate view and records the deterministic winner before the existing resolvers mutate state.
+
+### Observed evidence
+
+- `src/contact-manifold.js` exports `collectRuntimeContactCandidates()`; it normalizes one candidate per family without mutating source objects.
+- `index.html` imports the adapter, assembles it from the live primary circle/static segment/flipper candidates, and records `manifoldFamily`/`manifoldT` telemetry.
+- `npm test` passes 27/27; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks, screenshots, and grayscale judgment are not claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- This is telemetry and dispatch preparation, not a global runtime manifold: circle, segment, and flipper resolvers still run through their established separate seams. The next physics packet must select one family for actual response, rewind/replay residual time, and preserve gate rewards and cradle maintenance without double resolution.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
+
 ## Overhaul tick 109 verdict
 
 **Playable hackathon slice: PASS for a shared contact-ordering contract; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** A renderer-independent selector now provides the common timing/tie-break primitive needed before cross-family collision dispatch, and the live flipper selector uses it without changing resolver behavior.

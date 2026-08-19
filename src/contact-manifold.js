@@ -29,3 +29,15 @@ export function summarizeContactManifold(candidates = []) {
     kinds: [...new Set(valid.map(candidate => candidate.kind || 'unknown'))]
   };
 }
+
+// Adapt the three live geometry families to one common, non-mutating view.
+// The caller still owns resolution; this seam makes it possible to compare
+// circle, static-segment, and rotating-flipper timing before a future dispatch
+// packet changes ball state.
+export function collectRuntimeContactCandidates({ circle = null, segment = null, flipper = null } = {}) {
+  return [
+    normalizeContactCandidate(circle?.swept || circle, { kind: 'circle', order: 'circle' }),
+    normalizeContactCandidate(segment?.swept || segment, { kind: 'segment', order: 'segment' }),
+    normalizeContactCandidate(flipper?.contact || flipper, { kind: 'flipper', order: 'flipper' })
+  ].filter(Boolean);
+}
