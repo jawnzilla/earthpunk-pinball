@@ -13,6 +13,7 @@
 - Hosted exact Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth`, `destruction-run`, and `upgrade` review routes at both exact 320×568 and 390×844. All returned HTTP 200, complete documents, Canvas, exact CSS width parity, and zero console/page/request errors.
 - Hosted fixture evidence: `depth` and `destruction-run` overlays hidden; `upgrade` overlay visible through the real upgrade renderer; body heights 568px / 846.39px for the normal portrait routes.
 - `git diff --check`: passed.
+- GitHub Pages run `32212851021` completed successfully for commit `8aaa6738733087993719c8e6c5174b8fdb131381`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32212851021.
 
 ### Decision / next gate
 

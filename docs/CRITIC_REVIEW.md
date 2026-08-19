@@ -10,6 +10,7 @@
 - `npm test` passes 18 tests.
 - Hosted exact Playwright passes `depth`, `destruction-run`, and `upgrade` at 320×568 and 390×844 with HTTP 200, exact CSS width parity, Canvas, expected fixture/overlay state, and zero console/page/request errors.
 - The upgrade route was verified through the real renderer with its overlay visible; destruction-run was verified through the production destructible fixture with its overlay hidden.
+- GitHub Pages run `32212851021` completed successfully for commit `8aaa6738733087993719c8e6c5174b8fdb131381`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32212851021.
 
 ### Remaining risk / next smallest slice
 
