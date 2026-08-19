@@ -1018,7 +1018,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     return contact;
   }
 
-  function resolveFlipperCollision(ball, flipper, side, held) {
+  function resolveFlipperCollision(ball, flipper, side, held, sweptOverride = null) {
     let segment = { ...flipperEndpoints(flipper), width: flipper.width, material: 'rubber' };
     let dx = segment.x2 - segment.x1, dy = segment.y2 - segment.y1;
     let lengthSquared = dx * dx + dy * dy || 1;
@@ -1027,7 +1027,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     let nx = ball.x - closestX, ny = ball.y - closestY;
     let distance = Math.hypot(nx, ny), radius = ball.r + flipper.width / 2;
     if (distance >= radius && ball.cradleSide !== side) {
-      const swept = sweptFlipperContact(ball, flipper, radius, { lengthBonus: state?.flipperLengthBonus || 0 });
+      const swept = sweptOverride || sweptFlipperContact(ball, flipper, radius, { lengthBonus: state?.flipperLengthBonus || 0 });
       if (!swept) return false;
       ball.x = swept.x; ball.y = swept.y; segment = { ...swept.segment, material: 'rubber' };
       dx = segment.x2 - segment.x1; dy = segment.y2 - segment.y1; lengthSquared = dx * dx + dy * dy || 1;
@@ -1142,8 +1142,33 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     if (staticSegmentCandidate?.kind === 'gate') { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
     const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
-    const leftHit = resolveFlipperCollision(b, flippers.left, 'left', input.left);
-    const rightHit = resolveFlipperCollision(b, flippers.right, 'right', input.right);
+    const flipperCandidates = [];
+    for (const side of ['left', 'right']) {
+      const flipper = flippers[side];
+      const radius = b.r + flipper.width / 2;
+      const contact = sweptFlipperContact(b, flipper, radius, { lengthBonus: state?.flipperLengthBonus || 0 });
+      if (contact) flipperCandidates.push({ side, flipper, contact });
+    }
+    const selectedFlipperCandidate = selectEarliestFlipperContact(flipperCandidates);
+    let leftHit = false; let rightHit = false;
+    if (selectedFlipperCandidate) {
+      const { side, flipper, contact } = selectedFlipperCandidate;
+      const hit = resolveFlipperCollision(b, flipper, side, side === 'left' ? input.left : input.right, contact);
+      if (side === 'left') leftHit = hit; else rightHit = hit;
+      if (hit && b.lastContact && !b.lastContact.separating && contact.t < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.t);
+      // Preserve a held cradle on the other side; selection must not erase a
+      // stable overlap merely because the opposite blade won the sweep race.
+      const otherSide = side === 'left' ? 'right' : 'left';
+      if (b.cradleSide === otherSide && hingeCradle(otherSide)) {
+        const otherHit = resolveFlipperCollision(b, flippers[otherSide], otherSide, true);
+        if (otherSide === 'left') leftHit = otherHit; else rightHit = otherHit;
+      }
+    } else {
+      // A held cradle can have no swept candidate because the ball is already
+      // settled on the hinge; keep cradle maintenance alive.
+      if (b.cradleSide === 'left' && hingeCradle('left')) leftHit = resolveFlipperCollision(b, flippers.left, 'left', true);
+      if (b.cradleSide === 'right' && hingeCradle('right')) rightHit = resolveFlipperCollision(b, flippers.right, 'right', true);
+    }
     const freshActiveHit = (leftHit && leftActiveFresh) || (rightHit && rightActiveFresh);
     if (freshActiveHit) { state.lastLaunchSpeed = Math.hypot(b.vx, b.vy); emitImpact(b.x, b.y, '#ffd083', .35 + (b.lastFlipperLaunchFactor || .18) * .25); }
     if (!leftHit && !rightHit) b.cradleSide = null;

@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 108: live flipper earliest-contact manifold
+
+### Decision
+
+- Implemented one bounded physics slice: the live primary-ball update now gathers swept candidates for both rotating flippers and resolves only the earliest candidate using the renderer-independent selector.
+- The selected candidate is passed into the resolver without re-querying stale ball state, then replays the residual fixed-step time from the resolved contact boundary.
+- Held cradle maintenance remains active for the non-selected side, including the no-sweep settled-cradle path, so candidate selection does not erase a stable hinge overlap.
+- Added renderer-contract regressions for candidate gathering, selected dispatch, residual replay, and cradle preservation. No geometry, material, input, or progression changes were bundled.
+
+### Verification
+
+- `npm test`: 23 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- Hosted Pages parity and deployment are pending this push.
+
+### Remaining risk / next smallest slice
+
+- The live flipper path now has earliest selection and residual replay, but the global manifold still resolves primary circles, static segments, and flippers in separate phases; a residual replay can still expose a later cross-family contact in the same fixed step.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective visual verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 107: flipper candidate ordering contract
 
 ### Decision

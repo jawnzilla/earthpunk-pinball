@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 108 verdict
+
+**Playable hackathon slice: PASS for the live flipper earliest-contact seam; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** Both rotating flippers now participate in one deterministic candidate selection before the selected response and residual replay.
+
+### Observed evidence
+
+- `index.html` gathers both `sweptFlipperContact()` results, calls `selectEarliestFlipperContact()`, and passes the selected contact into `resolveFlipperCollision()`.
+- The selected path replays `advancePrimaryBallResidual()` from the selected normalized timing; a non-selected held cradle is explicitly maintained, including a settled cradle with no swept candidate.
+- `npm test` passes 23/23; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks are not claimed because no runnable browser executable is available in this scheduled environment. No screenshot or subjective grayscale verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- Cross-family contact ordering is still split: primary circles, static segments, and flippers do not share one global candidate manifold. Do not claim complete anti-tunneling parity.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability. The next visual change requires a runnable still-frame review rather than another source-only layer.
+
 ## Overhaul tick 107 verdict
 
 **Playable hackathon slice: PASS for a deterministic flipper-selection seam; flipper manifold: NOT IMPLEMENTED; visual quality: source/host pending; AAA-ready: FAIL / unverified.** The new helper makes earliest rotating-flipper timing selectable without prematurely mutating the live sequential resolver.
