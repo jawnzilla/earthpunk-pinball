@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: visual-phase evidence gate refresh
+
+### Implemented
+
+- No product-code change was made this tick. The current renderer already contains the bounded recessed-well, wall-bevel, foreground-mechanism, authored-silhouette, and contact-shadow seams; without a human-inspected still-frame verdict, adding another visual layer would violate the visual-direction gate and risk stacking unmeasured contrast.
+- Refreshed the implementation-ready visual packet's evidence boundary to the current `prototype` HEAD (`7892f47`) and recorded the hosted review matrix below. This is a canon/evidence tick, not a completion claim.
+
+### Verification
+
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- GitHub Pages run `32230125632` completed successfully for `7892f47`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32230125632.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: all 16 route/viewport checks returned HTTP 200, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), complete documents, expected fixture/overlay state, and zero console/page/request errors. Captures are outside the repository at `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick82-<route>-<width>.png`.
+
+### Gate / next slice
+
+- This evidence proves deployed runtime/layout health only; it does not certify grayscale silhouette separation, depth-plane readability, material differentiation, or AAA readiness.
+- The next product change remains blocked until one fresh still frame is human-inspected and names a single hierarchy defect. No physics, collision, input, progression, or elemental behavior was changed.
+
 ## 2026-08-19 — Overhaul tick: recessed well wall bevel
 
 ### Implemented

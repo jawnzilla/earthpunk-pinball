@@ -1,3 +1,21 @@
+# Deadlight Critic Review — Overhaul tick 82
+
+## Overhaul tick 82 verdict
+
+**Playable hackathon slice: PASS for evidence-gated visual direction; AAA-ready: FAIL / unverified.** The hosted build is healthy across the required portrait review matrix, but no new renderer layer is justified without actual still-frame inspection. This tick deliberately avoids decorative guesswork.
+
+### Observed evidence
+
+- HEAD is `7892f47` on `prototype`; GitHub Pages run `32230125632` completed successfully.
+- Exact hosted Playwright passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: HTTP 200, Canvas, exact CSS width parity, complete documents, expected fixture/overlay state, and zero console/page/request errors for all 16 checks.
+- `npm test` passes all 22 tests; syntax and whitespace checks pass.
+- Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick82-<route>-<width>.png`.
+
+### Remaining risk / next smallest slice
+
+- Runtime health is not a visual verdict. The largest remaining gap is still a human-inspected still-frame judgment of whether the three depth planes and major silhouettes separate in grayscale without muddy contact shadows.
+- Do not add another shadow, glow, opacity, or HUD layer until that frame identifies one concrete defect. Physics and input remain unchanged.
+
 # Deadlight Critic Review — Overhaul tick 81
 
 ## Overhaul tick 81 verdict

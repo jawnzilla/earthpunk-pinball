@@ -4,7 +4,7 @@ Status: implementation-ready visual packet; no renderer change in this tick.
 
 ## Evidence boundary
 
-The current `prototype` HEAD is `e101422ef824bb5162caac19a76aa78f73132e76`. Hosted review routes returned HTTP 200 at exact CSS viewports 320×568 and 390×844 with Canvas present, `innerWidth === clientWidth === scrollWidth`, and zero console/page/request errors. The `upgrade` fixture exposed four visible choices at both sizes; the production `destruction-run` fixture exposed the deployed salvage path. Local browser verification remains blocked by the reproducible `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local visual pass is claimed.
+The current `prototype` HEAD is `7892f47`. Hosted `depth`, `destruction-run`, `active-elements`, and `upgrade` review routes returned HTTP 200 at exact CSS viewports 320×568 and 390×844 with Canvas present, `innerWidth === clientWidth === scrollWidth`, complete documents, expected fixture/overlay state, and zero console/page/request errors. Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick82-<route>-<width>.png`. This is runtime evidence only; no human still-frame visual verdict is claimed.
 
 This packet deliberately does **not** infer final visual quality from DOM health or from the deterministic fixtures. It is the smallest coherent visual phase to execute next when a fresh still-frame review or human-play capture is available.
 
