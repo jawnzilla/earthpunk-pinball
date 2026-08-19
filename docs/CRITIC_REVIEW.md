@@ -8,12 +8,13 @@
 
 - `segmentCollision()` now calls `sweptSegmentContact(ball, segment, radius)` only after the current-position overlap test misses, then recomputes the segment projection, normal, and contact distance at the swept sample before resolving the normal material/surface-velocity contact.
 - The deterministic suite passes 11 tests; the existing crossing-path regression proves a crossing is detected while a parallel/missing path remains null. Syntax and whitespace checks pass.
-- Hosted/browser evidence and the GitHub Pages run are intentionally not claimed until the pushed commit is deployed and checked at both required portrait widths.
+- GitHub Pages run `32204106383` completed successfully for commit `39b52c6fe47b62370c335fe3cec5798b3ff62e97`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32204106383.
+- Hosted exact Playwright at `?review=depth&cacheBust=39b52c6` passed at 320×568 and 390×844: HTTP 200, complete documents, Canvas, exact CSS width parity, body heights 568px / 844.39px, `depth` marker, hidden overlay, expected grayscale filter, and zero console/page/request errors.
 
 ### Remaining risk / next smallest slice
 
 - The swept sampler is bounded to 12 samples, so extremely long travel relative to the segment radius remains a known approximation; the fixed-step speed cap should keep ordinary gameplay within the intended range, but a high-speed stress regression is still useful.
-- The live browser path still needs exact 320×568 and 390×844 checks after deployment, including zero console/page/request errors. AAA-ready remains unsupported.
+- The deployed browser path is healthy at both required portrait widths. Next should be the stress regression or a measured live-play physics gap, not another unverified visual layer. AAA-ready remains unsupported.
 
 ## Overhaul tick 60 verdict
 

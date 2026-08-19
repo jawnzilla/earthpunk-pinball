@@ -12,11 +12,12 @@
 
 - `npm test`: 11 tests passed, 0 failures, including the deterministic crossing/miss regression in `tests/flipper-contact.test.mjs`.
 - `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
-- Pages/browser verification and deployment are pending this commit; no hosted result is claimed yet.
+- GitHub Pages run `32204106383` completed successfully for commit `39b52c6fe47b62370c335fe3cec5798b3ff62e97`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32204106383.
+- Hosted exact Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=39b52c6` passed at 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), body heights 568px / 844.39px, `depth` fixture, hidden overlay, expected `grayscale(1) contrast(1.08)` filter, and zero console/page/request errors.
 
 ### Decision / next gate
 
-- This is one bounded collision-continuity slice aimed at preventing fast-ball tunneling through static narrow geometry. After push, run exact hosted checks at 320×568 and 390×844 with zero console/page/request errors before selecting another physics or visual change.
+- This is one bounded collision-continuity slice aimed at preventing fast-ball tunneling through static narrow geometry. The deployed artifact is healthy at both required portrait widths; next work should add a deterministic high-speed stress regression or return to a measured live-play physics gap rather than stack unverified visual changes.
 - AAA-ready remains unsupported.
 
 ## 2026-08-18 — Overhaul tick: mass-weighted dynamic-contact separation
