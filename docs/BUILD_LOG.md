@@ -12,7 +12,9 @@
 
 - `npm test`: 22 tests passed, 0 failures.
 - `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
-- Exact hosted browser verification and Pages deployment are pending for this commit; no hosted result is claimed yet.
+- GitHub Pages run `32229948739` completed successfully for commit `94b8faf`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32229948739.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=<route>&cacheBust=94b8faf` passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: all 8 checks returned HTTP 200, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), expected fixture/overlay state, four visible upgrade choices, and zero console/page/request errors.
+- Fresh hosted captures are outside the repository: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick81-depth-320.png`, `earthpunk-tick81-depth-390.png`, `earthpunk-tick81-upgrade-320.png`, and `earthpunk-tick81-upgrade-390.png`.
 - Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local visual pass is claimed.
 
 ### Decision / next gate

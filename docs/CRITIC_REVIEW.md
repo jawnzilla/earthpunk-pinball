@@ -12,8 +12,9 @@
 
 ### Remaining risk / next smallest slice
 
-- Pages deployment and exact hosted Playwright still need to run for this commit at 320×568 and 390×844 across `depth`, `destruction-run`, `active-elements`, and `upgrade`; no hosted runtime result or screenshot claim is made yet.
-- Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`.
+- GitHub Pages run `32229948739` completed successfully for commit `94b8faf`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32229948739.
+- Exact hosted Playwright passed all 8 `depth`, `destruction-run`, `active-elements`, and `upgrade` route/viewport checks at 320×568 and 390×844: HTTP 200, Canvas, exact CSS width parity, expected fixture/overlay state, four visible upgrade choices, and zero console/page/request errors. Fresh depth and upgrade captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick81-<route>-<width>.png`.
+- Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local visual pass is claimed.
 - Inspect the fresh depth/grayscale still before choosing another renderer seam. AAA-ready remains unsupported.
 
 # Deadlight Critic Review — Overhaul tick 80
