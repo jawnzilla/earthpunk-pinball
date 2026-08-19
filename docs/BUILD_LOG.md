@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: active-status HUD separation
+
+### Implemented
+
+- Moved the in-canvas active Fire/Water imprint chips from `y=52` to `y=78`, below the 44–74px objective cue bounds. This removes a concrete portrait HUD collision without changing status projection, gameplay, physics, or chip content.
+- Added a renderer-contract regression asserting the reserved separation seam.
+
+### Verification before deployment
+
+- The new focused contract was red before the renderer change and green after it.
+- `npm test`: 21 tests passed, 0 failures; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` passed.
+
+### Decision / next gate
+
+- This is a bounded hierarchy correction, not a visual-completion claim. Exact hosted `active-elements` checks at 320×568 and 390×844 must still verify no overflow, visible chip state, and zero browser/request errors after Pages deployment.
+- AAA readiness remains unsupported; next work should return to measured live-play feel or one named visual defect from captured evidence.
+
 ## 2026-08-19 — Overhaul tick: flipper CCD deployment closure
 
 ### Verification-only slice

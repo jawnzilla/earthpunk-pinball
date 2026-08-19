@@ -1137,7 +1137,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       const element = entry.label;
       const color = elementColors[element] || '#b5d3a1';
       const x = index === 0 ? 28 : W - 28 - chipWidth;
-      const y = 52;
+      const y = 78; // keep active chips below the objective cue
       ctx.save();
       ctx.fillStyle = 'rgba(7,13,15,.9)';
       ctx.strokeStyle = color;

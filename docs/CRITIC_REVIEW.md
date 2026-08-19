@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 68
 
+## Overhaul tick 72 verdict
+
+**Playable hackathon slice: PASS for bounded HUD hierarchy correction; AAA-ready: FAIL / unverified.** Active elemental chips no longer occupy the same vertical band as the objective cue in the production canvas renderer.
+
+### Observed evidence
+
+- Before the change, `drawObjectiveCue()` occupied `y=44..74` while `drawActiveElementChips()` placed 24px chips at `y=52`, creating a direct 22px overlap whenever active imprints were present.
+- The chips now begin at `y=78`, leaving a 4px separation after the objective cue; the renderer contract test locks this layout seam.
+- The focused regression was red before implementation and `npm test` is green afterward with 21 passing tests; syntax and whitespace checks pass.
+
+### Remaining risk / next smallest slice
+
+- This is source/test evidence only until the new commit is deployed and exact hosted `?review=active-elements` checks pass at 320×568 and 390×844.
+- The change may reduce top-table clearance at the smallest portrait height; hosted runtime and screenshot evidence must confirm that the chips remain inside the canvas and subordinate to the objective cue.
+- AAA-ready remains unsupported.
+
 ## Overhaul tick 71 verdict
 
 **Playable hackathon slice: PASS for deployed flipper CCD evidence. AAA-ready: FAIL / unverified.** The current prototype commit is live and the required portrait browser path is healthy after the bounded rotating-flipper tunneling fix.

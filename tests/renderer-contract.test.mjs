@@ -20,6 +20,7 @@ assert.match(source, /function drawTargetMaterialCue\(target, index\)/);
 assert.match(source, /ctx\.strokeStyle = '#0d1211'/);
 assert.match(source, /drawTargetMaterialCue\(target, index\);/);
 assert.match(source, /function drawActiveElementChips\(\)/);
+assert.match(source, /const y = 78; \/\/ keep active chips below the objective cue/);
 assert.match(projection, /entries\.slice\(0, 2\)/);
 assert.match(source, /drawActiveElementChips\(\);/);
 assert.match(source, /family === 0/);
