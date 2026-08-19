@@ -8,7 +8,7 @@
 
 - `prototype` HEAD is `eceac2d`; the implementation-ready visual packet now points at that HEAD.
 - `npm test` passes all 22 tests.
-- Hosted `?review=depth&cacheBust=eceac2d` returned HTTP 200 with `Content-Length: 201085`.
+- Hosted `?review=depth&cacheBust=a9fb22e` returned HTTP 200 with `Content-Length: 201085`; Pages run `32234657948` completed successfully for `a9fb22e`.
 - No screenshot, exact hosted Playwright matrix, console assertion, viewport-parity claim, or human still-frame verdict is made for this tick.
 
 ### Remaining risk / next smallest slice
