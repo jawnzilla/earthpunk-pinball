@@ -1,4 +1,22 @@
-# Deadlight Critic Review — Overhaul tick 118
+# Deadlight Critic Review — Overhaul tick 119
+
+## Overhaul tick 119 verdict
+
+**Playable hackathon slice: PASS for bounded drain residual replay; global manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** A selected late-drain flipper rescue now replays the remainder of its fixed timestep, while state ownership remains explicit.
+
+### Observed evidence
+
+- `src/drain-recovery.js` exports `drainRecoveryResidualFraction()` and returns the bounded timing in `resolveDrainRecovery()`.
+- `index.html` calls `advancePrimaryBallResidual()` after the selected drain flipper response, using the selected contact timing and only when the response produced a non-separating contact.
+- `tests/drain-recovery.test.mjs` covers timing bounds and state preservation; `npm test` passes 39/39.
+- Syntax checks and `git diff --check` pass.
+- Exact local Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
+- Hosted pre-push HTML returned HTTP 200, 209251 bytes, and contained `<canvas` plus `resolveDrainRecovery`; post-push Pages parity is pending.
+
+### Remaining risk / next smallest slice
+
+- Drain recovery remains outside the primary contact manifold. The next packet should add a focused runtime fixture proving opening contact residual trajectory and cradle/state behavior before changing manifold ownership.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
 
 ## Overhaul tick 118 verdict
 

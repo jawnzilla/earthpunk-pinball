@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 119: replay residual time after drain flipper rescue
+
+### Decision
+
+- Extended the renderer-independent drain seam with bounded `drainRecoveryResidualFraction()` timing derived from the selected flipper contact.
+- The late drain rescue now replays the remainder of the same fixed timestep after resolving the selected blade, instead of ending the frame at the emergency contact point.
+- Preserved drain state ownership: a selected flipper still does not consume stability or charge. No claim is made that the opening has entered the primary manifold.
+
+### Verification
+
+- `npm test`: 39 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Local Playwright checks at exact CSS 320×568 and 390×844: both HTTP 200, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages pre-push HTTP check: `https://jawnzilla.github.io/earthpunk-pinball/?review=tick119&cacheBust=a9cd771` returned HTTP 200, 209251 bytes, and contained `<canvas` plus `resolveDrainRecovery`; post-push deployment verification remains pending.
+
+### Remaining risk / next smallest slice
+
+- Drain recovery is still an emergency post-dispatch path; a runtime fixture should next prove the selected opening contact's residual trajectory and cradle/state behavior before manifold ownership changes.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 118: complete headless drain resolution seam
 
 ### Decision

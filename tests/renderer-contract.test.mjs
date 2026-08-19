@@ -62,6 +62,8 @@ assert.doesNotMatch(source, /const flipperCandidates = \[\]/);
 assert.doesNotMatch(source, /const selectedFlipperCandidate = selectEarliestFlipperContact\(flipperCandidates\)/);
 assert.match(source, /resolveFlipperCollision\(b, flipper, side, side === 'left' \? input\.left : input\.right, contact\)/);
 assert.match(source, /contact\.t < 1\) advancePrimaryBallResidual\(b, routeGravity, dt, contact\.t\)/);
+assert.match(source, /drainRecoveryResidualFraction\(lateFlipperCandidate\)/);
+assert.match(source, /if \(b\.lastContact && !b\.lastContact\.separating\) advancePrimaryBallResidual\(b, routeGravity, dt, drainRecoveryResidualFraction\(lateFlipperCandidate\)\)/);
 assert.match(source, /b\.cradleSide === otherSide && hingeCradle\(otherSide\)/);
 assert.match(source, /settled on the hinge; keep cradle maintenance alive/);
 assert.match(source, /activateDamagePulseReviewFixture\(\);/);

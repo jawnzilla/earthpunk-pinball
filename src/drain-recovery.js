@@ -23,10 +23,19 @@ export function applyDrainRecoveryOutcome({ outcome, stability = 1, stabilityMax
   return { stability: outcome.nextStability, charge: outcome.nextCharge };
 }
 
+// The emergency opening is queried after the primary manifold. Expose the
+// selected blade's normalized contact time so the caller can replay the
+// remainder of the same fixed step instead of ending motion at the rescue.
+export function drainRecoveryResidualFraction(candidate = null) {
+  return Number.isFinite(candidate?.contact?.t)
+    ? Math.max(0, Math.min(1, candidate.contact.t))
+    : 1;
+}
+
 // Complete renderer-independent decision/application seam for the late drain.
 // The selected contact remains an action for the caller; it must not consume
 // stability or charge merely because the emergency query found a blade.
 export function resolveDrainRecovery({ candidate = null, tableKind = 'standard', immortal = false, stability = 1, stabilityMax = 3, charge = 0 } = {}) {
   const outcome = decideDrainRecoveryOutcome({ candidate, tableKind, immortal, stability, charge });
-  return { outcome, state: applyDrainRecoveryOutcome({ outcome, stability, stabilityMax, charge }) };
+  return { outcome, state: applyDrainRecoveryOutcome({ outcome, stability, stabilityMax, charge }), residualFraction: drainRecoveryResidualFraction(candidate) };
 }
