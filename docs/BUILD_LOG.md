@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 126: hosted still-frame gate and next-slice canon
+
+### Decision
+
+- No gameplay or renderer mutation was safe to claim from this scheduled pass: the current material-authored target slice is already live, and the remaining highest-risk gate is subjective grayscale/depth review rather than another source-only ornament.
+- Re-ran the exact frozen `?review=depth` path locally and on GitHub Pages at CSS 320×568 and 390×844. Captured local stills outside the repository for the next visual inspection; no subjective visual verdict is inferred from source or pixel statistics.
+- Canonized the next bounded visual slice: inspect the frozen grayscale still first, then change only the largest observed failure among (a) shell/well plane separation, (b) target/flipper silhouette separation, or (c) compact HUD legibility. Physics, collision geometry, input, progression, and asset loading remain out of scope until that evidence exists.
+
+### Verification
+
+- `npm test`: 42 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed; `git diff --check`: passed.
+- Local Playwright exact viewport checks: 320×568 and 390×844 both returned HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, and zero page/console errors. Still frames: `%LOCALAPPDATA%/Temp/deadlight-tick126-depth-320.png` and `...-390.png`.
+- Hosted Playwright exact viewport checks against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=4558819`: both returned HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, and zero page/console errors.
+- GitHub Pages run `32306942238` completed successfully for `4558819`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32306942238.
+
+### Remaining risk / next smallest slice
+
+- This pass deliberately makes no AAA or subjective grayscale claim because this environment did not provide an image-inspection surface; the still-frame gate is captured, not passed.
+- Next implementation must be selected from inspected still-frame evidence. Do not add another decorative renderer layer or touch physics by inference.
+
 ## 2026-08-19 — Overhaul tick 125 follow-up: remove duplicate renderer binding
 
 ### Root cause and correction

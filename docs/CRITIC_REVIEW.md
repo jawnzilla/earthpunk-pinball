@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 125 follow-up
 
+## Overhaul tick 126 verdict
+
+**Playable hackathon slice: PASS for hosted frozen-depth verification; global visual manifold: unchanged / not complete; visual quality: still-frame captured / subjective inspection pending; AAA-ready: FAIL / unverified.** The existing depth-audit fixture is reachable on the current Pages build at both required portrait widths without runtime errors or overflow. This pass intentionally avoids inventing a visual verdict from source inspection alone.
+
+### Observed evidence
+
+- Local and hosted `?review=depth` loads each produced one Canvas, exact requested CSS width, `scrollWidth === clientWidth`, HTTP 200, and zero page/console errors at 320×568 and 390×844.
+- The frozen fixture applies the grayscale audit filter and stops the ball, so the captured stills are suitable for judging shell/well/foreground plane order without motion blur.
+- Current Pages run `32306942238` is successful for commit `4558819`.
+
+### Remaining risk / next smallest slice
+
+- No human grayscale/depth verdict is claimed because the captured images were not visually inspectable in this scheduled environment. Source contracts and browser smoke are not substitutes for looking at the still.
+- Next slice is one evidence-selected renderer change only: shell/well separation, authored target/flipper silhouette separation, or HUD legibility. Preserve physics and input behavior.
+
 ## Follow-up verdict
 
 **Prior browser probe: FAIL, corrected before final delivery.** The first post-push browser probe caught a duplicate `family` declaration that source-text tests could not detect. The duplicate was removed, with no change to the intended material-authored rendering slice. A fresh Pages deployment and browser probe are required before declaring this tick complete.
