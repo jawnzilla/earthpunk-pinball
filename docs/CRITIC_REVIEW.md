@@ -1,5 +1,23 @@
 # Deadlight Critic Review — Overhaul tick 119
 
+# Deadlight Critic Review — Overhaul tick 121
+
+## Overhaul tick 121 verdict
+
+**Playable hackathon slice: PASS for a real headless drain-opening fixture; global manifold: IMPROVED / not complete; visual quality: runtime smoke verified / subjective still-frame unverified; AAA-ready: FAIL / unverified.** The fixture now uses the actual late-opening candidate collector and selector, proving bounded recovery timing and state ownership without overstating manifold integration.
+
+### Observed evidence
+
+- `tests/drain-recovery.test.mjs` drives `collectDrainRecoveryCandidates()` and `selectDrainRecoveryCandidate()` with a moving ball and both flippers.
+- The selected real candidate is passed to `resolveDrainRecovery()`; stability/charge remain unchanged, residual duration is asserted, and existing `cradleSide` remains intact.
+- `npm test` passes 41/41; syntax checks and `git diff --check` pass.
+- Exact local Playwright checks at CSS 320×568 and 390×844 pass: HTTP 200, canvas present, no horizontal overflow, and zero console/page errors.
+
+### Remaining risk / next smallest slice
+
+- This is a headless integration fixture around renderer-independent seams, not evidence that the browser live drain branch is inside the primary manifold. Do not claim that boundary is closed.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 120 verdict
 
 **Playable hackathon slice: PASS for a headless drain replay-window contract; global manifold: IMPROVED / not complete; visual quality: runtime smoke pending; AAA-ready: FAIL / unverified.** The late-drain path now has one renderer-independent remainder calculation, and a focused fixture proves a selected rescue preserves state while replaying the residual fixed-step duration.

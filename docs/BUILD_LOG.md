@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 121: runtime drain-opening fixture
+
+### Decision
+
+- Added a focused headless runtime-opening fixture that uses the real `collectDrainRecoveryCandidates()` and `selectDrainRecoveryCandidate()` seams rather than synthetic candidate objects.
+- The fixture proves an actual late-opening trajectory selects a bounded blade contact, preserves stability/charge through `resolveDrainRecovery()`, replays the residual fixed-step duration, and does not erase existing cradle ownership.
+- No primary-manifold ownership, solver constants, geometry, or visual styling changes were made.
+
+### Verification
+
+- `npm test`: 41 passed, 0 failed.
+- Syntax checks for `src/*.js`, `src/*.mjs`, and `tests/*.mjs`: passed.
+- `git diff --check`: passed.
+- Exact local Playwright checks at CSS 320×568 and 390×844: HTTP 200, `innerWidth` matched requested width, canvas present, `scrollWidth === clientWidth`, and zero console/page errors.
+- Hosted Pages verification will be performed after push; no hosted result is claimed yet.
+
+### Remaining risk / next smallest slice
+
+- The fixture exercises the renderer-independent runtime seams, not the browser's live drain branch or a primary-manifold drain contact. Keep the boundary explicit.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 120: headless drain replay-window contract
 
 ### Decision

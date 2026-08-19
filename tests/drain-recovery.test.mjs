@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate } from '../src/flipper-contact.js';
 import { applyDrainRecoveryOutcome, decideDrainRecoveryOutcome, drainRecoveryResidualDt, drainRecoveryResidualFraction, resolveDrainRecovery } from '../src/drain-recovery.js';
 
 test('drain outcome preserves a selected flipper winner as the first action', () => {
@@ -29,6 +30,25 @@ test('headless drain fixture preserves recovery state and replays the opening re
   assert.deepEqual(resolution.state, { stability: 2, charge: 1.8 });
   assert.equal(drainRecoveryResidualDt(1 / 60, candidate), (1 / 60) * 0.75);
   assert.equal(drainRecoveryResidualDt(1 / 60, null), 0);
+});
+
+test('runtime opening fixture selects the earliest real blade and preserves cradle state through replay', () => {
+  const ball = { prevX: 150, prevY: 520, x: 180, y: 548, cradleSide: 'right' };
+  const flippers = {
+    left: { pivotX: 140, pivotY: 540, length: 42, width: 12, previousAngle: -.4, angle: .2 },
+    right: { pivotX: 220, pivotY: 540, length: 42, width: 12, previousAngle: Math.PI + .4, angle: Math.PI - .2 }
+  };
+  const candidates = collectDrainRecoveryCandidates(ball, flippers, 12);
+  const candidate = selectDrainRecoveryCandidate(candidates);
+  assert.ok(candidates.length >= 1, 'the late opening trajectory must reach at least one blade');
+  assert.ok(candidate, 'the deterministic opening resolver must select a blade');
+  assert.ok(candidate.contact.t >= 0 && candidate.contact.t <= 1);
+
+  const resolution = resolveDrainRecovery({ candidate, stability: 2, stabilityMax: 3, charge: 2.4 });
+  assert.equal(resolution.outcome.kind, 'flipper');
+  assert.deepEqual(resolution.state, { stability: 2, charge: 2.4 });
+  assert.equal(drainRecoveryResidualDt(1 / 60, candidate), (1 / 60) * (1 - candidate.contact.t));
+  assert.equal(ball.cradleSide, 'right', 'recovery selection must not erase existing cradle ownership');
 });
 
 test('complete drain resolution applies ordinary recovery state', () => {
