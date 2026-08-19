@@ -15,7 +15,8 @@
 - `git diff --check`: passed.
 - Tight regression seam: `tests/flipper-contact.test.mjs` asserts that a segment crossing returns `t` strictly between 0 and 1; `tests/renderer-contract.test.mjs` pins `segmentCollision()` propagation.
 - Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
-- Pages deployment and hosted parity remain pending until this commit is pushed.
+- GitHub Pages run `32263268322` for commit `cbcabd3` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32263268322.
+- Hosted `?review=depth&cacheBust=cbcabd3` returned HTTP 200 with a 204168-byte body containing `contact.sweptT = swept?.t ?? 1`, `swept = sweptSegmentContact`, and `<canvas`; this confirms deployed artifact parity, not subjective visual quality.
 
 ### Remaining risk / next smallest slice
 

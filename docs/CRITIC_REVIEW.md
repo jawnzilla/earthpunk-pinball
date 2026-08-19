@@ -10,6 +10,7 @@
 - `index.html` assigns `contact.sweptT = swept?.t ?? 1` in `segmentCollision()`.
 - `tests/flipper-contact.test.mjs` covers a fractional crossing time; `npm test` passes all 22 tests, syntax checks and `git diff --check` pass.
 - Exact 320×568/390×844 browser and screenshot checks are not claimed because this scheduled environment has no runnable browser executable.
+- GitHub Pages run `32263268322` for `cbcabd3` completed successfully; hosted `?review=depth&cacheBust=cbcabd3` returned HTTP 200 and retained the segment timing markers plus `<canvas`.
 
 ### Remaining risk / next smallest slice
 
