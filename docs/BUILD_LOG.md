@@ -13,7 +13,7 @@
 - `npm test`: 35 passed, 0 failed.
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
-- Exact 320×568/390×844 browser checks and Pages verification are pending this push.
+- Hosted Playwright checks at exact CSS 320×568 and 390×844: both returned HTTP 200, canvas present, no horizontal overflow, and zero console/page errors after the follow-up syntax correction. GitHub Pages run `32291315924` completed successfully for `4c82a21`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32291315924.
 
 ### Remaining risk / next smallest slice
 
