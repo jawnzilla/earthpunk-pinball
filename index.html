@@ -328,6 +328,7 @@ import { selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact,
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
+import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
 (() => {
   "use strict";
   const canvas = document.querySelector('#game'); canvas.addEventListener('contextmenu', event => event.preventDefault()); canvas.addEventListener('selectstart', event => event.preventDefault());
@@ -1108,9 +1109,6 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     advanceElementalEffects(dt);
     state.peakY = Math.min(state.peakY, b.y);
     b.trail.push({ x: b.x, y: b.y }); if (b.trail.length > 10) b.trail.shift();
-    if (b.x - b.r < table.left) resolveBoundaryContact(b, { x: 1, y: 0 }, { x: table.left, y: b.y }, table.left - (b.x - b.r));
-    if (b.x + b.r > table.right) resolveBoundaryContact(b, { x: -1, y: 0 }, { x: table.right, y: b.y }, (b.x + b.r) - table.right);
-    if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
     // Gather every swept family from the same pre-resolution trajectory. The
     // selected family is the only one allowed to mutate the primary ball.
@@ -1118,6 +1116,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     const preStaticSegmentCandidate = selectEarliestSweptContact(preStaticSegmentCandidates);
     const preFlipperCandidates = collectFlipperCandidates(b);
     const preSelectedFlipperCandidate = selectEarliestFlipperContact(preFlipperCandidates);
+    const preBoundaryCandidates = collectBoundaryContactCandidates(b, table);
     const primaryCircleCandidates = [];
     targets.filter(t => !t.hit).forEach(item => {
       const swept = sweptCircleContact({ x: b.prevX, y: b.prevY }, { x: b.x, y: b.y }, { x: item.x, y: item.y }, b.r + item.r);
@@ -1132,10 +1131,13 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (swept.hit) primaryCircleCandidates.push({ type: 'bumper', item, swept });
     });
     const primaryCircleCandidate = selectEarliestSweptContact(primaryCircleCandidates);
-    const runtimeContactCandidates = collectRuntimeContactCandidates({ circle: primaryCircleCandidate, segment: preStaticSegmentCandidate, flipper: preSelectedFlipperCandidate });
+    const runtimeContactCandidates = collectRuntimeContactCandidates({ circle: primaryCircleCandidate, segment: preStaticSegmentCandidate, flipper: preSelectedFlipperCandidate, boundaries: preBoundaryCandidates });
     const runtimeContactWinner = selectEarliestContact(runtimeContactCandidates);
     state.physicsTelemetry.manifoldFamily = runtimeContactWinner?.kind || null;
     state.physicsTelemetry.manifoldT = runtimeContactWinner?.t ?? null;
+    if (runtimeContactWinner?.kind === 'boundary') {
+      resolveBoundaryContact(b, runtimeContactWinner.normal, runtimeContactWinner.point, runtimeContactWinner.penetration);
+    }
     if (primaryCircleCandidate && runtimeContactWinner?.kind === 'circle') {
       const { type, item } = primaryCircleCandidate;
       const contact = type === 'destructible' ? destructibleCollision(b, item) : circleCollision(b, item);

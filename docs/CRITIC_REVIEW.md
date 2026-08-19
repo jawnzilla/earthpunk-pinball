@@ -1,5 +1,22 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 114 verdict
+
+**Playable hackathon slice: PASS for boundary candidate dispatch; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** Primary-ball left, right, and top edge recovery now participates in the shared earliest-contact decision instead of mutating the ball before interior candidates are compared.
+
+### Observed evidence
+
+- `src/boundary-contact.js` reports only penetrated edges with deterministic end-of-step timing and preserves normal/point/penetration data for the resolver.
+- `index.html` gathers boundary candidates before contact-family dispatch and resolves them only when `runtimeContactWinner.kind === 'boundary'`.
+- `tests/boundary-contact.test.mjs` proves edge filtering and that a swept interior contact beats boundary recovery; `npm test` passes 29/29.
+- Syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks, hosted Pages verification, and screenshots are not claimed in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- Late drain recovery still performs a separate post-dispatch flipper sweep. A focused drain-opening runtime fixture is required before folding that path into the manifold.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 113 verdict
 
 **Playable hackathon slice: PASS for single-source flipper candidate dispatch; global manifold: IMPROVED / not complete; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The redundant post-manifold flipper sweep is removed, so the selected flipper response cannot be silently replaced by a second candidate query against mutated ball state.

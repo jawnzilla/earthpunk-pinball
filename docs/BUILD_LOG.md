@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 114: boundary contacts enter the shared manifold
+
+### Decision
+
+- Added a renderer-independent boundary candidate collector for left, right, and top table edges. Candidates carry deterministic `t=1`, edge identity, normal, point, and penetration data.
+- Moved primary-ball boundary resolution behind the same cross-family selector used by circle, segment, and flipper contacts. Interior swept contacts now win before end-of-step edge recovery; boundary behavior remains otherwise unchanged.
+- Added focused regressions for penetrated-edge selection and interior-contact precedence. The drain opening remains outside this manifold and is intentionally still the next runtime seam.
+
+### Verification
+
+- `npm test`: 29 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed until a runnable browser is available in this scheduled environment.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- Late drain recovery still performs a separate post-dispatch flipper sweep. Fold it into the manifold only after a focused drain-opening fixture proves the selected flipper and recovery state are preserved.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap; no subjective still-frame verdict is claimed.
+
 ## 2026-08-19 — Overhaul tick 113: remove duplicate post-manifold flipper query
 
 ### Decision

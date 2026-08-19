@@ -34,10 +34,11 @@ export function summarizeContactManifold(candidates = []) {
 // The caller still owns resolution; this seam makes it possible to compare
 // circle, static-segment, and rotating-flipper timing before a future dispatch
 // packet changes ball state.
-export function collectRuntimeContactCandidates({ circle = null, segment = null, flipper = null } = {}) {
+export function collectRuntimeContactCandidates({ circle = null, segment = null, flipper = null, boundaries = [] } = {}) {
   return [
     normalizeContactCandidate(circle?.swept || circle, { kind: 'circle', order: 'circle' }),
     normalizeContactCandidate(segment?.swept || segment, { kind: 'segment', order: 'segment' }),
-    normalizeContactCandidate(flipper?.contact || flipper, { kind: 'flipper', order: 'flipper' })
+    normalizeContactCandidate(flipper?.contact || flipper, { kind: 'flipper', order: 'flipper' }),
+    ...boundaries.map(boundary => normalizeContactCandidate(boundary, { kind: 'boundary', order: boundary.order || `boundary-${boundary.edge || 'unknown'}` }))
   ].filter(Boolean);
 }
