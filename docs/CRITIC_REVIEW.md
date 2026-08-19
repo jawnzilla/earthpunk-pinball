@@ -8,7 +8,9 @@
 
 - `index.html` adds `segmentCollisionWithResidual()` around the existing segment solver and routes the live static-segment consumers through it.
 - This intentionally does not change flipper timing or add a segment earliest-contact manifold.
-- Test, syntax, diff, deployment, and hosted-parity evidence will be appended after execution.
+- `npm test` passes all 22 tests; syntax checks and `git diff --check` pass.
+- GitHub Pages run `32265141060` for `907452a` completed successfully; hosted `?review=depth&cacheBust=907452a` returned HTTP 200 and retained `segmentCollisionWithResidual` plus `<canvas`.
+- Exact 320×568/390×844 browser and screenshot checks are not claimed because no Chromium/Chrome executable is available in this scheduled environment.
 
 ### Remaining risk / next smallest slice
 

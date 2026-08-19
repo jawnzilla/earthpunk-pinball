@@ -15,7 +15,9 @@
 - `git diff --check`: passed (only a CRLF normalization warning from Git for the edited test file).
 - Tight regression seam: `tests/renderer-contract.test.mjs` pins wrapper delegation and residual replay for edge segments, the relay gate, and side guards; existing `tests/flipper-contact.test.mjs` covers fractional swept segment timing.
 - Exact 320×568 and 390×844 browser checks are not claimed: no Chromium/Chrome executable is available in this scheduled environment.
-- Pre-push hosted baseline `?review=depth&cacheBust=6e7c273` returned HTTP 200 and `<canvas`, but correctly lacks the new wrapper; post-push parity is required.
+- Pre-push hosted baseline `?review=depth&cacheBust=6e7c273` returned HTTP 200 and `<canvas`, but correctly lacked the new wrapper.
+- GitHub Pages run `32265141060` for commit `907452a` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32265141060.
+- Hosted `?review=depth&cacheBust=907452a` returned HTTP 200 with a 204480-byte body containing `segmentCollisionWithResidual` and `<canvas`; this confirms deployed artifact parity, not subjective visual quality.
 
 ### Remaining risk / next smallest slice
 
