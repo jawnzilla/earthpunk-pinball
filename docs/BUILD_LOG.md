@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 90: current-host evidence gate refreshed
+
+### Decision
+
+- No product-code change was made this tick. The visual phase remains held at the required human-inspected still-frame gate; adding another renderer seam without one named hierarchy defect would be unmeasured polish.
+- Refreshed repository, hosted artifact, and Pages workflow evidence against the clean `prototype` HEAD (`8eb69f1`). This is an evidence tick, not a completion claim.
+
+### Verification
+
+- `git status --short --branch`, `git rev-parse HEAD`, and `git rev-parse origin/prototype` confirm a clean checkout with local and remote both at `8eb69f1531aad83d0568013736fa4b1c817052bf1`.
+- `npm test`: 22 passed, 0 failed. `git diff --check`: passed.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=8eb69f1'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 10:33:11 GMT`.
+- Hosted body fetch returned 201085 bytes and retained `drawForegroundMechanismPlane` and `drawWellWallBevel` markers. This confirms artifact content/availability, not subjective visual quality.
+- GitHub Actions Pages run `32243224419` completed successfully for `8eb69f1`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32243224419.
+- No new browser matrix, screenshot inspection, grayscale verdict, or subjective visual-quality claim is made in this scheduled tick.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes.
+- When a human still-frame review is available, name exactly one defect at 320×568, implement only that renderer seam, and rerun the full hosted portrait packet plus the upgrade fixture.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 89: hosted evidence gate refreshed
 
 ### Decision
