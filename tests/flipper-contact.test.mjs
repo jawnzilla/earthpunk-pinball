@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
+import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, shortestAngularDelta, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -33,6 +33,22 @@ test('moving flipper query does not tunnel across a large angular sweep', () => 
   const hit = sweptFlipperContact(ball, flipper, 8);
   assert.ok(hit, 'a stationary ball in the swept arc must not be skipped');
   assert.ok(hit.t >= 0 && hit.t <= 1, 'rotating-only contacts must expose normalized pose timing');
+});
+
+test('rotating flipper follows the short arc across the angle seam', () => {
+  const delta = shortestAngularDelta(Math.PI - 0.05, -Math.PI + 0.05);
+  assert.ok(Math.abs(delta - 0.1) < 1e-9, `expected a 0.1 radian seam crossing, got ${delta}`);
+  const flipper = {
+    pivotX: 100,
+    pivotY: 100,
+    length: 100,
+    width: 17,
+    previousAngle: Math.PI - 0.05,
+    angle: -Math.PI + 0.05
+  };
+  const hit = sweptFlipperContact({ prevX: 0, prevY: 100, x: 0, y: 100 }, flipper, 8);
+  assert.ok(hit, 'the seam-crossing blade should still contact its equivalent pose');
+  assert.ok(hit.t >= 0 && hit.t <= 1);
 });
 
 test('swept segment rejects a path that misses and detects a crossing path', () => {

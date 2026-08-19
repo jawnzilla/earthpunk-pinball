@@ -1,6 +1,17 @@
 import { selectEarliestContact } from './contact-manifold.js';
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const TWO_PI = Math.PI * 2;
+
+// Restored runs and review fixtures can cross the +/-PI seam even though live
+// motor angles are normally unwrapped. Follow the physically short arc rather
+// than spending the rotating CCD budget on poses the blade never visited.
+export function shortestAngularDelta(from, to) {
+  let delta = (to - from) % TWO_PI;
+  if (delta > Math.PI) delta -= TWO_PI;
+  if (delta < -Math.PI) delta += TWO_PI;
+  return delta;
+}
 
 function segmentAt(flipper, angle, lengthBonus = 0) {
   const length = flipper.length + lengthBonus;
@@ -70,7 +81,8 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
   const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
   const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle;
-  const tipTravel = Math.abs(flipper.angle - previousAngle) * (flipper.length + lengthBonus);
+  const angleDelta = shortestAngularDelta(previousAngle, flipper.angle);
+  const tipTravel = Math.abs(angleDelta) * (flipper.length + lengthBonus);
   const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
   if (Math.max(ballTravel, tipTravel) < 0.01) return null;
   const queryRadius = radius + Math.min(10, tipTravel * 0.28);
@@ -78,7 +90,7 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   // enough for ordinary motion but can skip a stationary ball during a large
   // angular jump; keep the query bounded for pathological review inputs.
   const angularSteps = Math.min(64, Math.max(2, Math.ceil(tipTravel / Math.max(2, queryRadius * 0.45))));
-  const angles = Array.from({ length: angularSteps + 1 }, (_, index) => previousAngle + (flipper.angle - previousAngle) * (index / angularSteps));
+  const angles = Array.from({ length: angularSteps + 1 }, (_, index) => previousAngle + angleDelta * (index / angularSteps));
   for (let angleIndex = 0; angleIndex < angles.length; angleIndex += 1) {
     const angle = angles[angleIndex];
     const poseT = angleIndex / angularSteps;

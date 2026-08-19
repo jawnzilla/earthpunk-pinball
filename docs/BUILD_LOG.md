@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 129: rotating flipper angle-seam CCD
+
+### Decision
+
+- Added `shortestAngularDelta()` to the rotating flipper contact query and use it for both tip-travel budgeting and pose interpolation.
+- This prevents restored/review states that cross the +/-PI seam from being interpreted as an almost-full revolution. The change is physics-only and keeps the existing contact shape/timing contract.
+- Added a regression covering the equivalent `PI - 0.05` to `-PI + 0.05` seam crossing.
+
+### Verification
+
+- Red/green loop: `npm test` passes 44/44, including the seam regression.
+- `node --check src/flipper-contact.js` passed; `git diff --check` passed.
+- Hosted source reachability probe before push: HTTP 200, 212586 bytes, `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip` present. Exact viewport/console/pixel checks remain pending because this checkout has no runnable browser harness.
+
+### Remaining risk / next smallest slice
+
+- Continuous rotating-segment TOI is still not implemented; pose sampling remains bounded at 64 steps. The next physics slice needs a dedicated continuous-rotation fixture before changing that architecture.
+- Visual overhaul, materials, element hybrids, destructible readability, and subjective portrait/grayscale inspection remain open. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 128: analytic flipper swept-segment TOI
 
 ### Decision

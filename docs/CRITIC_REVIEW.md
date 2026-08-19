@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 128 follow-up
 
+## Overhaul tick 129 verdict
+
+**Physics slice: PASS for angle-seam normalization; global overhaul: NOT COMPLETE; visual quality: unchanged this tick; AAA-ready: FAIL / unverified.** Rotating flipper CCD now follows the physically short arc when angles cross the +/-PI seam instead of consuming its bounded pose budget on an almost-full revolution.
+
+### Observed evidence
+
+- `src/flipper-contact.js` exports and uses `shortestAngularDelta()` for tip travel and sampled pose interpolation.
+- `tests/flipper-contact.test.mjs` covers the `PI - 0.05` to `-PI + 0.05` seam crossing; `npm test`: 44/44 passed.
+- Syntax and whitespace checks passed. No renderer, input, progression, or asset behavior changed.
+- Pre-push hosted probe returned HTTP 200 and retained `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip`; exact viewport/console/pixel checks are not claimed without a runnable browser harness.
+
+### Remaining risk / next smallest slice
+
+- The rotating blade still uses bounded pose sampling rather than continuous rotating-segment TOI; add a dedicated regression fixture before replacing it.
+- The earthpunk visual overhaul, material differentiation, elemental hybrids, destructible readability, and subjective grayscale inspection remain open. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## Overhaul tick 128 verdict
 
 **Physics slice: PASS for analytic rail/flipper segment CCD; global overhaul: NOT COMPLETE; visual quality: unchanged this tick; AAA-ready: FAIL / unverified.** The flipper segment query now computes earliest point-vs-capsule time of impact instead of sampling at most 64 positions, eliminating the demonstrated 1100px fixed-step narrow-rail miss.
