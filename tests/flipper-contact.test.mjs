@@ -16,6 +16,7 @@ test('moving flipper query detects a ball at an intermediate angle once', () => 
   const second = sweptFlipperContact(ball, flipper, 8);
   assert.ok(first, 'the intermediate swept flipper pose should contact the ball');
   assert.deepEqual(second, first, 'the pure query should be deterministic and side-effect free');
+  assert.ok(first.t >= 0 && first.t <= 1, 'flipper contacts must expose normalized combined timing');
   assert.equal(first.segment.material, 'rubber');
 });
 
@@ -31,6 +32,7 @@ test('moving flipper query does not tunnel across a large angular sweep', () => 
   const ball = { prevX: 154, prevY: 184, x: 154, y: 184 };
   const hit = sweptFlipperContact(ball, flipper, 8);
   assert.ok(hit, 'a stationary ball in the swept arc must not be skipped');
+  assert.ok(hit.t >= 0 && hit.t <= 1, 'rotating-only contacts must expose normalized pose timing');
 });
 
 test('swept segment rejects a path that misses and detects a crossing path', () => {

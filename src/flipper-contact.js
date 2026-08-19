@@ -49,7 +49,9 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   // angular jump; keep the query bounded for pathological review inputs.
   const angularSteps = Math.min(64, Math.max(2, Math.ceil(tipTravel / Math.max(2, queryRadius * 0.45))));
   const angles = Array.from({ length: angularSteps + 1 }, (_, index) => previousAngle + (flipper.angle - previousAngle) * (index / angularSteps));
-  for (const angle of angles) {
+  for (let angleIndex = 0; angleIndex < angles.length; angleIndex += 1) {
+    const angle = angles[angleIndex];
+    const poseT = angleIndex / angularSteps;
     const segment = segmentAt(flipper, angle, lengthBonus);
     const dx = segment.x2 - segment.x1;
     const dy = segment.y2 - segment.y1;
@@ -57,9 +59,9 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
     const projection = clamp(((ball.x - segment.x1) * dx + (ball.y - segment.y1) * dy) / lengthSquared, 0, 1);
     const closestX = segment.x1 + projection * dx;
     const closestY = segment.y1 + projection * dy;
-    if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, segment };
+    if (Math.hypot(ball.x - closestX, ball.y - closestY) < queryRadius) return { x: ball.x, y: ball.y, t: poseT, segment };
     const swept = sweptSegmentContact({ prevX: startX, prevY: startY, x: ball.x, y: ball.y }, segment, queryRadius);
-    if (swept) return { x: swept.x, y: swept.y, segment };
+    if (swept) return { x: swept.x, y: swept.y, t: Math.max(poseT, swept.t), segment };
   }
   return null;
 }

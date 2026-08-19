@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 106: flipper candidate timing contract
+
+### Decision
+
+- Implemented one bounded physics slice: `sweptFlipperContact()` now returns normalized combined timing (`t`) for both rotating-pose and ball-sweep portions of a flipper query.
+- The timing is the earliest sampled pose that also intersects the ball path (`max(poseT, swept.t)`); stationary-ball rotational contacts report pose timing, while direct current-pose overlaps report the current pose fraction.
+- The live resolver was intentionally not changed this tick. Candidate selection, contact rewind, residual replay, and unselected cradle preservation remain a single follow-up packet rather than being faked with sequential calls.
+- Added deterministic regressions proving timing is present and bounded for intermediate-angle and large angular-sweep contacts.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Hosted `https://jawnzilla.github.io/earthpunk-pinball/?review=flipper-contact&cacheBust=tick106` returned HTTP 200 with 205487 bytes and contained `sweptFlipperContact` plus `<canvas`; it correctly did not contain the unpushed `poseT` implementation.
+- Exact 320×568/390×844 browser checks are not claimed: no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- This establishes the shared timing contract only; the live loop still resolves left and right flippers sequentially. The next packet must gather both candidates, select the earliest, rewind to its contact, replay residual time, and preserve a non-selected cradle overlap.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No new visual claim is made from source/HTTP evidence.
+
 ## 2026-08-19 — Overhaul tick 105: flipper manifold investigation held
 
 ### Decision

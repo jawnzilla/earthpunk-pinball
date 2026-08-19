@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 106 verdict
+
+**Playable hackathon slice: PASS for a renderer-independent flipper timing contract; flipper manifold: NOT IMPLEMENTED; visual quality: source/host verified only; AAA-ready: FAIL / unverified.** The query now exposes normalized timing needed by a future earliest-flipper resolver, without changing live collision behavior prematurely.
+
+### Observed evidence
+
+- `src/flipper-contact.js` returns `t` for current-pose overlaps and `Math.max(poseT, swept.t)` for combined rotating-blade/ball-path contacts.
+- `tests/flipper-contact.test.mjs` asserts bounded normalized timing for intermediate-angle and large angular-sweep cases; `npm test` passes 22/22 and syntax checks pass.
+- Hosted `?review=flipper-contact&cacheBust=tick106` returns HTTP 200, 205487 bytes, and contains the prior `sweptFlipperContact`/`<canvas>` artifact. The hosted body does not contain the new timing marker because this tick is not pushed yet; no parity claim is made.
+- No exact 320×568/390×844 browser or screenshot check is claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- The live update path still calls `resolveFlipperCollision()` for left and right sequentially. Do not claim a manifold until both candidates use this timing, the selected contact is rewound, residual fixed-step time is replayed, and a regression proves an unselected cradle overlap is retained.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; no subjective still-frame verdict is claimed.
+
 ## Overhaul tick 105 verdict
 
 **Playable hackathon slice: PASS for evidence discipline; flipper manifold: NOT IMPLEMENTED; visual quality: source/host verified only; AAA-ready: FAIL / unverified.** Investigation found that a superficial earliest-flipper selector would be unsound: the current query/resolver seam lacks a shared timing contract, contact rewind, residual replay, and cradle-preservation behavior.
