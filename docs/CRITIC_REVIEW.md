@@ -6,9 +6,10 @@
 
 ### Evidence
 
-- Exact hosted probe on commit `8b15ab9` returned HTTP 200, correct 320/390 CSS widths, canvas, and no overflow, but reported `Identifier 'family' has already been declared` as a page error at both widths and both review URLs.
-- `npm test` remained 42/42 because the existing renderer contract is source-text based; this exposes a test coverage gap, not a clean browser result.
-- The correction removes the duplicate binding; post-push Pages verification is explicitly pending.
+- Exact hosted probe on commit `8b15ab9` returned HTTP 200, correct 320/390 CSS widths, Canvas, and no overflow, but reported `Identifier 'family' has already been declared`; this was corrected in `014e438`.
+- GitHub Pages run `32306812369` completed successfully for `014e438`.
+- Fresh hosted Playwright at 320×568 passes with zero page/console errors. At 390×844, width parity and Canvas pass, but Chromium reports intermittent `ERR_INSUFFICIENT_RESOURCES` asset-load errors; the 390 zero-error gate remains blocked in this environment.
+- `npm test` remains 42/42; the source-text renderer contract still does not catch browser module syntax errors, so the first red browser probe was valuable evidence.
 
 # Deadlight Critic Review — Overhaul tick 125
 

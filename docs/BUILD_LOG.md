@@ -12,7 +12,9 @@
 
 - `npm test`: 42 passed, 0 failed.
 - Syntax checks and `git diff --check`: passed.
-- The failed hosted probe is retained as a blocker on the prior commit; post-follow-up deployment verification is required before claiming browser health.
+- GitHub Pages run `32306812369` completed successfully for `014e438`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32306812369.
+- Hosted Playwright at exact CSS 320×568 now passes HTTP 200, `innerWidth`, `scrollWidth === clientWidth`, Canvas, `?review=depth`, and zero page/console errors.
+- Hosted Playwright at exact CSS 390×844 passes HTTP 200, width parity, Canvas, and `?review=depth`, but this environment still reports intermittent `ERR_INSUFFICIENT_RESOURCES` asset-load console errors; no zero-error claim is made for 390.
 
 ## 2026-08-19 — Overhaul tick 125: target silhouettes follow material data
 
