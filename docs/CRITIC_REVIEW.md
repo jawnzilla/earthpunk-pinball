@@ -9,7 +9,7 @@
 - `src/flipper-contact.js` exports and uses `shortestAngularDelta()` for tip travel and sampled pose interpolation.
 - `tests/flipper-contact.test.mjs` covers the `PI - 0.05` to `-PI + 0.05` seam crossing; `npm test`: 44/44 passed.
 - Syntax and whitespace checks passed. No renderer, input, progression, or asset behavior changed.
-- Pre-push hosted probe returned HTTP 200 and retained `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip`; exact viewport/console/pixel checks are not claimed without a runnable browser harness.
+- Pages run `32312580129` completed successfully for commit `5837299`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32312580129. Post-deployment index probe returned HTTP 200 with one `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip`; the hosted flipper module returned HTTP 200 with `shortestAngularDelta`. Exact viewport/console/pixel checks are not claimed without a runnable browser harness.
 
 ### Remaining risk / next smallest slice
 

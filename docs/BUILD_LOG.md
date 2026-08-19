@@ -12,7 +12,8 @@
 
 - Red/green loop: `npm test` passes 44/44, including the seam regression.
 - `node --check src/flipper-contact.js` passed; `git diff --check` passed.
-- Hosted source reachability probe before push: HTTP 200, 212586 bytes, `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip` present. Exact viewport/console/pixel checks remain pending because this checkout has no runnable browser harness.
+- GitHub Pages run `32312580129` completed successfully for commit `5837299`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32312580129.
+- Post-deployment hosted probes: index HTTP 200, 212586 bytes, one `<canvas>`, `sweptSegmentContact`, and `drawWellFrontLip`; `src/flipper-contact.js` HTTP 200 with two `shortestAngularDelta` markers. Exact viewport/console/pixel checks remain pending because this checkout has no runnable browser harness.
 
 ### Remaining risk / next smallest slice
 
