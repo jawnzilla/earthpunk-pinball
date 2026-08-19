@@ -13,7 +13,8 @@
 - `for f in src/*.js; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
 - Tight regression seam: `tests/renderer-contract.test.mjs` requires `advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT)` after swept target and bumper contacts; existing elemental tests continue to cover residual replay behavior.
-- Pre-deploy hosted `?review=depth&cacheBust=9f5cc5c` returned HTTP 200, 201488 bytes, and contained `circleCollision`, `sweptCircleContact`, `drawRecessedWellPlane`, and `<canvas>`. This confirms the prior artifact, not this uncommitted change.
+- GitHub Pages run `32255527064` for commit `af5d6a5f9d07fec6216151c2b8e0e95e3a2d7122` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32255527064.
+- Post-deploy hosted `?review=depth&cacheBust=af5d6a5` returned HTTP 200, 201678 bytes, and contained `advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT)`, `circleCollision`, `sweptCircleContact`, `drawRecessedWellPlane`, and a `<canvas` element. This confirms artifact parity, not subjective visual quality.
 - No runnable browser executable was available in this scheduled environment; exact 320×568 and 390×844 interactive/screenshot checks are not claimed.
 
 ### Remaining risk / next smallest slice

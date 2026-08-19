@@ -9,7 +9,8 @@
 - Product change is limited to `index.html` target/bumper call sites and `tests/renderer-contract.test.mjs` contract assertions.
 - `npm test` passes all 22 tests; all `src/*.js` files pass `node --check`; `git diff --check` passes.
 - Source evidence: `index.html:1059` and `index.html:1074` call `advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT)` after non-separating circular contacts; the existing destructible path remains covered at `index.html:1060`.
-- Pre-deploy hosted `?review=depth&cacheBust=9f5cc5c` returned HTTP 200 and 201488 bytes with expected renderer/physics markers. This is prior artifact evidence, not proof of the uncommitted change.
+- GitHub Pages run `32255527064` for `af5d6a5f9d07fec6216151c2b8e0e95e3a2d7122` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32255527064.
+- Post-deploy hosted `?review=depth&cacheBust=af5d6a5` returned HTTP 200 and 201678 bytes with `advancePrimaryBallResidual`, `circleCollision`, `sweptCircleContact`, `drawRecessedWellPlane`, and a `<canvas` marker. This confirms artifact parity, not subjective visual quality.
 - No browser executable is installed in this scheduled environment, so exact 320×568/390×844 interactive and screenshot checks are not claimed. No visual-quality or grayscale verdict is claimed.
 
 ### Remaining risk / next smallest slice
