@@ -14,6 +14,8 @@
 - `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
 - `git diff --check`: passed.
 - Tight regression seam: `tests/renderer-contract.test.mjs` requires the live bumper renderer to contain the collar-radius, radial-gradient, and specular-arc markers; existing physics and elemental tests remain green.
+- GitHub Pages run `32257273532` for commit `971de45` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32257273532.
+- Post-deploy hosted `?review=depth&cacheBust=971de45` returned HTTP 200 and contained `const faceGradient`, `Nested shell, recessed face`, `<canvas`, and `drawRecessedWellPlane`. This confirms artifact parity, not subjective visual quality.
 - Exact 320×568 and 390×844 browser checks are not claimed: no browser executable is available in this scheduled environment.
 
 ### Remaining risk / next smallest slice
