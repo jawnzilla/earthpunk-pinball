@@ -1064,6 +1064,34 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       flipper.previousAngle = result.previousAngle; flipper.angle = result.angle; flipper.angularVelocity = result.angularVelocity;
     });
   }
+  function collectStaticSegmentCandidates(ball) {
+    const candidates = [];
+    state.layout.bumpers.filter(item => item.type === 'edge' && (!item.oneWay || (ball.y < item.y && ball.vy > 0))).forEach(item => {
+      const segment = { ...edgeSegment(item), material: 'steel' };
+      const swept = sweptSegmentContact(ball, segment, ball.r + (segment.width || 0) / 2);
+      if (swept) candidates.push({ kind: 'edge', item, segment, swept });
+    });
+    if (state.layout.gate && state.relayCooldown === 0) {
+      const segment = { ...state.layout.gate, material: 'copper' };
+      const swept = sweptSegmentContact(ball, segment, ball.r + (segment.width || 0) / 2);
+      if (swept) candidates.push({ kind: 'gate', item: state.layout.gate, segment, swept });
+    }
+    sideGuards.forEach(guard => {
+      const segment = { ...guard, width: 12, material: 'steel' };
+      const swept = sweptSegmentContact(ball, segment, ball.r + (segment.width || 0) / 2);
+      if (swept) candidates.push({ kind: 'guard', item: guard, segment, swept });
+    });
+    return candidates;
+  }
+  function collectFlipperCandidates(ball) {
+    const candidates = [];
+    for (const side of ['left', 'right']) {
+      const flipper = flippers[side];
+      const contact = sweptFlipperContact(ball, flipper, ball.r + flipper.width / 2, { lengthBonus: state?.flipperLengthBonus || 0 });
+      if (contact) candidates.push({ side, flipper, contact });
+    }
+    return candidates;
+  }
   function update(dt = FIXED_DT) {
     if (!state.running) return;
     const physicsStepStart = performance.now();
@@ -1084,6 +1112,12 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     if (b.x + b.r > table.right) resolveBoundaryContact(b, { x: -1, y: 0 }, { x: table.right, y: b.y }, (b.x + b.r) - table.right);
     if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
+    // Gather every swept family from the same pre-resolution trajectory. The
+    // selected family is the only one allowed to mutate the primary ball.
+    const preStaticSegmentCandidates = collectStaticSegmentCandidates(b);
+    const preStaticSegmentCandidate = selectEarliestSweptContact(preStaticSegmentCandidates);
+    const preFlipperCandidates = collectFlipperCandidates(b);
+    const preSelectedFlipperCandidate = selectEarliestFlipperContact(preFlipperCandidates);
     const primaryCircleCandidates = [];
     targets.filter(t => !t.hit).forEach(item => {
       const swept = sweptCircleContact({ x: b.prevX, y: b.prevY }, { x: b.x, y: b.y }, { x: item.x, y: item.y }, b.r + item.r);
@@ -1098,7 +1132,11 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (swept.hit) primaryCircleCandidates.push({ type: 'bumper', item, swept });
     });
     const primaryCircleCandidate = selectEarliestSweptContact(primaryCircleCandidates);
-    if (primaryCircleCandidate) {
+    const runtimeContactCandidates = collectRuntimeContactCandidates({ circle: primaryCircleCandidate, segment: preStaticSegmentCandidate, flipper: preSelectedFlipperCandidate });
+    const runtimeContactWinner = selectEarliestContact(runtimeContactCandidates);
+    state.physicsTelemetry.manifoldFamily = runtimeContactWinner?.kind || null;
+    state.physicsTelemetry.manifoldT = runtimeContactWinner?.t ?? null;
+    if (primaryCircleCandidate && runtimeContactWinner?.kind === 'circle') {
       const { type, item } = primaryCircleCandidate;
       const contact = type === 'destructible' ? destructibleCollision(b, item) : circleCollision(b, item);
       if (contact && !contact.separating) {
@@ -1125,12 +1163,12 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (swept) staticSegmentCandidates.push({ kind: 'guard', item: guard, segment, swept });
     });
     const staticSegmentCandidate = selectEarliestSweptContact(staticSegmentCandidates);
-    if (staticSegmentCandidate) segmentCollisionWithResidual(b, staticSegmentCandidate.segment, routeGravity, dt);
+    if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate) segmentCollisionWithResidual(b, preStaticSegmentCandidate.segment, routeGravity, dt);
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
       const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);
       if (item.type === 'edge') return;
-      if (primaryCircleCandidate) return;
+      if (runtimeContactWinner) return;
       if (item.oneWay && !energetic) return;
       const surface = { ...item, material: item.material || (item.type === 'armor' ? 'steel' : 'rubber') }, contact = circleCollision(b, surface);
       if (contact && !contact.separating) {
@@ -1140,7 +1178,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
         const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse impact. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.');
       }
     });
-    if (staticSegmentCandidate?.kind === 'gate') { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
+    if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate?.kind === 'gate') { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
     const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
     const flipperCandidates = [];
@@ -1154,13 +1192,9 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
         // Gather a comparable read-only view across all live geometry families.
         // Resolution remains in its established seams this tick; telemetry proves
         // which family would win before the global dispatch packet is enabled.
-        const runtimeContactCandidates = collectRuntimeContactCandidates({ circle: primaryCircleCandidate, segment: staticSegmentCandidate, flipper: selectedFlipperCandidate });
-        const runtimeContactWinner = selectEarliestContact(runtimeContactCandidates);
-        state.physicsTelemetry.manifoldFamily = runtimeContactWinner?.kind || null;
-        state.physicsTelemetry.manifoldT = runtimeContactWinner?.t ?? null;
         let leftHit = false; let rightHit = false;
-    if (selectedFlipperCandidate) {
-      const { side, flipper, contact } = selectedFlipperCandidate;
+    if (runtimeContactWinner?.kind === 'flipper' && preSelectedFlipperCandidate) {
+      const { side, flipper, contact } = preSelectedFlipperCandidate;
       const hit = resolveFlipperCollision(b, flipper, side, side === 'left' ? input.left : input.right, contact);
       if (side === 'left') leftHit = hit; else rightHit = hit;
       if (hit && b.lastContact && !b.lastContact.separating && contact.t < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.t);

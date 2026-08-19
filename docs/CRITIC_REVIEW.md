@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 111 verdict
+
+**Playable hackathon slice: PASS for bounded live cross-family dispatch; global manifold: IMPROVED / not yet fully simplified; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The primary ball now gathers circle, static-segment, and flipper candidates from one pre-resolution trajectory and dispatches only the earliest normalized family winner.
+
+### Observed evidence
+
+- `index.html` gathers `preStaticSegmentCandidate` and `preSelectedFlipperCandidate` before circle resolution, then calls `collectRuntimeContactCandidates(...)` and `selectEarliestContact(...)` before any family response.
+- Circle, segment, gate reward, bumper fallback, and flipper response paths are guarded by `runtimeContactWinner.kind`; a winning family is the only family allowed to mutate the primary ball in that dispatch pass.
+- `npm test` passes 27/27; syntax checks and `git diff --check` pass.
+- Exact 320×568/390×844 browser checks and screenshots are not claimed because no runnable browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- The old post-circle static candidate collection remains as a compatibility contract seam even though it cannot resolve without the pre-resolution segment winner. Remove or replace it only with a focused runtime fixture proving the pre-resolution candidate carries all gate/segment data needed.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap. No subjective still-frame verdict is claimed.
+
 ## Overhaul tick 110 verdict
 
 **Playable hackathon slice: PASS for cross-family contact telemetry; global manifold: NOT IMPLEMENTED; visual quality: source-only / unverified; AAA-ready: FAIL / unverified.** The live loop now adapts circle, static-segment, and flipper timing into one shared read-only candidate view and records the deterministic winner before the existing resolvers mutate state.

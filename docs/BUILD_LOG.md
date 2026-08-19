@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 111: live cross-family contact dispatch
+
+### Decision
+
+- Replaced telemetry-only family comparison with one bounded runtime dispatch seam: circle, static-segment, and rotating-flipper swept candidates are gathered from the same pre-resolution ball trajectory, normalized through the shared manifold adapter, and only the earliest family is allowed to mutate primary-ball state.
+- Circle responses now require a circle manifold win; segment residual replay and relay rewards require a segment win; flipper response and residual replay require a flipper win. Held-cradle maintenance remains available when no flipper wins.
+- Existing gameplay materials, elemental rules, geometry, and input were not redesigned in this packet. The later static-segment query remains as a compatibility candidate/contract seam, but cannot resolve unless the pre-resolution segment wins.
+- Updated the renderer contract regression to pin pre-resolution family gathering and single-family dispatch guards.
+
+### Verification
+
+- `npm test`: 27 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Exact 320×568/390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
+- Hosted Pages verification is pending this push.
+
+### Remaining risk / next smallest slice
+
+- The primary family dispatch now shares one pre-resolution winner, but the compatibility static-segment query should be removed in a follow-up after a focused runtime fixture proves no post-resolution candidate is needed. No visual or grayscale verdict is claimed.
+- Portrait visual hierarchy and human grayscale readability remain the largest product gap.
+
 ## 2026-08-19 — Overhaul tick 110: live cross-family contact readout seam
 
 ### Decision
