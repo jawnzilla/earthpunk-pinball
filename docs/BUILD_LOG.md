@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick: recessed well wall bevel
+
+### Implemented
+
+- Added one bounded renderer-only seam: `drawWellWallBevel()` gives the recessed Generator Well narrow side-wall thickness plus restrained warm top/bottom edge catches.
+- The bevel is composed immediately after `drawRecessedWellPlane()` and before mine structures/gameplay objects; collision geometry, fixed timestep, physics constants, input, progression, and elemental behavior are unchanged.
+- Added renderer-contract coverage for the helper, fixed portrait-safe band, gradient, alpha, and live draw call. The focused contract was intentionally red before implementation and green afterward.
+
+### Verification before deployment
+
+- `npm test`: 22 tests passed, 0 failures.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
+- Exact hosted browser verification and Pages deployment are pending for this commit; no hosted result is claimed yet.
+- Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local visual pass is claimed.
+
+### Decision / next gate
+
+- This is a single ordered depth-plane seam from `docs/NEXT_VISUAL_PHASE.md`, not a physics or content change.
+- After deployment, run the full hosted `depth`, `destruction-run`, `active-elements`, and `upgrade` packet at exact 320×568 and 390×844, then inspect fresh depth/grayscale captures before stacking more visual polish.
+- AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick: foreground mechanism plane
 
 ### Implemented

@@ -1,3 +1,21 @@
+# Deadlight Critic Review — Overhaul tick 81
+
+## Overhaul tick 81 verdict
+
+**Playable hackathon slice: PASS for a bounded recessed-well wall bevel; AAA-ready: FAIL / unverified.** The well now has a narrow side-wall value cue and restrained edge catches, but the subjective still-frame read remains unverified until the hosted capture is inspected.
+
+### Observed evidence
+
+- `drawWellWallBevel()` is composed after `drawRecessedWellPlane()` and before mine structures, using the fixed `bevelTop = 124` / `bevelBottom = H - 112` portrait band.
+- The focused renderer contract was red before implementation and green afterward; `npm test` passes all 22 tests, module syntax checks pass, and `git diff --check` passes.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed.
+
+### Remaining risk / next smallest slice
+
+- Pages deployment and exact hosted Playwright still need to run for this commit at 320×568 and 390×844 across `depth`, `destruction-run`, `active-elements`, and `upgrade`; no hosted runtime result or screenshot claim is made yet.
+- Local exact browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`.
+- Inspect the fresh depth/grayscale still before choosing another renderer seam. AAA-ready remains unsupported.
+
 # Deadlight Critic Review — Overhaul tick 80
 
 ## Overhaul tick 80 verdict

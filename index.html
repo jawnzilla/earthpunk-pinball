@@ -1122,6 +1122,22 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     ctx.globalAlpha = .32; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1; ctx.setLineDash([18, 12]); ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
   }
+  function drawWellWallBevel() {
+    // A narrow inner bevel gives the recessed well a readable wall thickness.
+    const bevelTop = 124, bevelBottom = H - 112, left = 38, right = W - 38;
+    ctx.save();
+    ctx.globalAlpha = .36;
+    const side = ctx.createLinearGradient(0, 0, 0, bevelBottom - bevelTop);
+    side.addColorStop(0, '#789487'); side.addColorStop(.28, '#263c3a'); side.addColorStop(1, '#050708');
+    ctx.fillStyle = side;
+    ctx.fillRect(left + 2, bevelTop + 8, 7, bevelBottom - bevelTop - 16);
+    ctx.fillRect(right - 9, bevelTop + 8, 7, bevelBottom - bevelTop - 16);
+    ctx.globalAlpha = .22;
+    ctx.fillStyle = '#d7a45a';
+    ctx.fillRect(left + 9, bevelTop + 4, right - left - 18, 2);
+    ctx.fillRect(left + 9, bevelBottom - 6, right - left - 18, 2);
+    ctx.restore();
+  }
   function drawForegroundMechanismPlane() {
     // A low, separate service ledge gives the flipper assembly a physical
     // foreground plane without changing collision geometry or the drain path.
@@ -1156,7 +1172,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     // Compose the authored mine/deck planes before gameplay objects. These layers
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
-    drawReactor(); drawDeckDetails(); drawRecessedWellPlane(); drawMineStructures(); drawLowerMidLandmarks();
+    drawReactor(); drawDeckDetails(); drawRecessedWellPlane(); drawWellWallBevel(); drawMineStructures(); drawLowerMidLandmarks();
     if (state.boss.active) drawBoss();
     drawEdgeMachinery(); drawTargets(); drawDestructibles(); drawBumpers(); drawRelayGate(); drawRouteChutes(); drawForegroundMechanismPlane(); drawFlippers();
     drawEffects(); drawElementalRuntime(); drawScorePopups(); drawAimReticle(); drawBall();

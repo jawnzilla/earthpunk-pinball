@@ -86,6 +86,10 @@ assert.match(source, /ctx\.globalAlpha = deckInsetOpacity; ctx\.drawImage\(sprit
 assert.match(source, /function drawForegroundMechanismPlane\(\)/);
 assert.match(source, /const top = H - 154, bottom = H - 106/);
 assert.match(source, /ledge\.addColorStop\(\.18, '#526e63'\)/);
+assert.match(source, /function drawWellWallBevel\(\)/);
+assert.match(source, /const bevelTop = 124, bevelBottom = H - 112/);
+assert.match(source, /ctx\.globalAlpha = \.36/);
+assert.match(source, /drawWellWallBevel\(\);/);
 assert.match(source, /drawForegroundMechanismPlane\(\); drawFlippers\(\);/);
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
