@@ -11,7 +11,8 @@
 
 - `npm test`: 22 tests passed, 0 failures.
 - `git fetch origin prototype`: clean checkout; local `HEAD` equals `origin/prototype` at `e176591214c7f4bb9febc8e8a0ee517da95d7250`.
-- Hosted `curl -I -L` for `?review=depth&cacheBust=e176591`: HTTP 200, `Content-Length: 201085`.
+- Hosted `curl -I -L` for `?review=depth&cacheBust=e176591`: HTTP 200, `Content-Length: 201085` before the docs push; post-deploy `?review=depth&cacheBust=a5bfbb6` also returned HTTP 200 with `Content-Length: 201085` and `Last-Modified: Wed, 19 Aug 2026 09:11:24 GMT`.
+- GitHub Pages run `32236309860` completed successfully for `a5bfbb6`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32236309860.
 - Hosted Playwright matrix: `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844 all returned HTTP 200, `document.readyState=complete`, Canvas present, exact CSS width parity (`innerWidth=clientWidth=scrollWidth`), and zero console/page/request errors.
 - Upgrade route specifically exposed the real `overlay upgrade-decision` with 4 buttons at both sizes. At 320×568, cards were 246×98.2px with x=35; at 390×844, 316×104px with x=35. This is layout evidence, not a final visual verdict.
 - Fresh captures: `C:/Users/jawnb/AppData/Local/Temp/earthpunk-tick85-depth-320.png`, `earthpunk-tick85-depth-390.png`, `earthpunk-tick85-upgrade-320.png`, and `earthpunk-tick85-upgrade-390.png`.
