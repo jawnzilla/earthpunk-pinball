@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 98: authored bumper hardware pass
+
+### Decision
+
+- Implemented one bounded visual slice in `drawBumpers()`: standard, pulse, and armor bumpers now render a nested collar, recessed dark face, material-aware radial key gradient, and restrained specular arc before the existing center insert/bolts.
+- Physics, collision geometry, materials used by gameplay, input, progression, and elemental rules are unchanged. Edge bumpers retain their existing renderer path.
+- Added renderer-contract assertions for the new nested bumper treatment.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Tight regression seam: `tests/renderer-contract.test.mjs` requires the live bumper renderer to contain the collar-radius, radial-gradient, and specular-arc markers; existing physics and elemental tests remain green.
+- Exact 320×568 and 390×844 browser checks are not claimed: no browser executable is available in this scheduled environment.
+
+### Remaining risk / next smallest slice
+
+- The new hardware treatment is source/test verified but not human-inspected in grayscale; AAA readiness remains unsupported.
+- The next visual decision still requires a legitimate portrait still-frame verdict before stacking another renderer family. The sequential multi-contact physics loop also remains a separate known risk.
+
 ## 2026-08-19 — Overhaul tick 97: replay residual time after swept circular impacts
 
 ### Decision

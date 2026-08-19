@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 98 verdict
+
+**Playable hackathon slice: PASS for deterministic regression health; visual quality: source-verified improvement / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Bumpers now have a clearer earthpunk hardware read without touching gameplay.
+
+### Observed evidence
+
+- Product change is limited to `index.html:1494-1501` and four assertions in `tests/renderer-contract.test.mjs`.
+- Standard, pulse, and armor bumpers retain their shadow, collar, center insert, bolts, and armor damage cue while adding a recessed face, radial key gradient, and specular arc.
+- `npm test` passes all 22 tests; all `src/*.js`, `src/*.mjs`, and `tests/*.mjs` files pass `node --check`; `git diff --check` passes.
+- No exact 320×568/390×844 browser or screenshot check is claimed because this scheduled environment has no runnable browser executable. No grayscale or subjective visual verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- The bumper family is now more authored in source, but the required still-frame test of shell → deck → recessed well → foreground mechanism and grayscale silhouette separation remains outstanding.
+- Do not claim AAA or production readiness. Do not stack another visual layer until a fresh portrait still names one concrete hierarchy defect.
+
 ## Overhaul tick 97 verdict
 
 **Playable hackathon slice: PASS for deterministic physics regression health; AAA-ready: FAIL / unverified.** Swept circular contacts now preserve the unused fixed-step time after a mid-step target or bumper impact, rather than stopping the ball at the contact boundary for the rest of that step.
