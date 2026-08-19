@@ -1056,7 +1056,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
     if (b.x + b.r > table.right) resolveBoundaryContact(b, { x: -1, y: 0 }, { x: table.right, y: b.y }, (b.x + b.r) - table.right);
     if (b.y - b.r < table.top) resolveBoundaryContact(b, { x: 0, y: 1 }, { x: b.x, y: table.top }, table.top - (b.y - b.r));
     resolveBoss(b, frameScale);
-    targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) hitTarget(t); });
+    targets.filter(t => !t.hit).forEach(t => { const contact = circleCollision(b, t); if (contact && !contact.separating) { hitTarget(t); if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT); } });
     state.destructibles.forEach(item => { if (item.destroyed) return; const contact = destructibleCollision(b, item); if (contact && !contact.separating) { applyDestructibleContact(item, contact); if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT); } });
     if (!state.running) return;
     const upperBumpers = getUpperBumpers();
@@ -1071,6 +1071,7 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
       if (item.oneWay && !energetic) return;
       const surface = { ...item, material: item.material || (item.type === 'armor' ? 'steel' : 'rubber') }, contact = circleCollision(b, surface);
       if (contact && !contact.separating) {
+        if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT);
         if (upperBumpers.includes(item) && state.topHitCooldown === 0) { state.topHits += 1; state.topHitCooldown = 18; state.score += 75; emitScorePopup(item.x, item.y, 75, '#ffd083'); emitImpact(item.x, item.y, '#ffd083', 1.15); setMessage('Upper bank reached. Launch line confirmed.'); }
         if (item.type === 'armor') { item.hits = (item.hits || 0) + 1; if (item.hits < 2) { state.score += 10; emitScorePopup(item.x, item.y, 10, '#f1b35b'); emitImpact(item.x, item.y, '#f1b35b', .6); setMessage('Armor cracked. One more impact.'); return; } item.hits = 0; }
         const multiplier = chainHit(); const reaction = reactWithEnvironment(item.element, item.x, item.y, `${item.element} machinery awakened`); const bumperPoints = Math.round(((item.type === 'pulse' ? 40 : 25) + (reaction ? 35 : 0)) * multiplier); state.score += bumperPoints; emitScorePopup(item.x, item.y, bumperPoints, reaction ? elementColors[item.element] : '#ffd083'); state.charge = Math.min(99, state.charge + (item.type === 'pulse' ? .3 : item.type === 'armor' ? .5 : .1)); emitImpact(item.x, item.y, reaction ? elementColors[item.element] : item.type === 'pulse' || item.type === 'armor' ? '#f1b35b' : '#b5d3a1', item.type === 'pulse' ? 1.1 : .8); capBallSpeed(b); setMessage(reaction ? `${item.element} machinery awakened. Chain x${multiplier.toFixed(2)}.` : item.type === 'pulse' ? `Pulse impact. Chain x${multiplier.toFixed(2)}.` : item.type === 'armor' ? 'Armor breached. Salvage recovered.' : 'Generator impact. Charge rising.');

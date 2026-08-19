@@ -1,4 +1,21 @@
-# Deadlight Critic Review — Overhaul tick 92
+# Deadlight Critic Review — Overhaul tick 97
+
+## Overhaul tick 97 verdict
+
+**Playable hackathon slice: PASS for deterministic physics regression health; AAA-ready: FAIL / unverified.** Swept circular contacts now preserve the unused fixed-step time after a mid-step target or bumper impact, rather than stopping the ball at the contact boundary for the rest of that step.
+
+### Observed evidence
+
+- Product change is limited to `index.html` target/bumper call sites and `tests/renderer-contract.test.mjs` contract assertions.
+- `npm test` passes all 22 tests; all `src/*.js` files pass `node --check`; `git diff --check` passes.
+- Source evidence: `index.html:1059` and `index.html:1074` call `advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT)` after non-separating circular contacts; the existing destructible path remains covered at `index.html:1060`.
+- Pre-deploy hosted `?review=depth&cacheBust=9f5cc5c` returned HTTP 200 and 201488 bytes with expected renderer/physics markers. This is prior artifact evidence, not proof of the uncommitted change.
+- No browser executable is installed in this scheduled environment, so exact 320×568/390×844 interactive and screenshot checks are not claimed. No visual-quality or grayscale verdict is claimed.
+
+### Remaining risk / next smallest slice
+
+- Sequential multiple-contact handling still lacks an earliest-contact manifold; do not alter it without a focused regression seam.
+- The largest product gap remains authored portrait visual hierarchy and human grayscale readability. The visual phase stays held rather than being inferred from DOM/source evidence.
 
 ## Overhaul tick 96 verdict
 

@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 97: replay residual time after swept circular impacts
+
+### Decision
+
+- Implemented one bounded physics slice: target and bumper circle contacts now replay the unused portion of the fixed timestep when a swept contact occurs mid-step, matching the existing destructible residual path.
+- Added renderer-contract assertions for both target and circular-bumper call sites. No solver constants, collision geometry, input, progression, or elemental rules changed.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed.
+- Tight regression seam: `tests/renderer-contract.test.mjs` requires `advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT)` after swept target and bumper contacts; existing elemental tests continue to cover residual replay behavior.
+- Pre-deploy hosted `?review=depth&cacheBust=9f5cc5c` returned HTTP 200, 201488 bytes, and contained `circleCollision`, `sweptCircleContact`, `drawRecessedWellPlane`, and `<canvas>`. This confirms the prior artifact, not this uncommitted change.
+- No runnable browser executable was available in this scheduled environment; exact 320×568 and 390×844 interactive/screenshot checks are not claimed.
+
+### Remaining risk / next smallest slice
+
+- Residual replay is now present for swept circular targets, bumpers, and destructibles, but multiple contacts in one fixed step still use the existing sequential collision loop rather than a full earliest-contact manifold. A focused multi-contact regression seam is required before changing that architecture.
+- The visual phase remains held on the human still-frame/grayscale gate in `docs/NEXT_VISUAL_PHASE.md`; no visual polish was stacked without that evidence.
+
 ## 2026-08-19 — Overhaul tick 96: swept circular contacts for targets and bumpers
 
 ### Decision
