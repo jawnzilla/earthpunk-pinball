@@ -12,7 +12,9 @@
 
 - `npm test`: 22 tests passed, 0 failures.
 - `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check`: passed.
-- Exact browser verification is pending deployment. The repository's known local runner remains blocked by `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
+- GitHub Pages run `32227028720` completed successfully for commit `0e7cbc4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32227028720.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=<route>&cacheBust=0e7cbc4` passed `depth`, `destruction-run`, `active-elements`, and `upgrade` at 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), expected fixture/overlay state, and zero console/page/request errors. Captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-<route>-<width>.png`.
+- Exact local browser verification remains blocked by the known `127.0.0.1:8765 ERR_EMPTY_RESPONSE`; no local browser pass is claimed.
 
 ### Decision / next gate
 

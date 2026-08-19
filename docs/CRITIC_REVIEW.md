@@ -11,7 +11,8 @@
 
 ### Remaining risk / next smallest slice
 
-- This is source/test evidence only until the new commit is deployed and exact hosted portrait checks plus fresh `depth` stills confirm the rim is visible without muddying the well.
+- GitHub Pages run `32227028720` completed successfully for commit `0e7cbc4`; exact hosted Playwright passed all four review routes at 320×568 and 390×844 with HTTP 200, Canvas, exact CSS width parity, expected fixture/overlay state, and zero console/page/request errors. Fresh captures are outside the repository under `C:/Users/jawnb/AppData/Local/Temp/earthpunk-hosted-<route>-<width>.png`.
+- The hosted browser checks prove deployment and layout/runtime health, but the scheduled tick does not make a subjective still-frame claim about whether the new rim is too muddy.
 - No claim is made about final visual quality, human-play feel, or AAA readiness. Do not stack another visual layer until hosted still evidence is inspected.
 
 # Deadlight Critic Review — Overhaul tick 78
