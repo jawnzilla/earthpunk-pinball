@@ -12,7 +12,8 @@
 - `npm test`: 22 passed, 0 failed.
 - `node --check src/elemental-effects.js`, `node --check tests/elemental-effects.test.mjs`, and `git diff --check`: passed.
 - Tight regression seam: `tests/elemental-effects.test.mjs` asserts a nearer valid swept contact wins over a farther hit and misses, with empty input returning null.
-- Hosted artifact was checked before this change at https://jawnzilla.github.io/earthpunk-pinball/ and returned the current Deadlight page; post-push Pages evidence is recorded below once the workflow completes.
+- GitHub Pages run `32259152787` for commit `52ee1f2` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32259152787.
+- Hosted `?review=depth&cacheBust=52ee1f2` returned HTTP 200, 203125 bytes, and contained `selectEarliestSweptContact` plus `<canvas`; this confirms artifact parity, not subjective visual quality.
 - Exact 320×568 and 390×844 browser checks are not claimed: this scheduled environment has no runnable browser executable.
 
 ### Remaining risk / next smallest slice
