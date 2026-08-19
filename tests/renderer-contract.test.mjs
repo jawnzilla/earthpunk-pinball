@@ -108,6 +108,7 @@ assert.match(source, /Step: \$\{telemetry\.physicsStepMs\.toFixed\(2\)\}ms/);
 assert.match(source, /swept = sweptSegmentContact\(ball, segment, radius\)/);
 assert.match(source, /contact\.sweptT = swept\?\.t \?\? 1/);
 assert.match(source, /function segmentCollisionWithResidual\(ball, segment, gravityMps2, dt\)/);
+assert.match(source, /function advancePrimaryBallResidual\(ball, gravityMps2, dt, contactFraction\) \{[\s\S]*?ball\.prevX = ball\.x; ball\.prevY = ball\.y;[\s\S]*?integratePrimaryBall\(ball, gravityMps2, residualDt\)/);
 assert.match(source, /const staticSegmentCandidates = \[\]/);
 assert.match(source, /selectEarliestSweptContact\(staticSegmentCandidates\)/);
 assert.match(source, /const staticSegmentCandidate = selectEarliestSweptContact\(staticSegmentCandidates\)/);

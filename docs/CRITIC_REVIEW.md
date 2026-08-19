@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 97
 
+## Overhaul tick 104 verdict
+
+**Playable hackathon slice: PASS for residual swept-contact correctness; visual quality: source-verified / no new subjective visual verdict; AAA-ready: FAIL / unverified.** Residual integration now begins a fresh swept segment at the resolved contact boundary instead of the original fixed-step origin.
+
+### Observed evidence
+
+- `index.html` reassigns `ball.prevX = ball.x` and `ball.prevY = ball.y` immediately before `integratePrimaryBall()` in `advancePrimaryBallResidual()`.
+- `tests/renderer-contract.test.mjs` asserts the re-anchoring contract, preventing regression to stale sweep origins.
+- `npm test` passes all 22 tests; syntax checks and `git diff --check` pass.
+- Local Playwright matrix passes 8/8 exact portrait checks at 320×568 and 390×844 across the four review fixtures: HTTP 200, canvas present, no horizontal overflow, console errors, page errors, or failed requests.
+
+### Remaining risk / next smallest slice
+
+- This does not yet create a global contact manifold across circle, static-segment, and flipper seams.
+- No new screenshot or human grayscale verdict is claimed; the largest product gap remains portrait visual hierarchy and grayscale readability.
+
 ## Overhaul tick 103 verdict
 
 **Playable hackathon slice: PASS for deterministic static-segment contact ordering; visual quality: source-verified / human visual verdict unavailable; AAA-ready: FAIL / unverified.** Edge rails, relay gates, and side guards now choose the earliest swept static-segment contact instead of resolving sequentially against stale movement.

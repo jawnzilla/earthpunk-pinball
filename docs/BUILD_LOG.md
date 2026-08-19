@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 104: residual sweep origin
+
+### Decision
+
+- Implemented one bounded physics slice: residual fixed-step replay now re-anchors `ball.prevX/prevY` at the resolved contact before integrating the remaining time.
+- This prevents the next swept static-segment query from reusing the original step origin and re-detecting rails, relay gates, or side guards crossed before the contact.
+- Added a renderer-contract regression assertion for the re-anchoring seam; collision response, materials, and candidate ordering remain unchanged.
+
+### Verification
+
+- `npm test`: 22 passed, 0 failed.
+- `for f in src/*.js src/*.mjs tests/*.mjs; do node --check "$f" || exit 1; done`: passed.
+- `git diff --check`: passed (Git reports the existing LF→CRLF normalization warning for the edited test file).
+- Exact local browser matrix: 8/8 checks passed at 320×568 and 390×844 across `depth`, `destruction-run`, `active-elements`, and `upgrade`; HTTP 200, canvas present, no horizontal overflow, console errors, page errors, or failed requests.
+- Hosted parity and Pages run are pending this push.
+
+### Remaining risk / next smallest slice
+
+- A global manifold across primary circle, static-segment, and flipper contacts is still not established.
+- The largest product gap remains portrait visual hierarchy and human grayscale readability; this tick intentionally changed physics only.
+
 ## 2026-08-19 — Overhaul tick 103: earliest static-segment contact
 
 ### Decision

@@ -956,7 +956,11 @@ import { resolveDestructibleContact } from './src/destructible-contact.js';
   }
   function advancePrimaryBallResidual(ball, gravityMps2, dt, contactFraction) {
     const residualDt = Math.max(0, dt * (1 - Math.max(0, Math.min(1, contactFraction))));
-    if (residualDt > 0) integratePrimaryBall(ball, gravityMps2, residualDt);
+    if (residualDt > 0) {
+      // Residual replay starts a new swept segment at the resolved contact, not the original step origin.
+      ball.prevX = ball.x; ball.prevY = ball.y;
+      integratePrimaryBall(ball, gravityMps2, residualDt);
+    }
     return residualDt;
   }
   function segmentCollisionWithResidual(ball, segment, gravityMps2, dt) {
