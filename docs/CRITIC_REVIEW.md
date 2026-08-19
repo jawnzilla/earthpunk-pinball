@@ -9,6 +9,8 @@
 - The new regression was red before implementation and green after the angular sampler change.
 - `sweptFlipperContact()` now spaces samples by contact radius and caps the count at 64; ordinary ball travel still uses the existing swept-segment query.
 - `npm test` passes 21 tests; syntax and whitespace checks pass.
+- GitHub Pages run `32215358744` completed successfully for commit `859b640`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32215358744.
+- Hosted exact Playwright passed at 320×568 and 390×844 with HTTP 200, complete documents, Canvas, exact CSS width parity, `depth` fixture, hidden overlay, body heights 568px / 846.39px, and zero console/page/request errors. The deployed artifact is minified, so no source-name marker claim is made.
 
 ### Remaining risk / next smallest slice
 

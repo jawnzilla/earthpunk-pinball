@@ -13,7 +13,8 @@
 - The new regression was red before the implementation: the three-pose query returned no contact for the large angular sweep.
 - `npm test`: 21 tests passed, 0 failures.
 - `node --check src/flipper-contact.js` and `git diff --check`: passed.
-- Browser/deployment verification remains pending until the pushed prototype commit is served by GitHub Pages.
+- GitHub Pages run `32215358744` completed successfully for commit `859b640`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32215358744.
+- Exact hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=859b640` passed at 320×568 and 390×844: HTTP 200, `document.readyState === 'complete'`, Canvas present, exact CSS width parity (`innerWidth === clientWidth === scrollWidth`), `depth` fixture, hidden upgrade overlay, body heights 568px / 846.39px, and zero console/page/request errors. The served page was healthy; the minified/deployed artifact does not expose the source identifier `angularSteps` as literal HTML, so no marker claim is made.
 
 ### Decision / next gate
 
