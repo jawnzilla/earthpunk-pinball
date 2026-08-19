@@ -1,5 +1,27 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 94: visual evidence gate held, hosted artifact refreshed
+
+### Decision
+
+- No product-code change was made this tick. The implementation-ready visual phase remains blocked on a legitimate human-inspected still frame naming one concrete hierarchy defect; adding renderer polish from source/HTTP evidence alone would be unmeasured.
+- Refreshed the current repository, hosted artifact, and Pages workflow evidence. Updated `docs/NEXT_VISUAL_PHASE.md` to stop carrying the stale HEAD pointer. This is an evidence/canon-maintenance tick, not a completion claim.
+
+### Verification
+
+- `git fetch origin prototype`, `git rev-parse HEAD`, and `git rev-parse origin/prototype` confirm clean local/remote `prototype` at `972310dba9bd55d98ab80890cde3adbf287536c3`.
+- `npm test`: 22 passed, 0 failed. All six `src/*.js` files pass `node --check`; `git diff --check` passes before this documentation update.
+- Hosted `curl -I -L --max-time 30 'https://jawnzilla.github.io/earthpunk-pinball/?review=depth&cacheBust=972310d'`: HTTP 200, `Content-Length: 201085`, `Last-Modified: Wed, 19 Aug 2026 11:45:10 GMT`.
+- Hosted body fetch returned 201085 bytes and retained `drawForegroundMechanismPlane`, `drawWellWallBevel`, `review=upgrade`, and `<canvas>` markers. This confirms artifact content/availability, not subjective visual quality.
+- GitHub Actions Pages run `32249122893` completed successfully for `972310d`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32249122893.
+- No human grayscale inspection or subjective visual-quality claim is made. No exact hosted Playwright matrix is claimed because this scheduled checkout has no runnable browser harness.
+
+### Gate / next slice
+
+- The largest unresolved gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and the major silhouettes.
+- When a human still-frame review is available, name exactly one defect at 320×568, implement only that renderer seam, and rerun the full hosted portrait packet plus the upgrade fixture.
+- No physics, collision geometry, fixed timestep, input, progression, or elemental behavior changed. AAA readiness remains unsupported.
+
 ## 2026-08-19 — Overhaul tick 93: current-host portrait gate refreshed
 
 ### Decision
