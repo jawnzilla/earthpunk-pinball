@@ -1,5 +1,26 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 128: analytic flipper swept-segment TOI
+
+### Decision
+
+- Replaced the capped 64-sample `sweptSegmentContact()` query in `src/flipper-contact.js` with an analytic point-vs-capsule sweep. The solver checks the expanded segment strip and both endpoint caps, then returns the earliest normalized time of impact.
+- This is a bounded physics-only slice: it preserves the existing `{ x, y, t }` contract and flipper pose sampling, while removing travel-distance-dependent tunneling for narrow rails and flipper segments.
+- Added a regression at an 1100px fixed-step crossing. The old sampler returned a false miss; the new query reports the first contact at y=92 for an 8px radius rail centered at y=100.
+
+### Verification
+
+- Red regression first: the new test failed against the old sampler (`expected first contact near y=92, got 93.75`).
+- `node --test tests/flipper-contact.test.mjs`: 13 passed, 0 failed after the change.
+- `npm test`: 43 passed, 0 failed.
+- `node --check src/flipper-contact.js`: passed; `git diff --check`: passed.
+- Exact 320×568 / 390×844 browser checks are not claimed in this tick because this checkout has no `node_modules` or runnable browser harness; the required hosted HTTP/parity probe is run after Pages deployment.
+
+### Remaining risk / next smallest slice
+
+- `sweptFlipperContact()` still samples rotating poses and nests the analytic ball sweep inside that pose loop. The next physics slice should replace rotating-pose sampling with continuous rotating-segment TOI, but only after a dedicated regression fixture is defined.
+- The complete overhaul remains open: materials, element hybrids, destructible readability, and subjective portrait/grayscale visual inspection are not complete. Do not claim AAA readiness or LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 127: well front lip depth slice
 
 ### Decision

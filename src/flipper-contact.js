@@ -17,25 +17,53 @@ function segmentAt(flipper, angle, lengthBonus = 0) {
 export function sweptSegmentContact(ball, segment, radius) {
   const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
   const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
-  const travel = Math.hypot(ball.x - startX, ball.y - startY);
-  if (travel < 0.01) return null;
-  // Keep sample spacing tied to the contact radius so a fast ball cannot
-  // jump over a narrow rail. The cap is still bounded for pathological
-  // review inputs and keeps the query cheap in the fixed-step loop.
-  const steps = Math.min(64, Math.max(2, Math.ceil(travel / Math.max(2, radius * 0.45))));
+  const velocityX = ball.x - startX;
+  const velocityY = ball.y - startY;
+  if (Math.hypot(velocityX, velocityY) < 0.01 || !Number.isFinite(radius) || radius <= 0) return null;
+
+  // Analytic point-vs-capsule sweep: the segment is expanded by the ball
+  // radius, so the first hit is either the parallel strip or an endpoint cap.
+  // This keeps CCD independent of travel distance and removes the old capped
+  // sample loop that could tunnel through a rail on a large fixed step.
   const dx = segment.x2 - segment.x1;
   const dy = segment.y2 - segment.y1;
-  const lengthSquared = dx * dx + dy * dy || 1;
-  for (let index = 1; index <= steps; index += 1) {
-    const ratio = index / steps;
-    const sampleX = startX + (ball.x - startX) * ratio;
-    const sampleY = startY + (ball.y - startY) * ratio;
-    const projection = clamp(((sampleX - segment.x1) * dx + (sampleY - segment.y1) * dy) / lengthSquared, 0, 1);
-    const closestX = segment.x1 + projection * dx;
-    const closestY = segment.y1 + projection * dy;
-    if (Math.hypot(sampleX - closestX, sampleY - closestY) < radius) return { x: sampleX, y: sampleY, t: ratio };
+  const lengthSquared = dx * dx + dy * dy;
+  if (lengthSquared < 0.000001) return null;
+  const length = Math.sqrt(lengthSquared);
+  const candidates = [];
+  const cross = (ax, ay, bx, by) => ax * by - ay * bx;
+  const startOffsetX = startX - segment.x1;
+  const startOffsetY = startY - segment.y1;
+  const lineOffset = cross(dx, dy, startOffsetX, startOffsetY);
+  const lineVelocity = cross(dx, dy, velocityX, velocityY);
+  if (Math.abs(lineVelocity) > 0.000001) {
+    for (const signedRadius of [-radius * length, radius * length]) {
+      const t = (signedRadius - lineOffset) / lineVelocity;
+      if (t >= 0 && t <= 1) {
+        const hitX = startX + velocityX * t;
+        const hitY = startY + velocityY * t;
+        const projection = ((hitX - segment.x1) * dx + (hitY - segment.y1) * dy) / lengthSquared;
+        if (projection >= 0 && projection <= 1) candidates.push(t);
+      }
+    }
   }
-  return null;
+  for (const endpoint of [{ x: segment.x1, y: segment.y1 }, { x: segment.x2, y: segment.y2 }]) {
+    const offsetX = startX - endpoint.x;
+    const offsetY = startY - endpoint.y;
+    const a = velocityX * velocityX + velocityY * velocityY;
+    const b = 2 * (offsetX * velocityX + offsetY * velocityY);
+    const c = offsetX * offsetX + offsetY * offsetY - radius * radius;
+    const discriminant = b * b - 4 * a * c;
+    if (discriminant >= 0) {
+      const root = Math.sqrt(discriminant);
+      for (const t of [(-b - root) / (2 * a), (-b + root) / (2 * a)]) {
+        if (t >= 0 && t <= 1) candidates.push(t);
+      }
+    }
+  }
+  if (!candidates.length) return null;
+  const t = Math.min(...candidates);
+  return { x: startX + velocityX * t, y: startY + velocityY * t, t };
 }
 
 export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } = {}) {

@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 125 follow-up
+# Deadlight Critic Review — Overhaul tick 128 follow-up
+
+## Overhaul tick 128 verdict
+
+**Physics slice: PASS for analytic rail/flipper segment CCD; global overhaul: NOT COMPLETE; visual quality: unchanged this tick; AAA-ready: FAIL / unverified.** The flipper segment query now computes earliest point-vs-capsule time of impact instead of sampling at most 64 positions, eliminating the demonstrated 1100px fixed-step narrow-rail miss.
+
+### Observed evidence
+
+- `src/flipper-contact.js` now tests the expanded segment strip and both endpoint caps and returns the earliest `{ x, y, t }` hit.
+- The regression was red before implementation (`got 93.75` rather than the expected first contact y=92), then passed after the analytic query was installed.
+- `node --test tests/flipper-contact.test.mjs`: 13/13 passed; `npm test`: 43/43 passed; syntax and whitespace checks passed.
+- No renderer, input, progression, or asset behavior changed. Exact browser viewport checks were not run because no local browser harness is installed in this checkout; no visual verdict is inferred.
+
+### Remaining risk / next smallest slice
+
+- Rotating flipper contact still samples poses and nests the ball sweep. Replace that with continuous rotating-segment TOI only after adding a dedicated rotating-CCD regression fixture.
+- The earthpunk visual overhaul, material differentiation, element hybrids, destructible readability, and subjective grayscale inspection remain open. Do not claim AAA readiness or LOOP_COMPLETE.
 
 ## Overhaul tick 127 verdict
 
