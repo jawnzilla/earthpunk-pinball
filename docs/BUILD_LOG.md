@@ -16,7 +16,8 @@
 
 ### Deployment / remaining risk
 
-- Deployment is pending this commit. Hosted verification will be recorded after the Pages run completes.
+- Commit `6aaebd9` deployed successfully in Pages run `32391618142`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32391618142.
+- Hosted post-deploy exact CSS 320x568 and 390x844 standard, `?review=depth`, and `?review=upgrade` routes passed 12/12: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade choices on upgrade, zero console/page errors; hosted HTML retains `CONTACT_CUE_LIFE = 8` and `recordBallContact()`.
 - This closes stale visual feedback lifetime only; it does not prove human image-inspected still-frame quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 177: flipper blade hardware cue

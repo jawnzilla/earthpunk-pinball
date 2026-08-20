@@ -13,7 +13,7 @@
 ### Limits and next gate
 
 - The bounded lifetime is source/runtime verified, but no subjective still-frame inspection is claimed from this tick. The largest remaining product gap remains evidence-selected visual/contact review, plus complete hybrid fidelity and the broader mine/tunnel overhaul.
-- Pages deployment result will be appended after the pushed commit's workflow completes.
+- Commit `6aaebd9` deployed successfully in Pages run `32391618142`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32391618142. Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 12/12; hosted HTML retains `CONTACT_CUE_LIFE = 8` and `recordBallContact()`.
 
 ## Overhaul tick 177 verdict
 
