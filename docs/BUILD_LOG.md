@@ -13,7 +13,8 @@
 - Tight red/green loop: `node --test tests/elemental-effects.test.mjs` failed before `consumeRootSling` existed with the missing-export error, then passed after implementation.
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/elemental-effects.js`, `node --check src/physics-core.js`, and `git diff --check` passed.
-- Browser/deployment verification remains pending until the prototype push completes; no hosted result is claimed here.
+- GitHub Actions Pages run `32334729125` completed successfully for commit `d34e912`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32334729125. Hosted source returned HTTP 200, 221166 bytes, and retained `consumeRootSling`.
+- Hosted Playwright exact CSS `320×568` and `390×844` checks passed standard, `?review=active-elements`, and `?review=grayscale` (6/6): HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, and zero console/page/request errors. Upgrade review also passed at both sizes (2/2): four `.upgrade-effect` nodes, 16px overlay gutter, no overflow, and zero errors. Screenshots were captured outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-146-upgrade-320.png` and `earthpunk-146-upgrade-390.png`; they were not independently image-inspected.
 
 ### Remaining risk / next smallest slice
 
