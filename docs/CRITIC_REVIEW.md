@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 148
+
+## Overhaul tick 148 verdict
+
+**Fire/Water steam-pressure impulse: PASS as a bounded gameplay-correctness slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Fire + Water hybrid now stores and consumes a capped mass-scaled pressure impulse along the struck structure normal after the ordinary material response, instead of leaving `extraTick` as inert metadata.
+
+### Observed evidence
+
+- `src/elemental-effects.js` adds `steamPressure` runtime state, captures the normalized first Fire + Water contact normal, and exports one-shot `consumeSteamPressure()`.
+- `index.html` consumes the pulse in `applyDestructibleContact()` through the shared `applyImpulse` seam; the existing 1.35 steam damage multiplier is unchanged.
+- `tests/elemental-effects.test.mjs` covers normalization, mass-scaled impulse values, and one-shot consumption. `npm test` passes 50/50; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- Deployment and hosted exact-viewport browser evidence are still pending for this commit.
+- The mine/tunnel visual overhaul, remaining hybrid fidelity, independently inspected still frames, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 # Deadlight Critic Review — Overhaul tick 147
 
 ## Overhaul tick 147 verdict

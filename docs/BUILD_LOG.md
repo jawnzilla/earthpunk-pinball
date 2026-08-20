@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 148: Fire/Water steam-pressure impulse
+
+### Root cause and decision
+
+- Root-cause tracing found the Fire + Water `steam-fracture` branch applied its damage multiplier but left the declared physical pressure consequence as metadata (`extraTick: true`); no runtime state or Physics V2 impulse consumed it.
+- Added one bounded gameplay slice: the first valid Fire + Water structure contact stores a normalized contact normal and one capped 0.9 m/s mass-scaled pressure impulse. The live destructible adapter consumes it after the normal material response through `applyImpulse`, while the existing 1.35 damage multiplier remains unchanged. Other hybrids, scoring, rewards, topology, and input are unchanged.
+- Added deterministic arm/normalization/one-shot impulse coverage.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/elemental-effects.test.mjs` passed after the new `consumeSteamPressure` export and regression were added.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+
+### Remaining risk / next smallest slice
+
+- Push only `prototype`, wait for GitHub Pages, then run exact hosted 320×568 and 390×844 standard/grayscale/active-elements checks with console, request, overflow, and source-parity evidence.
+- The mine/tunnel overhaul, remaining hybrid fidelity, independently inspected still frames, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 147: Water/Earth slurry-bind redirection
 
 ### Root cause and decision

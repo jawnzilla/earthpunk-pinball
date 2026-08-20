@@ -7,6 +7,7 @@ import {
   createElementalRuntime,
   consumeRootSling,
   consumeSlurryBind,
+  consumeSteamPressure,
   onHardBounce,
   onMiniBallBounce,
   onMiniBallContact,
@@ -30,7 +31,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
 
 {
   const runtime = createElementalRuntime();
-  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, hybridUsed: new Set() });
+  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, steamPressure: null, hybridUsed: new Set() });
   assert.equal(ELEMENTAL_BUDGETS.fire.maxSegments, 12);
   assert.equal(ELEMENTAL_BUDGETS.water.maxBounces, 3);
   assert.equal(ELEMENTAL_BUDGETS.wind.maxDistance, 900);
@@ -62,6 +63,18 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.deepEqual(onStructureContact(runtime, { effects: waterEarth, objectId: 'stone-plug', material: 'stone', normal: { x: 0, y: -1 } }), { type: 'slurry-bind-contact', objectId: 'stone-plug', redirect: true });
   assert.equal(consumeSlurryBind(runtime, { material: 'stone', velocity: { x: 3, y: 4 }, normal: { x: 0, y: -1 } }).tangentVelocity.y, 0);
   assert.equal(consumeSlurryBind(runtime, { material: 'stone', velocity: { x: 3, y: 4 }, normal: { x: 0, y: -1 } }), null);
+}
+
+{
+  const runtime = createElementalRuntime();
+  const fireWater = { Fire: { stacks: 3 }, Water: { stacks: 3 } };
+  assert.deepEqual(onStructureContact(runtime, { effects: fireWater, objectId: 'pipe-steam', normal: { x: 3, y: 4 } }), { type: 'steam-fracture', objectId: 'pipe-steam', damageMultiplier: 1.35, extraTick: true });
+  assert.deepEqual(runtime.steamPressure, { objectId: 'pipe-steam', x: .6, y: .8, speed: .9 });
+  const pulse = consumeSteamPressure(runtime, { mass: .032 });
+  assert.equal(pulse.objectId, 'pipe-steam');
+  assert.ok(Math.abs(pulse.impulse.x - .01728) < 1e-12);
+  assert.ok(Math.abs(pulse.impulse.y - .02304) < 1e-12);
+  assert.equal(consumeSteamPressure(runtime, { mass: .032 }), null);
 }
 
 {

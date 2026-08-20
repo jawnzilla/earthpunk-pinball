@@ -127,7 +127,17 @@ let nextMiniBallId = 1;
 const activeStacks = (effects, element) => Math.max(0, effects?.[element]?.stacks ?? 0);
 
 export function createElementalRuntime() {
-  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, hybridUsed: new Set() };
+  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, steamPressure: null, hybridUsed: new Set() };
+}
+
+// Fire + Water stores one bounded pressure pulse. The table adapter consumes it
+// after the ordinary material response so the hybrid has a real force consequence.
+export function consumeSteamPressure(runtime, { mass = 0, maxImpulseSpeed = .9 } = {}) {
+  const pressure = runtime?.steamPressure;
+  if (!pressure || !Number.isFinite(mass) || mass <= 0) return null;
+  runtime.steamPressure = null;
+  const speed = Math.min(Math.max(0, pressure.speed), Math.max(0, maxImpulseSpeed));
+  return { objectId: pressure.objectId, impulse: { x: pressure.x * speed * mass, y: pressure.y * speed * mass }, speed };
 }
 
 // Water + Earth arms a single low-friction anchor. The table adapter consumes it
@@ -387,6 +397,10 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
   }
   if (objectId && hasPair(effects, 'Fire', 'Water') && !runtime.hybridUsed.has('steam-fracture')) {
     runtime.hybridUsed.add('steam-fracture');
+    if (!runtime.steamPressure && normal && Number.isFinite(normal.x) && Number.isFinite(normal.y)) {
+      const length = Math.hypot(normal.x, normal.y);
+      if (length > 1e-8) runtime.steamPressure = { objectId, x: normal.x / length, y: normal.y / length, speed: .9 };
+    }
     events.push({ type: 'steam-fracture', objectId, damageMultiplier: 1.35, extraTick: true });
   } else if (objectId && hasPair(effects, 'Water', 'Earth') && !runtime.hybridUsed.has('slurry-bind')) {
     runtime.hybridUsed.add('slurry-bind');

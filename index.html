@@ -327,7 +327,7 @@
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, applyImpulse, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { collectRuntimeContactCandidates, selectEarliestContact } from './src/contact-manifold.js';
 import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
-import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
+import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, consumeSteamPressure, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
 import { drainRecoveryResidualDt, resolveDrainRecovery } from './src/drain-recovery.js';
@@ -664,6 +664,10 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function applyDestructibleContact(item, contact) {
     const elementalEvent = observeStructureContact(item.id, { x: item.x, y: item.y }, contact.normal, item.material);
+    const steam = elementalEvent.type === 'steam-fracture'
+      ? consumeSteamPressure(state.ball.elementalRuntime, { mass: state.ball.physics.mass })
+      : null;
+    if (steam) { applyImpulse(state.ball.physics, steam.impulse); syncPixelsFromPhysics(state.ball); setMessage('Steam fracture vented pressure through the probe.'); }
     const slurry = elementalEvent.type === 'slurry-bind-contact'
       ? consumeSlurryBind(state.ball.elementalRuntime, { material: item.material, velocity: { x: state.ball.vx, y: state.ball.vy }, normal: contact.normal })
       : null;
