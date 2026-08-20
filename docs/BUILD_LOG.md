@@ -13,11 +13,12 @@
 - Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the reorder with `recessed well must sit behind authored deck details`, then passed after the composition change.
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/*.js` loop and `git diff --check` passed.
-- Local Chromium discovery found no executable; no local screenshot or subjective visual verdict is claimed. Hosted exact portrait checks remain to be run after Pages deploy.
+- Local Playwright Chromium was available for the hosted check. GitHub Actions Pages run `32332016889` completed successfully for commit `3c0860f`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32332016889.
+- Hosted Playwright covered `depth`, `grayscale`, `destruction-run`, and `upgrade` at exact CSS `320×568` and `390×844` (8/8): HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, and zero console/page/request errors. Screenshots were captured outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-144-*.png`; they are runtime evidence, not an independently inspected visual verdict.
 
 ### Remaining risk / next smallest slice
 
-- Push and verify the Pages artifact, then run hosted exact CSS 320×568 and 390×844 checks for `depth`, `grayscale`, `destruction-run`, and `upgrade`, including HTTP status, one canvas, exact viewport, overflow, and console/page/request errors.
+- Inspect the hosted depth and grayscale still frames before treating the three-plane or silhouette gates as subjectively observed; source/runtime evidence alone does not establish visual quality.
 - The complete mine/tunnel overhaul, independently inspected still-frame verdict, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 143: upgrade choice effect/context pass

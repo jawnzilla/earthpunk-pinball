@@ -12,8 +12,8 @@
 
 ### Limits and next gate
 
-- Local Chromium is unavailable, so no local still frame or subjective visual claim is made. Deploy this commit and run hosted exact CSS 320×568 and 390×844 checks for `depth`, `grayscale`, `destruction-run`, and `upgrade`; record console/request errors and inspect captures before calling the depth gate observed.
-- The mine/tunnel overhaul, human-inspected grayscale/material verdict, and global physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+- Hosted Playwright checks ran after Pages deployment: run `32332016889` succeeded for commit `3c0860f`, and all eight exact portrait cases (`depth`, `grayscale`, `destruction-run`, `upgrade` × 320×568/390×844) returned HTTP 200 with exact CSS dimensions, one canvas, no horizontal overflow, and zero console/page/request errors. Captures are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-144-*.png`.
+- The captures were not independently inspected by an image-capable reviewer, so the depth/material and grayscale gates remain runtime/source evidence rather than a subjective visual verdict. The mine/tunnel overhaul, human-inspected grayscale/material verdict, and global physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
 
 ## Overhaul tick 143 verdict
 
