@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 137: hosted portrait verification for thermal-lance seam
+
+### Decision
+
+- No new gameplay or renderer code was safe to add before proving the already-landed thermal-lance presentation seam on the hosted artifact. This tick is a bounded deployment/browser verification slice; the repository remains clean apart from this evidence update.
+
+### Verification
+
+- `npm test`: 50 passed, 0 failed.
+- GitHub Actions Pages run `32321730388` completed successfully for `b9231c9`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32321730388.
+- Hosted Playwright checks against `https://jawnzilla.github.io/earthpunk-pinball/` ran at exact CSS `320×568` and `390×844`. Standard, `?review=active-elements`, and `?review=upgrade` routes returned HTTP 200, reported the requested `innerWidth`/`innerHeight`, rendered one canvas, had `scrollWidth === clientWidth`, and captured zero console/page/request errors. The active-elements 390×844 case was rerun independently after the multi-case screenshot runner closed early and also passed.
+- Hosted source probe returned HTTP 200 and retained both `thermalLanceTrail` and `thermal-lance` markers. Review screenshots were written outside the repository under `C:\Users\jawnb\AppData\Local\Temp\earthpunk-*.png`; no temporary artifacts were added to git.
+
+### Remaining risk / next smallest slice
+
+- Exact hosted portrait/runtime health is now evidenced, but this is not a human visual verdict: screenshots were not visually inspected by an image-capable reviewer in this tick. The earthpunk mine/tunnel visual overhaul, grayscale silhouette review, authored materials, destructible readability, and physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+- Next bounded implementation slice: improve one major object-family silhouette/material treatment in the production canvas, with a renderer-contract regression and a fresh hosted portrait check.
+
 ## 2026-08-19 — Overhaul tick 136: thermal-lance burn-echo presentation seam
 
 ### Root cause and decision
