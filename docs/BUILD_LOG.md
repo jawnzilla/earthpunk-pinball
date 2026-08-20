@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 158: destructible impact pulse
+
+### Root cause and decision
+
+- Source tracing found destructible contacts already emitted impact particles and updated integrity, but the object renderer only exposed a cooldown ring and persistent damage scars. A fast hit could therefore read as a delayed state change rather than a localized structural event.
+- Added one bounded renderer-only slice: destructibles now carry an `impactPulse` timer set by ordinary, Water-fragment, Wind-echo, and Fire-trail damage paths. `drawDestructibleImpactPulse()` renders a short material-edge ring and restrained face flash using the existing palette. It adds no collision, damage, reward, timing, or progression rules.
+- Added renderer-contract assertions for initialization, all decay/seam markers, and the live draw call.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Hosted Playwright exact CSS 320×568 and 390×844 across standard, `damage-pulse`, `destruction-run`, `grayscale`, and `upgrade` routes passed 10/10: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, zero console/page/request errors, and four upgrade choices on upgrade routes.
+
+### Deployment / remaining risk
+
+- Commit `4468343` was pushed to `prototype`; GitHub Pages run `32352491145` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32352491145.
+- Hosted runtime/source evidence confirms the new build executes, but no independently image-inspected still-frame verdict is claimed in this scheduled tick. The mine/tunnel visual overhaul, complete hybrid fidelity, final contact feel, and `LOOP_COMPLETE` gate remain open.
+
 ## 2026-08-20 — Overhaul tick 157: material-shaped destructible damage scars
 
 ### Root cause and decision

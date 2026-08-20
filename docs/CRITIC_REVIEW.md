@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 156
+# Deadlight Critic Review — Overhaul tick 158
+
+## Overhaul tick 158 verdict
+
+**Destructible impact pulse: PASS as a bounded hit-legibility correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Structure damage now gets a short localized visual event at the same seam that mutates integrity, rather than relying only on the cooldown ring and persistent scars.
+
+### Observed evidence
+
+- `index.html` initializes `impactPulse` for destructibles, sets it across ordinary and elemental damage paths, decays it in the fixed-step update, and composes `drawDestructibleImpactPulse(item, palette)` in the live renderer.
+- The pulse uses the destructible's existing material edge color, expanding ring, and restrained face fill; it does not change collision, damage, reward, timing, or progression.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+- Hosted exact CSS 320×568 and 390×844 standard, damage-pulse, destruction-run, grayscale, and upgrade routes pass 10/10 with HTTP 200, one canvas, exact dimensions, no horizontal overflow, four upgrade choices on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Pages run `32352491145` succeeded for commit `4468343`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32352491145.
+- This scheduled tick contains runtime/source evidence only; no independently image-inspected still-frame verdict is claimed. The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 157 verdict
 
