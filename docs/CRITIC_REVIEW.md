@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 156
 
+## Overhaul tick 157 verdict
+
+**Material-shaped destructible damage scars: PASS as a bounded readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Damage stages now carry authored fracture language for timber, pipe, and stone instead of relying on a shared crack and a tiny integrity bar.
+
+### Observed evidence
+
+- `index.html` adds `drawDestructibleDamageScars(item, palette)` and calls it for live, non-destroyed destructibles after their material inset.
+- Stage 1 draws one material-specific scar; stage 2 adds a second branch. The helper is renderer-only and does not alter collision, rewards, timing, or physics.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This commit is not deployed yet, so no hosted browser or still-frame result is claimed in this entry.
+- After deployment, verify exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade routes, then independently inspect at least one destruction/grayscale frame. The mine/tunnel visual overhaul, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
+
 ## Overhaul tick 156 verdict
 
 **Fire III ember-trail damage seam: PASS as a bounded hybrid-fidelity correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Fire III trail ticks now have a narrow, deterministic structure-damage consequence instead of being discarded by the live adapter.

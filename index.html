@@ -1654,6 +1654,28 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     }
     ctx.restore();
   }
+  function drawDestructibleDamageScars(item, palette) {
+    // Damage stages need a material-shaped read, not only a tiny integrity bar.
+    // These scars are static geometry: they add no collision, reward, or timing work.
+    const stage = Math.max(0, Math.min(2, item.damageStage || 0));
+    if (!stage) return;
+    ctx.save();
+    ctx.globalAlpha = .48 + stage * .12;
+    ctx.strokeStyle = palette.light;
+    ctx.lineWidth = Math.max(1, item.r * .055);
+    ctx.lineCap = 'round';
+    if (item.kind === 'crate') {
+      ctx.beginPath(); ctx.moveTo(-item.r * .46, -item.r * .42); ctx.lineTo(-item.r * .08, -.08); ctx.lineTo(-item.r * .22, item.r * .42); ctx.stroke();
+      if (stage > 1) { ctx.beginPath(); ctx.moveTo(item.r * .42, -item.r * .42); ctx.lineTo(item.r * .12, -.04); ctx.lineTo(item.r * .3, item.r * .4); ctx.stroke(); }
+    } else if (item.kind === 'pipe') {
+      ctx.beginPath(); ctx.moveTo(-item.r * .5, -.12); ctx.lineTo(-item.r * .12, -.28); ctx.lineTo(item.r * .22, .08); ctx.lineTo(item.r * .5, -.06); ctx.stroke();
+      if (stage > 1) { ctx.beginPath(); ctx.moveTo(-item.r * .32, item.r * .34); ctx.lineTo(-item.r * .18, item.r * .08); ctx.stroke(); }
+    } else {
+      ctx.beginPath(); ctx.moveTo(-item.r * .42, -.18); ctx.lineTo(-item.r * .08, -.02); ctx.lineTo(item.r * .12, -item.r * .42); ctx.stroke();
+      if (stage > 1) { ctx.beginPath(); ctx.moveTo(-item.r * .06, -.02); ctx.lineTo(item.r * .36, item.r * .3); ctx.stroke(); }
+    }
+    ctx.restore();
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
@@ -1695,6 +1717,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
         drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
       }
       drawDestructibleMaterialInset(item, palette);
+      drawDestructibleDamageScars(item, palette);
       drawDestructibleSilhouette(item, palette);
       if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }

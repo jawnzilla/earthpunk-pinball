@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 157: material-shaped destructible damage scars
+
+### Root cause and decision
+
+- Source review found damage stages were communicated mainly by the small integrity bar and a shared edge crack, so damaged timber, pipe, and stone salvage could still read as the same generic hit state in a portrait/grayscale frame.
+- Added one bounded renderer-only slice: `drawDestructibleDamageScars()` draws deterministic, material-specific fracture/rust/splinter paths for damage stages 1–2. It adds no collision, reward, timing, or physics work.
+- Added renderer-contract assertions for the helper and live draw seam.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check src/destructible-contact.js` and `git diff --check` passed.
+- Hosted browser verification is pending the Pages deployment for this commit; no hosted visual result is claimed yet.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for the GitHub Pages workflow, then run exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade checks.
+- This improves damage-state readability but does not establish independently inspected still-frame quality, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 156: Fire III ember-trail damage seam
 
 ### Root cause and decision
