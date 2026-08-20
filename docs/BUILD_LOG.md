@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 170: material contact glint
+
+### Root cause and decision
+
+- Physics V2 already returns authoritative `impactEnergy`, `normal`, and `materialB` on the live ball contact, but the renderer only exposed persistent ball facets and spin. A timber/stone/copper impact therefore had no short-lived material-specific read at the point of contact.
+- Added one bounded renderer-only slice: `drawBallContactMaterialCue()` draws a restrained directional glint and contact ring from the latest non-separating physics contact. It uses material-specific earthpunk tones, rejects stale/invalid/near-zero energy, and does not mutate physics, collision, input, timing, progression, or assets.
+- Added renderer-contract assertions for the helper, finite-energy gate, material branch, and live composition order.
+
+### Verification
+
+- Tight red/green loop: renderer contract was red before the helper existed; `npm test` passes 56/56 after implementation. `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` pass.
+- Exact hosted 320x568/390x844 checks and Pages deployment are pending this commit; no hosted result is claimed yet.
+
+### Deployment / remaining risk
+
+- The slice is intentionally small: it improves physics-to-visual legibility but does not establish human image-inspected material quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 169: ball spin readability from contact torque
 
 ### Root cause and decision

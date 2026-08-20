@@ -1,4 +1,18 @@
-# Deadlight Critic Review — Overhaul tick 169
+# Deadlight Critic Review — Overhaul tick 170
+
+## Overhaul tick 170 verdict
+
+**Material contact glint: PASS as a bounded physics-to-renderer handoff; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The live contact result already carried impact energy and material identity, but the ball did not visually acknowledge where or what it struck. The new glint is deliberately brief and localized rather than another table-wide effect.
+
+### Observed evidence
+
+- `index.html` adds `drawBallContactMaterialCue(b)`, gates on non-separating finite impact energy, maps timber/stone/copper to distinct restrained tones, and composes it after elemental facets and before the spin mark.
+- `tests/renderer-contract.test.mjs` asserts the helper, finite-energy gate, material branch, and live call. `npm test` passes 56/56; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- Exact hosted 320x568/390x844 checks and Pages deployment are pending this commit; no hosted result is claimed yet.
+- This improves contact readability but does not prove human image-inspected material quality, final flipper feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 169 verdict
 
