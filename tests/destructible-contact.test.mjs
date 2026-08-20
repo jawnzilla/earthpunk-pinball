@@ -43,4 +43,13 @@ test('applies steam hybrid multiplier and pays salvage exactly on destruction', 
   assert.equal(second.salvageValue, 0);
 });
 
+test('applies thermal lance multiplier to the contact that creates the burn echo', () => {
+  const result = resolveDestructibleContact(item({ integrity: 5 }), contact, {
+    elementalEvent: { type: 'thermal-lance', damageMultiplier: 1.2 },
+    damageResolver: resolver
+  });
+  assert.ok(Math.abs(result.damage - 3.6) < 1e-9);
+  assert.equal(result.destroyedNow, false);
+});
+
 console.log('destructible-contact: threshold, elemental, cooldown, stage, and exactly-once reward contracts passed');

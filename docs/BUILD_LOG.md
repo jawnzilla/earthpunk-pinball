@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 151: Fire/Wind thermal-lance contact damage
+
+### Root cause and decision
+
+- Root-cause tracing found the Fire + Wind `thermal-lance` hybrid created a burn-echo trail and HUD event, but its `burnEcho` metadata never changed the destructible contact result. The hybrid was therefore presentation-only at the first structure impact.
+- Added one bounded gameplay slice: the thermal-lance event now carries a capped `damageMultiplier: 1.2`, and `resolveDestructibleContact()` consumes that multiplier on the creating contact alongside the existing steam-fracture path. No new damage-over-time loop, reward, topology, input, or collision behavior was added.
+
+### Verification
+
+- Tight regression loop: added a destructible-contact test for thermal-lance damage and updated the elemental event contract; `npm test` passed 51/51.
+- `node --check src/destructible-contact.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This tick is ready for the `prototype` push and hosted Pages verification. The local 4173 port was occupied by an unrelated server, so the exact local check used port 4174; no product failure was inferred from that environment collision.
+- Fire/Wind now has a measurable first-contact gameplay consequence, but the full mine/tunnel visual overhaul, complete hybrid fidelity, independently inspected still frames, and global completion gate remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 150: speed-cap telemetry at the Physics V2 seam
 
 ### Root cause and decision

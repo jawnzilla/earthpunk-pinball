@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 151
+
+## Overhaul tick 151 verdict
+
+**Fire/Wind thermal-lance contact damage: PASS as a bounded hybrid-fidelity correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Fire + Wind hybrid now does more than leave a burn-echo marker: the structure contact that creates the echo receives a capped 1.2× damage multiplier.
+
+### Observed evidence
+
+- `src/elemental-effects.js` emits `thermal-lance` with `damageMultiplier: 1.2` while retaining the short-lived burn-echo trail.
+- `src/destructible-contact.js` consumes the multiplier through the same final-damage seam as `steam-fracture`; no reward or follow-up damage loop was added.
+- The focused regression and full suite pass 51/51. Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes pass 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Hosted Pages verification for the new commit is still pending. The local browser check used port 4174 because port 4173 was occupied by an unrelated server.
+- This closes one gameplay consequence gap but does not prove final feel, material fidelity, or visual quality. The mine/tunnel overhaul, complete hybrid fidelity, independently inspected still frames, and `LOOP_COMPLETE` gate remain open.
+
 # Deadlight Critic Review — Overhaul tick 150
 
 ## Overhaul tick 150 verdict

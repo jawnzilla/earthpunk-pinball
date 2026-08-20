@@ -224,7 +224,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.deepEqual(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-a' }), { type: 'steam-fracture', objectId: 'pipe-a', damageMultiplier: 1.35, extraTick: true });
   assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-b' }).type, 'slurry-bind');
   assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-c' }).type, 'root-sling');
-  assert.deepEqual(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-d', position: { x: 12, y: 34 } }), { type: 'thermal-lance', objectId: 'pipe-d', burnEcho: true });
+  assert.deepEqual(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-d', position: { x: 12, y: 34 } }), { type: 'thermal-lance', objectId: 'pipe-d', burnEcho: true, damageMultiplier: 1.2 });
   assert.deepEqual(runtime.thermalLanceTrail, [{ x: 12, y: 34, age: 0, lifetime: .65 }]);
   advanceElementalRuntime(runtime, { effects: hybridEffects, position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, dt: .65, integrateBodies: false });
   assert.equal(runtime.thermalLanceTrail.length, 0);

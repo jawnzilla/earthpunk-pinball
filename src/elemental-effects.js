@@ -418,7 +418,7 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
     runtime.thermalLanceTrail = runtime.thermalLanceTrail || [];
     runtime.thermalLanceTrail.push({ x: position.x, y: position.y, age: 0, lifetime: .65 });
     if (runtime.thermalLanceTrail.length > 4) runtime.thermalLanceTrail.shift();
-    events.push({ type: 'thermal-lance', objectId, burnEcho: true });
+    events.push({ type: 'thermal-lance', objectId, burnEcho: true, damageMultiplier: 1.2 });
   }
   return events[0] || { type: 'none', counted: false, ignoreResponse: false, damage: false };
 }

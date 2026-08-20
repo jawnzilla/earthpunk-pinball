@@ -13,7 +13,7 @@ export function resolveDestructibleContact(item, contact, {
     weaknesses: item.weaknesses,
     elementEffects
   });
-  const finalDamage = elementalEvent.type === 'steam-fracture'
+  const finalDamage = ['steam-fracture', 'thermal-lance'].includes(elementalEvent.type)
     ? damage * elementalEvent.damageMultiplier
     : damage;
   if (finalDamage <= 0) return { accepted: false, damage: 0, destroyedNow: false, reason: 'below-threshold' };
