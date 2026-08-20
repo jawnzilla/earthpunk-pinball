@@ -15,7 +15,7 @@
 
 ### Deployment / remaining risk
 
-- This slice is local until commit/push and GitHub Pages deployment are verified. Global overhaul remains NOT COMPLETE; no subjective still-frame inspection is claimed, and final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+- Commit `9540f05` deployed successfully in Pages run `32401512731`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32401512731. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 across standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors. Global overhaul remains NOT COMPLETE; no subjective still-frame inspection is claimed, and final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
 
 ## 2026-08-20 — Overhaul tick 182: remove legacy full-table strata wash
 

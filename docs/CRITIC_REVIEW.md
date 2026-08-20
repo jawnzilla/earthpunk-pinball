@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- No subjective still-frame verdict is claimed from this scheduled tick. Hosted post-deploy verification remains required after push. The largest remaining product gap is human-observed full-table material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
+- Commit `9540f05` deployed successfully in Pages run `32401512731`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32401512731. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 across standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors. No subjective still-frame verdict is claimed from this scheduled tick. The largest remaining product gap is human-observed full-table material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 182 verdict
 
