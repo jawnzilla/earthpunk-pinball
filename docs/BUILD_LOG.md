@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 183: distant timber grain cue
+
+### Root cause and decision
+
+- Root-cause review found the distant tunnel support posts had a gradient, edge, footing, and fastener but no surface-scale timber cue. At the top of the portrait table they could still read as flat brown geometry rather than load-bearing wood.
+- Added one bounded renderer-only slice: `drawTunnelTimberGrain(width, height)` draws two quiet deterministic grain breaks inside each distant post. Physics, collision geometry, input, progression, and assets are unchanged.
+- Added renderer-contract assertions for the helper, its intent, and its live post call.
+
+### Verification
+
+- Tight regression loop was red after the contract assertions were added (missing helper), then green after implementation: `npm test` passes 56/56 and `git diff --check` passes.
+- Exact local browser checks pass 10/10 at CSS 320x568 and 390x844 for standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- This slice is local until commit/push and GitHub Pages deployment are verified. Global overhaul remains NOT COMPLETE; no subjective still-frame inspection is claimed, and final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 182: remove legacy full-table strata wash
 
 ### Root cause and decision

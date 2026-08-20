@@ -1421,6 +1421,21 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     ctx.restore();
   }
+  function drawTunnelTimberGrain(width, height) {
+    // The distant brace needs a scale cue too: a few quiet grain breaks keep it from
+    // reading as a flat brown line while preserving atmospheric separation.
+    ctx.save();
+    ctx.globalAlpha = .22;
+    ctx.strokeStyle = '#d7a45a';
+    ctx.lineWidth = .7;
+    for (let row = -height * .28; row <= height * .28; row += Math.max(9, height * .34)) {
+      ctx.beginPath();
+      ctx.moveTo(-width * .38, row);
+      ctx.quadraticCurveTo(0, row - 1, width * .38, row + .5);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
   function drawMineTunnelSupportHardware() {
     // Distant timber braces give the tunnel arch a believable load-bearing scale cue.
     // Keep them quiet and behind the well so they read as architecture, not targets.
@@ -1431,6 +1446,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       const face = ctx.createLinearGradient(-5, 0, 5, 0);
       face.addColorStop(0, '#261d17'); face.addColorStop(.35, '#765037'); face.addColorStop(.62, '#9a6841'); face.addColorStop(1, '#33251c');
       ctx.fillStyle = face; ctx.fillRect(-5, -44, 10, 48);
+      drawTunnelTimberGrain(10, 48);
       ctx.fillStyle = 'rgba(5,7,6,.42)'; ctx.fillRect(2, -41, 3, 42);
       ctx.strokeStyle = '#171512'; ctx.lineWidth = 1.5; ctx.strokeRect(-5, -44, 10, 48);
       ctx.fillStyle = '#b06a3c'; ctx.beginPath(); ctx.arc(0, -28, 2, 0, Math.PI * 2); ctx.fill();

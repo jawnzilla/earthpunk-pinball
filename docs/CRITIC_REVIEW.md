@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 181
 
+## Overhaul tick 183 verdict
+
+**Distant timber grain cue: PASS as a bounded tunnel-material correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The upper tunnel support posts now carry a restrained directional grain cue, improving the material distinction between distant timber and the surrounding bedrock without adding a competing gameplay mark.
+
+### Observed evidence
+
+- `index.html` adds `drawTunnelTimberGrain(width, height)` and calls it inside both distant support-post draws after the wood gradient and before the occlusion edge.
+- The cue is deterministic, low-alpha, and limited to the two 10×48 post faces. `tests/renderer-contract.test.mjs` covers the helper, intent, and live call; `npm test` passes 56/56 and `git diff --check` passes.
+- Exact local browser checks pass 10/10 at CSS 320x568 and 390x844 across standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Limits and next gate
+
+- No subjective still-frame verdict is claimed from this scheduled tick. Hosted post-deploy verification remains required after push. The largest remaining product gap is human-observed full-table material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 182 verdict
 
 **Legacy full-table strata wash removal: PASS as a bounded depth/readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The backdrop no longer paints repeated geology curves across the playable well; the newer restrained side-wall strata helper is now the only authored sediment-band pass.
