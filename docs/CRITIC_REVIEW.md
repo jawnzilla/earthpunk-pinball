@@ -1,6 +1,23 @@
-# Deadlight Critic Review — Overhaul tick 173
+# Deadlight Critic Review — Overhaul tick 176
+
+## Overhaul tick 176 verdict
+
+**Identity HUD band reservation: PASS as a bounded readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The table identity strip no longer occludes the fuel/target meter rail: it now occupies y=96–118 while the meters remain at y=124–140.
+
+### Observed evidence
+
+- `index.html:1596–1603` gives `drawTableIdentity()` an explicit `bandY = 96` and keeps its 22px strip above the meter rail.
+- `index.html:2058–2074` retains the meter geometry at rail y=124, fill y=136, and unchanged values.
+- `tests/renderer-contract.test.mjs` asserts the identity band bottom is no greater than the scoped meter rail. The regression was red against the prior y=112 placement and green after the move.
+- `npm test` passes 56/56. Exact local and current-hosted browser checks pass 12/12 across 320x568 and 390x844 standard, depth, and upgrade routes with HTTP 200, exact CSS viewports, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The change addresses one concrete HUD occlusion seam only. It does not prove image-inspected material/depth quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+- Post-deploy Pages run and hosted verification must be recorded after the prototype push.
 
 ## Overhaul tick 175 verdict
+
 
 **Finite kinematic body boundary: PASS as a bounded first-principles solver hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Body creation now rejects non-finite initial position, velocity, rotation, and spin before malformed state can contaminate the fixed-step simulation.
 

@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 176: reserve the identity HUD band
+
+### Root cause and decision
+
+- Root-cause review found `drawTableIdentity()` painted a 22px banner at y=112–134 after `drawMeters()` had already placed the meter rail at y=124–140. The later draw order covered the upper meter icons, labels, and rail.
+- Added one bounded renderer slice: the table identity strip now owns an explicit y=96–118 band, leaving the meter rail unchanged at y=124. Gameplay, physics, input, progression, values, and assets are unchanged.
+- Added a renderer-contract regression that compares the identity band bottom against the scoped meter-rail coordinate. The new test was red before the layout change and green afterward.
+
+### Verification
+
+- `npm test` passes 56/56; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` pass.
+- Exact browser matrix passed locally and against the current hosted build at 320x568 and 390x844 for standard, `?review=depth`, and `?review=upgrade`: 12/12 total, HTTP 200, exact CSS viewport, no horizontal overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
+- The local check used a MIME-correct static server; the documented Python server is not suitable for `.mjs` module loading on this host.
+
+### Deployment / remaining risk
+
+- This slice is ready for prototype deployment; Pages run and post-deploy hosted evidence will be recorded after push.
+- It fixes a concrete HUD occlusion defect, not final image-inspected mine/tunnel material quality, flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 175: finite kinematic body boundary
 
 ### Root cause and decision

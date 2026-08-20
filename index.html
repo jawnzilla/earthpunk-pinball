@@ -1596,8 +1596,11 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function drawTableIdentity() {
     const color = state.tableKind === 'boss' ? '#ef8b45' : state.tableKind === 'reward' ? '#c6a7ef' : state.tableKind === 'free' ? '#67c8d5' : '#f1b35b';
     const identity = state.tableKind === 'boss' ? { icon: '◈', label: 'WARDEN' } : state.tableKind === 'reward' ? { icon: '✦', label: 'VAULT' } : state.tableKind === 'free' ? { icon: '≋', label: 'SLUICE' } : { icon: 'ϟ', label: 'CORE' };
-    ctx.save(); if (spriteImages.tableIdentity.complete && spriteImages.tableIdentity.naturalWidth) { ctx.globalAlpha = .96; ctx.drawImage(spriteImages.tableIdentity, 92, 112, W - 184, 22); ctx.globalAlpha = 1; } else { ctx.fillStyle = 'rgba(7,13,15,.72)'; ctx.fillRect(92, 112, W - 184, 22); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(92, 112, W - 184, 22); }
-    ctx.fillStyle = color; ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(identity.icon, W / 2 - 20, 128); ctx.fillStyle = '#e9f1df'; ctx.font = 'bold 10px Trebuchet MS'; ctx.fillText(identity.label, W / 2 + 8, 127); ctx.restore();
+    // Reserve the meter rail band below the identity strip; these overlays are
+        // composed in different helpers, so their vertical contract must be explicit.
+        const bandY = 96;
+        ctx.save(); if (spriteImages.tableIdentity.complete && spriteImages.tableIdentity.naturalWidth) { ctx.globalAlpha = .96; ctx.drawImage(spriteImages.tableIdentity, 92, bandY, W - 184, 22); ctx.globalAlpha = 1; } else { ctx.fillStyle = 'rgba(7,13,15,.72)'; ctx.fillRect(92, bandY, W - 184, 22); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(92, bandY, W - 184, 22); }
+        ctx.fillStyle = color; ctx.font = 'bold 13px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(identity.icon, W / 2 - 20, bandY + 16); ctx.fillStyle = '#e9f1df'; ctx.font = 'bold 10px Trebuchet MS'; ctx.fillText(identity.label, W / 2 + 8, bandY + 15); ctx.restore();
   }
   function drawBoss() {
     const boss = state.layout.boss; const exposed = state.boss.exposed; const color = exposed ? '#ef8b45' : '#67c8d5'; const pulse = 2 + Math.sin(state.pulse * 2) * 2, shellRadius = boss.r + 2;
