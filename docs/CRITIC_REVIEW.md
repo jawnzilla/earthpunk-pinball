@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 140
+# Deadlight Critic Review — Overhaul tick 144
+
+## Overhaul tick 144 verdict
+
+**Deck/well composition order: PASS as a bounded depth correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The live renderer now paints the recessed well behind the authored deck details, preventing the opaque well plane from hiding the deck/manifold/cassette layer. This is source-contract evidence only until the hosted still frames are checked.
+
+### Observed evidence
+
+- `index.html` `draw()` now orders `drawRecessedWellPlane()` before `drawDeckDetails()`, with both before `drawTargets()` and the remaining gameplay object pass.
+- `tests/renderer-contract.test.mjs` contains the new source-order assertions. The focused contract was red before the reorder and green afterward; `npm test` passes 50/50.
+- Syntax and whitespace checks pass. No physics, input, progression, or asset behavior changed.
+
+### Limits and next gate
+
+- Local Chromium is unavailable, so no local still frame or subjective visual claim is made. Deploy this commit and run hosted exact CSS 320×568 and 390×844 checks for `depth`, `grayscale`, `destruction-run`, and `upgrade`; record console/request errors and inspect captures before calling the depth gate observed.
+- The mine/tunnel overhaul, human-inspected grayscale/material verdict, and global physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
 
 ## Overhaul tick 143 verdict
 

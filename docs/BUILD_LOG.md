@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 144: restore deck-over-well render order
+
+### Root cause and decision
+
+- Source inspection found the live `draw()` seam painted `drawDeckDetails()` before `drawRecessedWellPlane()`. The recessed well's opaque fill could therefore cover authored deck/manifold/cassette geometry, collapsing the shell → deck → well depth read back toward a flat procedural surface.
+- Reordered only the renderer composition so the recessed well is painted first, followed by authored deck details, well-wall bevel, mine structures, and meters. Physics, collision geometry, input, progression, assets, and gameplay object order are unchanged.
+- Added source-order regression assertions requiring the recessed plane before deck details and both before gameplay targets.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the reorder with `recessed well must sit behind authored deck details`, then passed after the composition change.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/*.js` loop and `git diff --check` passed.
+- Local Chromium discovery found no executable; no local screenshot or subjective visual verdict is claimed. Hosted exact portrait checks remain to be run after Pages deploy.
+
+### Remaining risk / next smallest slice
+
+- Push and verify the Pages artifact, then run hosted exact CSS 320×568 and 390×844 checks for `depth`, `grayscale`, `destruction-run`, and `upgrade`, including HTTP status, one canvas, exact viewport, overflow, and console/page/request errors.
+- The complete mine/tunnel overhaul, independently inspected still-frame verdict, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 143: upgrade choice effect/context pass
 
 ### Root cause and decision
