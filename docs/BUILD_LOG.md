@@ -16,7 +16,8 @@
 
 ### Deployment / remaining risk
 
-- This change is ready to deploy from `prototype`; deployment evidence will be appended after the push and Pages run complete.
+- Commit `22c1095` deployed successfully in GitHub Pages run `32384553855`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32384553855.
+- Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6: HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on the upgrade route, zero console/page/request errors, and hosted `src/physics-core.js` retained `finiteOrZero`.
 - It hardens the solver input boundary; it does not prove final flipper contact feel, human image-inspected mine/tunnel material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 174: explicit material rolling resistance

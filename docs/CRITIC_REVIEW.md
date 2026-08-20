@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- Deployment and Pages-run evidence is intentionally pending until this commit is pushed and the workflow completes.
+- Commit `22c1095` deployed successfully in Pages run `32384553855`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32384553855. Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes pass 6/6 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on the upgrade route, zero console/page/request errors, and hosted source retaining `finiteOrZero`.
 - This closes an input-state seam, not final flipper contact feel, human image-inspected still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`; the largest remaining product gap remains evidence-selected visual/contact review.
 
 ## Overhaul tick 174 verdict
