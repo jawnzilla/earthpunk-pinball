@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 150
+
+## Overhaul tick 150 verdict
+
+**Speed-cap telemetry: PASS as a bounded observability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Physics V2 safety ceiling was already active, but its interventions were invisible. The live debug-only telemetry now counts actual pre-cap events without changing the cap or player-facing behavior.
+
+### Observed evidence
+
+- `index.html` initializes `physicsTelemetry.speedCapCount`, increments it in `capBallSpeed()` only when speed exceeds `maxSpeed`, and exposes the value as `Caps` in the diagnostics readout.
+- `tests/renderer-contract.test.mjs` asserts the reset shape, increment seam, and readout marker. The focused contract and full suite pass 50/50; syntax and whitespace checks pass.
+- Local Playwright exact CSS 320×568 and 390×844 standard, depth, destruction-run, active-elements, upgrade, and grayscale routes pass 12/12 with HTTP 200, one canvas, no overflow, expected fixture markers/upgrade choices, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The commit still needs a Pages deployment and fresh hosted parity checks; no hosted result is claimed yet.
+- This is instrumentation, not a final feel or visual-quality verdict. No still frame was independently inspected. The mine/tunnel overhaul, full physics/effects completion, and `LOOP_COMPLETE` gate remain open.
+
 # Deadlight Critic Review — Overhaul tick 148
 
 ## Overhaul tick 149 verdict

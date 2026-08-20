@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 150: speed-cap telemetry at the Physics V2 seam
+
+### Root cause and decision
+
+- Physics V2 already enforced a safety speed ceiling after live contacts, but the cap was silent. That made it impossible to distinguish authored material/force tuning from repeated safety intervention during a seeded run.
+- Added one bounded instrumentation slice: `capBallSpeed()` now increments `state.physicsTelemetry.speedCapCount` only when the pre-cap speed exceeds the limit, and the debug-only readout exposes the count as `Caps`. Reset initializes the counter with the rest of the per-run telemetry. Collision response, speed limits, input, progression, and rendering are unchanged.
+- Added renderer-contract assertions for the initialized counter, increment seam, and readout marker.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` passed with the new speed-cap telemetry contract; the pre-change contract expected the old telemetry shape.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Local Playwright exact CSS 320×568 and 390×844 standard, depth, destruction-run, active-elements, upgrade, and grayscale routes passed 12/12: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, expected review fixtures/upgrade choices, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This commit is not yet deployed. Push only `prototype`, wait for the Pages workflow, then rerun the hosted packet before treating the change as delivered.
+- The telemetry closes an evidence gap in the physics contract; it does not prove final feel, material fidelity, or the larger mine/tunnel visual overhaul. No still-frame verdict is claimed and `LOOP_COMPLETE` remains open.
+
 ## 2026-08-20 — Overhaul tick 149: deterministic mine grime/material wear
 
 ### Root cause and decision
