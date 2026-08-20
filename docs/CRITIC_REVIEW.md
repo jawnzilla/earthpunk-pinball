@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 170
+# Deadlight Critic Review — Overhaul tick 171
+
+## Overhaul tick 171 verdict
+
+**Hybrid probe signature: PASS as a bounded gameplay-readability handoff; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Hybrid gameplay state was authoritative but visually collapsed into separate elemental rings and a HUD label. The probe now carries a compact split seam and reaction-specific glyph for each canonical hybrid.
+
+### Observed evidence
+
+- `index.html` adds `drawBallHybridMark(b)`, maps `steam-fracture`, `slurry-bind`, `root-sling`, and `thermal-lance` to distinct paired tones/glyphs, and composes it after elemental facets and before contact/spin cues.
+- `tests/renderer-contract.test.mjs` asserts every canonical branch and the live call. `npm test` passes 56/56; syntax and whitespace checks pass.
+- Local Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16 with HTTP 200, exact viewport dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The local check verifies runtime/layout and the helper's live module path but does not replace hosted verification or independent image inspection of still frames.
+- The largest remaining product gap is still a human-observed full mine/tunnel material/depth and contact-feel review, alongside any remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 170 verdict
 

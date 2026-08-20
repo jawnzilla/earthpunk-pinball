@@ -2163,6 +2163,35 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     ctx.restore();
   }
+  function drawBallHybridMark(b) {
+    const hybrid = b.hybrid;
+    if (!hybrid?.id) return;
+    // Hybrid reactions need a material signature on the probe, not only a HUD label.
+    // A split inner seam stays legible in grayscale while the paired tones retain identity.
+    let primary = '#67c8d5', secondary = '#b65f32', glyph = 'steam';
+    if (hybrid.id === 'slurry-bind') { primary = '#6f8f88'; secondary = '#a47d4d'; glyph = 'slurry'; }
+    if (hybrid.id === 'root-sling') { primary = '#a47d4d'; secondary = '#b5c2a4'; glyph = 'root'; }
+    if (hybrid.id === 'thermal-lance') { primary = '#b65f32'; secondary = '#b5c2a4'; glyph = 'lance'; }
+    if (hybrid.id === 'steam-fracture') { glyph = 'steam'; }
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.globalAlpha = .86;
+    ctx.lineWidth = Math.max(1, b.r * .12);
+    ctx.strokeStyle = primary;
+    ctx.beginPath(); ctx.arc(0, 0, b.r * .48, -Math.PI * .82, Math.PI * .02); ctx.stroke();
+    ctx.strokeStyle = secondary;
+    ctx.beginPath(); ctx.arc(0, 0, b.r * .48, Math.PI * .02, Math.PI * .82); ctx.stroke();
+    ctx.globalAlpha = .74;
+    ctx.lineWidth = Math.max(1, b.r * .1);
+    ctx.strokeStyle = primary;
+    ctx.beginPath();
+    if (glyph === 'steam') { ctx.arc(0, 0, b.r * .23, Math.PI * 1.1, Math.PI * 1.9); }
+    else if (glyph === 'slurry') { ctx.moveTo(-b.r * .22, 0); ctx.lineTo(0, b.r * .14); ctx.lineTo(b.r * .22, -b.r * .12); }
+    else if (glyph === 'root') { ctx.moveTo(0, -b.r * .22); ctx.lineTo(0, b.r * .18); ctx.moveTo(0, b.r * .08); ctx.lineTo(-b.r * .2, b.r * .22); ctx.moveTo(0, b.r * .08); ctx.lineTo(b.r * .2, b.r * .22); }
+    else { ctx.moveTo(-b.r * .2, b.r * .18); ctx.lineTo(b.r * .2, -b.r * .18); }
+    ctx.stroke();
+    ctx.restore();
+  }
   function drawBallSpinMark(b) {
     const spin = Number.isFinite(b.physics?.spin) ? b.physics.spin : 0;
     if (Math.abs(spin) < .01) return;
@@ -2210,6 +2239,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     drawDirectionalRim(b.x, b.y, b.r, b.vx, b.vy, '#f1b35b', .82);
     drawBallElementalFacets(b, activeEffects);
+    drawBallHybridMark(b);
     drawBallContactMaterialCue(b);
     drawBallSpinMark(b);
   }

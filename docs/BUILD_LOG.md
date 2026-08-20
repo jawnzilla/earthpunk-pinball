@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 171: hybrid probe signature
+
+### Root cause and decision
+
+- Hybrid state already drove gameplay multipliers and a named HUD cue, but the probe renderer still showed only independent elemental rings/facets. The player could not read that a reaction had formed at the ball itself, especially in grayscale or during fast contacts.
+- Added one bounded renderer-only slice: `drawBallHybridMark()` renders a restrained split inner seam plus a compact authored glyph for Steam, Slurry, Root Sling, and Thermal Lance. It reads `state.ball.hybrid` only; no elemental rules, damage, physics, input, timing, progression, or assets changed.
+- Added renderer-contract assertions for all four canonical hybrid branches and the live composition seam.
+
+### Verification
+
+- Tight red/green loop: the new renderer contract failed before the helper existed, then `npm test` passed 56/56 after implementation. `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` pass.
+- Local Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16: HTTP 200, complete document, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This slice is intentionally small: it makes canonical hybrids visible on the probe without claiming final still-frame quality, final flipper feel, complete material fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 170: material contact glint
 
 ### Root cause and decision
