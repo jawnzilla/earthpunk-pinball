@@ -135,6 +135,12 @@ assert.match(source, /Pulse bumpers expose a mechanical coil/);
 assert.match(source, /for \(let coil = 0; coil < 4; coil \+= 1\)/);
 assert.match(source, /ctx\.strokeRect\(item\.x - item\.r \* \.32, item\.y - 2/);
 assert.match(source, /ctx\.moveTo\(item\.x - item\.r \* \.74, item\.y - item\.r \* \.42\)/);
+assert.match(source, /function drawMineStructures\(\)/);
+assert.match(source, /const face = ctx\.createLinearGradient\(-width \/ 2, 0, width \/ 2, 0\)/);
+assert.match(source, /const rockFace = \(x, y, scale, flip = 1\)/);
+assert.match(source, /Irregular rock faces establish a third material family/);
+assert.match(source, /rockFace\(82, 112, 1\); rockFace\(W - 82, 112, 1, -1\)/);
+assert.match(source, /drawMineStructures\(\);/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
