@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 136: thermal-lance burn-echo presentation seam
+
+### Root cause and decision
+
+- `thermal-lance` was emitted by the Fire + Wind structure-contact branch with `burnEcho: true`, but the live runtime did not retain any short-lived contact artifact for the renderer to consume. The hybrid was therefore gameplay metadata plus HUD state, not a visible burn echo at the struck mine.
+- Added a bounded runtime trail buffer (`thermalLanceTrail`, max 4 entries, 0.65s lifetime) at the contact position. The fixed-step elemental runtime owns expiry; the canvas adapter renders a restrained warm-ring/ash cue. Physics response, damage, input, progression, and object topology are unchanged.
+- Added deterministic coverage for contact-position capture and expiry, plus the runtime shape contract update.
+
+### Verification
+
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+- Exact 320x568/390x844 browser checks are not yet run because this checkout has no Chromium executable; no screenshot or console claim is made.
+- Pages deployment and hosted parity verification remain pending until this commit is pushed.
+
+### Remaining risk / next smallest slice
+
+- Deploy and run the exact hosted portrait checks, including `?review=active-elements`, and verify the new `thermalLanceTrail` renderer marker is served.
+- The earthpunk mine/tunnel visual overhaul, portrait grayscale inspection, authored materials, destructible readability, and full physics/effects completion remain open. Do not claim LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 135: Fire/Wind thermal-lance contact completion
 
 ### Root cause and decision

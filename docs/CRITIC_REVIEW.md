@@ -1,3 +1,22 @@
+# Deadlight Critic Review — Overhaul tick 136
+
+## Overhaul tick 136 verdict
+
+**Elemental presentation seam: PASS for making Fire/Wind thermal-lance contact visibly consumable; global overhaul: NOT COMPLETE; visual quality: unverified; AAA-ready: FAIL / unverified.** The declared `burnEcho` flag now creates a bounded, renderer-consumed contact trail at the struck structure and expires through the fixed-step runtime. This is a narrow effects legibility slice, not a visual-completion claim.
+
+### Observed evidence
+
+- `src/elemental-effects.js` adds `thermalLanceTrail` to runtime state, records the structure contact position, caps the buffer at four entries, and expires entries after 0.65 seconds.
+- `index.html` draws the trail as a short-lived warm ring/ash cue in `drawElementalRuntime()`.
+- `tests/elemental-effects.test.mjs` proves position capture and deterministic expiry; `npm test` passes 50/50.
+- `node --check src/elemental-effects.js` and `git diff --check` pass.
+- Exact 320x568/390x844 browser execution and screenshots are not claimed because no Chromium executable is available in this checkout. Pages deployment is pending push.
+
+### Remaining risk / next smallest slice
+
+- Push/deploy, then run hosted exact portrait checks with the active-elements fixture and source parity probe.
+- Inspect the hosted frame before selecting another visual change. The earthpunk mine/tunnel overhaul, authored materials, grayscale readability, destructible readability, and physics/effects completion remain open. Do not claim LOOP_COMPLETE.
+
 # Deadlight Critic Review — Overhaul tick 135
 
 ## Overhaul tick 135 verdict

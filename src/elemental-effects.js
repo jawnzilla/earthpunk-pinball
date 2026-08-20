@@ -113,7 +113,7 @@ let nextMiniBallId = 1;
 const activeStacks = (effects, element) => Math.max(0, effects?.[element]?.stacks ?? 0);
 
 export function createElementalRuntime() {
-  return { fireTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, hybridUsed: new Set() };
+  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, hybridUsed: new Set() };
 }
 
 const hybridFor = (runtime, effects, objectId) => {
@@ -193,6 +193,13 @@ function advanceEarthLink(runtime, dt) {
   if (runtime.earthLink.lifetime <= 0) runtime.earthLink = null;
 }
 
+function advanceThermalLanceTrail(runtime, dt) {
+  runtime.thermalLanceTrail = (runtime.thermalLanceTrail || []).filter(trail => {
+    trail.age += dt;
+    return trail.age < trail.lifetime;
+  });
+}
+
 export function advanceElementalRuntime(runtime, { effects = {}, position, velocity = { x: 0, y: 0 }, dt = 0, integrateBodies = true, miniBallContactResolver = null, windEchoContactResolver = null } = {}) {
   const safeDt = Math.max(0, Number.isFinite(dt) ? dt : 0);
   const events = [];
@@ -201,6 +208,7 @@ export function advanceElementalRuntime(runtime, { effects = {}, position, veloc
   advanceMiniBalls(runtime, safeDt, integrateBodies, miniBallContactResolver);
   advanceWindEcho(runtime, safeDt, integrateBodies, windEchoContactResolver);
   advanceEarthLink(runtime, safeDt);
+  advanceThermalLanceTrail(runtime, safeDt);
   return events;
 }
 
@@ -340,6 +348,9 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
     events.push({ type: 'root-sling', objectId, assist: 1.2 });
   } else if (objectId && hasPair(effects, 'Fire', 'Wind') && !runtime.hybridUsed.has('thermal-lance')) {
     runtime.hybridUsed.add('thermal-lance');
+    runtime.thermalLanceTrail = runtime.thermalLanceTrail || [];
+    runtime.thermalLanceTrail.push({ x: position.x, y: position.y, age: 0, lifetime: .65 });
+    if (runtime.thermalLanceTrail.length > 4) runtime.thermalLanceTrail.shift();
     events.push({ type: 'thermal-lance', objectId, burnEcho: true });
   }
   return events[0] || { type: 'none', counted: false, ignoreResponse: false, damage: false };
