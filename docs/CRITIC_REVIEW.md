@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- This closes a solver-to-gameplay state boundary only; it is not a subjective visual verdict. Hosted post-deploy verification, human-observed mine/tunnel material/depth, final flipper contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` remain open.
+- Commit `b7d0ee3` deployed successfully in Pages run `32395649942`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32395649942. Hosted post-deploy exact CSS 320x568 and 390x844 standard, upgrade, active-elements, and depth routes passed 4/4 with HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors; hosted source retains `safeImpactEnergy`. This closes a solver-to-gameplay state boundary only; human-observed mine/tunnel material/depth, final flipper contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` remain open.
 
 ## Overhaul tick 179 verdict
 

@@ -15,7 +15,7 @@
 
 ### Deployment / remaining risk
 
-- This is a local physics hardening slice until committed and deployed. Global overhaul remains NOT COMPLETE; hosted post-deploy evidence, human image inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+- Commit `b7d0ee3` deployed successfully in Pages run `32395649942`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32395649942. Hosted post-deploy exact CSS 320x568 and 390x844 standard, upgrade, active-elements, and depth routes passed 4/4: HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, zero console/page errors; hosted `src/physics-core.js` retains `safeImpactEnergy` and the fail-closed boundary. Global overhaul remains NOT COMPLETE; human image inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
 
 ## 2026-08-20 — Overhaul tick 179: add restrained timber grain
 
