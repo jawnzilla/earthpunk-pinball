@@ -17,8 +17,9 @@
 
 ### Deployment / remaining risk
 
-- This commit is not yet deployed. Push only `prototype`, wait for the Pages workflow, then rerun the hosted packet before treating the change as delivered.
-- The telemetry closes an evidence gap in the physics contract; it does not prove final feel, material fidelity, or the larger mine/tunnel visual overhaul. No still-frame verdict is claimed and `LOOP_COMPLETE` remains open.
+- GitHub Actions Pages run `32340216505` completed successfully for commit `5309ab3`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32340216505. Hosted HTML returned HTTP 200, 223216 bytes, and retained `speedCapCount`/`Caps` markers.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, destruction-run, active-elements, upgrade, and grayscale routes passed 12/12: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, expected review fixtures/upgrade choices, and zero console/page/request errors. The hosted packet is runtime/source evidence only; no still frame was independently inspected.
+- The telemetry closes an evidence gap in the physics contract; it does not prove final feel, material fidelity, or the larger mine/tunnel visual overhaul. `LOOP_COMPLETE` remains open.
 
 ## 2026-08-20 — Overhaul tick 149: deterministic mine grime/material wear
 

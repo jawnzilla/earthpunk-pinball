@@ -12,7 +12,8 @@
 
 ### Limits and next gate
 
-- The commit still needs a Pages deployment and fresh hosted parity checks; no hosted result is claimed yet.
+- GitHub Actions Pages run `32340216505` completed successfully for commit `5309ab3`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32340216505. Hosted HTML returned HTTP 200, 223216 bytes, and retained `speedCapCount`/`Caps` markers.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, destruction-run, active-elements, upgrade, and grayscale routes passed 12/12 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, expected fixtures/upgrade choices, and zero console/page/request errors.
 - This is instrumentation, not a final feel or visual-quality verdict. No still frame was independently inspected. The mine/tunnel overhaul, full physics/effects completion, and `LOOP_COMPLETE` gate remain open.
 
 # Deadlight Critic Review — Overhaul tick 148
