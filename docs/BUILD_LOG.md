@@ -15,6 +15,7 @@
 
 ### Deployment / remaining risk
 
+- Commit `c127844` deployed successfully in GitHub Pages run `32374753660`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32374753660. Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, complete document, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
 - This slice is intentionally small: it makes canonical hybrids visible on the probe without claiming final still-frame quality, final flipper feel, complete material fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 170: material contact glint

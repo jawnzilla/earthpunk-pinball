@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- The local check verifies runtime/layout and the helper's live module path but does not replace hosted verification or independent image inspection of still frames.
+- GitHub Pages run `32374753660` completed successfully for commit `c127844`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32374753660. Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors. This does not replace independent image inspection of still frames.
 - The largest remaining product gap is still a human-observed full mine/tunnel material/depth and contact-feel review, alongside any remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 170 verdict
