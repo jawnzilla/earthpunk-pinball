@@ -12,6 +12,7 @@ export const FIXED_DT = 1 / 120;
 
 const EPSILON = 1e-8;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const finiteOrZero = value => Number.isFinite(value) ? value : 0;
 const dot = (a, b) => a.x * b.x + a.y * b.y;
 const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
 const scale = (a, scalar) => ({ x: a.x * scalar, y: a.y * scalar });
@@ -40,14 +41,16 @@ export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius 
   const safeRadius = Number.isFinite(radius) && radius > 0 ? radius : 0.08;
   const safeMaterial = Object.hasOwn(MATERIALS, material) ? material : 'steel';
   return {
-    position: { x, y },
-    velocity: { x: vx, y: vy },
+    // Position and velocity are solver state too: one non-finite component would
+    // poison every later sweep, contact, telemetry, and renderer read.
+    position: { x: finiteOrZero(x), y: finiteOrZero(y) },
+    velocity: { x: finiteOrZero(vx), y: finiteOrZero(vy) },
     radius: safeRadius,
     mass: safeMass,
     inverseMass: safeMass > 0 ? 1 / safeMass : 0,
     material: safeMaterial,
-    rotation: Number.isFinite(rotation) ? rotation : 0,
-    spin: Number.isFinite(spin) ? spin : 0,
+    rotation: finiteOrZero(rotation),
+    spin: finiteOrZero(spin),
     angularInertia: 0.5 * safeMass * safeRadius * safeRadius,
     effects: {},
     contactsThisStep: new Set(),

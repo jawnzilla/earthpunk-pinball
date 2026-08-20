@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 175: finite kinematic body boundary
+
+### Root cause and decision
+
+- Root-cause investigation found `createBall()` normalized mass, radius, and material but copied position/velocity components directly. A malformed `NaN`/`Infinity` authoring value could therefore poison swept queries, contact response, telemetry, and canvas reads from the first fixed step.
+- Added one bounded physics-core slice: non-finite initial position, velocity, rotation, and spin components now normalize to zero at body creation. Valid body behavior, mass response, collision response, timing, input, progression, and renderer behavior remain unchanged.
+- Added a deterministic regression covering all four kinematic state groups. The test was red before the boundary normalization and green after it.
+
+### Verification
+
+- Tight red/green loop: the new malformed-kinematics regression failed before implementation (`NaN/Infinity` leaked into position), then `npm test` passed 56/56. `node --check src/physics-core.js` and `git diff --check` pass.
+- Local exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6 with HTTP 200, exact inner dimensions, no horizontal overflow, one canvas, four upgrade choices on the upgrade route, and zero console/page/request errors.
+- Hosted pre-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on the upgrade route, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This change is ready to deploy from `prototype`; deployment evidence will be appended after the push and Pages run complete.
+- It hardens the solver input boundary; it does not prove final flipper contact feel, human image-inspected mine/tunnel material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 174: explicit material rolling resistance
 
 ### Root cause and decision

@@ -34,6 +34,14 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const malformedKinematics = createBall({ x: Number.NaN, y: Number.POSITIVE_INFINITY, vx: Number.NEGATIVE_INFINITY, vy: Number.NaN, rotation: Number.NaN, spin: Number.POSITIVE_INFINITY });
+  assert.deepEqual(malformedKinematics.position, { x: 0, y: 0 });
+  assert.deepEqual(malformedKinematics.velocity, { x: 0, y: 0 });
+  assert.equal(malformedKinematics.rotation, 0);
+  assert.equal(malformedKinematics.spin, 0);
+}
+
+{
   const ball = createBall({ mass: 1, x: 0, y: 0 });
   integrateBall(ball, { gravity: { x: 0, y: 9.81 }, dt: 0.5 });
   approx(ball.position.y, 2.4525, 0.01);

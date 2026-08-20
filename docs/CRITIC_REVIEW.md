@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 173
 
+## Overhaul tick 175 verdict
+
+**Finite kinematic body boundary: PASS as a bounded first-principles solver hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Body creation now rejects non-finite initial position, velocity, rotation, and spin before malformed state can contaminate the fixed-step simulation.
+
+### Observed evidence
+
+- `src/physics-core.js` adds a finite scalar boundary and applies it to all initial kinematic and angular components in `createBall()`.
+- `tests/physics-core.test.mjs` proves `NaN`/`Infinity` inputs become deterministic zero-valued state. The new test was red before implementation; `npm test` passes 56/56 and syntax/whitespace checks pass.
+- Local and hosted pre-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes pass 6/6 each with HTTP 200, exact dimensions, no horizontal overflow, one canvas, correct upgrade count, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Deployment and Pages-run evidence is intentionally pending until this commit is pushed and the workflow completes.
+- This closes an input-state seam, not final flipper contact feel, human image-inspected still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`; the largest remaining product gap remains evidence-selected visual/contact review.
+
 ## Overhaul tick 174 verdict
 
 **Explicit material rolling resistance: PASS as a bounded first-principles physics tuning correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Angular damping no longer derives from linear drag by convention: each material now exposes an explicit rolling-resistance coefficient, with a deterministic stone-versus-steel regression.
