@@ -32,7 +32,7 @@ export function impactEnergyFromMassSpeed(mass = 0, speed = 0) {
   return 0.5 * safeMass * safeSpeed ** 2;
 }
 
-export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius = 0.08, material = 'steel' } = {}) {
+export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius = 0.08, material = 'steel', rotation = 0, spin = 0 } = {}) {
   // Contact math assumes physical, non-negative mass and a positive radius. Normalize
   // malformed authoring/config input at the body boundary so negative inertia or an
   // unknown material cannot leak into the solver and create non-finite response.
@@ -46,7 +46,8 @@ export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius 
     mass: safeMass,
     inverseMass: safeMass > 0 ? 1 / safeMass : 0,
     material: safeMaterial,
-    spin: 0,
+    rotation: Number.isFinite(rotation) ? rotation : 0,
+    spin: Number.isFinite(spin) ? spin : 0,
     angularInertia: 0.5 * safeMass * safeRadius * safeRadius,
     effects: {},
     contactsThisStep: new Set(),
@@ -61,6 +62,12 @@ export function integrateBall(ball, { force = { x: 0, y: 0 }, gravity = { x: 0, 
   const drag = MATERIALS[ball.material]?.drag ?? MATERIALS.steel.drag;
   const dragFactor = Math.exp(-drag * dt);
   ball.velocity = scale(ball.velocity, dragFactor);
+  const spin = Number.isFinite(ball.spin) ? ball.spin : 0;
+  const rotation = Number.isFinite(ball.rotation) ? ball.rotation : 0;
+  ball.rotation = rotation + spin * dt;
+  // Rolling resistance is intentionally gentler than linear drag, but keeps
+  // contact-generated spin bounded instead of allowing an immortal angular state.
+  ball.spin = spin * Math.exp(-drag * dt * 4);
   return ball;
 }
 

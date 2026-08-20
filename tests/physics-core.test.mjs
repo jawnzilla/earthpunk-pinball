@@ -74,6 +74,14 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const ball = createBall({ mass: 1, spin: 6 });
+  const initialRotation = ball.rotation;
+  integrateBall(ball, { gravity: { x: 0, y: 0 }, dt: 0.25 });
+  assert.ok(ball.rotation > initialRotation);
+  assert.ok(ball.spin < 6);
+}
+
+{
   const ball = createBall({ mass: 1, vx: 0, vy: 3 });
   const surface = createBall({ mass: 3, vx: 0, vy: 0, material: 'rubber' });
   const beforeMomentum = ball.mass * ball.velocity.y + surface.mass * surface.velocity.y;
