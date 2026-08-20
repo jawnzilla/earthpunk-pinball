@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 160: explicit Earth facet branch
+
+### Root cause and decision
+
+- Source tracing found the new elemental facet renderer had authored Fire, Water, and Wind branches, but Earth was only the implicit fallback. That made the Earth silhouette contract less auditable and left malformed element data able to inherit Earth geometry.
+- Added one bounded renderer-only correction: Earth now owns its angular plate marks explicitly, while an inert fallback is reserved for malformed review data. No physics, timing, damage, rewards, input, progression, or layout changed.
+- Added a renderer-contract assertion for the explicit Earth branch.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for GitHub Pages, and run exact hosted CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade checks.
+- This makes the elemental silhouette ownership explicit but does not establish a human still-frame verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 159: elemental facet silhouettes
 
 ### Root cause and decision

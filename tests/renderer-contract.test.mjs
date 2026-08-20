@@ -48,6 +48,7 @@ assert.match(source, /Stacks need authored material cues on the probe/);
 assert.match(source, /element === 'Fire'/);
 assert.match(source, /element === 'Water'/);
 assert.match(source, /element === 'Wind'/);
+assert.match(source, /element === 'Earth'/);
 assert.match(source, /drawBallElementalFacets\(b, activeEffects\);/);
 assert.match(source, /function drawActiveElementChips\(\)/);
 assert.match(source, /function drawHybridCue\(\)/);

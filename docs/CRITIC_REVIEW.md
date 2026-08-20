@@ -1,5 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 159
+# Deadlight Critic Review — Overhaul tick 160
 
+## Overhaul tick 160 verdict
+
+**Explicit Earth facet ownership: PASS as a bounded renderer-contract correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Earth plate marks now have a named branch instead of being the implicit fallback, preserving the intended grayscale silhouette language while isolating malformed review data.
+
+### Observed evidence
+
+- `index.html` changes `drawBallElementalFacets()` to branch explicitly on `element === 'Earth'`; the fallback now emits only a neutral arc for unexpected data.
+- `tests/renderer-contract.test.mjs` asserts the Earth branch. `npm test` passes 54/54; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This commit is not deployed yet, so no hosted browser or still-frame result is claimed in this entry.
+- After deployment, verify exact hosted CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade routes. The mine/tunnel visual overhaul, final contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
+
+# Deadlight Critic Review — Overhaul tick 159
 ## Overhaul tick 159 verdict
 
 **Elemental facet silhouettes: PASS as a bounded stacked-effect readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Active elemental stacks now have distinct probe-adjacent geometry instead of relying only on colored rings.
