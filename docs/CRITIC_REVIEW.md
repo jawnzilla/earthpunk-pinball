@@ -1,4 +1,18 @@
-# Deadlight Critic Review — Overhaul tick 165
+# Deadlight Critic Review — Overhaul tick 166
+
+## Overhaul tick 166 verdict
+
+**Executable flipper launch-balance gate: PASS as a bounded calibration-contract correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The review seam now makes left/right launch asymmetry deterministic instead of requiring manual arithmetic, while refusing to judge an incomplete pair.
+
+### Observed evidence
+
+- `src/flipper-contact.js` exports `summarizeFlipperLaunchBalance()`. It filters `mode=launch`, optionally filters `source`, emits independent left/right summaries, signed right-minus-left `afterSpeedDelta`, relative asymmetry values, and a strict `>20%` gate.
+- `tests/flipper-contact.test.mjs` covers catch exclusion, live/fixture isolation, exact threshold behavior, and missing-side behavior. `npm test` passes 56/56 after implementation.
+
+### Limits and next gate
+
+- Hosted exact CSS 320x568 and 390x844 flipper-contact checks plus Pages deployment are still required for this commit.
+- The API does not provide human-steered samples by itself and does not prove final contact feel, visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 165 verdict
 

@@ -228,4 +228,38 @@ export function summarizeFlipperContactSources(samples = [], { sources = ['live'
   return Object.fromEntries(knownSources.map(source => [source, summarizeFlipperContactSeries(samples, { source })]));
 }
 
+// Compare the two launch lanes without allowing catches, unknown sides, or a
+// review fixture to hide a live asymmetry. A complete pair is required before
+// the >20% gate can become actionable; an empty side is reported explicitly.
+export function summarizeFlipperLaunchBalance(samples = [], { source = null, threshold = 0.2 } = {}) {
+  const launches = samples.filter(sample => sample?.mode === 'launch'
+    && (sample?.side === 'left' || sample?.side === 'right')
+    && (!source || sample.source === source));
+  const sides = {
+    left: summarizeFlipperContactSeries(launches.filter(sample => sample.side === 'left')),
+    right: summarizeFlipperContactSeries(launches.filter(sample => sample.side === 'right'))
+  };
+  const leftSpeed = sides.left.meanAfterSpeed;
+  const rightSpeed = sides.right.meanAfterSpeed;
+  const leftDelta = sides.left.meanSpeedDelta;
+  const rightDelta = sides.right.meanSpeedDelta;
+  const pairComplete = sides.left.count > 0 && sides.right.count > 0;
+  const relativeDifference = (a, b) => {
+    const denominator = Math.max(Math.abs(a), Math.abs(b));
+    return denominator > 0 ? Math.abs(a - b) / denominator : 0;
+  };
+  const afterSpeedAsymmetry = pairComplete ? relativeDifference(leftSpeed, rightSpeed) : 0;
+  const speedDeltaAsymmetry = pairComplete ? relativeDifference(leftDelta, rightDelta) : 0;
+  return {
+    source,
+    left: sides.left,
+    right: sides.right,
+    pairComplete,
+    afterSpeedDelta: rightSpeed - leftSpeed,
+    afterSpeedAsymmetry,
+    speedDeltaAsymmetry,
+    asymmetric: pairComplete && (afterSpeedAsymmetry > threshold || speedDeltaAsymmetry > threshold)
+  };
+}
+
 export { segmentAt as flipperSegmentAt };

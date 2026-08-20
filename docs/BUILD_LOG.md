@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 166: executable flipper launch-balance gate
+
+### Root cause and decision
+
+- The calibration packet required a left/right launch-symmetry decision, but the telemetry API only produced independent aggregate buckets. That forced a reviewer to manually compare values and made the `>20%` gate easy to apply inconsistently.
+- Added one renderer-independent calibration slice: `summarizeFlipperLaunchBalance()` filters launch events, preserves optional `live`/`fixture` provenance, reports both side summaries plus signed right-minus-left speed delta, and exposes a strict `>20%` asymmetry flag only when both sides have data. Physics constants, collision geometry, input, timing, progression, and renderer behavior are unchanged.
+- Added focused red/green tests for catch exclusion, provenance isolation, complete-pair threshold behavior, and incomplete-side reporting.
+
+### Verification
+
+- Tight red/green loop: the new focused tests first failed because the export was absent; after implementation `npm test` passes 56/56, `node --check src/flipper-contact.js`, and `git diff --check` pass.
+- Hosted exact 320x568/390x844 browser checks and Pages deployment remain required after commit.
+
+### Deployment / remaining risk
+
+- This entry will be completed with the pushed commit and hosted workflow evidence after verification.
+- This is a measurement-contract slice, not proof of final contact feel or global overhaul completion; `LOOP_COMPLETE` remains open.
+
 ## 2026-08-20 — Overhaul tick 165: tunnel support footings
 
 ### Root cause and decision

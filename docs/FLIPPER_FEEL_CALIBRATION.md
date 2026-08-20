@@ -11,7 +11,7 @@ Measure the human-steered launch response of the existing Physics V2 flippers be
 - Production query: `src/flipper-contact.js::sweptFlipperContact()`.
 - Production response: `index.html` flipper contact consumer and `physics-core.js` contact response.
 - Fixed timestep: `FIXED_DT` in `index.html`; do not multiply the solver timestep for measurement.
-- Existing deterministic seam: `summarizeFlipperContact()` and `summarizeFlipperContactSeries()`.
+- Existing deterministic seam: `summarizeFlipperContact()`, `summarizeFlipperContactSeries()`, and `summarizeFlipperLaunchBalance()`.
 - Browser fixture: `?review=flipper-contact` routes through the real renderer and records a moving-flipper contact without pretending that fixture input is human-play evidence.
 
 ## Measurement protocol
@@ -30,6 +30,7 @@ Measure the human-steered launch response of the existing Physics V2 flippers be
 - **Provenance:** live and fixture summaries remain independent keys in `summarizeFlipperContactSources()`.
 - **Response sanity:** live launches have finite values; no negative `afterSpeed`; no sample exceeds the production speed cap.
 - **Side symmetry:** compare left/right mean `afterSpeed` and `speedDelta`; a side difference greater than 20% is a tuning investigation, not an excuse to hide one side.
+- **Balance report:** call `summarizeFlipperLaunchBalance(samples, { source: 'live' })`; it filters to launches, keeps left/right buckets, reports signed right-minus-left speed delta, and only raises `asymmetric=true` when both sides have samples and either relative mean exceeds the strict `>20%` threshold.
 - **Repeatability:** two identical seeded fixture runs serialize to identical JSON.
 
 ## One-variable tuning order

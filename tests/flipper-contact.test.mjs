@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, shortestAngularDelta, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from '../src/flipper-contact.js';
+import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, shortestAngularDelta, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources, summarizeFlipperLaunchBalance } from '../src/flipper-contact.js';
 
 test('moving flipper query detects a ball at an intermediate angle once', () => {
   const flipper = {
@@ -260,4 +260,33 @@ test('flipper telemetry keeps missing provenance visible as an empty bucket', ()
   assert.deepEqual(Object.keys(reports), ['live', 'fixture']);
   assert.equal(reports.live.count, 0);
   assert.equal(reports.fixture.count, 0);
+});
+
+test('flipper launch balance compares sides without mixing catches or provenance', () => {
+  const report = summarizeFlipperLaunchBalance([
+    { mode: 'catch', side: 'left', source: 'live', afterSpeed: 999, speedDelta: 999 },
+    { mode: 'launch', side: 'left', source: 'live', afterSpeed: 400, speedDelta: 100 },
+    { mode: 'launch', side: 'right', source: 'live', afterSpeed: 500, speedDelta: 120 },
+    { mode: 'launch', side: 'left', source: 'fixture', afterSpeed: 900, speedDelta: 800 }
+  ], { source: 'live' });
+  assert.equal(report.source, 'live');
+  assert.equal(report.left.count, 1);
+  assert.equal(report.right.count, 1);
+  assert.equal(report.left.meanAfterSpeed, 400);
+  assert.equal(report.right.meanAfterSpeed, 500);
+  assert.equal(report.afterSpeedDelta, 100);
+  assert.equal(report.afterSpeedAsymmetry, 0.2);
+  assert.equal(report.asymmetric, false);
+  assert.equal(report.speedDeltaAsymmetry, 1 / 6);
+});
+
+test('flipper launch balance preserves empty sides and does not flag incomplete data', () => {
+  const report = summarizeFlipperLaunchBalance([
+    { mode: 'launch', side: 'left', source: 'live', afterSpeed: 440, speedDelta: 120 }
+  ]);
+  assert.equal(report.left.count, 1);
+  assert.equal(report.right.count, 0);
+  assert.equal(report.afterSpeedDelta, -440);
+  assert.equal(report.afterSpeedAsymmetry, 0);
+  assert.equal(report.asymmetric, false);
 });
