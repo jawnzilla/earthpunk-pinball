@@ -9,7 +9,7 @@
 - `index.html` adds `drawDestructibleMaterialInset(item, palette)` and calls it for live destructibles after their family-specific body geometry.
 - The renderer contract explicitly checks the helper, crate/pipe/drum branches, and live call. The focused contract was red before implementation and green afterward.
 - `npm test`: 50 passed, 0 failed; syntax and whitespace checks passed.
-- No browser or still-frame claim is made before the new commit is deployed and exact portrait checks are rerun.
+- Pages run `32328113261` completed successfully for commit `6507685`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32328113261. Hosted Playwright standard and grayscale routes returned HTTP 200 at exact CSS `320×568` and `390×844`, one canvas, exact viewport dimensions, `scrollWidth === clientWidth`, and zero console/page/request errors. Screenshots were captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-141-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-141-390-gray.png`; they are runtime evidence, not an independently inspected visual verdict.
 
 ### Remaining risk / next smallest slice
 

@@ -13,7 +13,7 @@
 - Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the helper existed with the exact missing material-inset contract, then passed after implementation.
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
-- Exact hosted 320×568/390×844 browser verification is pending deployment; no screenshot, console, or visual-quality claim is made yet.
+- Pages run `32328113261` completed successfully for commit `6507685`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32328113261. Hosted Playwright standard and grayscale routes returned HTTP 200 at exact CSS `320×568` and `390×844`, one canvas, exact viewport dimensions, `scrollWidth === clientWidth`, and zero console/page/request errors. Screenshots were captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-141-320.png` and `%LOCALAPPDATA%/Temp/earthpunk-141-390-gray.png`.
 
 ### Remaining risk / next smallest slice
 
