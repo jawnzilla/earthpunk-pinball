@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 176
 
+## Overhaul tick 180 verdict
+
+**Fail-closed destructible damage boundary: PASS as a bounded first-principles physics hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Invalid contact/config numbers can no longer turn a structural impact into `NaN` damage and corrupt integrity or salvage state.
+
+### Observed evidence
+
+- `src/physics-core.js` normalizes impact speed/energy, threshold, damage scale, elemental stacks, and weakness multipliers before calculating damage; invalid or non-positive energy returns zero.
+- `tests/physics-core.test.mjs` adds a malformed-contact regression. `npm test` passes 56/56; `node --check src/physics-core.js` and `git diff --check` pass.
+- Local exact CSS 320x568 and 390x844 standard, upgrade, active-elements, and depth routes pass 4/4 with HTTP 200, exact viewports, no overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Limits and next gate
+
+- This closes a solver-to-gameplay state boundary only; it is not a subjective visual verdict. Hosted post-deploy verification, human-observed mine/tunnel material/depth, final flipper contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` remain open.
+
 ## Overhaul tick 179 verdict
 
 **Restrained timber grain: PASS as a bounded material-read correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The mine support beam renderer now has a small directional grain cue in addition to its existing value gradient, bevel, and occlusion edge.

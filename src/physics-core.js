@@ -324,17 +324,24 @@ export function calibrateFlipperContactResponse({
 }
 
 export function damageFromContact(contact, { objectMaterial = 'timber', damageScale = 1, threshold = 1.2, weaknesses = {}, elementEffects = {} } = {}) {
-  if (!contact?.hit || contact.separating || contact.impactSpeed < threshold) return 0;
+  // Damage is a gameplay-state boundary: malformed contact/config values must
+  // fail closed instead of turning one bad impact into NaN integrity/rewards.
+  const safeImpactSpeed = Number.isFinite(contact?.impactSpeed) ? Math.max(0, contact.impactSpeed) : 0;
+  const safeImpactEnergy = Number.isFinite(contact?.impactEnergy) ? Math.max(0, contact.impactEnergy) : 0;
+  const safeThreshold = Number.isFinite(threshold) && threshold > 0 ? threshold : 1.2;
+  const safeDamageScale = Number.isFinite(damageScale) && damageScale >= 0 ? damageScale : 0;
+  if (!contact?.hit || contact.separating || safeImpactSpeed < safeThreshold || safeImpactEnergy <= 0) return 0;
   const material = MATERIALS[objectMaterial] ?? MATERIALS.timber;
   const ballMaterial = MATERIALS[contact.materialA] ?? MATERIALS.steel;
-  const speedFactor = clamp(contact.impactSpeed / threshold, 0.25, 2.5);
+  const speedFactor = clamp(safeImpactSpeed / safeThreshold, 0.25, 2.5);
   const materialFactor = clamp(ballMaterial.hardness / Math.max(material.hardness, EPSILON), 0.25, 2.5);
   const elementFactor = Object.entries(elementEffects).reduce((factor, [element, effect]) => {
-    const stacks = effect?.stacks ?? 0;
-    const weakness = weaknesses[element] ?? 1;
+    const stacks = Number.isFinite(effect?.stacks) ? Math.max(0, effect.stacks) : 0;
+    const weakness = Number.isFinite(weaknesses[element]) ? Math.max(0, weaknesses[element]) : 1;
     return factor * (1 + Math.max(0, stacks) * (weakness - 1) * 0.5);
   }, 1);
-  return contact.impactEnergy * damageScale * speedFactor * materialFactor * elementFactor;
+  const damage = safeImpactEnergy * safeDamageScale * speedFactor * materialFactor * elementFactor;
+  return Number.isFinite(damage) ? damage : 0;
 }
 
 export function advanceFixed(world, elapsedSeconds, step = FIXED_DT, maxSteps = 4) {

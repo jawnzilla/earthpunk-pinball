@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 180: fail-closed destructible damage boundary
+
+### Root cause and decision
+
+- Root-cause review found `damageFromContact()` trusted contact energy/speed and authoring values. A non-finite impact energy could pass the threshold branch and return `NaN`, contaminating destructible integrity, damage stages, salvage transitions, and score state.
+- Added one bounded physics-core slice: contact damage now normalizes speed, energy, threshold, damage scale, elemental stacks, and weaknesses at the gameplay boundary and returns zero for invalid/non-positive energy. Valid material and hybrid scaling remains unchanged.
+- Added a deterministic malformed-contact regression. Renderer, collision geometry, input, progression, and assets are unchanged.
+
+### Verification
+
+- Tight regression loop was red before the boundary guard (`NaN` damage), then green after implementation: `npm test` passes 56/56; `node --check src/physics-core.js` and `git diff --check` pass.
+- Exact local browser checks pass 4/4 at CSS 320x568 and 390x844 for standard, upgrade, active-elements, and depth routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- This is a local physics hardening slice until committed and deployed. Global overhaul remains NOT COMPLETE; hosted post-deploy evidence, human image inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 179: add restrained timber grain
 
 ### Root cause and decision

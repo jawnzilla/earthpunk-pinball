@@ -133,6 +133,23 @@ const approx = (actual, expected, tolerance = 1e-6) => {
   assert.ok(fire > plain);
 }
 
+{
+  const malformedContact = {
+    hit: true,
+    separating: false,
+    impactSpeed: Number.POSITIVE_INFINITY,
+    impactEnergy: Number.NaN,
+    materialA: 'steel'
+  };
+  assert.equal(damageFromContact(malformedContact, {
+    objectMaterial: 'unknown',
+    damageScale: Number.NaN,
+    threshold: Number.NaN,
+    weaknesses: { Fire: Number.NaN },
+    elementEffects: { Fire: { stacks: Number.POSITIVE_INFINITY } }
+  }), 0);
+}
+
 assert.equal(MATERIALS.steel.restitution < 1, true);
 assert.equal(FIXED_DT, 1 / 120);
 assert.equal(impactEnergyFromMassSpeed(.012, 10), .6);
