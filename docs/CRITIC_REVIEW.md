@@ -1,3 +1,21 @@
+# Deadlight Critic Review — Overhaul tick 147
+
+## Overhaul tick 147 verdict
+
+**Water/Earth slurry-bind redirection: PASS as a bounded gameplay-correctness slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The canonical slurry branch now arms a one-shot low-friction anchor and redirects the next eligible timber/stone contact along its tangent instead of leaving `response: 'redirect'` as inert metadata.
+
+### Observed evidence
+
+- `src/elemental-effects.js` adds `slurryBind` runtime state and `consumeSlurryBind()`, which projects velocity off the normalized contact normal and consumes the bind once.
+- `index.html` passes destructible material into `onStructureContact()`, recognizes `slurry-bind-contact`, and applies the tangent velocity through the live adapter after the shared solver.
+- The focused regression was red before the export existed and green afterward; `npm test` passes 50/50; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- GitHub Actions Pages run `32336068662` completed successfully for commit `544dc4c`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32336068662.
+- Hosted Playwright exact CSS `320×568` and `390×844` passed standard, grayscale, and upgrade (6/6): HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade effects, and zero console/page/request errors. Hosted source retained the slurry markers. Local browser navigation timed out, and no subjective still-frame verdict is claimed.
+- The mine/tunnel overhaul, remaining hybrid fidelity, independently inspected still frames, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 # Deadlight Critic Review — Overhaul tick 146
 
 ## Overhaul tick 146 verdict

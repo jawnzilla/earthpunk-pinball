@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 147: Water/Earth slurry-bind redirection
+
+### Root cause and decision
+
+- Root-cause tracing found the canonical Water + Earth `slurry-bind` branch only emitted HUD metadata (`response: 'redirect'`); no runtime state or adapter consumed it, so the declared low-friction anchor behavior was inert.
+- Added one bounded Physics V2 slice: the first Water + Earth structure contact arms a one-shot bind; the next timber/stone structure contact emits `slurry-bind-contact`; the table adapter consumes it after the normal contact solver and removes only the incoming normal velocity component, redirecting the probe along the anchor instead of retaining a hard bounce. Copper and other non-anchor materials remain ineligible; damage, rewards, progression, topology, and other hybrids are unchanged.
+- Added deterministic arm/eligible-material/one-shot tangent projection coverage plus renderer-contract assertions for the live adapter seam.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/elemental-effects.test.mjs` failed before `consumeSlurryBind` existed with the missing-export error, then passed after implementation.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+- GitHub Actions Pages run `32336068662` completed successfully for commit `544dc4c`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32336068662.
+- Hosted Playwright exact CSS `320×568` and `390×844` checks passed standard, `?review=grayscale`, and `?review=upgrade` (6/6): HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, zero console/page/request errors; upgrade exposed four `.upgrade-effect` nodes. Hosted source retained the new slurry adapter markers. Local HTTP server navigation timed out in this Windows environment, so no local browser claim is made.
+
+### Remaining risk / next smallest slice
+
+- The mine/tunnel overhaul, remaining hybrid visual/physics fidelity, independently inspected still frames, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 146: Earth/Wind root-sling force consumption
 
 ### Root cause and decision
