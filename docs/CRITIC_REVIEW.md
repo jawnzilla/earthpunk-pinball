@@ -11,7 +11,8 @@
 
 ### Limits and next gate
 
-- Deployment and exact 320x568/390x844 browser evidence will be appended after the pushed Pages artifact is available.
+- Commit `3968a1c` deployed successfully in Pages run `32382091282`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32382091282.
+- Hosted exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6: HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on upgrade, depth fixture present, and no actionable console/page errors. Hosted source retained `rollingResistance`.
 - This does not prove final flipper contact feel, human image-inspected still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`; the largest remaining product gap remains evidence-selected visual/contact review.
 
 ## Overhaul tick 173 verdict

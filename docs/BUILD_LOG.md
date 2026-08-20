@@ -11,10 +11,12 @@
 ### Verification
 
 - Tight red/green loop: the explicit material-resistance regression was red before the new contract; after implementation `npm test` passed 56/56. `node --check src/physics-core.js` and `git diff --check` pass.
-- Local/hosted browser verification and deployment evidence are recorded below after push.
+- Local exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6: HTTP 200, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade choices on the upgrade route, and no console/page errors after filtering one transient hosted asset 503 during the first probe.
+- Hosted exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, exact inner dimensions, no horizontal overflow, one canvas, four upgrade choices on the upgrade route, depth fixture present, and no actionable console/page errors. Hosted source fetch retained `rollingResistance`.
 
 ### Deployment / remaining risk
 
+- Commit `3968a1c` deployed successfully in GitHub Pages run `32382091282`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32382091282.
 - This is a solver tuning-boundary correction, not proof of final flipper feel, human image-inspected mine/tunnel material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 173: integrate and damp ball spin
