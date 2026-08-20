@@ -338,6 +338,9 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
   } else if (objectId && hasPair(effects, 'Earth', 'Wind') && !runtime.hybridUsed.has('root-sling')) {
     runtime.hybridUsed.add('root-sling');
     events.push({ type: 'root-sling', objectId, assist: 1.2 });
+  } else if (objectId && hasPair(effects, 'Fire', 'Wind') && !runtime.hybridUsed.has('thermal-lance')) {
+    runtime.hybridUsed.add('thermal-lance');
+    events.push({ type: 'thermal-lance', objectId, burnEcho: true });
   }
   return events[0] || { type: 'none', counted: false, ignoreResponse: false, damage: false };
 }

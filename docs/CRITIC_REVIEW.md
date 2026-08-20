@@ -1,3 +1,23 @@
+# Deadlight Critic Review — Overhaul tick 135
+
+## Overhaul tick 135 verdict
+
+**Elemental runtime slice: PASS for restoring the declared Fire/Wind hybrid contact; global overhaul: NOT COMPLETE; visual quality: unverified; AAA-ready: FAIL / unverified.** The canonical `thermal-lance` reaction was declared but unreachable from the live structure-contact branch. It now emits once per runtime with a deterministic regression; this is a narrow gameplay/effects correctness slice, not a visual-completion claim.
+
+### Observed evidence
+
+- Before the implementation, the new focused regression failed with the live result `{ type: 'none', counted: false, ignoreResponse: false, damage: false }` for Fire + Wind structure contact.
+- `src/elemental-effects.js` now emits `{ type: 'thermal-lance', objectId, burnEcho: true }` after the existing steam/slurry/root branches and records the hybrid in `runtime.hybridUsed`.
+- The regression asserts the first Fire + Wind contact emits thermal-lance and a subsequent contact returns `none`.
+- `npm test` passes 50/50; `node --check src/elemental-effects.js` and `git diff --check` pass.
+- This commit is not yet deployed. Exact hosted 320×568/390×844 checks, source parity, console state, and screenshots are intentionally unclaimed.
+
+### Remaining risk / next smallest slice
+
+- Deploy this commit and run exact hosted portrait checks with the active-elements fixture.
+- Audit the adapter that consumes structure-contact events: `burnEcho` must produce the intended short-lived wind-echo burn trail, not remain an unconsumed metadata flag.
+- The earthpunk mine/tunnel visual overhaul, material differentiation, destructible readability, and subjective grayscale still-frame review remain open. Do not claim LOOP_COMPLETE.
+
 # Deadlight Critic Review — Overhaul tick 134
 
 ## Overhaul tick 134 verdict

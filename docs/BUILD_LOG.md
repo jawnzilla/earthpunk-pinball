@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 135: Fire/Wind thermal-lance contact completion
+
+### Root cause and decision
+
+- `src/elemental-effects.js` declared the canonical Fire + Wind `thermal-lance` hybrid in `hybridFor()` and `physics-core.js`, but the live `onStructureContact()` branch stopped after Fire/Water, Water/Earth, and Earth/Wind. A Fire + Wind structure contact therefore returned the generic no-event result, so the declared hybrid was unreachable on the primary contact path.
+- Added the smallest root-cause fix: emit `{ type: 'thermal-lance', objectId, burnEcho: true }` once per runtime after the existing three hybrid branches, preserving the one-use `hybridUsed` guard. No renderer, physics response, damage, input, progression, or asset behavior changed.
+- Added a deterministic regression that proves the first Fire + Wind contact emits thermal-lance and the subsequent contact is suppressed.
+
+### Verification
+
+- Red/green loop: focused `node --test tests/elemental-effects.test.mjs` failed before the implementation with actual `type: 'none'`; after the branch was added, `npm test` passed 50/50.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+- Exact 320x568/390x844 browser checks and hosted deployment are pending this commit; no browser, screenshot, console, or Pages result is claimed yet.
+
+### Remaining risk / next smallest slice
+
+- Run exact hosted 320x568 and 390x844 checks after deployment, including the active-elements fixture and source parity probe.
+- Thermal-lance is now emitted by the structure-contact seam, but the renderer/gameplay adapter must still be audited for consuming `burnEcho` as a short-lived echo trail rather than treating the event as presentation-only.
+- The mine/tunnel visual overhaul, portrait grayscale inspection, authored materials, destructible readability, and full physics/effects completion remain open. Do not claim LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 134: hybrid reaction HUD cue
 
 ### Decision

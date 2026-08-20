@@ -182,7 +182,8 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.deepEqual(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-a' }), { type: 'steam-fracture', objectId: 'pipe-a', damageMultiplier: 1.35, extraTick: true });
   assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-b' }).type, 'slurry-bind');
   assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-c' }).type, 'root-sling');
-  assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-d' }).type, 'none');
+  assert.deepEqual(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-d' }), { type: 'thermal-lance', objectId: 'pipe-d', burnEcho: true });
+  assert.equal(onStructureContact(runtime, { effects: hybridEffects, objectId: 'pipe-e' }).type, 'none');
   const wind = createElementalRuntime();
   const echo = onHardBounce(wind, { effects: { Fire: { stacks: 1 }, Wind: { stacks: 3 } }, position: { x: 0, y: 0 }, velocity: { x: 100, y: 0 }, impactSpeed: 2 });
   assert.equal(echo.type, 'wind-echo');
