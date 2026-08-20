@@ -11,11 +11,11 @@
 ### Verification
 
 - Tight red/green loop: the new focused tests first failed because the export was absent; after implementation `npm test` passes 56/56, `node --check src/flipper-contact.js`, and `git diff --check` pass.
-- Hosted exact 320x568/390x844 browser checks and Pages deployment remain required after commit.
+- Hosted Playwright exact CSS 320x568 and 390x844 `?review=flipper-contact&rev=7c63b27` passed 2/2: HTTP 200, `readyState=complete`, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, `data-review-fixture=flipper-contact`, and zero console/page/request errors.
 
 ### Deployment / remaining risk
 
-- This entry will be completed with the pushed commit and hosted workflow evidence after verification.
+- Commit `7c63b27` was pushed only to `prototype`; GitHub Pages run `32365674258` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32365674258. Hosted source fetch returned HTTP 200 and retained `summarizeFlipperLaunchBalance`.
 - This is a measurement-contract slice, not proof of final contact feel or global overhaul completion; `LOOP_COMPLETE` remains open.
 
 ## 2026-08-20 — Overhaul tick 165: tunnel support footings

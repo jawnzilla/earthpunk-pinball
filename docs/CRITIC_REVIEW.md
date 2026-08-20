@@ -11,7 +11,8 @@
 
 ### Limits and next gate
 
-- Hosted exact CSS 320x568 and 390x844 flipper-contact checks plus Pages deployment are still required for this commit.
+- Hosted Playwright exact CSS 320x568 and 390x844 `?review=flipper-contact&rev=7c63b27` passed 2/2 with HTTP 200, complete documents, exact dimensions, no horizontal overflow, one canvas, `data-review-fixture=flipper-contact`, and zero console/page/request errors.
+- Commit `7c63b27` is deployed by successful Pages run `32365674258`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32365674258. Hosted source fetch returned HTTP 200 and retained `summarizeFlipperLaunchBalance`.
 - The API does not provide human-steered samples by itself and does not prove final contact feel, visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 165 verdict
