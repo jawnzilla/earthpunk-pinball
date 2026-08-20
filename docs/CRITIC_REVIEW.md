@@ -12,8 +12,9 @@
 
 ### Limits and next gate
 
-- Hosted exact-viewport verification is pending this commit; no hosted or independently image-inspected still-frame result is claimed yet.
-- The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+- Commit `2b1b7c4` is deployed by successful Pages run `32357543852`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32357543852.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade routes passed 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade choices on upgrade routes, destruction/grayscale fixtures present, and zero console/page/request errors.
+- No independently image-inspected still-frame result is claimed. The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 160 verdict
 

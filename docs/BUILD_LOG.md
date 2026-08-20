@@ -15,7 +15,8 @@
 
 ### Deployment / remaining risk
 
-- Push only `prototype`, wait for the GitHub Pages workflow, then run hosted exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade checks.
+- Commit `2b1b7c4` was pushed only to `prototype`; GitHub Pages run `32357543852` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32357543852.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, destruction and grayscale fixtures present, and four upgrade choices on upgrade routes.
 - This closes one spent-target readability gap but does not establish an independently image-inspected still-frame verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 160: explicit Earth facet branch
