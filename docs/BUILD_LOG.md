@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 143: upgrade choice effect/context pass
+
+### Root cause and decision
+
+- The live upgrade renderer exposed module identity, element, and cost, but omitted the authored effect text and current hinge loadout. At the decision point, players could not compare what a module does against the state they were about to modify.
+- Added one bounded UI slice: the real upgrade overlay now shows `HINGE LOADOUT · L ... · R ...`, keeps the charge requirement visible, and renders each module's effect sentence beneath its title. The change is presentation-only; upgrade costs, apply functions, physics, input, route topology, and progression are unchanged.
+- Added a renderer-contract regression for the context class, effect class, authored `upgrade.text`, and live loadout marker.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the new upgrade markers existed, then passed after the overlay change.
+- `npm test`: 50 passed, 0 failed.
+- `git diff --check` passed.
+- Exact 320×568 and 390×844 browser checks are pending deployment; this checkout has Playwright resolvable but no local Chromium executable. No screenshot or visual-quality claim is made yet.
+
+### Remaining risk / next smallest slice
+
+- Push and verify the Pages artifact, then run hosted exact 320×568 and 390×844 `?review=upgrade` checks for viewport, overflow, console/request errors, and all four visible choices.
+- The complete mine/tunnel overhaul, human-inspected still-frame verdict, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 142: analytic elemental swept-circle entry
 
 ### Root cause and decision

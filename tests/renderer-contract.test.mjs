@@ -150,6 +150,10 @@ assert.match(source, /function drawMeters\(\)/);
 assert.match(source, /drawMeter\(30, 138, 'FUEL'/);
 assert.match(source, /drawMeter\(216, 114, 'TARGET'/);
 assert.match(source, /drawMineStructures\(\); drawMeters\(\);/);
+assert.match(source, /class="upgrade-effect"/);
+assert.match(source, /overlayCopy\.className = 'upgrade-context'/);
+assert.match(source, /upgrade\.text/);
+assert.match(source, /HINGE LOADOUT/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

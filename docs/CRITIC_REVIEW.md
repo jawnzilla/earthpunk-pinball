@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 140
 
+## Overhaul tick 143 verdict
+
+**Upgrade choice communication: PASS as a bounded UI correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The real route-upgrade overlay now communicates module effect text and the current left/right hinge loadout in addition to identity, element, and charge cost. This closes a concrete decision-legibility gap without changing the run systems.
+
+### Observed evidence
+
+- `showModuleChoices()` now renders `upgrade.text` in `.upgrade-effect` and exposes `HINGE LOADOUT` context with left/right installed elements and current charge.
+- `tests/renderer-contract.test.mjs` has the new contract assertions; focused and full suites pass 50/50.
+- Browser/Pages verification is not yet claimed for this unpushed slice. Playwright is resolvable locally, but no Chromium executable is installed in this checkout.
+
+### Limits and next gate
+
+- Deploy this commit and run hosted exact CSS 320×568 and 390×844 `?review=upgrade` checks. Confirm all four choices fit with at least 16px overlay gutters, no horizontal overflow, and zero console/page/request errors; inspect the still frame before selecting another UI slice.
+- The mine/tunnel visual overhaul, grayscale/material still-frame review, and global physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 ## Overhaul tick 142 verdict
 
 **Analytic swept-circle timing: PASS as a bounded physics correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The elemental broad phase now reports the first circle boundary entry rather than the path's closest approach, which makes rewind/residual replay physically meaningful for fast mini-balls and wind echoes.
