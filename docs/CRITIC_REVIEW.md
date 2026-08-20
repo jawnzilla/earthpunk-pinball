@@ -11,8 +11,8 @@
 
 ### Limits and next gate
 
-- This commit is not deployed yet, so no hosted browser or independently image-inspected still-frame result is claimed in this entry.
-- The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+- Commit `217f49e` is deployed by successful Pages run `32354193114`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32354193114. Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes pass 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade choices on upgrade routes, and zero console/page/request errors.
+- This scheduled tick contains runtime/source evidence only; no independently image-inspected still-frame verdict is claimed. The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 158 verdict
 

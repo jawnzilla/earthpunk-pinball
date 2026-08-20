@@ -12,11 +12,11 @@
 
 - `npm test` passed 54/54.
 - `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
-- Hosted exact CSS 320×568 and 390×844 checks are required after Pages deployment; no hosted result is claimed before deployment.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade choices on upgrade routes, and zero console/page/request errors.
 
 ### Deployment / remaining risk
 
-- Push only `prototype`, wait for the Pages run, then verify standard, active-elements, upgrade, and grayscale routes at both exact CSS viewports.
+- Commit `217f49e` was pushed to `prototype`; GitHub Pages run `32354193114` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32354193114. Hosted exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8 with no runtime errors.
 - This improves stacked-element readability but does not establish a still-frame visual verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 158: destructible impact pulse
