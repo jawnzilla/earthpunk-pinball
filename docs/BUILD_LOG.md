@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 134: hybrid reaction HUD cue
+
+### Decision
+
+- Added a compact canvas `HYBRID` cue for the active Fire/Water, Water/Earth, Earth/Wind, and Fire/Wind reaction IDs already produced by the gameplay core.
+- The cue is renderer-only: it reads `state.ball.hybrid`, uses a centered 92px maximum footprint at the existing y=78 status band, and leaves physics, damage, effects, input, and progression unchanged.
+- Added renderer-contract assertions for all four authored hybrid labels and the live composition call. This makes the elemental hybrid system visually legible instead of leaving its gameplay state only in transient message text.
+
+### Verification
+
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+- Hosted pre-deployment smoke against Pages returned HTTP 200 with exact CSS 320px width, one Canvas, and no horizontal overflow; it reported one HTTP 503 asset error on the stale hosted build, so no fresh hosted zero-console claim is made for this commit.
+- No local Chromium executable is available for a local exact-viewport screenshot inspection. No subjective visual-quality claim is made.
+
+### Remaining risk / next smallest slice
+
+- Deploy and rerun exact hosted 320x568 and 390x844 checks against this commit, including the `?review=active-elements` fixture and browser error capture.
+- The full mine/tunnel visual overhaul, portrait grayscale review, material depth, destructive readability, and physics/effects completion remain open. Do not claim LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 133: rotating CCD ordering and benchmark gate
 
 ### Decision

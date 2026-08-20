@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 131
+# Deadlight Critic Review — Overhaul tick 134
+
+## Overhaul tick 134 verdict
+
+**Elemental presentation slice: PASS for hybrid-state legibility; global overhaul: NOT COMPLETE; visual quality: unverified; AAA-ready: FAIL / unverified.** Active hybrid reactions now get a persistent, compact canvas badge rather than existing only as gameplay state and transient prose. This is a narrow UI communication improvement, not a claim that the visual overhaul is complete.
+
+### Observed evidence
+
+- `index.html` adds `drawHybridCue()` and composes it after active element chips in the live draw path.
+- Four known reaction IDs are labeled: STEAM, SLURRY, ROOT SLING, and THERMAL; the badge is capped at 92 internal canvas pixels and occupies the existing y=78 status band.
+- `tests/renderer-contract.test.mjs` asserts the function, labels, footprint, and composition order; `npm test` passes 50/50.
+- Hosted pre-deployment smoke reached Pages at HTTP 200 with exact CSS 320px width, one Canvas, and no horizontal overflow, but one stale hosted asset request returned HTTP 503. It is not evidence for the new commit and zero-console is not claimed.
+
+### Remaining risk / next smallest slice
+
+- Freshly deploy this commit and run exact hosted 320x568 and 390x844 checks against `?review=active-elements`; inspect the hybrid fixture still frame before selecting another visual change.
+- The mine/tunnel depth pass, portrait grayscale inspection, authored materials, destructible readability, and physics/effects completion remain open. Do not claim LOOP_COMPLETE.
 
 ## Overhaul tick 133 verdict
 
