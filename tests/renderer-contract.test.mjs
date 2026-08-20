@@ -9,6 +9,11 @@ assert.match(source, /import \{ projectActiveStatus \} from '\.\/src\/status-pro
 assert.match(source, /const activeStatus = projectActiveStatus/);
 assert.match(source, /projectActiveStatus\(\{ hingeElements: state\.hingeElements/);
 assert.match(source, /function drawDestructibleContactShadow\(item\)/);
+assert.match(source, /function drawDestructibleMaterialInset\(item, palette\)/);
+assert.match(source, /item\.kind === 'crate'/);
+assert.match(source, /item\.kind === 'pipe'/);
+assert.match(source, /item\.kind === 'drum'/);
+assert.match(source, /drawDestructibleMaterialInset\(item, palette\);/);
 assert.match(source, /item\.destroyed \? \.24 : \.34/);
 assert.match(source, /item\.destroyed \? \.08 : \.14/);
 assert.match(source, /drawDestructibleContactShadow\(item\);/);

@@ -1555,6 +1555,40 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.fill();
     ctx.restore();
   }
+  function drawDestructibleMaterialInset(item, palette) {
+    // A narrow inner bevel separates the authored face from its dark collision shell.
+    // It is deliberately material-specific: timber gets a brace, pipe/drum get bands,
+    // and stone keeps a fractured inset instead of inheriting a generic outline.
+    ctx.save();
+    ctx.globalAlpha = .72;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 1.5;
+    if (item.kind === 'crate') {
+      ctx.strokeRect(-item.r * .56, -item.r * .46, item.r * 1.12, item.r * .86);
+      ctx.strokeStyle = palette.light;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(-item.r * .46, -item.r * .36); ctx.lineTo(item.r * .42, item.r * .31); ctx.stroke();
+    } else if (item.kind === 'pipe') {
+      ctx.strokeRect(-item.r * .68, -item.r * .39, item.r * 1.36, item.r * .78);
+      ctx.strokeStyle = palette.edge;
+      ctx.beginPath(); ctx.moveTo(-item.r * .54, -item.r * .2); ctx.lineTo(item.r * .54, -item.r * .2); ctx.moveTo(-item.r * .54, item.r * .2); ctx.lineTo(item.r * .54, item.r * .2); ctx.stroke();
+    } else if (item.kind === 'drum') {
+      ctx.beginPath(); ctx.ellipse(0, 0, item.r * .54, item.r * .78, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = palette.light;
+      ctx.beginPath(); ctx.ellipse(0, -item.r * .43, item.r * .54, item.r * .14, 0, 0, Math.PI * 2); ctx.stroke();
+    } else {
+      ctx.beginPath();
+      for (let point = 0; point < 6; point += 1) {
+        const angle = point * Math.PI / 3 - .18, radius = item.r * (point % 2 ? .54 : .68);
+        const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
+        point ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = palette.light;
+      ctx.beginPath(); ctx.moveTo(-item.r * .34, item.r * .22); ctx.lineTo(item.r * .3, -item.r * .3); ctx.stroke();
+    }
+    ctx.restore();
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
@@ -1595,6 +1629,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       } else {
         drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
       }
+      drawDestructibleMaterialInset(item, palette);
       drawDestructibleSilhouette(item, palette);
       if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }

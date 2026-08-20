@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 141: destructible material inset pass
+
+### Decision
+
+- Root-cause review of the live destructible renderer found that each crate, pipe, drum, and stone plug already had an outer silhouette and sheen, but no material-specific inner face boundary. At portrait scale, the collision shell and face therefore risked reading as one flat badge.
+- Added one bounded renderer-only slice: `drawDestructibleMaterialInset(item, palette)` adds restrained inner bevels, bands, braces, and fracture lines per material family. Physics, damage thresholds, elemental response, reward flow, input, topology, and asset loading are unchanged.
+- Extended the renderer contract to require the helper, all three explicit material branches, and live composition.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the helper existed with the exact missing material-inset contract, then passed after implementation.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Exact hosted 320×568/390×844 browser verification is pending deployment; no screenshot, console, or visual-quality claim is made yet.
+
+### Remaining risk / next smallest slice
+
+- Push and verify the Pages artifact, then run exact hosted standard and grayscale portrait checks at 320×568 and 390×844. Inspect still frames before selecting another renderer change.
+- The global mine/tunnel overhaul, full physics/effects completion, and human visual verdict remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 140: live instrument-meter composition
 
 ### Decision

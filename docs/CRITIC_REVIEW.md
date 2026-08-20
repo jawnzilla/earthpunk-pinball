@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 140
 
+## Overhaul tick 141 verdict
+
+**Destructible material inset pass: PASS as a bounded renderer improvement; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Destructible objects now have a second, material-specific face read inside their collision shells: timber braces, pipe bands, drum rings, and stone fractures. This should improve grayscale separation and damage-state legibility without changing gameplay.
+
+### Observed evidence
+
+- `index.html` adds `drawDestructibleMaterialInset(item, palette)` and calls it for live destructibles after their family-specific body geometry.
+- The renderer contract explicitly checks the helper, crate/pipe/drum branches, and live call. The focused contract was red before implementation and green afterward.
+- `npm test`: 50 passed, 0 failed; syntax and whitespace checks passed.
+- No browser or still-frame claim is made before the new commit is deployed and exact portrait checks are rerun.
+
+### Remaining risk / next smallest slice
+
+- Verify the hosted artifact at exact CSS 320×568 and 390×844 for standard and grayscale routes, including console/request capture and overflow checks.
+- The largest remaining gap is still the full mine/tunnel visual read and independently inspected grayscale/material evidence. Do not claim `LOOP_COMPLETE`.
+
 ## Overhaul tick 140 verdict
 
 **Live instrument-meter composition: PASS as a bounded renderer correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Fuel, target progress, and chain meters were authored but unreachable from the live `draw()` path. The call is now composed between the mine/deck layers and gameplay objects, restoring a compact instrument-panel read without changing physics or input.
