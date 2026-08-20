@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 160
+# Deadlight Critic Review — Overhaul tick 163
+
+## Overhaul tick 163 verdict
+
+**Tunnel work lamps and cable depth cues: PASS as a bounded depth/readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Two distant work lights and one overhead cable give the recessed tunnel a quiet infrastructure/scale cue without turning the mine into a neon overlay.
+
+### Observed evidence
+
+- `index.html` adds `drawMineTunnelLamps()` and composes it after `drawMineTunnelDepth()` but before `drawRecessedWellPlane()`, preserving the intended behind-the-playfield z-order.
+- The helper uses localized radial gradients, dark housings, warm lamp cores, and a low-alpha cable. It does not alter gameplay, physics, input, timing, or HUD state.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes pass 8/8 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Commit `c07e432` is deployed by successful Pages run `32360749034`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32360749034.
+- Screenshots were captured during the hosted matrix but were not independently image-inspected in this scheduled tick, so no subjective still-frame pass is claimed. The largest remaining gap is the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 162 verdict
 

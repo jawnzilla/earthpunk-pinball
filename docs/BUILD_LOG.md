@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 163: tunnel work lamps and cable depth cues
+
+### Root cause and decision
+
+- Source tracing found the new distant tunnel arch supplied a destination plane, but it remained visually uninhabited and lacked a scale cue. The playable well could still read as a framed illustration rather than a mine shaft.
+- Added one bounded renderer-only slice: `drawMineTunnelLamps()` adds two restrained work lamps with localized radial glow, metal housings, and a connecting overhead cable behind the playable well. Collision geometry, physics, input, timing, progression, HUD, and assets are unchanged.
+- Added renderer-contract assertions for the helper, deterministic lamp positions/color, authored intent marker, and live composition.
+
+### Verification
+
+- Tight red/green loop: `npm test` passed 54/54; `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Hosted Playwright exact CSS 320×568 and 390×844 across standard, depth, grayscale, and upgrade routes passed 8/8: HTTP 200, `readyState=complete`, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, and four upgrade buttons on upgrade routes. Screenshots were captured to the OS temp directory and not independently image-inspected in this tick.
+
+### Deployment / remaining risk
+
+- Commit `c07e432` was pushed only to `prototype`; GitHub Pages run `32360749034` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32360749034.
+- Hosted checks prove the deployed source executes and the exact mobile layout remains clean. They do not prove final subjective still-frame quality, contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 162: distant tunnel depth landmark
 
 ### Root cause and decision
