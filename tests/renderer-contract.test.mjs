@@ -196,6 +196,8 @@ assert.match(source, /ctx\.moveTo\(item\.x - item\.r \* \.74, item\.y - item\.r 
 assert.match(source, /function drawMineStrata\(\)/);
 assert.match(source, /Bedrock strata stay outside the playable deck/);
 assert.match(source, /drawMineStrata\(\);/);
+assert.doesNotMatch(source, /for \(let band = 0; band < 9; band \+= 1\).*ctx\.moveTo\(24, y\)/s, 'legacy full-width bedrock wash must not cross the playable well');
+assert.doesNotMatch(source, /for \(let band = 0; band < 8; band \+= 1\).*ctx\.moveTo\(24, y \+ 8\)/s, 'legacy full-width bedrock highlight wash must not cross the playable well');
 assert.match(source, /function drawMineGrime\(\)/);
 assert.match(source, /const grimeMarks = \[\[34, 156, 18, 5\]/);
 assert.match(source, /drawMineGrime\(\);/);

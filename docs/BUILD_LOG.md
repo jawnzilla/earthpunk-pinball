@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 182: remove legacy full-table strata wash
+
+### Root cause and decision
+
+- Root-cause review found `drawMineBackdrop()` still drew nine broad bedrock curves and eight highlight curves from the left wall edge to the right wall edge, crossing the playable well. This contradicted the newer bounded side-wall strata pass and the canon's prohibition on persistent full-table wash.
+- Removed only those legacy backdrop loops. `drawMineStrata()` remains the sole bounded strata cue, keeping geology in the non-playable side margins. Physics, collision geometry, input, progression, and assets are unchanged.
+- Added two renderer-contract assertions that fail if either legacy full-width loop returns.
+
+### Verification
+
+- Tight regression loop was red after the assertions were added (the old loops matched), then green after removal: `npm test` passes 56/56 and `git diff --check` passes.
+- Exact local browser checks pass 10/10 at CSS 320x568 and 390x844 for standard, depth, active-elements, grayscale, and upgrade routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- This slice is local until commit/push and GitHub Pages deployment are verified. Global overhaul remains NOT COMPLETE; hosted post-deploy checks, human still-frame inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 181: bedrock strata material cue
 
 ### Root cause and decision

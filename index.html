@@ -1287,11 +1287,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const wall = ctx.createLinearGradient(0, 0, W, H); wall.addColorStop(0, '#201a15'); wall.addColorStop(.42, '#2c241c'); wall.addColorStop(1, '#0d0e0d');
     ctx.fillStyle = wall; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#161513'; ctx.fillRect(18, 18, W - 36, H - 36);
-    ctx.save(); ctx.globalAlpha = .5; ctx.strokeStyle = '#5a4330'; ctx.lineWidth = 2;
-    for (let band = 0; band < 9; band += 1) { const y = 52 + band * 64; ctx.beginPath(); ctx.moveTo(24, y); ctx.bezierCurveTo(82, y - 18 + (band % 2) * 9, 126, y + 14, 180, y - 2); ctx.bezierCurveTo(236, y - 19, 278, y + 16, W - 24, y - 4); ctx.stroke(); }
-    ctx.globalAlpha = .22; ctx.strokeStyle = '#907052'; ctx.lineWidth = 1;
-    for (let band = 0; band < 8; band += 1) { const y = 66 + band * 64; ctx.beginPath(); ctx.moveTo(24, y + 8); ctx.bezierCurveTo(84, y - 8, 128, y + 18, 180, y + 4); ctx.bezierCurveTo(234, y - 11, 280, y + 16, W - 24, y + 2); ctx.stroke(); }
-    ctx.restore();
+    // Keep the wall quiet here. Bounded side-wall strata are composed by drawMineStrata()
+    // after the deck shell, so geology does not become a persistent full-table wash.
     ctx.save(); ctx.fillStyle = '#111412'; ctx.beginPath(); ctx.moveTo(76, 28); ctx.lineTo(W - 76, 28); ctx.lineTo(W - 116, 118); ctx.lineTo(116, 118); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#5a4330'; ctx.lineWidth = 3; ctx.stroke();
     ctx.fillStyle = 'rgba(215,164,90,.08)'; ctx.beginPath(); ctx.moveTo(108, 35); ctx.lineTo(W - 108, 35); ctx.lineTo(W - 142, 105); ctx.lineTo(142, 105); ctx.closePath(); ctx.fill(); ctx.restore();
     ctx.save(); const deck = ctx.createLinearGradient(0, 100, 0, H - 24); deck.addColorStop(0, '#31312a'); deck.addColorStop(.48, '#252825'); deck.addColorStop(1, '#171a18'); ctx.fillStyle = deck; ctx.fillRect(27, 100, W - 54, H - 126); ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 3; ctx.strokeRect(27, 100, W - 54, H - 126); ctx.strokeStyle = 'rgba(9,10,9,.7)'; ctx.lineWidth = 8; ctx.strokeRect(31, 104, W - 62, H - 134); ctx.restore();
