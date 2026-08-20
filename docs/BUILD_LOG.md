@@ -14,6 +14,8 @@
 - Serial full suite: `node --test --test-concurrency=1 tests/*.test.mjs` — 50 passed, 0 failed.
 - `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
 - Local exact-viewport browser attempt was blocked by this Windows environment's local HTTP server returning `ERR_EMPTY_RESPONSE` to both curl and Playwright; no local screenshot, console, or visual-quality claim is made. The temporary harness was outside the repository.
+- GitHub Pages run `32326742297` completed successfully for commit `8fdf351`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32326742297. Hosted source probe returned HTTP 200, 217319 bytes, and retained both `drawMeters();` and the FUEL meter marker.
+- Hosted Playwright exact CSS `320×568` standard and grayscale routes returned HTTP 200, one canvas, exact dimensions, and `scrollWidth === clientWidth`. The standard route reported one 404 console error; grayscale reported repeated `ERR_INSUFFICIENT_RESOURCES` sprite failures, so zero-console and complete-asset claims are blocked. A separate exact `390×844` attempt exhausted the local Node/Playwright process and timed out; no 390×844 claim is made.
 
 ### Remaining risk / next smallest slice
 

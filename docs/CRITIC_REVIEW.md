@@ -10,6 +10,7 @@
 - `tests/renderer-contract.test.mjs` asserts the helper, both meter definitions, and the exact live composition seam.
 - The focused renderer contract was red before the call existed and passed after the call was added. Serial full suite passes 50/50; syntax and whitespace checks pass.
 - Local exact-viewport browser execution was attempted but blocked by the environment's local HTTP server returning `ERR_EMPTY_RESPONSE` to curl and Playwright. No screenshot or subjective visual verdict is claimed from local runtime.
+- Pages run `32326742297` completed successfully for commit `8fdf351`. Hosted source returned HTTP 200 and retained the live meter markers. Hosted exact CSS `320×568` standard and grayscale routes confirmed HTTP 200, one canvas, exact dimensions, and no horizontal overflow, but the standard route had one 404 console error and grayscale had repeated `ERR_INSUFFICIENT_RESOURCES` sprite failures. A 390×844 attempt timed out after local Node/Playwright OOM pressure; no 390×844 claim is made.
 
 ### Remaining risk / next smallest slice
 
