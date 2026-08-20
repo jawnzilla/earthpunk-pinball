@@ -11,11 +11,12 @@
 
 - `npm test` passed 53/53.
 - `node --check src/physics-calibration.mjs`, `node --check src/physics-core.js`, and `git diff --check` passed.
-- Local browser verification was blocked by the available Windows static servers serving `.mjs` as `text/plain`; this is a test-server MIME limitation, not a product result. Hosted verification is required after Pages deployment.
+- Local browser verification was blocked by the available Windows static servers serving `.mjs` as `text/plain`; this is a test-server MIME limitation, not a product result.
 
 ### Deployment / remaining risk
 
-- Push only `prototype`, wait for Pages, then run exact CSS 320×568 and 390×844 hosted checks for standard, depth, destruction-run, and calibration routes.
+- Commit `66c474b` was pushed to `prototype`; GitHub Actions Pages run `32347784333` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32347784333.
+- Hosted exact CSS 320×568 and 390×844 standard, depth, destruction-run, calibration, upgrade, and grayscale routes passed 12/12: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, calibration `true`, four upgrade effects, and zero console/page/request errors.
 - This closes a deployment-evidence seam only. It does not establish final collision feel, independently inspected visual quality, or global overhaul completion. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 154: live manifold dispatch integration

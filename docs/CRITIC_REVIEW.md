@@ -8,10 +8,11 @@
 
 - `index.html` imports `runPhysicsCalibration()` and `?review=calibration` writes `reviewCalibrationPass`, `reviewCalibrationGates`, and `reviewCalibrationSamples` to the document dataset.
 - `npm test` passes 53/53; syntax and whitespace checks pass.
+- Pages run `32347784333` succeeded for commit `66c474b`; hosted exact CSS 320×568 and 390×844 standard, depth, destruction-run, calibration, upgrade, and grayscale routes pass 12/12 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, calibration `true`, four upgrade effects, and zero console/page/request errors.
 
 ### Limits and next gate
 
-- Local browser verification could not be completed because the available Windows static servers served `.mjs` as `text/plain`; no local browser pass is claimed. Hosted exact viewport verification remains required after deployment.
+- Local browser verification could not be completed because the available Windows static servers served `.mjs` as `text/plain`; no local browser pass is claimed. Hosted verification is the authoritative deployed result for this slice.
 - This is deployment/runtime evidence plumbing, not a visual or gameplay-quality correction. The still-frame verdict, final contact feel, remaining overhaul work, and `LOOP_COMPLETE` gate remain open.
 
 ## Overhaul tick 154 verdict
