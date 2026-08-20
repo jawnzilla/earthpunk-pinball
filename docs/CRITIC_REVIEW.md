@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- No subjective still-frame verdict is claimed from this scheduled tick. Hosted post-deploy verification is required after push. The largest remaining product gap is human-observed mine/tunnel material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
+- No subjective still-frame verdict is claimed from this scheduled tick. Commit `6982233` deployed successfully in Pages run `32399488426`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32399488426. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 for standard, depth, active-elements, grayscale, and upgrade routes; hosted source retains `drawMineStrata()` and both legacy loops are absent. The largest remaining product gap is human-observed mine/tunnel material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 181 verdict
 

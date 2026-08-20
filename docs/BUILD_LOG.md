@@ -15,7 +15,7 @@
 
 ### Deployment / remaining risk
 
-- This slice is local until commit/push and GitHub Pages deployment are verified. Global overhaul remains NOT COMPLETE; hosted post-deploy checks, human still-frame inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+- Commit `6982233` deployed successfully in Pages run `32399488426`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32399488426. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 for standard, depth, active-elements, grayscale, and upgrade routes: HTTP 200, exact viewports, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors. Hosted `index.html` retains `drawMineStrata()` and no longer contains either legacy full-width loop. Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
 
 ## 2026-08-20 — Overhaul tick 181: bedrock strata material cue
 
