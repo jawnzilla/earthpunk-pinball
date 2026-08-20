@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 162: distant tunnel depth landmark
+
+### Root cause and decision
+
+- Source tracing found the mine backdrop had a wall, grime, and playable recessed well, but no quiet architectural destination behind the upper playfield. The remaining depth read was therefore mostly a framed surface rather than a mine/tunnel ascent.
+- Added one bounded renderer-only slice: `drawMineTunnelDepth()` draws a recessed arched continuation with layered occlusion, a warm lintel edge, a lower sill, and restrained geology seams behind the playable well. Collision geometry, object layout, physics, input, timing, progression, and assets are unchanged.
+- Added renderer-contract assertions for the helper, deterministic arch bounds, and live composition.
+
+### Verification
+
+- Tight red/green loop: `npm test` was red after adding the new renderer contract, then passed 54/54 after the helper and live draw seam were implemented.
+- `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, depth/grayscale fixtures present, and four upgrade choices on upgrade routes. Screenshots were captured to the OS temp directory, not the repository.
+
+### Deployment / remaining risk
+
+- Commit `ce36688` was pushed only to `prototype`; GitHub Pages run `32359170664` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32359170664.
+- Hosted source returned HTTP 200 and the browser executed the new helper. This closes one tunnel-depth landmark gap but does not establish an independently image-inspected still-frame verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 161: spent target material silhouettes
 
 ### Root cause and decision

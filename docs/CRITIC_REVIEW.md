@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 160
 
+## Overhaul tick 162 verdict
+
+**Distant tunnel depth landmark: PASS as a bounded depth/readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The upper mine wall now contains a recessed arch with a darker interior, layered rim, sill, and sparse seams, giving the portrait table a destination behind the playable well instead of only a framed backdrop.
+
+### Observed evidence
+
+- `index.html` adds `drawMineTunnelDepth()` and composes it after the backdrop/grime layer but before `drawRecessedWellPlane()`, so the landmark remains behind the playable plane.
+- The helper uses nested fill/stroke layers and restrained opacity rather than another bright overlay; no gameplay or collision code changed.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes pass 8/8 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Commit `ce36688` is deployed by successful Pages run `32359170664`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32359170664.
+- Screenshots were captured during the hosted matrix but were not independently image-inspected in this scheduled tick, so no subjective still-frame pass is claimed. The largest remaining gap is the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 161 verdict
 
 **Spent target material silhouettes: PASS as a bounded hit-state readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Hit targets now retain distinct timber, stone, and copper outlines instead of collapsing to a generic dark circle during cooldown.
