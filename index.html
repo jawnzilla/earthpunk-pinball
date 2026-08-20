@@ -325,6 +325,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, applyImpulse, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
+import { runPhysicsCalibration } from './src/physics-calibration.mjs';
 import { collectRuntimeContactCandidates, dispatchRuntimeContact, selectEarliestContact } from './src/contact-manifold.js';
 import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, consumeSteamPressure, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
@@ -809,6 +810,18 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     document.body.dataset.reviewDamageStages = stages.join(',');
     document.body.dataset.reviewRewardTransitions = String(rewardTransitions);
     updateHud();
+  }
+  // Review-only fixture: exposes the renderer-independent calibration gate to
+  // the hosted browser packet without adding a player-facing HUD or changing
+  // the live simulation. The JSON-like report remains on the document for an
+  // automated check and for future capture tooling.
+  function activateCalibrationReviewFixture() {
+    if (new URLSearchParams(window.location.search).get('review') !== 'calibration') return;
+    const report = runPhysicsCalibration();
+    document.body.dataset.reviewFixture = 'calibration';
+    document.body.dataset.reviewCalibrationPass = String(report.pass);
+    document.body.dataset.reviewCalibrationGates = JSON.stringify(report.gates);
+    document.body.dataset.reviewCalibrationSamples = JSON.stringify(report.samples);
   }
   // Review-only fixture: puts the production table through a value-only pass.
   // CSS filtering leaves physics and renderer colors untouched while making
@@ -1964,7 +1977,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   window.addEventListener('keydown', event => { if (event.key in keys) { keys[event.key] = true; syncInput(); event.preventDefault(); } });
   window.addEventListener('keyup', event => { if (event.key in keys) { keys[event.key] = false; syncInput(); event.preventDefault(); } });
   const defaultPresetButton = debugPanel.querySelector('[data-preset="pop"]'); if (defaultPresetButton) { defaultPresetButton.classList.add('is-active'); defaultPresetButton.setAttribute('aria-pressed', 'true'); } syncTuningControls(); resetButton.onclick = reset;
-  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateActiveElementsReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture(); activateDestructionRunReviewFixture();
+  reset(); activateUpgradeReviewFixture(); loop(); activateGrayscaleReviewFixture(); activateDepthReviewFixture(); activateActiveElementsReviewFixture(); activateFlipperContactReviewFixture(); activateDamagePulseReviewFixture(); activateDestructionRunReviewFixture(); activateCalibrationReviewFixture();
 })();
 </script>
 </body>

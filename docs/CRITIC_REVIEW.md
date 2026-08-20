@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 151
 
+## Overhaul tick 155 verdict
+
+**Hosted calibration review fixture: PASS as a bounded verification seam; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The existing deterministic physics calibration now has an opt-in browser route that executes the production `.mjs` module and exposes its pass/gate/sample report without expanding the player HUD.
+
+### Observed evidence
+
+- `index.html` imports `runPhysicsCalibration()` and `?review=calibration` writes `reviewCalibrationPass`, `reviewCalibrationGates`, and `reviewCalibrationSamples` to the document dataset.
+- `npm test` passes 53/53; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- Local browser verification could not be completed because the available Windows static servers served `.mjs` as `text/plain`; no local browser pass is claimed. Hosted exact viewport verification remains required after deployment.
+- This is deployment/runtime evidence plumbing, not a visual or gameplay-quality correction. The still-frame verdict, final contact feel, remaining overhaul work, and `LOOP_COMPLETE` gate remain open.
+
 ## Overhaul tick 154 verdict
 
 **Live manifold dispatch integration: PASS as a bounded physics-ownership correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The selected cross-family contact now routes through the stateful dispatch seam instead of leaving boundary, circle, segment, and flipper resolution split across parallel conditionals.

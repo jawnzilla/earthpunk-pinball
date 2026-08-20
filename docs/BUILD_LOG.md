@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 155: hosted physics calibration review fixture
+
+### Root cause and decision
+
+- The deterministic calibration gate already existed and passed in Node, but it had no browser-facing route. That left the hosted verification packet unable to prove that the deployed module graph executes the same calibration report without adding debug HUD clutter.
+- Added opt-in `?review=calibration`. It runs `runPhysicsCalibration()` and stores the pass flag, gates, and JSON-like samples on `document.body.dataset` only. Normal play, rendering, physics, input, progression, and HUD are unchanged.
+
+### Verification
+
+- `npm test` passed 53/53.
+- `node --check src/physics-calibration.mjs`, `node --check src/physics-core.js`, and `git diff --check` passed.
+- Local browser verification was blocked by the available Windows static servers serving `.mjs` as `text/plain`; this is a test-server MIME limitation, not a product result. Hosted verification is required after Pages deployment.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for Pages, then run exact CSS 320×568 and 390×844 hosted checks for standard, depth, destruction-run, and calibration routes.
+- This closes a deployment-evidence seam only. It does not establish final collision feel, independently inspected visual quality, or global overhaul completion. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 154: live manifold dispatch integration
 
 ### Root cause and decision
