@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- This commit is not deployed yet, so no hosted Pages run, exact 320×568/390×844 browser result, or screenshot claim is made.
+- GitHub Actions Pages run `32333220401` completed successfully for commit `846bf90`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32333220401. Hosted Playwright passed standard, grayscale, and destruction-run at exact CSS `320×568` and `390×844` (6/6): HTTP 200, exact dimensions, one canvas, no horizontal overflow, zero console/page/request errors, and deployed pulse markers present.
 - Inspect the pulse on the hosted portrait and grayscale still frames after deployment. The mine/tunnel visual overhaul, full first-principles physics/effects completion, and human visual verdict remain open. Do not claim `LOOP_COMPLETE`.
 
 ## Overhaul tick 144 verdict

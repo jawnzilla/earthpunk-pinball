@@ -13,7 +13,8 @@
 - Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the pulse markers existed, then passed after implementation.
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/*.js` and `git diff --check` passed.
-- Deployment and hosted exact 320×568/390×844 browser verification are pending this commit; no hosted or subjective visual claim is made yet.
+- GitHub Actions Pages run `32333220401` completed successfully for commit `846bf90`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32333220401.
+- Hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed standard, `?review=grayscale`, and `?review=destruction-run` at exact CSS `320×568` and `390×844` (6/6): HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, zero console/page/request errors, and deployed `drawTargetImpactPulse`/`hitPulse` markers present. The pulse was not independently image-inspected; this is runtime/source parity evidence only.
 
 ### Remaining risk / next smallest slice
 
