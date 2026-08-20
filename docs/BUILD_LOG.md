@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 177: flipper blade hardware cue
+
+### Root cause and decision
+
+- Root-cause review found the authored flipper sprite path returned immediately with no shared inset, edge break, or fastener cue. The foreground mechanism could therefore lose its manufactured silhouette depending on asset availability.
+- Added one bounded renderer-only slice: `drawFlipperBladeHardware()` overlays a narrow inset, dark lower edge, and two fasteners on the sprite path. It uses existing blade endpoints and width only; collision geometry, motor motion, physics constants, input, progression, and assets are unchanged.
+- Added renderer-contract assertions for the helper, live sprite-path call, and deterministic fastener positions.
+
+### Verification
+
+- `npm test` passes 56/56; `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` pass.
+- Exact local and current-hosted browser checks passed 12/12 at 320x568 and 390x844 for standard, `?review=depth`, and `?review=upgrade`: HTTP 200, exact CSS viewport, no horizontal overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
+- Local verification used the MIME-correct static server on port 4183; screenshots were not committed.
+
+### Deployment / remaining risk
+
+- Deployment evidence is pending the Pages workflow for this commit.
+- This improves the foreground mechanism silhouette but does not prove human image-inspected still-frame quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 176: reserve the identity HUD band
 
 ### Root cause and decision

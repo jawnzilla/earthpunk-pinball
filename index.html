@@ -2030,10 +2030,24 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.stroke();
     ctx.restore();
   }
+  function drawFlipperBladeHardware(end, width, active) {
+    // A narrow inset, tip cap, and fasteners give the blade a manufactured silhouette
+    // even when the authored sprite is unavailable; this is visual-only and never feeds collision geometry.
+    const dx = end.x2 - end.x1, dy = end.y2 - end.y1, length = Math.hypot(dx, dy) || 1, nx = -dy / length, ny = dx / length;
+    ctx.save();
+    ctx.globalAlpha = active ? .9 : .62;
+    ctx.strokeStyle = active ? '#fff0ba' : '#b5d3a1'; ctx.lineWidth = Math.max(1, width * .07); ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(end.x1 + nx * width * .2, end.y1 + ny * width * .2); ctx.lineTo(end.x2 - (end.x2 - end.x1) * .12 + nx * width * .1, end.y2 - (end.y2 - end.y1) * .12 + ny * width * .1); ctx.stroke();
+    ctx.strokeStyle = '#172321'; ctx.lineWidth = Math.max(1, width * .12);
+    ctx.beginPath(); ctx.moveTo(end.x1 - nx * width * .22, end.y1 - ny * width * .22); ctx.lineTo(end.x2 - (end.x2 - end.x1) * .16 - nx * width * .12, end.y2 - (end.y2 - end.y1) * .16 - ny * width * .12); ctx.stroke();
+    ctx.fillStyle = active ? '#ffd083' : '#789487';
+    for (const fraction of [.24, .56]) { const x = end.x1 + (end.x2 - end.x1) * fraction, y = end.y1 + (end.y2 - end.y1) * fraction; ctx.beginPath(); ctx.arc(x, y, Math.max(1.5, width * .08), 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
   function drawFlipperBlade(flipper, end, active, moving) {
     const dx = end.x2 - end.x1, dy = end.y2 - end.y1, length = Math.hypot(dx, dy) || 1, nx = -dy / length, ny = dx / length, width = flipper.width;
     drawFlipperContactShadow(end, width);
-    if (spriteImages.flipperBlade.complete && spriteImages.flipperBlade.naturalWidth) { ctx.save(); ctx.translate(end.x1, end.y1); ctx.rotate(Math.atan2(dy, dx)); ctx.globalAlpha = active ? 1 : .92; ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2; ctx.drawImage(spriteImages.flipperBlade, 0, -width / 2, length, width); ctx.restore(); return; }
+    if (spriteImages.flipperBlade.complete && spriteImages.flipperBlade.naturalWidth) { ctx.save(); ctx.translate(end.x1, end.y1); ctx.rotate(Math.atan2(dy, dx)); ctx.globalAlpha = active ? 1 : .92; ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2; ctx.drawImage(spriteImages.flipperBlade, 0, -width / 2, length, width); ctx.restore(); drawFlipperBladeHardware(end, width, active); return; }
     const tipWidth = width * .42, inset = 3, gradient = ctx.createLinearGradient(end.x1, end.y1, end.x2, end.y2); gradient.addColorStop(0, active ? '#fff0ba' : '#f1b35b'); gradient.addColorStop(.42, active ? '#ffd083' : '#c88748'); gradient.addColorStop(1, '#6b4932');
     ctx.save(); ctx.shadowColor = active ? '#f1b35b' : 'rgba(241,179,91,.22)'; ctx.shadowBlur = active ? (moving ? 15 : 6) : 2;
     ctx.beginPath(); ctx.moveTo(end.x1 + nx * width * .62, end.y1 + ny * width * .62); ctx.lineTo(end.x2 + nx * tipWidth, end.y2 + ny * tipWidth); ctx.quadraticCurveTo(end.x2, end.y2, end.x2 - nx * tipWidth, end.y2 - ny * tipWidth); ctx.lineTo(end.x1 - nx * width * .62, end.y1 - ny * width * .62); ctx.closePath(); ctx.fillStyle = gradient; ctx.fill(); ctx.strokeStyle = '#ffe8a5'; ctx.lineWidth = 1.5; ctx.stroke();

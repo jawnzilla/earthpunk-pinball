@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 176
 
+## Overhaul tick 177 verdict
+
+**Flipper blade hardware cue: PASS as a bounded foreground-silhouette correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The authored sprite path now receives the same restrained mechanical read as the fallback: inset edge, dark lower separation, and two fasteners.
+
+### Observed evidence
+
+- `index.html` adds `drawFlipperBladeHardware(end, width, active)` and calls it after the loaded flipper sprite is drawn, preserving the existing endpoint transform and collision-independent renderer path.
+- `tests/renderer-contract.test.mjs` asserts the helper, its live call, manufactured-silhouette intent, and fixed `.24/.56` fastener fractions. `npm test` passes 56/56; syntax and whitespace checks pass.
+- Local and hosted exact CSS 320x568 and 390x844 standard, depth, and upgrade routes pass 12/12 with HTTP 200, exact dimensions, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Deployment evidence is pending the Pages workflow for this commit.
+- This is a renderer-only foreground cue, not independent image inspection of the still frame or proof of contact feel, complete hybrid fidelity, material parity, or `LOOP_COMPLETE`. The largest remaining product gap remains evidence-selected visual/contact review.
+
 ## Overhaul tick 176 verdict
 
 **Identity HUD band reservation: PASS as a bounded readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The table identity strip no longer occludes the fuel/target meter rail: it now occupies y=96–118 while the meters remain at y=124–140.
