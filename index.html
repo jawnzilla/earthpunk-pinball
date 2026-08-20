@@ -1811,11 +1811,43 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     }
     ctx.restore();
   }
+  function drawTargetHitSilhouette(target) {
+    // A hit target should stay recognizable as timber, stone, or copper while it cools.
+    // Preserve the authored silhouette instead of collapsing every spent target to a circle.
+    const family = targetMaterialFamily(target);
+    ctx.save();
+    ctx.globalAlpha *= .9;
+    ctx.strokeStyle = '#171614';
+    ctx.lineWidth = Math.max(2, target.r * .14);
+    ctx.lineJoin = 'round';
+    if (family === 0) {
+      ctx.strokeRect(-target.r * .78, -target.r * .61, target.r * 1.56, target.r * 1.22);
+      ctx.strokeStyle = '#9a6940';
+      ctx.lineWidth = Math.max(1, target.r * .08);
+      ctx.beginPath(); ctx.moveTo(-target.r * .58, -target.r * .42); ctx.lineTo(target.r * .48, target.r * .36); ctx.stroke();
+    } else if (family === 1) {
+      ctx.beginPath();
+      for (let point = 0; point < 6; point += 1) {
+        const angle = point * Math.PI / 3 - .18;
+        const radius = target.r * (point % 2 ? .62 : .8);
+        const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
+        point ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = '#8f866f'; ctx.lineWidth = Math.max(1, target.r * .08);
+      ctx.beginPath(); ctx.moveTo(-target.r * .34, -target.r * .2); ctx.lineTo(target.r * .34, target.r * .18); ctx.stroke();
+    } else {
+      ctx.strokeRect(-target.r * .66, -target.r * .38, target.r * 1.32, target.r * .76);
+      ctx.strokeStyle = '#778078'; ctx.lineWidth = Math.max(1, target.r * .08);
+      ctx.beginPath(); ctx.moveTo(-target.r * .44, -target.r * .35); ctx.lineTo(-target.r * .44, target.r * .35); ctx.moveTo(target.r * .44, -target.r * .35); ctx.lineTo(target.r * .44, target.r * .35); ctx.stroke();
+    }
+    ctx.restore();
+  }
   function drawTargets() {
     targets.forEach((target, index) => {
       ctx.save(); ctx.translate(target.x, target.y); ctx.globalAlpha = target.hit ? .42 : 1;
       drawTargetContactShadow(target); drawTargetImpactPulse(target);
-      if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.beginPath(); ctx.moveTo(-target.r * .45, -target.r * .35); ctx.lineTo(target.r * .4, target.r * .35); ctx.stroke(); ctx.restore(); return; }
+      if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); drawTargetHitSilhouette(target); ctx.restore(); return; }
       const family = targetMaterialFamily(target);
       ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = family === 0 ? '#5b3d29' : family === 1 ? '#51483d' : '#3e4a47';
       if (family === 0) { ctx.fillRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeRect(-target.r * .72, -target.r * .55, target.r * 1.44, target.r * 1.1); ctx.strokeStyle = '#9a6940'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-target.r * .55, -target.r * .42); ctx.lineTo(target.r * .52, target.r * .4); ctx.moveTo(target.r * .52, -target.r * .42); ctx.lineTo(-target.r * .55, target.r * .4); ctx.stroke(); }

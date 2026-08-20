@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 161: spent target material silhouettes
+
+### Root cause and decision
+
+- Source tracing found hit targets collapsed to the same dark circular fallback while cooling, discarding the timber, stone, and copper silhouette language used by intact targets.
+- Added one bounded renderer-only slice: `drawTargetHitSilhouette()` preserves each target material family's outline and key structural mark in the hit state. Collision, hit timing, scoring, elemental state, and target recovery are unchanged.
+- Added renderer-contract assertions for the helper and live hit branch.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for the GitHub Pages workflow, then run hosted exact CSS 320×568 and 390×844 standard, destruction-run, grayscale, and upgrade checks.
+- This closes one spent-target readability gap but does not establish an independently image-inspected still-frame verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 160: explicit Earth facet branch
 
 ### Root cause and decision

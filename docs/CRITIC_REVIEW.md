@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 160
 
+## Overhaul tick 161 verdict
+
+**Spent target material silhouettes: PASS as a bounded hit-state readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Hit targets now retain distinct timber, stone, and copper outlines instead of collapsing to a generic dark circle during cooldown.
+
+### Observed evidence
+
+- `index.html` adds `drawTargetHitSilhouette(target)` and calls it from the live `target.hit` branch after the existing hit fill and pulse.
+- The helper reuses the target's material family to draw timber braces, a stone facet, or copper bands. It is renderer-only; no gameplay state changes.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- Hosted exact-viewport verification is pending this commit; no hosted or independently image-inspected still-frame result is claimed yet.
+- The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 160 verdict
 
 **Explicit Earth facet ownership: PASS as a bounded renderer-contract correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Earth plate marks now have a named branch instead of being the implicit fallback, preserving the intended grayscale silhouette language while isolating malformed review data.

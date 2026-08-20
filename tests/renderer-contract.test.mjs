@@ -34,6 +34,9 @@ assert.match(source, /ctx\.ellipse\(3, radius \* \.72, radius \* 1\.08, radius \
 assert.match(source, /drawTargetContactShadow\(target\);/);
 assert.match(source, /function targetMaterialFamily\(target\)/);
 assert.match(source, /function drawTargetMaterialCue\(target\)/);
+assert.match(source, /function drawTargetHitSilhouette\(target\)/);
+assert.match(source, /A hit target should stay recognizable as timber, stone, or copper/);
+assert.match(source, /drawTargetHitSilhouette\(target\);/);
 assert.match(source, /target\.material === 'stone'/);
 assert.match(source, /ctx\.strokeStyle = '#0d1211'/);
 assert.match(source, /drawTargetMaterialCue\(target\);/);
