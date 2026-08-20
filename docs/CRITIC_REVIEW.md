@@ -12,7 +12,9 @@
 
 ### Limits and next gate
 
-- Hosted Pages verification for the new commit is still pending. The local browser check used port 4174 because port 4173 was occupied by an unrelated server.
+- GitHub Actions Pages run `32341689757` completed successfully for commit `1d166b4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32341689757. Hosted HTML returned HTTP 200 and retained the thermal-lance marker.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
+- The local browser check used port 4174 because port 4173 was occupied by an unrelated server.
 - This closes one gameplay consequence gap but does not prove final feel, material fidelity, or visual quality. The mine/tunnel overhaul, complete hybrid fidelity, independently inspected still frames, and `LOOP_COMPLETE` gate remain open.
 
 # Deadlight Critic Review — Overhaul tick 150

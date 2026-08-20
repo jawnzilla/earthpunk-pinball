@@ -15,7 +15,9 @@
 
 ### Deployment / remaining risk
 
-- This tick is ready for the `prototype` push and hosted Pages verification. The local 4173 port was occupied by an unrelated server, so the exact local check used port 4174; no product failure was inferred from that environment collision.
+- GitHub Actions Pages run `32341689757` completed successfully for commit `1d166b4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32341689757. Hosted HTML returned HTTP 200, 223216 bytes, and retained the thermal-lance source marker.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
+- The local 4173 port was occupied by an unrelated server, so the exact local check used port 4174; no product failure was inferred from that environment collision.
 - Fire/Wind now has a measurable first-contact gameplay consequence, but the full mine/tunnel visual overhaul, complete hybrid fidelity, independently inspected still frames, and global completion gate remain open. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 150: speed-cap telemetry at the Physics V2 seam
