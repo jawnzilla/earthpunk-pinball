@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 159: elemental facet silhouettes
+
+### Root cause and decision
+
+- Source tracing found active Fire/Water/Wind/Earth stacks rendered primarily as colored concentric rings. That communicates activation, but collapses into generic circles in grayscale and gives hybrids no material language on the probe itself.
+- Added one bounded renderer-only slice: `drawBallElementalFacets()` adds compact authored marks around the probe—ember notches, water droplets, wind arcs, and earth plates—scaled by active stack count. It changes no physics, elemental timing, damage, rewards, input, or hybrid selection.
+- Added renderer-contract assertions for the helper, all four element branches, and the live draw seam.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Hosted exact CSS 320×568 and 390×844 checks are required after Pages deployment; no hosted result is claimed before deployment.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for the Pages run, then verify standard, active-elements, upgrade, and grayscale routes at both exact CSS viewports.
+- This improves stacked-element readability but does not establish a still-frame visual verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 158: destructible impact pulse
 
 ### Root cause and decision

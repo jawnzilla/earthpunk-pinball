@@ -1994,6 +1994,41 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r * .9, angle - 1.05, angle + 1.05); ctx.stroke();
     ctx.restore();
   }
+  function drawBallElementalFacets(b, activeEffects) {
+    // Stacks need authored material cues on the probe, not only colored status rings.
+    // Each facet is a compact silhouette language that survives hue removal.
+    if (!activeEffects.length) return;
+    ctx.save();
+    activeEffects.forEach(([element, effect], elementIndex) => {
+      const stacks = Math.max(1, Math.min(3, effect.stacks || 1));
+      const radius = b.r + 4 + elementIndex * 4;
+      const color = elementColors[element];
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.2; ctx.globalAlpha = .58 + stacks * .08;
+      if (element === 'Fire') {
+        for (let mark = 0; mark < stacks; mark += 1) {
+          const angle = -Math.PI * .72 + mark * .55;
+          const x = b.x + Math.cos(angle) * radius, y = b.y + Math.sin(angle) * radius;
+          ctx.beginPath(); ctx.moveTo(x, y + 3); ctx.lineTo(x + 2, y - 3); ctx.lineTo(x + 4, y + 2); ctx.stroke();
+        }
+      } else if (element === 'Water') {
+        for (let mark = 0; mark < stacks; mark += 1) {
+          const angle = Math.PI * .25 + mark * .55;
+          const x = b.x + Math.cos(angle) * radius, y = b.y + Math.sin(angle) * radius;
+          ctx.beginPath(); ctx.moveTo(x, y - 3); ctx.quadraticCurveTo(x - 3, y + 1, x, y + 3); ctx.quadraticCurveTo(x + 3, y + 1, x, y - 3); ctx.stroke();
+        }
+      } else if (element === 'Wind') {
+        ctx.beginPath(); ctx.arc(b.x, b.y, radius, -.25, .9); ctx.stroke();
+        if (stacks > 1) { ctx.beginPath(); ctx.arc(b.x, b.y, radius + 2, -.2, .55); ctx.stroke(); }
+      } else {
+        for (let mark = 0; mark < stacks; mark += 1) {
+          const angle = Math.PI * 1.05 + mark * .48;
+          const x = b.x + Math.cos(angle) * radius, y = b.y + Math.sin(angle) * radius;
+          ctx.beginPath(); ctx.moveTo(x - 3, y - 2); ctx.lineTo(x + 3, y - 3); ctx.lineTo(x + 2, y + 3); ctx.lineTo(x - 3, y + 2); ctx.closePath(); ctx.stroke();
+        }
+      }
+    });
+    ctx.restore();
+  }
   function drawBall() {
     const b = state.ball; const speed = Math.hypot(b.vx, b.vy); const motionX = speed > .05 ? -b.vx / speed : -.35; const motionY = speed > .05 ? -b.vy / speed : -.55;
     const activeEffects = Object.entries(b.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0);
@@ -2005,6 +2040,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     drawBallSilhouette(b, motionX, motionY);
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     drawDirectionalRim(b.x, b.y, b.r, b.vx, b.vy, '#f1b35b', .82);
+    drawBallElementalFacets(b, activeEffects);
   }
   const MAX_CATCHUP_STEPS = 4;
   let previousTime = 0;

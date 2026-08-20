@@ -1,4 +1,18 @@
-# Deadlight Critic Review — Overhaul tick 158
+# Deadlight Critic Review — Overhaul tick 159
+
+## Overhaul tick 159 verdict
+
+**Elemental facet silhouettes: PASS as a bounded stacked-effect readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Active elemental stacks now have distinct probe-adjacent geometry instead of relying only on colored rings.
+
+### Observed evidence
+
+- `index.html` adds `drawBallElementalFacets(b, activeEffects)` and calls it after the probe's material highlight/rim. Fire draws ember notches, Water draws droplets, Wind draws arcs, and Earth draws angular plates; each branch is bounded by active stack count.
+- `tests/renderer-contract.test.mjs` asserts the helper, all four branches, and live composition. `npm test` passes 54/54; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This commit is not deployed yet, so no hosted browser or independently image-inspected still-frame result is claimed in this entry.
+- The largest remaining visual gap is still the complete mine/tunnel material-and-depth pass, alongside final contact feel and remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 158 verdict
 
