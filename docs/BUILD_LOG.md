@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 146: Earth/Wind root-sling force consumption
+
+### Root cause and decision
+
+- Root-cause tracing found the Earth + Wind `root-sling` hybrid only emitted HUD metadata (`assist: 1.2`); it did not store a contact direction or modify the next primary-ball response. The declared hybrid therefore had no gameplay consequence.
+- Added one bounded Physics V2 slice: destructible contacts pass their swept normal into the elemental runtime; the first Earth + Wind structure contact stores a normalized direction once; the next eligible hard primary contact consumes it as a mass-scaled SI impulse through the existing `applyImpulse` seam. The stored state is one-shot and capped at the existing 1.2 m/s assist budget. Other hybrids, scoring, damage, progression, and topology are unchanged.
+- Added deterministic capture/one-shot/consumption coverage plus live renderer-contract assertions for the adapter seam.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/elemental-effects.test.mjs` failed before `consumeRootSling` existed with the missing-export error, then passed after implementation.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js`, `node --check src/physics-core.js`, and `git diff --check` passed.
+- Browser/deployment verification remains pending until the prototype push completes; no hosted result is claimed here.
+
+### Remaining risk / next smallest slice
+
+- Push only `prototype`, wait for the GitHub Pages workflow, and run exact hosted 320×568/390×844 checks for standard, `?review=active-elements`, and `?review=grayscale` if the browser executable is available. Capture console/request/overflow evidence.
+- Inspect the root-sling still frame before calling the hybrid visually closed. Mine/tunnel overhaul, full hybrid coverage, and human visual verdict remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 145: target impact pulse readability
 
 ### Root cause and decision

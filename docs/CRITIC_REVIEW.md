@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 146
+
+## Overhaul tick 146 verdict
+
+**Earth/Wind root-sling force consumption: PASS as a bounded gameplay-correctness slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The first Earth + Wind structure contact now stores a normalized contact direction and the next eligible hard primary contact consumes a capped, mass-scaled impulse through the shared Physics V2 path. This turns the hybrid from presentation-only metadata into a physical response without changing unrelated branches.
+
+### Observed evidence
+
+- `src/elemental-effects.js` adds `rootSling` runtime state, captures the first valid Earth + Wind normal, and exports one-shot `consumeRootSling()` returning a mass-scaled SI impulse.
+- `index.html` passes destructible contact normals into `onStructureContact()` and applies the consumed impulse through `applyImpulse(ball.physics, sling.impulse)` before the existing hard-bounce path.
+- The focused regression was red before the export existed and green afterward; `npm test` passes 50/50; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- GitHub Pages deployment and exact hosted 320×568/390×844 browser checks are pending for this commit; no hosted or visual result is claimed yet.
+- The mine/tunnel overhaul, remaining hybrid response fidelity, independently inspected still frames, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 # Deadlight Critic Review — Overhaul tick 144
 
 ## Overhaul tick 145 verdict

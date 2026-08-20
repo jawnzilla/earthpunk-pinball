@@ -5,6 +5,7 @@ import {
   advanceElementalRuntime,
   checkEarthLinkCrossing,
   createElementalRuntime,
+  consumeRootSling,
   onHardBounce,
   onMiniBallBounce,
   onMiniBallContact,
@@ -28,11 +29,28 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
 
 {
   const runtime = createElementalRuntime();
-  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, hybridUsed: new Set() });
+  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, hybridUsed: new Set() });
   assert.equal(ELEMENTAL_BUDGETS.fire.maxSegments, 12);
   assert.equal(ELEMENTAL_BUDGETS.water.maxBounces, 3);
   assert.equal(ELEMENTAL_BUDGETS.wind.maxDistance, 900);
   assert.equal(ELEMENTAL_BUDGETS.earth.linkLifetime, .9);
+}
+
+{
+  const runtime = createElementalRuntime();
+  const earthWind = { Earth: { stacks: 3 }, Wind: { stacks: 3 } };
+  const event = onStructureContact(runtime, { effects: earthWind, objectId: 'crate-root', position: { x: 12, y: 34 }, normal: { x: 3, y: 4 } });
+  assert.deepEqual(event, { type: 'root-sling', objectId: 'crate-root', assist: 1.2 });
+  assert.deepEqual(runtime.rootSling, { objectId: 'crate-root', x: 0.6, y: 0.8, assist: 1.2 });
+  onStructureContact(runtime, { effects: earthWind, objectId: 'crate-second', position: { x: 40, y: 50 }, normal: { x: -1, y: 0 } });
+  assert.deepEqual(runtime.rootSling, { objectId: 'crate-root', x: 0.6, y: 0.8, assist: 1.2 });
+  const consumed = consumeRootSling(runtime, { mass: .032 });
+  assert.equal(consumed.objectId, 'crate-root');
+  assert.ok(Math.abs(consumed.impulse.x - .02304) < 1e-12);
+  assert.ok(Math.abs(consumed.impulse.y - .03072) < 1e-12);
+  assert.equal(consumed.assist, 1.2);
+  assert.equal(runtime.rootSling, null);
+  assert.equal(consumeRootSling(runtime, { mass: .032 }), null);
 }
 
 {

@@ -162,6 +162,9 @@ assert.match(source, /class="upgrade-effect"/);
 assert.match(source, /overlayCopy\.className = 'upgrade-context'/);
 assert.match(source, /upgrade\.text/);
 assert.match(source, /HINGE LOADOUT/);
+assert.match(source, /consumeRootSling/);
+assert.match(source, /applyImpulse\(ball\.physics, sling\.impulse\)/);
+assert.match(source, /observeStructureContact\(item\.id, \{ x: item\.x, y: item\.y \}, contact\.normal\)/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

@@ -127,7 +127,23 @@ let nextMiniBallId = 1;
 const activeStacks = (effects, element) => Math.max(0, effects?.[element]?.stacks ?? 0);
 
 export function createElementalRuntime() {
-  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, hybridUsed: new Set() };
+  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, hybridUsed: new Set() };
+}
+
+// Earth + Wind stores one normalized contact direction. The table adapter
+// consumes the returned SI impulse at the next primary contact, keeping the
+// hybrid's force response on the same mass-aware Physics V2 seam as every
+// other collision impulse.
+export function consumeRootSling(runtime, { mass = 0, maxAssist = 1.2 } = {}) {
+  const sling = runtime?.rootSling;
+  if (!sling || !Number.isFinite(mass) || mass <= 0) return null;
+  runtime.rootSling = null;
+  const assist = Math.min(Math.max(0, sling.assist), Math.max(0, maxAssist));
+  return {
+    objectId: sling.objectId,
+    impulse: { x: sling.x * assist * mass, y: sling.y * assist * mass },
+    assist
+  };
 }
 
 const hybridFor = (runtime, effects, objectId) => {
@@ -333,7 +349,7 @@ export function onWindEchoStructureContact(runtime, { objectId, position = { x: 
   return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: contact.impactEnergy };
 }
 
-export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 } } = {}) {
+export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 }, normal = null } = {}) {
   const events = [];
   const echo = runtime.windEcho;
   if (echo && objectId && !echo.hitObjects.has(objectId)) {
@@ -359,6 +375,10 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
     events.push({ type: 'slurry-bind', objectId, response: 'redirect' });
   } else if (objectId && hasPair(effects, 'Earth', 'Wind') && !runtime.hybridUsed.has('root-sling')) {
     runtime.hybridUsed.add('root-sling');
+    if (!runtime.rootSling && normal && Number.isFinite(normal.x) && Number.isFinite(normal.y)) {
+      const length = Math.hypot(normal.x, normal.y);
+      if (length > 1e-8) runtime.rootSling = { objectId, x: normal.x / length, y: normal.y / length, assist: 1.2 };
+    }
     events.push({ type: 'root-sling', objectId, assist: 1.2 });
   } else if (objectId && hasPair(effects, 'Fire', 'Wind') && !runtime.hybridUsed.has('thermal-lance')) {
     runtime.hybridUsed.add('thermal-lance');
