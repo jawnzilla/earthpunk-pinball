@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 166
 
+## Overhaul tick 167 verdict
+
+**Tunnel air-column depth cue: PASS as a bounded atmosphere/depth correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The distant work lamps now have a restrained volume cue through tapered shafts and sparse motes, helping the upper mine destination read as open air rather than a flat arch.
+
+### Observed evidence
+
+- `index.html` adds `drawMineTunnelDust()` and composes it after `drawMineTunnelLamps()` but before support footings and the playable well, preserving the behind-playfield z-order.
+- The helper uses two low-alpha tapered gradients and six fixed motes; it does not alter gameplay, physics, input, timing, HUD state, or assets.
+- The renderer contract covers helper presence, authored intent, and live composition. Local automated verification is required before deployment claims.
+
+### Limits and next gate
+
+- This entry is provisional until the prototype commit, Pages run, and hosted exact-viewport matrix are recorded below with real output.
+- No independent image-inspected still-frame verdict is claimed. Final material/depth quality, contact feel, remaining hybrid fidelity, and `LOOP_COMPLETE` remain open.
+
 ## Overhaul tick 166 verdict
 
 **Executable flipper launch-balance gate: PASS as a bounded calibration-contract correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The review seam now makes left/right launch asymmetry deterministic instead of requiring manual arithmetic, while refusing to judge an incomplete pair.

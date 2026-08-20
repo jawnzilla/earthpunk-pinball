@@ -1348,6 +1348,24 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.beginPath(); ctx.moveTo(112, 76); ctx.bezierCurveTo(W * .3, 58, W * .7, 58, W - 112, 76); ctx.stroke();
     ctx.restore();
   }
+  function drawMineTunnelDust() {
+    // Sparse light shafts and motes give the distant tunnel an atmospheric air column.
+    // Keep this behind the playable well: depth cue, not a persistent table wash.
+    ctx.save();
+    const shafts = [[146, 94, 26], [W - 146, 94, 22]];
+    shafts.forEach(([x, y, width]) => {
+      const beam = ctx.createLinearGradient(x, y, x, y + 88);
+      beam.addColorStop(0, 'rgba(255,224,157,.12)'); beam.addColorStop(.55, 'rgba(215,164,90,.045)'); beam.addColorStop(1, 'rgba(215,164,90,0)');
+      ctx.fillStyle = beam;
+      ctx.beginPath(); ctx.moveTo(x - 4, y); ctx.lineTo(x + 4, y); ctx.lineTo(x + width, y + 88); ctx.lineTo(x - width, y + 88); ctx.closePath(); ctx.fill();
+    });
+    ctx.fillStyle = 'rgba(255,232,181,.34)';
+    [[139, 112], [154, 126], [W - 151, 108], [W - 138, 132], [181, 119], [W - 180, 121]].forEach(([x, y], index) => {
+      const size = index % 3 === 0 ? 1.5 : 1;
+      ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.restore();
+  }
   function drawMineTunnelSupportFootings() {
     // Ground the distant posts with small bearing plates and contact shadows. Without
     // this seam the brace floats in the arch instead of carrying the tunnel's weight.
@@ -1462,7 +1480,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelSupportFootings(); drawMineTunnelSupportHardware();
+    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelDust(); drawMineTunnelSupportFootings(); drawMineTunnelSupportHardware();
     // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.

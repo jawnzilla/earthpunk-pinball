@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 167: tunnel air-column depth cue
+
+### Root cause and decision
+
+- Source tracing found the distant tunnel had lamps and timber hardware but no atmospheric separation between its light sources and the playable well. The upper destination could still read as painted architecture rather than open excavated volume.
+- Added one bounded renderer-only slice: `drawMineTunnelDust()` adds two restrained tapered light shafts and six deterministic dust motes behind the playable well. Collision geometry, physics, input, timing, progression, HUD, and assets are unchanged.
+- Added renderer-contract assertions for the helper, authored intent marker, and live composition seam.
+
+### Verification
+
+- Tight red/green loop: renderer contract was red before the helper existed, then `npm test` passed after implementation; `node --check tests/renderer-contract.test.mjs` and `git diff --check` pass.
+- Hosted exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes will be verified after this commit is deployed. No hosted result is claimed before that check.
+
+### Deployment / remaining risk
+
+- This slice is not complete until the prototype commit is pushed and the GitHub Pages run plus hosted browser matrix are verified.
+- The effect is an atmospheric depth cue, not proof of final still-frame quality, contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 166: executable flipper launch-balance gate
 
 ### Root cause and decision
