@@ -13,7 +13,8 @@
 
 ### Limits and next gate
 
-- Commit, Pages deployment, and hosted exact CSS 320×568/390×844 checks remain required for standard, upgrade, and grayscale routes; no hosted result is claimed until actually run.
+- Commit `c8338a2` was pushed to `prototype`; Pages run `32349416418` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32349416418.
+- Hosted exact CSS 320×568 and 390×844 standard, upgrade, and grayscale routes pass 6/6 with HTTP 200, one canvas, exact dimensions, no horizontal overflow, four upgrade choices on upgrade routes, grayscale fixture present, and zero console/page/request errors.
 - This closes one inert Fire consequence but does not prove final contact feel, independently inspected still-frame visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 155 verdict

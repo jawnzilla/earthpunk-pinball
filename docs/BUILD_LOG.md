@@ -16,7 +16,8 @@
 
 ### Deployment / remaining risk
 
-- Commit and hosted GitHub Pages verification are required after this tick. Hosted checks must cover standard, `?review=upgrade`, and `?review=grayscale` at both exact portrait sizes with zero console/page/request errors.
+- Commit `c8338a2` was pushed to `prototype`; GitHub Actions Pages run `32349416418` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32349416418.
+- Hosted exact CSS 320×568 and 390×844 standard, `?review=upgrade`, and `?review=grayscale` passed 6/6: HTTP 200, `readyState=complete`, one canvas, `scrollWidth === clientWidth`, four upgrade choices on upgrade routes, grayscale fixture present, and zero console/page/request errors.
 - This closes one inert Fire hybrid consequence but does not establish final collision feel, still-frame visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 155: hosted physics calibration review fixture
