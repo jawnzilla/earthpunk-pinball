@@ -16,7 +16,7 @@
 
 ### Deployment / remaining risk
 
-- This slice is local until commit, push, GitHub Pages deployment, and hosted checks are verified. Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper contact feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+- Commit `fac31ec` deployed successfully in Pages run `32405664338`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32405664338. Hosted exact CSS 320x568 and 390x844 checks pass 24/24 across standard, depth, upgrade, active-elements, grayscale, and flipper-contact routes: HTTP 200, exact viewports, no overflow, one canvas, zero console/page/request errors; hosted `src/physics-core.js` contains the finite contact-velocity boundary. Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper contact feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
 
 ## 2026-08-20 — Overhaul tick 184: fail-closed integrator input boundary
 

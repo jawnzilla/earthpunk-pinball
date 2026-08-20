@@ -13,7 +13,7 @@
 ### Limits and next gate
 
 - This closes a numerical input seam only; it is not independent image inspection of the full table, proof of final flipper feel, or proof of complete hybrid fidelity. `LOOP_COMPLETE` remains open.
-- Hosted post-deploy verification is required after push. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
+- Commit `fac31ec` deployed successfully in Pages run `32405664338`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32405664338. Hosted exact CSS 320x568 and 390x844 checks pass 24/24 across standard, depth, upgrade, active-elements, grayscale, and flipper-contact routes with HTTP 200, exact viewports, no overflow, one canvas, and zero console/page/request errors; hosted source retains the finite contact-velocity boundary. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
 
 ## Overhaul tick 184 verdict
 
