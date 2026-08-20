@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 174: explicit material rolling resistance
+
+### Root cause and decision
+
+- Root-cause review found angular damping was technically material-scaled but implicitly borrowed each material's linear `drag` value (`drag * 4`). That coupled translational air/contact drag to rolling behavior and made tuning/material authoring ambiguous.
+- Added one bounded physics-core slice: every material now declares `rollingResistance`, and `integrateBall()` uses it exclusively to damp contact-generated spin. Steel/copper retain spin longer than timber/stone; gameplay forces, collision response, linear drag, input, and renderer behavior remain unchanged.
+- Added a deterministic regression proving higher-resistance stone sheds spin faster than steel.
+
+### Verification
+
+- Tight red/green loop: the explicit material-resistance regression was red before the new contract; after implementation `npm test` passed 56/56. `node --check src/physics-core.js` and `git diff --check` pass.
+- Local/hosted browser verification and deployment evidence are recorded below after push.
+
+### Deployment / remaining risk
+
+- This is a solver tuning-boundary correction, not proof of final flipper feel, human image-inspected mine/tunnel material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 173: integrate and damp ball spin
 
 ### Root cause and decision

@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 173
 
+## Overhaul tick 174 verdict
+
+**Explicit material rolling resistance: PASS as a bounded first-principles physics tuning correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Angular damping no longer derives from linear drag by convention: each material now exposes an explicit rolling-resistance coefficient, with a deterministic stone-versus-steel regression.
+
+### Observed evidence
+
+- `src/physics-core.js` adds `rollingResistance` to all six material records and uses that property in `integrateBall()` for spin damping, with a defensive fallback for future materials.
+- `tests/physics-core.test.mjs` proves the material ordering and resulting decay difference; full `npm test` passes 56/56, syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- Deployment and exact 320x568/390x844 browser evidence will be appended after the pushed Pages artifact is available.
+- This does not prove final flipper contact feel, human image-inspected still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`; the largest remaining product gap remains evidence-selected visual/contact review.
+
 ## Overhaul tick 173 verdict
 
 **Angular integration and rolling resistance: PASS as a bounded first-principles physics completion; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Contact torque was already generated, but it was not integrated into a rotational body state. The physics core now advances finite ball rotation and damps spin using the ball material's rolling-resistance scale.

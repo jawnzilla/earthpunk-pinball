@@ -1,10 +1,10 @@
 export const MATERIALS = Object.freeze({
-  steel: Object.freeze({ density: 7850, restitution: 0.62, friction: 0.18, hardness: 1.0, drag: 0.002 }),
-  rubber: Object.freeze({ density: 1100, restitution: 0.88, friction: 0.72, hardness: 0.35, drag: 0.010 }),
-  timber: Object.freeze({ density: 650, restitution: 0.28, friction: 0.62, hardness: 0.42, drag: 0.012 }),
-  stone: Object.freeze({ density: 2600, restitution: 0.18, friction: 0.78, hardness: 0.88, drag: 0.018 }),
-  copper: Object.freeze({ density: 8960, restitution: 0.48, friction: 0.32, hardness: 0.72, drag: 0.004 }),
-  water: Object.freeze({ density: 1000, restitution: 0.06, friction: 0.12, hardness: 0.05, drag: 0.080 })
+  steel: Object.freeze({ density: 7850, restitution: 0.62, friction: 0.18, hardness: 1.0, drag: 0.002, rollingResistance: 0.008 }),
+  rubber: Object.freeze({ density: 1100, restitution: 0.88, friction: 0.72, hardness: 0.35, drag: 0.010, rollingResistance: 0.040 }),
+  timber: Object.freeze({ density: 650, restitution: 0.28, friction: 0.62, hardness: 0.42, drag: 0.012, rollingResistance: 0.048 }),
+  stone: Object.freeze({ density: 2600, restitution: 0.18, friction: 0.78, hardness: 0.88, drag: 0.018, rollingResistance: 0.072 }),
+  copper: Object.freeze({ density: 8960, restitution: 0.48, friction: 0.32, hardness: 0.72, drag: 0.004, rollingResistance: 0.016 }),
+  water: Object.freeze({ density: 1000, restitution: 0.06, friction: 0.12, hardness: 0.05, drag: 0.080, rollingResistance: 0.320 })
 });
 
 export const PX_PER_M = 100;
@@ -65,9 +65,10 @@ export function integrateBall(ball, { force = { x: 0, y: 0 }, gravity = { x: 0, 
   const spin = Number.isFinite(ball.spin) ? ball.spin : 0;
   const rotation = Number.isFinite(ball.rotation) ? ball.rotation : 0;
   ball.rotation = rotation + spin * dt;
-  // Rolling resistance is intentionally gentler than linear drag, but keeps
-  // contact-generated spin bounded instead of allowing an immortal angular state.
-  ball.spin = spin * Math.exp(-drag * dt * 4);
+  // Rolling resistance is an explicit material property: a stone/timber body
+  // should shed contact spin faster than a polished steel or copper body.
+  const rollingResistance = MATERIALS[ball.material]?.rollingResistance ?? drag * 4;
+  ball.spin = spin * Math.exp(-rollingResistance * dt);
   return ball;
 }
 

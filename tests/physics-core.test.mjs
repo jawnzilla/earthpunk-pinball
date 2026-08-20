@@ -82,6 +82,15 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const steel = createBall({ mass: 1, material: 'steel', spin: 6 });
+  const stone = createBall({ mass: 1, material: 'stone', spin: 6 });
+  integrateBall(steel, { gravity: { x: 0, y: 0 }, dt: 1 });
+  integrateBall(stone, { gravity: { x: 0, y: 0 }, dt: 1 });
+  assert.ok(MATERIALS.stone.rollingResistance > MATERIALS.steel.rollingResistance);
+  assert.ok(stone.spin < steel.spin, 'high-resistance material must damp spin faster');
+}
+
+{
   const ball = createBall({ mass: 1, vx: 0, vy: 3 });
   const surface = createBall({ mass: 3, vx: 0, vy: 0, material: 'rubber' });
   const beforeMomentum = ball.mass * ball.velocity.y + surface.mass * surface.velocity.y;
