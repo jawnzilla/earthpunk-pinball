@@ -141,6 +141,10 @@ assert.match(source, /const rockFace = \(x, y, scale, flip = 1\)/);
 assert.match(source, /Irregular rock faces establish a third material family/);
 assert.match(source, /rockFace\(82, 112, 1\); rockFace\(W - 82, 112, 1, -1\)/);
 assert.match(source, /drawMineStructures\(\);/);
+assert.match(source, /function drawMeters\(\)/);
+assert.match(source, /drawMeter\(30, 138, 'FUEL'/);
+assert.match(source, /drawMeter\(216, 114, 'TARGET'/);
+assert.match(source, /drawMineStructures\(\); drawMeters\(\);/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

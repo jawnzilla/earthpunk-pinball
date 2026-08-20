@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 140: live instrument-meter composition
+
+### Decision
+
+- Root-cause investigation found `drawMeters()` was fully authored but orphaned from the production `draw()` composition. Fuel, target progress, and chain state therefore existed only as dead renderer code and were absent from the live portrait table.
+- Added the smallest bounded renderer slice: compose `drawMeters()` after the authored mine structures and before gameplay objects. Physics, collision geometry, input, progression, effects, and asset loading are unchanged.
+- Extended the renderer contract to require the meter helper, both live meter definitions, and the live composition call.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the composition call with the exact missing `drawMineStructures(); drawMeters();` contract, then passed after the call was added.
+- Serial full suite: `node --test --test-concurrency=1 tests/*.test.mjs` — 50 passed, 0 failed.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Local exact-viewport browser attempt was blocked by this Windows environment's local HTTP server returning `ERR_EMPTY_RESPONSE` to both curl and Playwright; no local screenshot, console, or visual-quality claim is made. The temporary harness was outside the repository.
+
+### Remaining risk / next smallest slice
+
+- Push and verify the hosted Pages artifact, then run the exact hosted portrait checks at 320×568 and 390×844 if the hosted browser path is available. Inspect the meter composition in a still frame before selecting another renderer change.
+- The mine/tunnel visual overhaul, destructible readability, first-principles physics/effects completion, and human visual review remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-19 — Overhaul tick 139: mine support depth/material pass
 
 ### Decision

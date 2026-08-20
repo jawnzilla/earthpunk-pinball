@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 138
+# Deadlight Critic Review — Overhaul tick 140
+
+## Overhaul tick 140 verdict
+
+**Live instrument-meter composition: PASS as a bounded renderer correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Fuel, target progress, and chain meters were authored but unreachable from the live `draw()` path. The call is now composed between the mine/deck layers and gameplay objects, restoring a compact instrument-panel read without changing physics or input.
+
+### Observed evidence
+
+- `index.html` defines `drawMeters()` with authored FUEL and TARGET segmented rails plus a conditional CHAIN readout, and `draw()` now calls `drawMeters()` immediately after `drawMineStructures()`.
+- `tests/renderer-contract.test.mjs` asserts the helper, both meter definitions, and the exact live composition seam.
+- The focused renderer contract was red before the call existed and passed after the call was added. Serial full suite passes 50/50; syntax and whitespace checks pass.
+- Local exact-viewport browser execution was attempted but blocked by the environment's local HTTP server returning `ERR_EMPTY_RESPONSE` to curl and Playwright. No screenshot or subjective visual verdict is claimed from local runtime.
+
+### Remaining risk / next smallest slice
+
+- Deploy and run hosted exact 320×568 and 390×844 checks, then inspect the still frame to confirm the meters remain legible and do not compete with the mine silhouette hierarchy.
+- The mine/tunnel visual overhaul, destructible readability, physics/effects completion, and human grayscale/material review remain open. Do not claim `LOOP_COMPLETE`.
 
 ## Overhaul tick 139 verdict
 
