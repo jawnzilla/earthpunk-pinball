@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- Deployment and hosted verification are pending this tick's push.
+- Commit `e21b629` is deployed by successful Pages run `32344617954`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32344617954. Hosted exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8 with HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
 - This is observability only: it does not prove final collision feel or replace the live stateful resolver branches. The independently inspected mine/tunnel still frame, full physics/effects fidelity, visual bar, and `LOOP_COMPLETE` gate remain open.
 
 ## Overhaul tick 152 verdict

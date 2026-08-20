@@ -17,7 +17,7 @@
 
 ### Deployment / remaining risk
 
-- Commit `PENDING` is ready to push to `prototype`; Pages run URL and hosted verification will be recorded after the workflow completes.
+- Commit `e21b629` pushed to `prototype`; GitHub Actions Pages run `32344617954` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32344617954. Hosted index returned HTTP 200 and retained the `manifoldCandidateCount` and `Manifold:` markers.
 - The telemetry makes live manifold contention measurable but does not replace stateful resolver integration, prove contact feel, provide an independently inspected still-frame visual verdict, or complete the mine/tunnel overhaul. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 152: single-winner runtime dispatch contract
