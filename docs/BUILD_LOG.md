@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 173: integrate and damp ball spin
+
+### Root cause and decision
+
+- Root-cause investigation found contact torque was accumulated in `physics.spin` but `integrateBall()` never advanced a rotational state or applied angular resistance. Spin was therefore a renderer-visible number, not a complete first-principles body state, and could persist indefinitely.
+- Added one bounded physics-core slice: balls now accept finite `rotation`/`spin`, integrate rotation by `spin * dt`, and apply material-scaled rolling resistance to spin. Linear motion, collision response, input, progression, and renderer behavior remain unchanged.
+- Added a deterministic regression that proves rotation advances and spin decays during a fixed step.
+
+### Verification
+
+- Tight red/green loop: the new rotation test was red before implementation (`ball.rotation` was undefined); after the single physics change `npm test` passed 56/56. `node --check src/physics-core.js` and `git diff --check` pass.
+- Local Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 8/8 using a MIME-correct static server: HTTP 200, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on the upgrade route, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- Commit `5648453` deployed successfully in GitHub Pages run `32379773358`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32379773358.
+- Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 8/8 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on the upgrade route, and zero console/page/request errors. Hosted `src/physics-core.js` fetch retained the new rotation contract.
+- This closes the missing angular integration seam but does not prove final flipper feel, human image-inspected material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 172: physical body-input normalization
 
 ### Root cause and decision

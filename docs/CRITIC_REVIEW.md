@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 171
+# Deadlight Critic Review — Overhaul tick 173
+
+## Overhaul tick 173 verdict
+
+**Angular integration and rolling resistance: PASS as a bounded first-principles physics completion; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Contact torque was already generated, but it was not integrated into a rotational body state. The physics core now advances finite ball rotation and damps spin using the ball material's rolling-resistance scale.
+
+### Observed evidence
+
+- `src/physics-core.js` accepts finite `rotation` and `spin` in `createBall()`, advances `rotation` by `spin * dt`, and applies exponential angular resistance after linear drag in `integrateBall()`.
+- `tests/physics-core.test.mjs` proves a fixed-step ball rotates and its spin decreases. The new test was red before implementation; `npm test` passes 56/56 and syntax/whitespace checks pass.
+- Local exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes pass 8/8 with HTTP 200, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page errors.
+
+### Limits and next gate
+
+- Commit `5648453` deployed successfully in Pages run `32379773358`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32379773358. Hosted exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes pass 8/8; hosted physics-core source retains the rotation contract.
+- This is a solver-state completion, not proof of final flipper feel, human image-inspected mine/tunnel material/depth quality, complete hybrid fidelity, or `LOOP_COMPLETE`. The largest remaining product gap is still an evidence-selected still-frame/contact-feel review.
 
 ## Overhaul tick 172 verdict
 
