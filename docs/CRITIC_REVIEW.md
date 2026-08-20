@@ -13,7 +13,7 @@
 ### Limits and next gate
 
 - This is a solver boundary correction, not independent image inspection of the full table, proof of final flipper contact feel, or proof of complete hybrid fidelity. `LOOP_COMPLETE` remains open.
-- Deployment verification is pending for the new commit. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
+- Commit `d1f3029` deployed successfully in Pages run `32403543138`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32403543138. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 across standard, depth, upgrade, active-elements, and grayscale routes with HTTP 200, exact viewports, no overflow, one canvas, and zero console/page/request errors; hosted source retains `finiteVectorOrZero` and `safeDt`. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
 
 ## Overhaul tick 183 verdict
 

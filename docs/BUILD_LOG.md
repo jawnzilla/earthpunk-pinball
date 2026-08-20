@@ -16,7 +16,7 @@
 
 ### Deployment / remaining risk
 
-- This slice is local until commit/push and GitHub Pages deployment are verified. Current hosted pre-deploy checks pass the same 10/10 matrix against `https://jawnzilla.github.io/earthpunk-pinball/` on the prior build.
+- Commit `d1f3029` deployed successfully in Pages run `32403543138`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32403543138. Hosted exact CSS 320x568 and 390x844 checks pass 10/10 across standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewports, no horizontal overflow, one canvas, zero console/page/request errors; hosted `src/physics-core.js` contains `finiteVectorOrZero` and `safeDt`.
 - Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper contact feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
 
 ## 2026-08-20 — Overhaul tick 183: distant timber grain cue
