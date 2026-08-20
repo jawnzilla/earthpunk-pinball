@@ -16,7 +16,8 @@
 
 ### Deployment / remaining risk
 
-- This tick is not deployed yet at log-authoring time; the commit and Pages run are recorded below after push verification.
+- Commit `9a04e1b` pushed to `prototype`; GitHub Actions Pages run `32343157874` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32343157874. Hosted index and `src/contact-manifold.js` returned HTTP 200; the deployed index retained `dispatchRuntimeContact`.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8 with HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
 - The helper is a renderer-independent contract seam; the existing live loop remains the stateful owner of resolution. This does not prove final collision feel, visual quality, or global overhaul completion. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 151: Fire/Wind thermal-lance contact damage

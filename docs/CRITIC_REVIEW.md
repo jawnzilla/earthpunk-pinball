@@ -13,7 +13,8 @@
 ### Limits and next gate
 
 - The contract helper is renderer-independent and does not replace the live stateful resolver branches; final live manifold mutation still needs an end-to-end regression at that seam.
-- Deployment evidence, hosted parity, and the independent still-frame visual verdict are recorded only after the commit is pushed. The mine/tunnel overhaul, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
+- Commit `9a04e1b` is deployed by successful Pages run `32343157874`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32343157874. Hosted index/module probes returned HTTP 200 and retained `dispatchRuntimeContact`; hosted Playwright exact CSS 320×568 and 390×844 routes passed 8/8 with exact dimensions, one canvas, no horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
+- The helper is a renderer-independent contract seam and does not replace the live stateful resolver branches; final live manifold mutation still needs an end-to-end regression at that seam. The independent still-frame visual verdict, mine/tunnel overhaul, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
 
 ## Overhaul tick 151 verdict
 
