@@ -12,7 +12,8 @@
 
 ### Limits and next gate
 
-- No Pages deployment or exact hosted portrait browser result is claimed before push. No screenshot was independently inspected, so this is not a visual verdict.
+- Pages run `32329382068` completed successfully for commit `7c9526e`. Hosted Playwright covered `depth`, `grayscale`, `active-elements`, and `upgrade` at exact CSS `320×568` and `390×844` (8/8): HTTP 200, exact viewport dimensions, one canvas, no horizontal overflow, and zero console/page/request errors. Captures are outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-142-*.png`.
+- The screenshots were not independently inspected by an image-capable reviewer, so this remains runtime evidence rather than a subjective visual verdict; the visual gate is still held.
 - The largest product gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and major silhouettes. The complete mine/tunnel overhaul and global contact-manifold completion remain open.
 
 ## Overhaul tick 141 verdict

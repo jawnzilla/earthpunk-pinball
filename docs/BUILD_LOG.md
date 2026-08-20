@@ -13,11 +13,12 @@
 - Tight red/green loop: `node --test tests/elemental-effects.test.mjs` failed before the implementation with `expected first entry at t=.46, got 0.5`, then passed after the analytic query landed.
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/elemental-effects.js` and `git diff --check` passed.
-- Pages deployment and exact hosted 320×568/390×844 browser verification remain pending this push; no hosted, screenshot, console, or visual-quality claim is made yet.
+- GitHub Actions Pages run `32329382068` completed successfully for commit `7c9526e`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32329382068. Hosted source probes returned HTTP 200 for the page and `src/elemental-effects.js`; the deployed module retained `const relativeStart`, `sweptCircleContact`, and the hosted page retained `<canvas>`.
+- Hosted Playwright exact CSS `320×568` and `390×844` checks covered `depth`, `grayscale`, `active-elements`, and `upgrade` (8/8): all returned HTTP 200, exact `innerWidth`/`innerHeight`, `clientWidth === scrollWidth`, one canvas, and zero console/page/request errors. Review fixtures reported the expected markers; upgrade reported `overlay upgrade-decision`. Screenshots were captured outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-142-*.png`; they are runtime evidence, not an independently inspected visual verdict.
 
 ### Remaining risk / next smallest slice
 
-- Push and verify the Pages artifact, then run the exact hosted standard and grayscale/active-elements portrait checks at 320×568 and 390×844.
+- The deployment/browser packet is green for runtime health; inspect the captured still frames before selecting another renderer seam.
 - The mine/tunnel visual overhaul, human still-frame verdict, and remaining cross-family physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 141: destructible material inset pass
