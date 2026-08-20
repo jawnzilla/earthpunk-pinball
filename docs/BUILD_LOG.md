@@ -10,7 +10,7 @@
 
 ### Verification
 
-- Tight regression loop was red before the boundary guard (`NaN` damage), then green after implementation: `npm test` passes 56/56; `node --check src/physics-core.js` and `git diff --check` pass.
+- Tight regression loop: the malformed-contact regression now passes with the boundary guard; `npm test` passes 56/56, and `node --check src/physics-core.js` plus `git diff --check` pass.
 - Exact local browser checks pass 4/4 at CSS 320x568 and 390x844 for standard, upgrade, active-elements, and depth routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
 
 ### Deployment / remaining risk
