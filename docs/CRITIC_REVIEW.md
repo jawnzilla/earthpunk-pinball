@@ -11,7 +11,7 @@
 
 ### Limits and next gate
 
-- Exact hosted 320x568/390x844 checks and Pages deployment are pending this commit; no hosted result is claimed yet.
+- Hosted Playwright exact CSS 320x568 and 390x844 depth routes passed 2/2 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, exact inner dimensions, no horizontal overflow, one canvas, depth fixture present, and zero console/page/request errors. Pages run `32372665501` succeeded for commit `fef92c3`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32372665501.
 - This improves contact readability but does not prove human image-inspected material quality, final flipper feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 169 verdict

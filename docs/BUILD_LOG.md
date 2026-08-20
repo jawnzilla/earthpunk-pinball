@@ -11,7 +11,7 @@
 ### Verification
 
 - Tight red/green loop: renderer contract was red before the helper existed; `npm test` passes 56/56 after implementation. `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` pass.
-- Exact hosted 320x568/390x844 checks and Pages deployment are pending this commit; no hosted result is claimed yet.
+- Hosted Playwright exact CSS 320x568 and 390x844 depth routes passed 2/2 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, `data-review-fixture=depth`, and zero console/page/request errors. The local pre-deploy check also passed the same matrix.
 
 ### Deployment / remaining risk
 
