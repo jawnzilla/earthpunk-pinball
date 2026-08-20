@@ -11,12 +11,12 @@
 ### Verification
 
 - Tight red/green loop: `npm test` passed 54/54; `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
-- Exact hosted browser verification is pending this commit's Pages deployment. No hosted viewport, console, request, or screenshot result is claimed before deployment.
+- Hosted Playwright exact CSS 320×568 and 390×844 across standard, depth, grayscale, and upgrade routes passed 8/8 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === innerWidth`, one canvas, four upgrade effects on upgrade routes, and zero console/page/request errors.
 
 ### Deployment / remaining risk
 
-- Push only `prototype`, wait for the Pages workflow, then verify hosted standard, depth, grayscale, and upgrade fixtures at CSS 320×568 and 390×844.
-- This grounds one tunnel-depth cue but does not establish final contact feel, complete hybrid fidelity, independently image-inspected still-frame quality, or `LOOP_COMPLETE`.
+- Commit `fa93101` deployed successfully in GitHub Pages run `32363868159`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32363868159. Hosted source returned HTTP 200 and retained `drawMineTunnelSupportFootings`.
+- The exact hosted matrix verifies runtime/layout for the deployed artifact but does not establish an independently image-inspected still-frame quality verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 164: distant tunnel support hardware
 

@@ -12,8 +12,9 @@
 
 ### Limits and next gate
 
-- This commit is not deployed yet, so no hosted browser or still-frame result is claimed in this entry.
-- After deployment, verify exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes. The largest remaining gap is still an independently image-inspected material/depth frame plus final contact feel and any remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+- Commit `fa93101` deployed successfully in GitHub Pages run `32363868159`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32363868159.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === innerWidth`, one canvas, four upgrade effects on upgrade routes, and zero console/page/request errors.
+- This runtime/layout evidence does not replace independent image inspection of the still frame or prove final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`; those remain open.
 
 ## Overhaul tick 164 verdict
 
