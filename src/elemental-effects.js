@@ -45,18 +45,32 @@ function createElementalBody({ id, position, velocity, ...metadata }) {
 // moves farther than its radius. Keep the swept broad phase renderer-independent.
 export function sweptCircleContact(start, end, center, reach) {
   const motion = { x: end.x - start.x, y: end.y - start.y };
-  const lengthSquared = motion.x * motion.x + motion.y * motion.y;
-  const t = lengthSquared > 1e-9
-    ? clamp(((center.x - start.x) * motion.x + (center.y - start.y) * motion.y) / lengthSquared, 0, 1)
-    : 1;
-  const point = { x: start.x + motion.x * t, y: start.y + motion.y * t };
+  const relativeStart = { x: start.x - center.x, y: start.y - center.y };
+  const radius = Math.max(0, Number.isFinite(reach) ? reach : 0);
+  const a = motion.x * motion.x + motion.y * motion.y;
+  const c = relativeStart.x * relativeStart.x + relativeStart.y * relativeStart.y - radius * radius;
+  let t = null;
+  if (c <= 0) {
+    t = 0;
+  } else if (a > 1e-9) {
+    const b = 2 * (relativeStart.x * motion.x + relativeStart.y * motion.y);
+    const discriminant = b * b - 4 * a * c;
+    if (discriminant >= 0) {
+      const root = Math.sqrt(discriminant);
+      const first = (-b - root) / (2 * a);
+      const second = (-b + root) / (2 * a);
+      if (first >= 0 && first <= 1) t = first;
+      else if (second >= 0 && second <= 1) t = second;
+    }
+  }
+  const safeT = t ?? 1;
+  const point = { x: start.x + motion.x * safeT, y: start.y + motion.y * safeT };
   const offset = { x: point.x - center.x, y: point.y - center.y };
-  if (offset.x * offset.x + offset.y * offset.y > reach * reach) return { hit: false, t, point, normal: { x: 0, y: 0 } };
-  const fallback = lengthSquared > 1e-9
-    ? { x: -motion.x, y: -motion.y }
-    : { x: end.x - center.x, y: end.y - center.y };
+  const hit = t !== null;
+  if (!hit) return { hit: false, t: safeT, point, normal: { x: 0, y: 0 } };
+  const fallback = a > 1e-9 ? { x: -motion.x, y: -motion.y } : { x: 1, y: 0 };
   const length = Math.hypot(offset.x, offset.y) || Math.hypot(fallback.x, fallback.y) || 1;
-  return { hit: true, t, point, normal: { x: (offset.x || fallback.x) / length, y: (offset.y || fallback.y) / length } };
+  return { hit: true, t: safeT, point, normal: { x: (offset.x || fallback.x) / length, y: (offset.y || fallback.y) / length } };
 }
 
 // Resolve only the first swept candidate in a fixed step. Later contacts must

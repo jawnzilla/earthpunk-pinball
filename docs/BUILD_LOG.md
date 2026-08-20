@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 142: analytic elemental swept-circle entry
+
+### Root cause and decision
+
+- The renderer-independent `sweptCircleContact()` broad phase selected the closest approach on the ball path, not the first boundary entry. A mini-ball crossing a salvage object from x=0 to x=100 with a 4px reach reported `t=0.5` instead of the physically correct first contact at `t=0.46`; downstream rewind and residual replay therefore started late.
+- Replaced the closest-point heuristic with an analytic ray/circle quadratic. It returns the earliest valid entry root, preserves explicit miss/degenerate behavior, and keeps the existing `{ hit, t, point, normal }` contract. Rendering, object damage policy, input, progression, and table geometry are unchanged.
+- Added a regression that fails on the old `t=0.5` behavior and requires first-entry timing.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/elemental-effects.test.mjs` failed before the implementation with `expected first entry at t=.46, got 0.5`, then passed after the analytic query landed.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js` and `git diff --check` passed.
+- Pages deployment and exact hosted 320×568/390×844 browser verification remain pending this push; no hosted, screenshot, console, or visual-quality claim is made yet.
+
+### Remaining risk / next smallest slice
+
+- Push and verify the Pages artifact, then run the exact hosted standard and grayscale/active-elements portrait checks at 320×568 and 390×844.
+- The mine/tunnel visual overhaul, human still-frame verdict, and remaining cross-family physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 141: destructible material inset pass
 
 ### Decision

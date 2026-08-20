@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 140
 
+## Overhaul tick 142 verdict
+
+**Analytic swept-circle timing: PASS as a bounded physics correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The elemental broad phase now reports the first circle boundary entry rather than the path's closest approach, which makes rewind/residual replay physically meaningful for fast mini-balls and wind echoes.
+
+### Observed evidence
+
+- `src/elemental-effects.js` now solves the relative-motion quadratic and selects the earliest root in `[0, 1]`.
+- The focused regression was red against the previous closest-point implementation (`t=0.5` vs expected first entry `t=0.46`) and green after the change.
+- `npm test`: 50 passed, 0 failed; syntax and whitespace checks passed.
+
+### Limits and next gate
+
+- No Pages deployment or exact hosted portrait browser result is claimed before push. No screenshot was independently inspected, so this is not a visual verdict.
+- The largest product gap remains the human-inspected grayscale read of shell → deck → recessed well → foreground mechanism and major silhouettes. The complete mine/tunnel overhaul and global contact-manifold completion remain open.
+
 ## Overhaul tick 141 verdict
 
 **Destructible material inset pass: PASS as a bounded renderer improvement; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Destructible objects now have a second, material-specific face read inside their collision shells: timber braces, pipe bands, drum rings, and stone fractures. This should improve grayscale separation and damage-state legibility without changing gameplay.

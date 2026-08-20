@@ -197,6 +197,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   const swept = sweptCircleContact({ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 50, y: 0 }, 4);
   assert.equal(swept.hit, true);
   assert.ok(swept.t > 0 && swept.t < 1);
+  assert.ok(Math.abs(swept.t - 0.46) < 1e-9, `expected first entry at t=.46, got ${swept.t}`);
   assert.equal(swept.normal.x, -1);
   assert.equal(sweptCircleContact({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 50, y: 0 }, 4).hit, false);
 }
