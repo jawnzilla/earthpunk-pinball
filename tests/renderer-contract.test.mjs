@@ -164,7 +164,10 @@ assert.match(source, /upgrade\.text/);
 assert.match(source, /HINGE LOADOUT/);
 assert.match(source, /consumeRootSling/);
 assert.match(source, /applyImpulse\(ball\.physics, sling\.impulse\)/);
-assert.match(source, /observeStructureContact\(item\.id, \{ x: item\.x, y: item\.y \}, contact\.normal\)/);
+assert.match(source, /observeStructureContact\(item\.id, \{ x: item\.x, y: item\.y \}, contact\.normal, item\.material\)/);
+assert.match(source, /consumeSlurryBind/);
+assert.match(source, /slurry-bind-contact/);
+assert.match(source, /Redirected along the anchor/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

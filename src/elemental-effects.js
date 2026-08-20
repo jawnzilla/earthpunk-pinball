@@ -127,7 +127,21 @@ let nextMiniBallId = 1;
 const activeStacks = (effects, element) => Math.max(0, effects?.[element]?.stacks ?? 0);
 
 export function createElementalRuntime() {
-  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, hybridUsed: new Set() };
+  return { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, hybridUsed: new Set() };
+}
+
+// Water + Earth arms a single low-friction anchor. The table adapter consumes it
+// after the contact solver, removing only the incoming normal component so the
+// ball redirects along the structure instead of receiving a hard bounce.
+export function consumeSlurryBind(runtime, { material = '', velocity = { x: 0, y: 0 }, normal = { x: 0, y: 0 } } = {}) {
+  const bind = runtime?.slurryBind;
+  if (!bind || bind.pending || !['stone', 'timber'].includes(material)) return null;
+  const length = Math.hypot(normal.x, normal.y);
+  if (length <= 1e-8) return null;
+  runtime.slurryBind = null;
+  const n = { x: normal.x / length, y: normal.y / length };
+  const normalSpeed = velocity.x * n.x + velocity.y * n.y;
+  return { objectId: bind.objectId, tangentVelocity: { x: velocity.x - n.x * normalSpeed, y: velocity.y - n.y * normalSpeed } };
 }
 
 // Earth + Wind stores one normalized contact direction. The table adapter
@@ -349,9 +363,13 @@ export function onWindEchoStructureContact(runtime, { objectId, position = { x: 
   return { type: 'wind-echo-structure-contact', counted: true, ignoreResponse, damage: true, objectId, position: { ...position }, contactKey, impactSpeed, impactEnergy: contact.impactEnergy };
 }
 
-export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 }, normal = null } = {}) {
+export function onStructureContact(runtime, { effects = {}, objectId, position = { x: 0, y: 0 }, normal = null, material = '' } = {}) {
   const events = [];
   const echo = runtime.windEcho;
+  if (objectId && runtime.slurryBind?.pending === false && ['stone', 'timber'].includes(material) && !runtime.slurryBind.targetId) {
+    runtime.slurryBind.targetId = objectId;
+    events.push({ type: 'slurry-bind-contact', objectId, redirect: true });
+  }
   if (echo && objectId && !echo.hitObjects.has(objectId)) {
     echo.hitObjects.add(objectId);
     const ignoreResponse = echo.ignoredResponses > 0;
@@ -372,6 +390,7 @@ export function onStructureContact(runtime, { effects = {}, objectId, position =
     events.push({ type: 'steam-fracture', objectId, damageMultiplier: 1.35, extraTick: true });
   } else if (objectId && hasPair(effects, 'Water', 'Earth') && !runtime.hybridUsed.has('slurry-bind')) {
     runtime.hybridUsed.add('slurry-bind');
+    runtime.slurryBind = { objectId, pending: false };
     events.push({ type: 'slurry-bind', objectId, response: 'redirect' });
   } else if (objectId && hasPair(effects, 'Earth', 'Wind') && !runtime.hybridUsed.has('root-sling')) {
     runtime.hybridUsed.add('root-sling');

@@ -327,7 +327,7 @@
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, applyImpulse, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
 import { collectRuntimeContactCandidates, selectEarliestContact } from './src/contact-manifold.js';
 import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
-import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
+import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
 import { resolveDestructibleContact } from './src/destructible-contact.js';
 import { drainRecoveryResidualDt, resolveDrainRecovery } from './src/drain-recovery.js';
@@ -559,8 +559,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const event = onHardBounce(ball.elementalRuntime, { effects: ball.elementEffects, position: { x: ball.x, y: ball.y }, velocity: { x: ball.vx, y: ball.vy }, impactSpeed: contact.impactSpeed });
     if (event.type !== 'none') handleElementalEvent(event);
   }
-  function observeStructureContact(objectId, position, normal = null) {
-    const event = onStructureContact(state.ball.elementalRuntime, { effects: state.ball.elementEffects, objectId, position, normal });
+  function observeStructureContact(objectId, position, normal = null, material = '') {
+    const event = onStructureContact(state.ball.elementalRuntime, { effects: state.ball.elementEffects, objectId, position, normal, material });
     if (event.type !== 'none') handleElementalEvent(event);
     return event;
   }
@@ -663,7 +663,16 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
   function applyDestructibleContact(item, contact) {
-    const elementalEvent = observeStructureContact(item.id, { x: item.x, y: item.y }, contact.normal);
+    const elementalEvent = observeStructureContact(item.id, { x: item.x, y: item.y }, contact.normal, item.material);
+    const slurry = elementalEvent.type === 'slurry-bind-contact'
+      ? consumeSlurryBind(state.ball.elementalRuntime, { material: item.material, velocity: { x: state.ball.vx, y: state.ball.vy }, normal: contact.normal })
+      : null;
+    if (slurry) {
+      state.ball.vx = slurry.tangentVelocity.x;
+      state.ball.vy = slurry.tangentVelocity.y;
+      syncPhysicsBallFromPixels(state.ball);
+      setMessage(`${item.label} caught the probe in slurry. Redirected along the anchor.`);
+    }
     const result = resolveDestructibleContact(item, contact, {
       elementalEvent,
       damageResolver: damageFromContact,

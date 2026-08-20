@@ -6,6 +6,7 @@ import {
   checkEarthLinkCrossing,
   createElementalRuntime,
   consumeRootSling,
+  consumeSlurryBind,
   onHardBounce,
   onMiniBallBounce,
   onMiniBallContact,
@@ -29,7 +30,7 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
 
 {
   const runtime = createElementalRuntime();
-  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, hybridUsed: new Set() });
+  assert.deepEqual(runtime, { fireTrail: [], thermalLanceTrail: [], miniBalls: [], waterSplitUsed: false, windEcho: null, earthHits: [], earthLink: null, rootSling: null, slurryBind: null, hybridUsed: new Set() });
   assert.equal(ELEMENTAL_BUDGETS.fire.maxSegments, 12);
   assert.equal(ELEMENTAL_BUDGETS.water.maxBounces, 3);
   assert.equal(ELEMENTAL_BUDGETS.wind.maxDistance, 900);
@@ -51,6 +52,16 @@ const step = (runtime, elementEffects, position, velocity, count, dt = 1 / 120) 
   assert.equal(consumed.assist, 1.2);
   assert.equal(runtime.rootSling, null);
   assert.equal(consumeRootSling(runtime, { mass: .032 }), null);
+}
+
+{
+  const runtime = createElementalRuntime();
+  const waterEarth = { Water: { stacks: 3 }, Earth: { stacks: 3 } };
+  assert.deepEqual(onStructureContact(runtime, { effects: waterEarth, objectId: 'copper-pipe', material: 'copper' }), { type: 'slurry-bind', objectId: 'copper-pipe', response: 'redirect' });
+  assert.deepEqual(runtime.slurryBind, { objectId: 'copper-pipe', pending: false });
+  assert.deepEqual(onStructureContact(runtime, { effects: waterEarth, objectId: 'stone-plug', material: 'stone', normal: { x: 0, y: -1 } }), { type: 'slurry-bind-contact', objectId: 'stone-plug', redirect: true });
+  assert.equal(consumeSlurryBind(runtime, { material: 'stone', velocity: { x: 3, y: 4 }, normal: { x: 0, y: -1 } }).tangentVelocity.y, 0);
+  assert.equal(consumeSlurryBind(runtime, { material: 'stone', velocity: { x: 3, y: 4 }, normal: { x: 0, y: -1 } }), null);
 }
 
 {
