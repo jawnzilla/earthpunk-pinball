@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 168: contact torque and ball spin seam
+
+### Root cause and decision
+
+- Root-cause review of the contact solver found that friction changed linear velocity but discarded the same contact impulse's torque, despite balls already carrying radius/inertia/spin state. This made off-center material contacts physically incomplete and left flipper/contact feel unable to preserve rotational response.
+- Added one bounded physics-core slice: `applyAngularImpulse()` applies finite angular impulse through body inertia, and `resolveContact()` derives ball torque from the contact offset while preserving equal/opposite torque for dynamic surfaces. Linear force, impulse, collision ordering, gameplay tuning, renderer, and input remain unchanged.
+- Added a deterministic regression asserting off-center friction produces angular impulse/spin and rejects non-finite angular input.
+
+### Verification
+
+- Tight red/green loop: the new spin assertion was added at the contact seam; `npm test` passes 56/56, `node --check src/physics-core.js`, and `git diff --check` pass.
+- Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes passed 8/8 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, zero console/page/request errors. Hosted `src/physics-core.js` contains `applyAngularImpulse` and `angularImpulse`.
+
+### Deployment / remaining risk
+
+- Commit `d92d306` deployed successfully in GitHub Pages run `32368911555`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32368911555.
+- The hosted matrix proves the deployed module graph and mobile layout execute cleanly; it does not establish a human image-inspected still-frame verdict, full flipper calibration, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 167: tunnel air-column depth cue
 
 ### Root cause and decision

@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 166
+# Deadlight Critic Review — Overhaul tick 168
+
+## Overhaul tick 168 verdict
+
+**Contact torque and ball spin seam: PASS as a bounded first-principles physics correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Off-center friction now produces rotational response through the same contact impulse rather than silently discarding torque.
+
+### Observed evidence
+
+- `src/physics-core.js` adds `applyAngularImpulse()` and `resolveContact()` derives `angularImpulse` from the ball-to-contact offset, applying it through `angularInertia`; dynamic surfaces receive equal/opposite angular impulse when represented as movable bodies.
+- `tests/physics-core.test.mjs` covers non-zero off-center angular response and non-finite angular-input rejection. `npm test` passes 56/56; syntax and whitespace checks pass.
+- Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes passed 8/8 against the deployed Pages artifact with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors. Hosted source retains `applyAngularImpulse` and `angularImpulse`.
+
+### Limits and next gate
+
+- Commit `d92d306` is deployed by successful Pages run `32368911555`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32368911555.
+- This seam is not proof that the live flipper adapter feeds accurate off-center contact points everywhere, nor proof of a human image-inspected still frame, complete hybrid fidelity, or `LOOP_COMPLETE`; those remain open.
 
 ## Overhaul tick 167 verdict
 
@@ -125,7 +140,6 @@
 - Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, active-elements and grayscale fixtures present, and four upgrade choices on upgrade routes.
 - No independently image-inspected still-frame verdict is claimed. The mine/tunnel visual overhaul, final contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
 
-# Deadlight Critic Review — Overhaul tick 159
 ## Overhaul tick 159 verdict
 
 **Elemental facet silhouettes: PASS as a bounded stacked-effect readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Active elemental stacks now have distinct probe-adjacent geometry instead of relying only on colored rings.
