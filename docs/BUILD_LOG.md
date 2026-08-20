@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 165: tunnel support footings
+
+### Root cause and decision
+
+- Source tracing found the new distant timber brace had posts and a lintel but no visible bearing/contact point. In a portrait still, the support could still float as an ornamental line rather than carry the tunnel load.
+- Added one bounded renderer-only slice: `drawMineTunnelSupportFootings()` adds two restrained radial contact shadows, bearing plates, and paired fasteners behind the playable well. Collision geometry, physics, input, timing, progression, HUD, and assets are unchanged.
+- Added renderer-contract assertions for the helper, deterministic footing positions, authored intent marker, and live composition order.
+
+### Verification
+
+- Tight red/green loop: `npm test` passed 54/54; `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Exact hosted browser verification is pending this commit's Pages deployment. No hosted viewport, console, request, or screenshot result is claimed before deployment.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for the Pages workflow, then verify hosted standard, depth, grayscale, and upgrade fixtures at CSS 320×568 and 390×844.
+- This grounds one tunnel-depth cue but does not establish final contact feel, complete hybrid fidelity, independently image-inspected still-frame quality, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 164: distant tunnel support hardware
 
 ### Root cause and decision

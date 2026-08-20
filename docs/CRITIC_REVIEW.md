@@ -1,4 +1,19 @@
-# Deadlight Critic Review — Overhaul tick 163
+# Deadlight Critic Review — Overhaul tick 165
+
+## Overhaul tick 165 verdict
+
+**Tunnel support footings: PASS as a bounded architectural grounding correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The distant brace now has explicit bearing/contact cues instead of ending in an ungrounded horizontal line.
+
+### Observed evidence
+
+- `index.html` adds `drawMineTunnelSupportFootings()` before `drawMineTunnelSupportHardware()`, using two deterministic radial contact shadows, dark bearing plates, and paired fasteners behind the playable well.
+- The helper is renderer-only and does not alter gameplay, physics, input, timing, HUD, assets, or progression.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This commit is not deployed yet, so no hosted browser or still-frame result is claimed in this entry.
+- After deployment, verify exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes. The largest remaining gap is still an independently image-inspected material/depth frame plus final contact feel and any remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 164 verdict
 

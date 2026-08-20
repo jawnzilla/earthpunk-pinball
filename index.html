@@ -1348,6 +1348,21 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.beginPath(); ctx.moveTo(112, 76); ctx.bezierCurveTo(W * .3, 58, W * .7, 58, W - 112, 76); ctx.stroke();
     ctx.restore();
   }
+  function drawMineTunnelSupportFootings() {
+    // Ground the distant posts with small bearing plates and contact shadows. Without
+    // this seam the brace floats in the arch instead of carrying the tunnel's weight.
+    const footings = [[96, 136], [W - 96, 136]];
+    ctx.save();
+    footings.forEach(([x, y]) => {
+      const shadow = ctx.createRadialGradient(x, y, 2, x, y, 22);
+      shadow.addColorStop(0, 'rgba(4,6,5,.62)'); shadow.addColorStop(1, 'rgba(4,6,5,0)');
+      ctx.fillStyle = shadow; ctx.fillRect(x - 22, y - 8, 44, 16);
+      ctx.fillStyle = '#171714'; ctx.fillRect(x - 9, y - 3, 18, 6);
+      ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 1; ctx.strokeRect(x - 9, y - 3, 18, 6);
+      ctx.fillStyle = '#b06a3c'; ctx.beginPath(); ctx.arc(x - 5, y, 1.4, 0, Math.PI * 2); ctx.arc(x + 5, y, 1.4, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.restore();
+  }
   function drawMineTunnelSupportHardware() {
     // Distant timber braces give the tunnel arch a believable load-bearing scale cue.
     // Keep them quiet and behind the well so they read as architecture, not targets.
@@ -1447,7 +1462,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelSupportHardware();
+    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelSupportFootings(); drawMineTunnelSupportHardware();
     // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
