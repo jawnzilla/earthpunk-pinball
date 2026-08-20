@@ -465,7 +465,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     { id: 'stone-plug', label: 'STONE PLUG', kind: 'stone', x: 180, y: 292, r: 22, material: 'stone', maxIntegrity: 42, threshold: 2.4, damageScale: 30, weaknesses: { Earth: 1.5, Water: 1.2, Fire: .7 }, salvageValue: 95, salvageCharge: .65 },
     { id: 'salvage-drum', label: 'SALVAGE DRUM', kind: 'drum', x: 250, y: 314, r: 18, material: 'copper', maxIntegrity: 10, threshold: .8, damageScale: 10, weaknesses: { Fire: 1.25, Water: .9 }, salvageValue: 40, salvageCharge: .25 }
   ]);
-  function createDestructibles() { return state.currentNode === 'generator-well' ? destructibleTemplates.map(template => ({ ...template, integrity: template.maxIntegrity, damageStage: 0, damageCooldown: 0, destroyed: false })) : []; }
+  function createDestructibles() { return state.currentNode === 'generator-well' ? destructibleTemplates.map(template => ({ ...template, integrity: template.maxIntegrity, damageStage: 0, damageCooldown: 0, impactPulse: 0, destroyed: false })) : []; }
   const targets = [
     { x: 90, y: 164, r: 17, hit: false, hitPulse: 0, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, hitPulse: 0, material: 'copper' }, { x: 270, y: 164, r: 17, hit: false, hitPulse: 0, material: 'stone' },
     { x: 77, y: 274, r: 15, hit: false, hitPulse: 0, material: 'copper' }, { x: 283, y: 274, r: 15, hit: false, hitPulse: 0, material: 'stone' }, { x: 180, y: 242, r: 14, hit: false, hitPulse: 0, material: 'timber' }
@@ -599,7 +599,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
           const damage = damageResult.damage;
           if (damage > 0) {
             item.integrity = Math.max(0, item.integrity - damage);
-            item.damageCooldown = 8;
+            item.damageCooldown = 8; item.impactPulse = 8;
             item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
             emitImpact(item.x, item.y, elementColors.Water, item.damageStage === 3 ? 1.1 : .45, 'Water');
             setMessage(item.integrity <= 0 ? `${item.label} cracked by water fragment.` : `${item.label} struck by water fragment.`);
@@ -624,7 +624,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
             if (!residualReplayed) { advanceElementalBodyResidual(echo, dt, swept.t); residualReplayed = true; }
             const damage = resolveWindEchoStructureDamage({ impactSpeed: response.impactSpeed, impactEnergy: response.impactEnergy, threshold: item.threshold, maxIntegrity: item.maxIntegrity, damageScale: item.damageScale || 1, objectMaterial: materialFor(item), weaknesses: item.weaknesses, elementEffects: ball.elementEffects }).damage;
             if (damage > 0) {
-              item.integrity = Math.max(0, item.integrity - damage); item.damageCooldown = 8; item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
+              item.integrity = Math.max(0, item.integrity - damage); item.damageCooldown = 8; item.impactPulse = 8; item.damageStage = item.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - item.integrity / item.maxIntegrity) * 3) + 1);
               emitImpact(item.x, item.y, elementColors.Wind, item.damageStage === 3 ? 1.05 : .4, 'Wind'); setMessage(item.integrity <= 0 ? `${item.label} sheared by wind echo.` : `${item.label} struck by wind echo.`); if (item.integrity <= 0) item.destroyed = true;
             }
           }
@@ -643,7 +643,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       const result = resolveFireTrailDamage({ maxIntegrity: target.maxIntegrity, damageScale: target.damageScale, objectMaterial: materialFor(target), weaknesses: target.weaknesses, elementEffects: ball.elementEffects });
       if (result.damage <= 0) return;
       target.integrity = Math.max(0, target.integrity - result.damage);
-      target.damageCooldown = 4;
+      target.damageCooldown = 4; target.impactPulse = 8;
       target.damageStage = target.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - target.integrity / target.maxIntegrity) * 3) + 1);
       emitImpact(target.x, target.y, elementColors.Fire, target.integrity <= 0 ? .9 : .3, 'Fire');
       setMessage(target.integrity <= 0 ? `${target.label} burned through by ember trail.` : `${target.label} singed by ember trail.`);
@@ -702,7 +702,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     if (!result.accepted) return;
     item.integrity = result.integrity;
-    item.damageCooldown = result.damageCooldown;
+    item.damageCooldown = result.damageCooldown; item.impactPulse = 8;
     item.damageStage = result.damageStage;
     const activeDamageElement = Object.entries(state.ball.elementEffects).find(([, effect]) => effect.stacks > 0 && effect.timer > 0)?.[0];
     const impactColor = activeDamageElement ? elementColors[activeDamageElement] : '#d7a45a';
@@ -1152,7 +1152,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const b = state.ball;
     const frameScale = dt * LEGACY_FRAME_RATE;
     state.pulse += .08 * frameScale; state.flash = Math.max(0, state.flash - frameScale); state.topHitCooldown = Math.max(0, state.topHitCooldown - frameScale); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - frameScale); state.relayCooldown = Math.max(0, state.relayCooldown - frameScale); state.comboTimer = Math.max(0, state.comboTimer - frameScale); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(frameScale); state.effects.forEach(effect => effect.life -= .045 * frameScale); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035 * frameScale; pop.y -= .42 * frameScale; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
-    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); }); targets.forEach(target => { target.hitPulse = Math.max(0, target.hitPulse - frameScale); });
+    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); item.impactPulse = Math.max(0, item.impactPulse - frameScale); }); targets.forEach(target => { target.hitPulse = Math.max(0, target.hitPulse - frameScale); });
     updateFlippers(dt);
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
@@ -1676,6 +1676,22 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     }
     ctx.restore();
   }
+  function drawDestructibleImpactPulse(item, palette) {
+    const pulse = Math.max(0, Math.min(1, (item.impactPulse || 0) / 8));
+    if (!pulse) return;
+    // A short contact pulse makes structural damage read as an event, not a delayed HUD mutation.
+    ctx.save();
+    ctx.globalAlpha = pulse * .62;
+    ctx.strokeStyle = palette.edge;
+    ctx.lineWidth = 1.5 + pulse * 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, item.r + 4 + (1 - pulse) * 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = pulse * .16;
+    ctx.fillStyle = palette.edge;
+    ctx.beginPath(); ctx.arc(0, 0, item.r * (.72 + pulse * .18), 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
   function drawDestructibles() {
     state.destructibles.forEach(item => {
       const stage = item.damageStage || 0;
@@ -1717,7 +1733,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
         drawMaterialSheen(item, palette); ctx.strokeStyle = palette.dark; ctx.lineWidth = 3; ctx.beginPath(); for (let index = 0; index < 8; index += 1) { const angle = index * Math.PI / 4 - .2; const radius = item.r * (index % 2 ? .88 : 1); const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius; index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = palette.light; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .6, -item.r * .12); ctx.lineTo(item.r * .48, -item.r * .42); ctx.moveTo(-item.r * .28, item.r * .62); ctx.lineTo(item.r * .12, -item.r * .06); ctx.lineTo(item.r * .62, item.r * .28); ctx.stroke();
       }
       drawDestructibleMaterialInset(item, palette);
-      drawDestructibleDamageScars(item, palette);
+      drawDestructibleDamageScars(item, palette); drawDestructibleImpactPulse(item, palette);
       drawDestructibleSilhouette(item, palette);
       if (stage > 0) { ctx.strokeStyle = palette.edge; ctx.globalAlpha = .52 + stage * .12; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-item.r * .42, -item.r * .7); ctx.lineTo(-item.r * .12, -item.r * .18); ctx.lineTo(-item.r * .28, item.r * .38); ctx.stroke(); }
       if (stage > 1) { ctx.strokeStyle = '#241b15'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(item.r * .2, -item.r * .5); ctx.lineTo(item.r * .05, item.r * .06); ctx.lineTo(item.r * .36, item.r * .55); ctx.stroke(); }
