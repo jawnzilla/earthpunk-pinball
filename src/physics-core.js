@@ -119,8 +119,14 @@ export function capVelocity(velocity = { x: 0, y: 0 }, maxSpeed = Infinity) {
 }
 
 export function contactVelocity({ linear = { x: 0, y: 0 }, angularVelocity = 0, point = { x: 0, y: 0 }, origin = { x: 0, y: 0 } } = {}) {
-  const offset = subtract(point, origin);
-  return { x: linear.x - angularVelocity * offset.y, y: linear.y + angularVelocity * offset.x };
+  // Contact telemetry and flipper response share this seam. Normalize all
+  // kinematic inputs before the cross-product term can manufacture NaN/Infinity.
+  const safeLinear = finiteVectorOrZero(linear);
+  const safeAngularVelocity = finiteOrZero(angularVelocity);
+  const safePoint = finiteVectorOrZero(point);
+  const safeOrigin = finiteVectorOrZero(origin);
+  const offset = subtract(safePoint, safeOrigin);
+  return { x: safeLinear.x - safeAngularVelocity * offset.y, y: safeLinear.y + safeAngularVelocity * offset.x };
 }
 
 export function resolveContact({ ball, surface = {}, point, normal, surfaceVelocity = surface.velocity ?? { x: 0, y: 0 }, penetration = 0, correctionPercent = 0.72, slop = 0.001, restitution = null }) {

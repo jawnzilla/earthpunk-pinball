@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 185: fail-closed contact-velocity boundary
+
+### Root cause and decision
+
+- Root-cause investigation found `contactVelocity()` trusted linear velocity, angular velocity, contact point, and origin inputs. A malformed angular term or offset could therefore produce `NaN`/`Infinity` in the contact-velocity seam used by response telemetry and flipper-adjacent calculations.
+- Added one bounded physics-core slice: all contact-velocity inputs now normalize to finite values before the rotational cross-product term. Valid linear/angular behavior is unchanged; malformed input fails closed to finite output.
+- Added a deterministic malformed-contact-velocity regression. Renderer, collision geometry, input, progression, and assets are unchanged.
+
+### Verification
+
+- Tight regression loop was red after the malformed-input test was added (`NaN`/`Infinity` output); after the single solver-boundary change `npm test` passes 56/56.
+- `node --test tests/physics-core.test.mjs`, `node --check src/physics-core.js`, and `git diff --check` pass.
+- Exact local browser checks pass 24/24 at CSS 320x568 and 390x844 across standard, depth, upgrade, active-elements, grayscale, and flipper-contact routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This slice is local until commit, push, GitHub Pages deployment, and hosted checks are verified. Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper contact feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 184: fail-closed integrator input boundary
 
 ### Root cause and decision

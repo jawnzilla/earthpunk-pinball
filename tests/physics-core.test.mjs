@@ -15,10 +15,21 @@ import {
   applyImpulse,
   applyAngularImpulse,
   capVelocity,
+  contactVelocity,
   calibrateContactResponse,
   calibrateMovingSurfaceResponse,
   calibrateFlipperContactResponse
 } from '../src/physics-core.mjs';
+
+{
+  const relative = contactVelocity({
+    linear: { x: Number.NaN, y: 4 },
+    angularVelocity: Number.POSITIVE_INFINITY,
+    point: { x: 2, y: Number.NaN },
+    origin: { x: 0, y: 1 }
+  });
+  assert.deepEqual(relative, { x: 0, y: 4 });
+}
 
 const approx = (actual, expected, tolerance = 1e-6) => {
   assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} was not within ${tolerance} of ${expected}`);

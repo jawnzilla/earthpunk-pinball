@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 181
 
+## Overhaul tick 185 verdict
+
+**Fail-closed contact-velocity boundary: PASS as a bounded first-principles physics hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Malformed kinematic inputs can no longer contaminate the contact-velocity seam with `NaN`/`Infinity`.
+
+### Observed evidence
+
+- `src/physics-core.js` normalizes linear velocity, angular velocity, contact point, and origin before computing the rotational offset term.
+- `tests/physics-core.test.mjs` adds a malformed contact-velocity regression. The test was red before implementation and `npm test` passes 56/56 afterward; syntax and whitespace checks pass.
+- Exact local browser checks pass 24/24 across CSS 320x568 and 390x844 standard, depth, upgrade, active-elements, grayscale, and flipper-contact routes with HTTP 200, exact viewports, no overflow, one canvas, and zero console/page/request errors.
+
+### Limits and next gate
+
+- This closes a numerical input seam only; it is not independent image inspection of the full table, proof of final flipper feel, or proof of complete hybrid fidelity. `LOOP_COMPLETE` remains open.
+- Hosted post-deploy verification is required after push. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
+
 ## Overhaul tick 184 verdict
 
 **Fail-closed integrator input boundary: PASS as a bounded first-principles physics hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The fixed-step integrator now rejects malformed force, gravity, and frame-delta input before it can contaminate live ball state.
