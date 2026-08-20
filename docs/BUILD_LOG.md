@@ -13,7 +13,8 @@
 - Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the new upgrade markers existed, then passed after the overlay change.
 - `npm test`: 50 passed, 0 failed.
 - `git diff --check` passed.
-- Exact 320×568 and 390×844 browser checks are pending deployment; this checkout has Playwright resolvable but no local Chromium executable. No screenshot or visual-quality claim is made yet.
+- GitHub Actions Pages run `32330732975` completed successfully for commit `a66745f`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32330732975.
+- Hosted Playwright `?review=upgrade` checks at exact CSS `320×568` and `390×844` returned HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, four choices, four `.upgrade-effect` nodes, 16px overlay gutters, and zero console/page/request errors. The hosted context read `HINGE LOADOUT · L OPEN · R OPEN` with charge `6`. No subjective visual verdict is claimed from DOM/runtime evidence alone.
 
 ### Remaining risk / next smallest slice
 

@@ -8,7 +8,7 @@
 
 - `showModuleChoices()` now renders `upgrade.text` in `.upgrade-effect` and exposes `HINGE LOADOUT` context with left/right installed elements and current charge.
 - `tests/renderer-contract.test.mjs` has the new contract assertions; focused and full suites pass 50/50.
-- Browser/Pages verification is not yet claimed for this unpushed slice. Playwright is resolvable locally, but no Chromium executable is installed in this checkout.
+- GitHub Actions Pages run `32330732975` completed successfully for commit `a66745f`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32330732975. Hosted Playwright at exact CSS `320×568` and `390×844` returned HTTP 200, exact viewport dimensions, one canvas, no horizontal overflow, four choices, four effect descriptions, 16px card gutters, and zero console/page/request errors. This is runtime/DOM evidence, not a subjective still-frame verdict.
 
 ### Limits and next gate
 
