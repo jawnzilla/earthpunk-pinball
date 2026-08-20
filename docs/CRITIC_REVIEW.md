@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 144
 
+## Overhaul tick 145 verdict
+
+**Target impact pulse: PASS as a bounded hit-legibility correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Target contacts now retain a short-lived pulse so an impact reads as an event before the target settles into its spent state.
+
+### Observed evidence
+
+- `index.html` initializes `hitPulse`, sets it to `8` in `hitTarget()`, decays it with the fixed-step frame scale, and composes `drawTargetImpactPulse(target)` in the live target renderer.
+- The pulse uses the target's canonical element color, an expanding ring, and a restrained center fill. Collision, scoring, progression, and material-family geometry are unchanged.
+- `tests/renderer-contract.test.mjs` contains the new contract markers. Focused and full suites pass 50/50; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This commit is not deployed yet, so no hosted Pages run, exact 320×568/390×844 browser result, or screenshot claim is made.
+- Inspect the pulse on the hosted portrait and grayscale still frames after deployment. The mine/tunnel visual overhaul, full first-principles physics/effects completion, and human visual verdict remain open. Do not claim `LOOP_COMPLETE`.
+
 ## Overhaul tick 144 verdict
 
 **Deck/well composition order: PASS as a bounded depth correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The live renderer now paints the recessed well behind the authored deck details, preventing the opaque well plane from hiding the deck/manifold/cassette layer. This is source-contract evidence only until the hosted still frames are checked.

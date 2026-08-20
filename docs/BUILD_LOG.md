@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 145: target impact pulse readability
+
+### Root cause and decision
+
+- Source tracing found target contact already emitted score/effect feedback, but the target renderer immediately collapsed a hit into a low-alpha dark disc. The hit was therefore easy to miss as a physical event, especially in grayscale and at portrait scale.
+- Added one bounded presentation slice: targets now retain an 8-frame `hitPulse`; the canvas renders an element-colored expanding ring and restrained center flash before the existing hit-state plate. Physics, collision response, scoring, progression, materials, and input are unchanged.
+- Added renderer-contract coverage for initialization, deterministic decay, live pulse composition, and the expanding ring geometry.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before the pulse markers existed, then passed after implementation.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/*.js` and `git diff --check` passed.
+- Deployment and hosted exact 320×568/390×844 browser verification are pending this commit; no hosted or subjective visual claim is made yet.
+
+### Remaining risk / next smallest slice
+
+- Push only `prototype`, wait for the GitHub Pages workflow, then verify hosted source parity and exact 320×568/390×844 runtime/error/overflow checks if a browser executable is available.
+- Inspect the pulse in a still frame before calling target impact readability closed. The complete mine/tunnel overhaul, full physics/effects completion, and human visual verdict remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 144: restore deck-over-well render order
 
 ### Root cause and decision

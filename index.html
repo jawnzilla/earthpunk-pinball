@@ -466,8 +466,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   ]);
   function createDestructibles() { return state.currentNode === 'generator-well' ? destructibleTemplates.map(template => ({ ...template, integrity: template.maxIntegrity, damageStage: 0, damageCooldown: 0, destroyed: false })) : []; }
   const targets = [
-    { x: 90, y: 164, r: 17, hit: false, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, material: 'copper' }, { x: 270, y: 164, r: 17, hit: false, material: 'stone' },
-    { x: 77, y: 274, r: 15, hit: false, material: 'copper' }, { x: 283, y: 274, r: 15, hit: false, material: 'stone' }, { x: 180, y: 242, r: 14, hit: false, material: 'timber' }
+    { x: 90, y: 164, r: 17, hit: false, hitPulse: 0, material: 'timber' }, { x: 180, y: 134, r: 17, hit: false, hitPulse: 0, material: 'copper' }, { x: 270, y: 164, r: 17, hit: false, hitPulse: 0, material: 'stone' },
+    { x: 77, y: 274, r: 15, hit: false, hitPulse: 0, material: 'copper' }, { x: 283, y: 274, r: 15, hit: false, hitPulse: 0, material: 'stone' }, { x: 180, y: 242, r: 14, hit: false, hitPulse: 0, material: 'timber' }
   ];
   const bumpers = levelLayouts[0].bumpers;
   const flippers = {
@@ -655,7 +655,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function hitTarget(target) {
     observeStructureContact(target.id || `target-${targets.indexOf(target)}`, { x: target.x, y: target.y });
-    const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); const points = Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.score += points; emitScorePopup(target.x, target.y, points, reaction ? elementColors[target.element] : '#ffd083'); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
+    const multiplier = chainHit(); const reaction = reactWithEnvironment(target.element, target.x, target.y, 'salvage target energized'); target.hit = true; target.hitPulse = 8; state.targets += 1; if (state.tableKind === 'boss') state.bossHits = Math.floor(state.targets / 2); state.charge = Math.min(99, state.charge + state.salvageBonus); const points = Math.round((100 + (reaction ? 35 : 0) + (state.tableKind === 'boss' ? 25 : 0)) * multiplier); state.score += points; emitScorePopup(target.x, target.y, points, reaction ? elementColors[target.element] : '#ffd083'); state.flash = 3; emitImpact(target.x, target.y, reaction ? elementColors[target.element] : '#f1b35b', 1.25);
     setMessage(state.targets === targets.length ? (state.tableKind === 'boss' ? `Armor core ${state.bossHits}/3 exposed.` : 'Descent mapped. Choose a modification.') : `Salvage secured. Chain x${multiplier.toFixed(2)}.`);
     if (state.targets === targets.length && (state.tableKind !== 'boss' || (state.bossHits >= 3 && state.boss.hp <= 0))) completeStage();
   }
@@ -1104,7 +1104,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const b = state.ball;
     const frameScale = dt * LEGACY_FRAME_RATE;
     state.pulse += .08 * frameScale; state.flash = Math.max(0, state.flash - frameScale); state.topHitCooldown = Math.max(0, state.topHitCooldown - frameScale); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - frameScale); state.relayCooldown = Math.max(0, state.relayCooldown - frameScale); state.comboTimer = Math.max(0, state.comboTimer - frameScale); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(frameScale); state.effects.forEach(effect => effect.life -= .045 * frameScale); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035 * frameScale; pop.y -= .42 * frameScale; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
-    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); });
+    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); }); targets.forEach(target => { target.hitPulse = Math.max(0, target.hitPulse - frameScale); });
     updateFlippers(dt);
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
@@ -1663,6 +1663,23 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function targetMaterialFamily(target) {
     return target.material === 'stone' ? 1 : target.material === 'copper' ? 2 : 0;
   }
+  function drawTargetImpactPulse(target) {
+    const pulse = Math.max(0, Math.min(1, target.hitPulse / 8));
+    if (!pulse) return;
+    const color = elementColors[canonicalElement(target.element)] || '#ffd083';
+    ctx.save();
+    ctx.globalAlpha = pulse * .9;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5 + pulse * 2;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.arc(0, 0, target.r + 5 + (1 - pulse) * 9, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = pulse * .35;
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(0, 0, target.r * (.72 + pulse * .18), 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
   function drawTargetMaterialCue(target) {
     const family = targetMaterialFamily(target);
     ctx.save();
@@ -1695,7 +1712,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function drawTargets() {
     targets.forEach((target, index) => {
       ctx.save(); ctx.translate(target.x, target.y); ctx.globalAlpha = target.hit ? .42 : 1;
-      drawTargetContactShadow(target);
+      drawTargetContactShadow(target); drawTargetImpactPulse(target);
       if (target.hit) { ctx.fillStyle = '#242521'; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, target.r * .72, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#9c6b45'; ctx.beginPath(); ctx.moveTo(-target.r * .45, -target.r * .35); ctx.lineTo(target.r * .4, target.r * .35); ctx.stroke(); ctx.restore(); return; }
       const family = targetMaterialFamily(target);
       ctx.strokeStyle = '#171614'; ctx.lineWidth = 3; ctx.fillStyle = family === 0 ? '#5b3d29' : family === 1 ? '#51483d' : '#3e4a47';
