@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 169: ball spin readability from contact torque
+
+### Root cause and decision
+
+- The contact solver now preserves off-centre friction torque in `physics.spin`, but the live ball renderer only exposed linear motion and elemental facets. Rotational response was physically present yet visually silent.
+- Added one bounded renderer-only slice: `drawBallSpinMark()` reads the finite physics spin state, draws a restrained rotating seam on the probe, and uses opposite warm/cool accents for spin direction. No new force, collision, timestep, input, progression, or asset path was introduced.
+- Added renderer-contract assertions for the helper, finite-spin guard, and live draw call.
+
+### Verification
+
+- Tight red/green loop: the new renderer contract failed before the helper existed, then `npm test` passed 56/56 after implementation. `node --check src/physics-core.js` and `git diff --check` pass.
+- Hosted Playwright against `https://jawnzilla.github.io/earthpunk-pinball/` passed 16/16 exact CSS viewport cases: standard, depth, grayscale, and upgrade at 320x568 and 390x844; HTTP 200, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors. Screenshots were captured to OS temp and not added to the repository.
+
+### Deployment / remaining risk
+
+- Commit `65b09d4` deployed successfully in GitHub Pages run `32370618738`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32370618738.
+- This makes the new spin state inspectable in the live artifact; it does not establish human image-inspected material quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 168: contact torque and ball spin seam
 
 ### Root cause and decision

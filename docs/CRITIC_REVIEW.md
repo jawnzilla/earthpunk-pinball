@@ -1,4 +1,20 @@
-# Deadlight Critic Review — Overhaul tick 168
+# Deadlight Critic Review — Overhaul tick 169
+
+## Overhaul tick 169 verdict
+
+**Ball spin readability: PASS as a bounded physics-to-renderer handoff; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Off-centre friction torque already accumulated in the physics ball, but the player could not read it. The probe now carries a restrained directional spin seam driven by the authoritative `physics.spin` value.
+
+### Observed evidence
+
+- `index.html` adds `drawBallSpinMark(b)`, rejects non-finite/near-zero spin, and composes it after the ball's directional rim and elemental facets. The helper does not mutate physics state.
+- `tests/renderer-contract.test.mjs` asserts the helper, finite-spin guard, and live composition. `npm test` passes 56/56; syntax and whitespace checks pass.
+- GitHub Pages run `32370618738` succeeded for commit `65b09d4`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32370618738.
+- Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes passed 16/16: HTTP 200, exact viewport dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The screenshots were captured but not independently image-inspected in this scheduled environment, so no subjective still-frame/material verdict is claimed.
+- The largest remaining product gap is still an evidence-selected full mine/tunnel material and depth read plus final contact-feel/hybrid review. `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 168 verdict
 
