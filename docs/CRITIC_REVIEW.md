@@ -12,8 +12,8 @@
 
 ### Limits and next gate
 
-- This tick has source/runtime-contract evidence only; no hosted deployment or independently image-inspected still frame has been claimed yet.
-- The mine/tunnel visual overhaul, grayscale/material still-frame verdict, remaining hybrid fidelity, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
+- GitHub Actions Pages run `32338596933` completed successfully for commit `53d27df`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32338596933. Hosted source returned HTTP 200 and retained `drawMineGrime`/`grimeMarks`. Playwright exact CSS 320×568 and 390×844 standard plus `?review=grayscale` passed 8/8 with exact inner dimensions, one canvas, no horizontal overflow, and zero console/page/request errors.
+- The hosted checks are runtime/source evidence only; no independently image-inspected still frame is claimed. The mine/tunnel visual overhaul, grayscale/material verdict, remaining hybrid fidelity, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
 
 ## Overhaul tick 148 verdict
 

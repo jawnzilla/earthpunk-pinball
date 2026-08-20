@@ -16,7 +16,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Push only `prototype`, wait for the GitHub Pages workflow, and verify hosted source plus exact CSS 320×568/390×844 standard and grayscale routes if the browser executable is available.
+- GitHub Actions Pages run `32338596933` completed successfully for commit `53d27df`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32338596933.
+- Hosted source probe returned HTTP 200, 223019 bytes, and retained `drawMineGrime`, `grimeMarks`, and `<canvas>`. Playwright exact CSS 320×568 and 390×844 standard plus `?review=grayscale` passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, and zero console/page/request errors.
 - The mine/tunnel overhaul still needs an independently inspected still-frame verdict, complete cross-family physics/effects fidelity, and the global completion gate. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 148: Fire/Water steam-pressure impulse
