@@ -1348,6 +1348,27 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.beginPath(); ctx.moveTo(112, 76); ctx.bezierCurveTo(W * .3, 58, W * .7, 58, W - 112, 76); ctx.stroke();
     ctx.restore();
   }
+  function drawMineTunnelSupportHardware() {
+    // Distant timber braces give the tunnel arch a believable load-bearing scale cue.
+    // Keep them quiet and behind the well so they read as architecture, not targets.
+    const left = 96, right = W - 96, top = 50, bottom = 136;
+    ctx.save();
+    const post = (x, lean) => {
+      ctx.save(); ctx.translate(x, bottom - 4); ctx.rotate(lean);
+      const face = ctx.createLinearGradient(-5, 0, 5, 0);
+      face.addColorStop(0, '#261d17'); face.addColorStop(.35, '#765037'); face.addColorStop(.62, '#9a6841'); face.addColorStop(1, '#33251c');
+      ctx.fillStyle = face; ctx.fillRect(-5, -44, 10, 48);
+      ctx.fillStyle = 'rgba(5,7,6,.42)'; ctx.fillRect(2, -41, 3, 42);
+      ctx.strokeStyle = '#171512'; ctx.lineWidth = 1.5; ctx.strokeRect(-5, -44, 10, 48);
+      ctx.fillStyle = '#b06a3c'; ctx.beginPath(); ctx.arc(0, -28, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    };
+    post(left, -.035); post(right, .035);
+    ctx.strokeStyle = '#2b2119'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(left, top + 8); ctx.lineTo(right, top + 8); ctx.stroke();
+    ctx.strokeStyle = '#8f6040'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(left + 2, top + 6); ctx.lineTo(right - 2, top + 6); ctx.stroke();
+    ctx.globalAlpha = .5; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(left + 8, top + 4); ctx.lineTo(right - 8, top + 4); ctx.stroke();
+    ctx.restore();
+  }
   function drawRecessedWellPlane() {
     // One explicit recessed plane keeps the mine table from reading as a flat poster.
     const left = 38, top = 124, right = W - 38, bottom = H - 112;
@@ -1426,7 +1447,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps();
+    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelSupportHardware();
     // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
