@@ -2163,6 +2163,28 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     ctx.restore();
   }
+  function drawBallSpinMark(b) {
+    const spin = Number.isFinite(b.physics?.spin) ? b.physics.spin : 0;
+    if (Math.abs(spin) < .01) return;
+    // The contact solver now preserves off-centre friction torque. This restrained
+    // seam makes that rotational state readable without adding a second physics path.
+    const angle = state.pulse * .04 + spin * .18;
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.rotate(angle);
+    ctx.globalAlpha = Math.min(.72, .22 + Math.abs(spin) * .035);
+    ctx.strokeStyle = spin > 0 ? '#f1b35b' : '#67c8d5';
+    ctx.lineWidth = Math.max(1, b.r * .12);
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r * .68, -.92, .92);
+    ctx.stroke();
+    ctx.globalAlpha *= .7;
+    ctx.beginPath();
+    ctx.moveTo(-b.r * .42, -b.r * .48);
+    ctx.lineTo(b.r * .42, -b.r * .48);
+    ctx.stroke();
+    ctx.restore();
+  }
   function drawBall() {
     const b = state.ball; const speed = Math.hypot(b.vx, b.vy); const motionX = speed > .05 ? -b.vx / speed : -.35; const motionY = speed > .05 ? -b.vy / speed : -.55;
     const activeEffects = Object.entries(b.elementEffects).filter(([, effect]) => effect.stacks > 0 && effect.timer > 0);
@@ -2175,6 +2197,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     ctx.save(); ctx.globalAlpha = .72; const highlight = ctx.createRadialGradient(b.x + motionX * b.r * .5 - 1, b.y + motionY * b.r * .5 - 1, .5, b.x + motionX * b.r * .5, b.y + motionY * b.r * .5, b.r * .7); highlight.addColorStop(0, '#fff6cf'); highlight.addColorStop(.22, 'rgba(255,240,186,.55)'); highlight.addColorStop(1, 'rgba(255,240,186,0)'); ctx.fillStyle = highlight; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     drawDirectionalRim(b.x, b.y, b.r, b.vx, b.vy, '#f1b35b', .82);
     drawBallElementalFacets(b, activeEffects);
+    drawBallSpinMark(b);
   }
   const MAX_CATCHUP_STEPS = 4;
   let previousTime = 0;
