@@ -15,7 +15,8 @@
 
 ### Deployment / remaining risk
 
-- Push only `prototype`, wait for GitHub Pages, and run exact hosted CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade checks.
+- Commit `14d0e9f` was pushed only to `prototype`; GitHub Pages run `32355940024` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32355940024.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, active-elements and grayscale fixtures present, and four upgrade choices on upgrade routes.
 - This makes the elemental silhouette ownership explicit but does not establish a human still-frame verdict, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 159: elemental facet silhouettes

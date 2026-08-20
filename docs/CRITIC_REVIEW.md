@@ -11,8 +11,9 @@
 
 ### Limits and next gate
 
-- This commit is not deployed yet, so no hosted browser or still-frame result is claimed in this entry.
-- After deployment, verify exact hosted CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade routes. The mine/tunnel visual overhaul, final contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
+- Commit `14d0e9f` is deployed by successful Pages run `32355940024`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32355940024.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, active-elements, grayscale, and upgrade routes passed 8/8: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, active-elements and grayscale fixtures present, and four upgrade choices on upgrade routes.
+- No independently image-inspected still-frame verdict is claimed. The mine/tunnel visual overhaul, final contact feel, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
 
 # Deadlight Critic Review — Overhaul tick 159
 ## Overhaul tick 159 verdict
