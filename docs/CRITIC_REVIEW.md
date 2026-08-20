@@ -10,7 +10,8 @@
 - `index.html` draws the trail as a short-lived warm ring/ash cue in `drawElementalRuntime()`.
 - `tests/elemental-effects.test.mjs` proves position capture and deterministic expiry; `npm test` passes 50/50.
 - `node --check src/elemental-effects.js` and `git diff --check` pass.
-- Exact 320x568/390x844 browser execution and screenshots are not claimed because no Chromium executable is available in this checkout. Pages deployment is pending push.
+- Exact 320x568/390x844 browser execution and screenshots are not claimed because no Chromium executable is available in this checkout.
+- GitHub Pages run `32321687898` completed successfully for commit `d658a68`; hosted HTML and module probes returned HTTP 200 with `thermalLanceTrail` and `thermal-lance` markers present.
 
 ### Remaining risk / next smallest slice
 

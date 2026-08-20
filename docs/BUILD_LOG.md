@@ -13,7 +13,7 @@
 - `npm test`: 50 passed, 0 failed.
 - `node --check src/elemental-effects.js` and `git diff --check` passed.
 - Exact 320x568/390x844 browser checks are not yet run because this checkout has no Chromium executable; no screenshot or console claim is made.
-- Pages deployment and hosted parity verification remain pending until this commit is pushed.
+- GitHub Pages run `32321687898` completed successfully for commit `d658a68`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32321687898. Hosted source/parity probes returned HTTP 200 for the active-elements page (214268 bytes) and `src/elemental-effects.js` (20909 bytes), with `thermalLanceTrail` and `thermal-lance` markers present.
 
 ### Remaining risk / next smallest slice
 
