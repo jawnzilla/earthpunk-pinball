@@ -330,7 +330,7 @@ import { collectRuntimeContactCandidates, dispatchRuntimeContact, selectEarliest
 import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, consumeSteamPressure, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
-import { resolveDestructibleContact } from './src/destructible-contact.js';
+import { resolveDestructibleContact, resolveFireTrailDamage } from './src/destructible-contact.js';
 import { drainRecoveryResidualDt, resolveDrainRecovery } from './src/drain-recovery.js';
 import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
 (() => {
@@ -632,6 +632,23 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       }
     });
     events.filter(event => event.type !== 'fire-trail-tick').forEach(handleElementalEvent);
+    // Fire III trail ticks are a narrow damage seam: one nearby structure,
+    // no score/charge, and the normal destruction rendering path.
+    events.filter(event => event.type === 'fire-trail-tick' && event.damageEnabled).forEach(event => {
+      const target = state.destructibles.filter(item => !item.destroyed && item.damageCooldown <= 0)
+        .map(item => ({ item, distance: Math.hypot(item.x - event.point.x, item.y - event.point.y) }))
+        .filter(candidate => candidate.distance <= 16)
+        .sort((a, b) => a.distance - b.distance)[0]?.item;
+      if (!target) return;
+      const result = resolveFireTrailDamage({ maxIntegrity: target.maxIntegrity, damageScale: target.damageScale, objectMaterial: materialFor(target), weaknesses: target.weaknesses, elementEffects: ball.elementEffects });
+      if (result.damage <= 0) return;
+      target.integrity = Math.max(0, target.integrity - result.damage);
+      target.damageCooldown = 4;
+      target.damageStage = target.integrity <= 0 ? 3 : Math.min(2, Math.floor((1 - target.integrity / target.maxIntegrity) * 3) + 1);
+      emitImpact(target.x, target.y, elementColors.Fire, target.integrity <= 0 ? .9 : .3, 'Fire');
+      setMessage(target.integrity <= 0 ? `${target.label} burned through by ember trail.` : `${target.label} singed by ember trail.`);
+      if (target.integrity <= 0) target.destroyed = true;
+    });
     const crossing = checkEarthLinkCrossing(ball.elementalRuntime, { x: ball.prevX, y: ball.prevY }, { x: ball.x, y: ball.y });
     if (crossing.powerMultiplier > 1) { ball.vx *= crossing.powerMultiplier; ball.vy *= crossing.powerMultiplier; syncPhysicsBallFromPixels(ball); emitImpact(ball.x, ball.y, elementColors.Earth, .9, 'Earth'); setMessage('Earth link powered the probe once.'); }
   }

@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 156: Fire III ember-trail damage seam
+
+### Root cause and decision
+
+- `advanceElementalRuntime()` already emitted `fire-trail-tick` events when Fire reached three stacks, but the live adapter explicitly filtered those events out. The declared Fire trail damage was therefore presentation-only.
+- Added one bounded gameplay slice: enabled ticks select the nearest eligible destructible within 16px, apply a deterministic material-aware capped damage policy, set the normal damage cooldown/stage, and use the existing impact/message path. Ticks award no score or charge and do not create a second collision model.
+- Added `resolveFireTrailDamage()` as a renderer-independent contract plus renderer/source assertions.
+
+### Verification
+
+- `npm test` passed 54/54.
+- `node --check src/destructible-contact.js` and `git diff --check` passed.
+- Local Playwright was attempted at exact CSS 320×568 and 390×844. The available Python server returned `.js/.mjs` as `text/plain`, so both routes loaded HTTP 200 with exact dimensions/one canvas/no overflow but failed module execution; no local gameplay/browser pass is claimed.
+
+### Deployment / remaining risk
+
+- Commit and hosted GitHub Pages verification are required after this tick. Hosted checks must cover standard, `?review=upgrade`, and `?review=grayscale` at both exact portrait sizes with zero console/page/request errors.
+- This closes one inert Fire hybrid consequence but does not establish final collision feel, still-frame visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 155: hosted physics calibration review fixture
 
 ### Root cause and decision

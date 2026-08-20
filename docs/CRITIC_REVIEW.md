@@ -1,6 +1,23 @@
-# Deadlight Critic Review — Overhaul tick 151
+# Deadlight Critic Review — Overhaul tick 156
+
+## Overhaul tick 156 verdict
+
+**Fire III ember-trail damage seam: PASS as a bounded hybrid-fidelity correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Fire III trail ticks now have a narrow, deterministic structure-damage consequence instead of being discarded by the live adapter.
+
+### Observed evidence
+
+- `src/destructible-contact.js` exports `resolveFireTrailDamage()` with material factors, Fire weakness scaling, and an 8% integrity cap.
+- `index.html` consumes `fire-trail-tick` events, selects one nearby eligible destructible within 16px, applies cooldown/stage updates, and emits the existing Fire impact/message path without score or charge.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+- Local exact-viewport browser execution was blocked by the available Python server's `text/plain` module MIME behavior. No local gameplay pass is claimed.
+
+### Limits and next gate
+
+- Commit, Pages deployment, and hosted exact CSS 320×568/390×844 checks remain required for standard, upgrade, and grayscale routes; no hosted result is claimed until actually run.
+- This closes one inert Fire consequence but does not prove final contact feel, independently inspected still-frame visual quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 155 verdict
+
 
 **Hosted calibration review fixture: PASS as a bounded verification seam; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The existing deterministic physics calibration now has an opt-in browser route that executes the production `.mjs` module and exposes its pass/gate/sample report without expanding the player HUD.
 

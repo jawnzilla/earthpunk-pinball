@@ -35,3 +35,15 @@ export function resolveDestructibleContact(item, contact, {
     reason: destroyedNow ? 'destroyed' : 'damaged'
   };
 }
+
+// Fire III trail ticks are a small, reward-free pressure source rather than a
+// second collision. Keep the policy deterministic and material-aware so the
+// runtime adapter can apply it without inventing another damage model.
+export function resolveFireTrailDamage({ maxIntegrity = 0, damageScale = 1, objectMaterial = 'timber', weaknesses = {}, elementEffects = {}, damageCap = .08 } = {}) {
+  if (!Number.isFinite(maxIntegrity) || maxIntegrity <= 0) return { damage: 0, materialFactor: 0, elementFactor: 0 };
+  const materialFactor = objectMaterial === 'timber' ? 1.25 : objectMaterial === 'stone' ? .55 : objectMaterial === 'copper' ? .8 : 1;
+  const fireStacks = Math.max(0, elementEffects.Fire?.stacks ?? 0);
+  const elementFactor = 1 + fireStacks * Math.max(0, (weaknesses.Fire ?? 1) - 1) * .35;
+  const rawDamage = Math.max(0, damageScale) * .18 * materialFactor * elementFactor;
+  return { damage: Math.min(maxIntegrity * Math.max(0, damageCap), rawDamage), materialFactor, elementFactor };
+}

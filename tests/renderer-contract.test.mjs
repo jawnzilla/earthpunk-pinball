@@ -179,6 +179,9 @@ assert.match(source, /observeStructureContact\(item\.id, \{ x: item\.x, y: item\
 assert.match(source, /consumeSlurryBind/);
 assert.match(source, /slurry-bind-contact/);
 assert.match(source, /Redirected along the anchor/);
+assert.match(source, /resolveFireTrailDamage/);
+assert.match(source, /event\.type === 'fire-trail-tick' && event\.damageEnabled/);
+assert.match(source, /burned through by ember trail/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

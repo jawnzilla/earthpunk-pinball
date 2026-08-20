@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { resolveDestructibleContact } from '../src/destructible-contact.js';
+import { resolveDestructibleContact, resolveFireTrailDamage } from '../src/destructible-contact.js';
 
 const item = (overrides = {}) => ({
   material: 'timber', damageScale: 13, threshold: 1.2, weaknesses: { Fire: 2 },
@@ -50,6 +50,14 @@ test('applies thermal lance multiplier to the contact that creates the burn echo
   });
   assert.ok(Math.abs(result.damage - 3.6) < 1e-9);
   assert.equal(result.destroyedNow, false);
+});
+
+test('fire trail damage is capped and material-aware', () => {
+  const timber = resolveFireTrailDamage({ maxIntegrity: 100, damageScale: 10, objectMaterial: 'timber', weaknesses: { Fire: 2 }, elementEffects: { Fire: { stacks: 3 } } });
+  const stone = resolveFireTrailDamage({ maxIntegrity: 100, damageScale: 10, objectMaterial: 'stone', weaknesses: { Fire: 2 }, elementEffects: { Fire: { stacks: 3 } } });
+  assert.ok(timber.damage > stone.damage);
+  assert.ok(timber.damage <= 8);
+  assert.equal(resolveFireTrailDamage({ maxIntegrity: 0, damageScale: 10 }).damage, 0);
 });
 
 console.log('destructible-contact: threshold, elemental, cooldown, stage, and exactly-once reward contracts passed');
