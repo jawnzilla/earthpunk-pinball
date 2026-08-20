@@ -15,7 +15,7 @@
 
 ### Deployment / remaining risk
 
-- This slice is ready for deployment, but no hosted result is claimed until the prototype push and Pages run complete.
+- Commit `72d7183` deployed successfully in GitHub Pages run `32377145332`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32377145332. Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, complete document, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors. Hosted source fetch retained `safeMass`, `safeRadius`, and `safeMaterial`.
 - It hardens the physics boundary; it does not prove final flipper feel, human image-inspected mine depth/material quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 171: hybrid probe signature

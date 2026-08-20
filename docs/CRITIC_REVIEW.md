@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- Hosted verification and Pages deployment are pending this tick; no hosted pass is claimed yet.
+- Commit `72d7183` deployed successfully in GitHub Pages run `32377145332`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32377145332. Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes pass 16/16 against `https://jawnzilla.github.io/earthpunk-pinball/` with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on upgrade routes, and zero console/page/request errors. Hosted source retains `safeMass`, `safeRadius`, and `safeMaterial`.
 - This is a data-boundary correction, not proof of final contact feel, subjective still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## Overhaul tick 171 verdict
