@@ -94,6 +94,38 @@ test('continuous query remains safe for degenerate inputs and reports bounded wo
   assert.ok(diagnostics.maxDepth <= 14);
 });
 
+test('deterministic benchmark preserves hit/miss parity and bounded work distribution', () => {
+  const flipper = { pivotX: 100, pivotY: 100, length: 100, width: 17, previousAngle: -1.2, angle: 1.2 };
+  let hits = 0;
+  let totalDistanceCalls = 0;
+  let maxDistanceCalls = 0;
+  const start = performance.now();
+  for (let index = 0; index < 10000; index += 1) {
+    const miss = index % 2 === 0;
+    const ball = miss
+      ? { prevX: 420, prevY: 420, x: 520, y: 520 }
+      : { prevX: 40, prevY: 260, x: 260, y: 40 };
+    const diagnostics = {};
+    const contact = sweptFlipperContact(ball, flipper, 8, { diagnostics });
+    if (contact) hits += 1;
+    totalDistanceCalls += diagnostics.distanceCalls;
+    maxDistanceCalls = Math.max(maxDistanceCalls, diagnostics.distanceCalls);
+  }
+  const elapsedMs = performance.now() - start;
+  assert.equal(hits, 5000, 'the fixed-seed benchmark must retain deterministic hit/miss parity');
+  assert.ok(maxDistanceCalls <= 160, `single-query work exceeded budget: ${maxDistanceCalls}`);
+  assert.ok(totalDistanceCalls <= 800000, `aggregate work exceeded benchmark budget: ${totalDistanceCalls}`);
+  assert.ok(elapsedMs < 1000, `10,000-query benchmark exceeded 1s: ${elapsedMs.toFixed(1)}ms`);
+});
+
+test('earliest-time ordering ignores later contacts and keeps stable equal-time side order', () => {
+  const first = { side: 'left', contact: { t: 0.2 } };
+  const later = { side: 'right', contact: { t: 0.8 } };
+  assert.equal(selectEarliestFlipperContact([later, first]), first);
+  const equalRight = { side: 'right', contact: { t: 0.2 } };
+  assert.equal(selectEarliestFlipperContact([equalRight, first]), first);
+});
+
 test('rotating flipper follows the short arc across the angle seam', () => {
   const delta = shortestAngularDelta(Math.PI - 0.05, -Math.PI + 0.05);
   assert.ok(Math.abs(delta - 0.1) < 1e-9, `expected a 0.1 radian seam crossing, got ${delta}`);

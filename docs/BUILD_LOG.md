@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 133: rotating CCD ordering and benchmark gate
+
+### Decision
+
+- Added a deterministic 10,000-query rotating-flipper benchmark fixture covering an alternating hit/miss distribution. It asserts 5,000 hits, a per-query diagnostic ceiling, an aggregate work ceiling, and a 1-second local runtime budget.
+- Added explicit earliest-time ordering coverage for rotating flipper candidates, including stable left-side tie behavior. No runtime solver or renderer behavior changed; this is evidence hardening only.
+
+### Verification
+
+- `npm test`: 50 passed, 0 failed; the new benchmark completed in 20.2 ms in this checkout.
+- `node --check src/flipper-contact.js` and `git diff --check` passed.
+- Local browser prerequisite discovery found no Chromium executable, but the global Playwright package is resolvable; exact browser checks remain scheduled after deployment.
+
+### Remaining risk / next smallest slice
+
+- The rotating CCD now has fixture, ordering, and bounded-work evidence, but the benchmark records assertions rather than a committed distribution artifact. A future tuning pass should collect hit/miss work percentiles only if solver changes alter the budget.
+- Visual overhaul, material/element hybrid depth, destructible readability, and subjective grayscale review remain open. Do not claim LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 132: rotating CCD fixture and bounded-work gate
 
 ### Decision

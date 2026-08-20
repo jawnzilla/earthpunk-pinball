@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 131
 
+## Overhaul tick 133 verdict
+
+**Physics slice: PASS for deterministic ordering and benchmark gates; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** The continuous rotating-flipper query now has an executable 10,000-query hit/miss benchmark and explicit earliest-time/tie-order assertions. This hardens the physics contract without pretending that more tests are a visual overhaul.
+
+### Observed evidence
+
+- `tests/flipper-contact.test.mjs` passes 20/20 focused flipper tests, including 5,000 deterministic hits, 5,000 deterministic misses, bounded per-query and aggregate diagnostic work, and stable equal-time side ordering.
+- Full `npm test` passes 50/50; syntax and whitespace checks pass. The new benchmark completed in 20.2 ms in this checkout.
+- No renderer, input, progression, asset, or elemental behavior changed this tick.
+- No Chromium executable is installed locally. The global Playwright package is resolvable, so hosted exact viewport checks remain a post-deployment verification step rather than a source-only claim.
+
+### Remaining risk / next smallest slice
+
+- The current benchmark asserts aggregate work but does not persist percentile telemetry. Do not change the solver budget without first recording a comparable distribution.
+- The earthpunk mine/tunnel visual overhaul, material differentiation, elemental hybrids, destructible readability, and subjective portrait/grayscale still-frame review remain open. Do not claim LOOP_COMPLETE.
+
 ## Overhaul tick 132 verdict
 
 **Physics slice: PASS for fixture coverage and bounded-work instrumentation; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** The continuous rotating-segment query now has executable coverage for combined motion, endpoint caps, near misses, degenerate inputs, and opt-in work accounting. This is evidence hardening, not a new visual phase.
