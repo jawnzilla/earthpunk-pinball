@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 151
 
+## Overhaul tick 153 verdict
+
+**Live manifold candidate telemetry: PASS as a bounded observability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Physics V2 loop now reports the number of normalized geometry-family candidates considered in the same fixed step as the selected winner, making contention and no-contact frames distinguishable in the developer readout.
+
+### Observed evidence
+
+- `index.html` initializes `manifoldCandidateCount`, records `runtimeContactCandidates.length` after cross-family collection, and exposes `Manifold: family / count` in the debug-only Physics V2 readout.
+- The renderer-contract test was red before the telemetry markers existed and green afterward; `npm test` passes 53/53. Syntax and whitespace checks pass.
+- Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes pass 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Deployment and hosted verification are pending this tick's push.
+- This is observability only: it does not prove final collision feel or replace the live stateful resolver branches. The independently inspected mine/tunnel still frame, full physics/effects fidelity, visual bar, and `LOOP_COMPLETE` gate remain open.
+
 ## Overhaul tick 152 verdict
 
 **Single-winner runtime dispatch contract: PASS as a bounded physics-verification slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The manifold now has a focused contract for invoking one selected family, replaying residual time once, and leaving a held-cradle preservation signal explicit.

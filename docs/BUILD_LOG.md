@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 153: live manifold candidate telemetry
+
+### Root cause and decision
+
+- The live loop already selected a single cross-family contact and exposed the winning family/time, but it did not report how many valid family candidates competed in that fixed step. That made a zero-contact frame indistinguishable from a crowded manifold and left the new dispatch contract difficult to tune against real play.
+- Added one bounded observability slice: reset initializes `manifoldCandidateCount`, the live Physics V2 seam records the normalized candidate count immediately after collection, and the developer-only readout exposes `Manifold: family / count`. Collision ordering, resolver ownership, residual replay, gameplay rewards, input, topology, and rendering are unchanged.
+- Added renderer-contract assertions for the reset shape, live count seam, and readout marker.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` was red before the new telemetry existed, then passed after implementation.
+- `npm test` passed 53/53.
+- `node --check src/contact-manifold.js`, `node --check src/physics-core.js`, and `git diff --check` passed.
+- Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- Commit `PENDING` is ready to push to `prototype`; Pages run URL and hosted verification will be recorded after the workflow completes.
+- The telemetry makes live manifold contention measurable but does not replace stateful resolver integration, prove contact feel, provide an independently inspected still-frame visual verdict, or complete the mine/tunnel overhaul. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 152: single-winner runtime dispatch contract
 
 ### Root cause and decision

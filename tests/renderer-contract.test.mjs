@@ -175,7 +175,9 @@ assert.match(source, /Redirected along the anchor/);
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);
-assert.match(source, /physicsTelemetry: \{ physicsStepMs: 0, contactCount: 0, substepCount: 0, speedCapCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null \}/);
+assert.match(source, /physicsTelemetry: \{ physicsStepMs: 0, contactCount: 0, substepCount: 0, speedCapCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null, manifoldCandidateCount: 0 \}/);
+assert.match(source, /state\.physicsTelemetry\.manifoldCandidateCount = runtimeContactCandidates\.length/);
+assert.match(source, /Manifold: \$\{telemetry\.manifoldFamily \|\| 'none'\} \/ \$\{telemetry\.manifoldCandidateCount\}/);
 assert.match(source, /if \(speed > maxSpeed && state\?\.physicsTelemetry\) state\.physicsTelemetry\.speedCapCount \+= 1/);
 assert.match(source, /Caps: \$\{telemetry\.speedCapCount\}/);
 assert.match(source, /performance\.now\(\)/);
