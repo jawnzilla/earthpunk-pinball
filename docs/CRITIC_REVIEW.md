@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- Deployment evidence is pending the Pages workflow for this commit.
+- Commit `bdcb451` deployed successfully in Pages run `32389404857`. Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6 with HTTP 200, exact dimensions, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
 - This is a renderer-only foreground cue, not independent image inspection of the still frame or proof of contact feel, complete hybrid fidelity, material parity, or `LOOP_COMPLETE`. The largest remaining product gap remains evidence-selected visual/contact review.
 
 ## Overhaul tick 176 verdict

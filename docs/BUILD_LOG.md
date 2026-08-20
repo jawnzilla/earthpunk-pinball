@@ -16,7 +16,7 @@
 
 ### Deployment / remaining risk
 
-- Deployment evidence is pending the Pages workflow for this commit.
+- Commit `bdcb451` deployed successfully in Pages run `32389404857`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32389404857. Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 6/6: HTTP 200, exact dimensions, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors.
 - This improves the foreground mechanism silhouette but does not prove human image-inspected still-frame quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 176: reserve the identity HUD band
