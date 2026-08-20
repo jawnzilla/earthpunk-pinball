@@ -62,6 +62,12 @@ assert.match(source, /drawBallElementalFacets\(b, activeEffects\);/);
 assert.match(source, /function drawBallSpinMark\(b\)/);
 assert.match(source, /const spin = Number\.isFinite\(b\.physics\?\.spin\) \? b\.physics\.spin : 0/);
 assert.match(source, /function drawBallContactMaterialCue\(b\)/);
+assert.match(source, /const CONTACT_CUE_LIFE = 8/);
+assert.match(source, /function recordBallContact\(ball, contact\)/);
+assert.match(source, /contactCueLife: 0/);
+assert.match(source, /ball\.contactCueLife = CONTACT_CUE_LIFE/);
+assert.match(source, /b\.contactCueLife = Math\.max\(0, \(b\.contactCueLife \|\| 0\) - frameScale\)/);
+assert.match(source, /\(b\.contactCueLife \|\| 0\) <= 0/);
 assert.match(source, /contact\.materialB === 'timber'/);
 assert.match(source, /contact\.impactEnergy <= \.00002/);
 assert.match(source, /drawBallContactMaterialCue\(b\);/);
@@ -235,7 +241,7 @@ assert.match(source, /resolveFireTrailDamage/);
 assert.match(source, /event\.type === 'fire-trail-tick' && event\.damageEnabled/);
 assert.match(source, /burned through by ember trail/);
 
-assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
+assert.match(source, /syncPixelsFromPhysics\(ball\); recordBallContact\(ball, contact\);.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');
 assert.match(source, /summarizeFlipperContactSources/);
 assert.match(source, /physicsTelemetry: \{ physicsStepMs: 0, contactCount: 0, substepCount: 0, speedCapCount: 0, activeBodyCount: 1, manifoldFamily: null, manifoldT: null, manifoldCandidateCount: 0 \}/);

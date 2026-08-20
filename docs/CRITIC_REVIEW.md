@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 176
 
+## Overhaul tick 178 verdict
+
+**Bounded ball contact glint: PASS as a localized-feedback correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The material glint now has an explicit fixed-step lifetime instead of persisting from stale contact state.
+
+### Observed evidence
+
+- `index.html` adds `recordBallContact()` and arms `contactCueLife` only for qualifying finite contacts; `update()` decays it with the fixed-step scale; `drawBallContactMaterialCue()` refuses expired cues.
+- `tests/renderer-contract.test.mjs` asserts initialization, arming, decay, and gating. `npm test` passes 56/56; syntax and whitespace checks pass.
+- Local and current-hosted exact CSS 320x568 and 390x844 standard, depth, and upgrade routes pass 12/12 with HTTP 200, exact dimensions, no overflow, four upgrade choices on upgrade, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The bounded lifetime is source/runtime verified, but no subjective still-frame inspection is claimed from this tick. The largest remaining product gap remains evidence-selected visual/contact review, plus complete hybrid fidelity and the broader mine/tunnel overhaul.
+- Pages deployment result will be appended after the pushed commit's workflow completes.
+
 ## Overhaul tick 177 verdict
 
 **Flipper blade hardware cue: PASS as a bounded foreground-silhouette correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The authored sprite path now receives the same restrained mechanical read as the fallback: inset edge, dark lower separation, and two fasteners.

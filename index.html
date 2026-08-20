@@ -493,11 +493,19 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     showPreLevelMap();
     updateHud();
   }
+  const CONTACT_CUE_LIFE = 8;
+  function recordBallContact(ball, contact) {
+    ball.lastContact = contact;
+    if (contact?.hit && !contact.separating && Number.isFinite(contact.impactEnergy) && contact.impactEnergy > .00002 && contact.point) {
+      ball.contactCueLife = CONTACT_CUE_LIFE;
+    }
+    return contact;
+  }
   function spawnBall() {
     state.flipperContacts.left = false; state.flipperContacts.right = false;
     const launchSide = Math.random() < .5 ? -1 : 1;
     const x = W / 2, y = H - 108, vx = launchSide * (66 + Math.random() * 42), vy = -312;
-    state.ball = { x, y, vx, vy, r: 8, trail: [], prevX: x, prevY: y, cradleSide: null, lastFlipperLaunchFactor: 0, elementEffects: {}, elementalRuntime: createElementalRuntime(), physics: createPhysicsBall({ x: x / PX_PER_M, y: y / PX_PER_M, vx: vx / PX_PER_M, vy: vy / PX_PER_M, mass: .032, radius: .08, material: 'steel' }) };
+    state.ball = { x, y, vx, vy, r: 8, trail: [], prevX: x, prevY: y, cradleSide: null, lastFlipperLaunchFactor: 0, contactCueLife: 0, elementEffects: {}, elementalRuntime: createElementalRuntime(), physics: createPhysicsBall({ x: x / PX_PER_M, y: y / PX_PER_M, vx: vx / PX_PER_M, vy: vy / PX_PER_M, mass: .032, radius: .08, material: 'steel' }) };
     state.peakY = state.ball.y; state.lastLaunchSpeed = Math.hypot(state.ball.vx, state.ball.vy);
     state.launched = true;
   }
@@ -975,7 +983,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'rubber'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
     contact.sweptT = swept?.t ?? 1;
-    ball.lastContact = contact;
+    recordBallContact(ball, contact);
     if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
     observeHardBounce(ball, contact);
     return contact;
@@ -1000,7 +1008,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(item, 'steel'), inverseMass: 0 }, point: { x: (item.x + normal.x * item.r) / PX_PER_M, y: (item.y + normal.y * item.r) / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
     syncPixelsFromPhysics(ball);
     contact.sweptT = swept?.t ?? 1;
-    ball.lastContact = contact;
+    recordBallContact(ball, contact);
     if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
     observeHardBounce(ball, contact);
     return contact;
@@ -1030,7 +1038,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   function resolveBoundaryContact(ball, normal, point, penetration) {
     const physics = syncPhysicsBallFromPixels(ball);
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'steel', inverseMass: 0 }, point: { x: point.x / PX_PER_M, y: point.y / PX_PER_M }, normal, penetration: penetration / PX_PER_M, correctionPercent: 1, slop: .0001 });
-    syncPixelsFromPhysics(ball); ball.lastContact = contact; return contact;
+    syncPixelsFromPhysics(ball); recordBallContact(ball, contact); return contact;
   }
   function flipperEndpoints(flipper) {
     return flipperEndpointsAt(flipper, flipper.angle);
@@ -1065,7 +1073,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: materialFor(segment, 'steel'), inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: (segment.surfaceVelocity?.x || 0) / PX_PER_M, y: (segment.surfaceVelocity?.y || 0) / PX_PER_M }, penetration: (radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
     contact.sweptT = swept?.t ?? 1;
     syncPixelsFromPhysics(ball);
-    ball.lastContact = contact;
+    recordBallContact(ball, contact);
     if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1;
     observeHardBounce(ball, contact);
     return contact;
@@ -1106,7 +1114,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const beforeVelocity = { x: ball.vx, y: ball.vy };
     const physics = syncPhysicsBallFromPixels(ball);
     const contact = resolvePhysicsContact({ ball: physics, surface: { material: 'rubber', inverseMass: 0 }, point: { x: closestX / PX_PER_M, y: closestY / PX_PER_M }, normal: { x: nx, y: ny }, surfaceVelocity: { x: surfaceVx / PX_PER_M, y: surfaceVy / PX_PER_M }, penetration: Math.max(0, radius - distance) / PX_PER_M, correctionPercent: 1, slop: .0001 });
-    syncPixelsFromPhysics(ball); ball.lastContact = contact; if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact({ side, held, beforeVelocity, afterVelocity: { x: ball.vx, y: ball.vy }, contact }); state.lastFlipperContact.source = state.flipperContactSource || 'live'; if (!held) { state.flipperContactSamples.push(state.lastFlipperContact); if (state.flipperContactSamples.length > 24) state.flipperContactSamples.shift(); } return true;
+    syncPixelsFromPhysics(ball); recordBallContact(ball, contact); if (state?.physicsTelemetry && contact.hit) state.physicsTelemetry.contactCount += 1; observeHardBounce(ball, contact); ball.lastFlipperLaunchFactor = .18 + projection * .82; capBallSpeed(ball); state.lastFlipperContact = summarizeFlipperContact({ side, held, beforeVelocity, afterVelocity: { x: ball.vx, y: ball.vy }, contact }); state.lastFlipperContact.source = state.flipperContactSource || 'live'; if (!held) { state.flipperContactSamples.push(state.lastFlipperContact); if (state.flipperContactSamples.length > 24) state.flipperContactSamples.shift(); } return true;
   }
   function getUpperBumpers() { return state.layout.bumpers.filter(item => item.upper === true); }
   function updateFlippers(dt) {
@@ -1152,7 +1160,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     const b = state.ball;
     const frameScale = dt * LEGACY_FRAME_RATE;
     state.pulse += .08 * frameScale; state.flash = Math.max(0, state.flash - frameScale); state.topHitCooldown = Math.max(0, state.topHitCooldown - frameScale); state.flipperEffectCooldown = Math.max(0, state.flipperEffectCooldown - frameScale); state.relayCooldown = Math.max(0, state.relayCooldown - frameScale); state.comboTimer = Math.max(0, state.comboTimer - frameScale); if (state.comboTimer === 0) state.combo = 0; decayElementEffects(frameScale); state.effects.forEach(effect => effect.life -= .045 * frameScale); state.effects = state.effects.filter(effect => effect.life > 0); state.scorePops.forEach(pop => { pop.life -= .035 * frameScale; pop.y -= .42 * frameScale; }); state.scorePops = state.scorePops.filter(pop => pop.life > 0);
-    state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); item.impactPulse = Math.max(0, item.impactPulse - frameScale); }); targets.forEach(target => { target.hitPulse = Math.max(0, target.hitPulse - frameScale); });
+    b.contactCueLife = Math.max(0, (b.contactCueLife || 0) - frameScale); state.destructibles.forEach(item => { item.damageCooldown = Math.max(0, item.damageCooldown - frameScale); item.impactPulse = Math.max(0, item.impactPulse - frameScale); }); targets.forEach(target => { target.hitPulse = Math.max(0, target.hitPulse - frameScale); });
     updateFlippers(dt);
     b.prevX = b.x; b.prevY = b.y;
     const routeGravity = GRAVITY_M_S2 * (state.routeModifier === 'Water' ? .72 : state.routeModifier === 'Earth' ? 1.08 : 1);
@@ -2235,7 +2243,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     // Contact energy is already authoritative in the physics result; expose its material
     // pairing as a short, directional glint instead of another persistent neon wash.
     const contact = b.lastContact;
-    if (!contact?.hit || contact.separating || !Number.isFinite(contact.impactEnergy) || contact.impactEnergy <= .00002 || !contact.point) return;
+    if ((b.contactCueLife || 0) <= 0 || !contact?.hit || contact.separating || !Number.isFinite(contact.impactEnergy) || contact.impactEnergy <= .00002 || !contact.point) return;
     const x = contact.point.x * PX_PER_M, y = contact.point.y * PX_PER_M;
     const normal = contact.normal || { x: 0, y: -1 };
     const materialTone = contact.materialB === 'timber' ? '#d08b56' : contact.materialB === 'stone' ? '#aeb6a1' : contact.materialB === 'copper' ? '#e0a064' : '#d7e8d0';

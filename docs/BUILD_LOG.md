@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 178: bound the ball contact glint
+
+### Root cause and decision
+
+- Root-cause review found `drawBallContactMaterialCue()` treated `ball.lastContact` as live indefinitely. A qualifying impact could therefore leave a stale material glint rendered at its old contact point until another contact overwrote it, contradicting the documented short directional cue.
+- Added one bounded renderer-feedback slice: contact recording now arms an 8 legacy-frame lifetime only for finite, non-separating, finite-energy contacts with a point; the fixed-step update decays that lifetime and the renderer gates the cue on it. Physics response, collision geometry, input, progression, and assets are unchanged.
+- Added renderer-contract assertions for initialization, arming, decay, and renderer gating.
+
+### Verification
+
+- Tight regression loop: `npm test` was red only because the existing flipper telemetry contract still expected the direct assignment; updating that contract to the new contact seam restored green. Full `npm test` passes 56/56.
+- `node --check src/physics-core.js`, `node --check src/flipper-contact.js`, and `git diff --check` pass.
+- Exact local and current-hosted browser checks pass 12/12 at CSS 320x568 and 390x844 for standard, `?review=depth`, and `?review=upgrade`: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade choices on upgrade, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- Deployment is pending this commit. Hosted verification will be recorded after the Pages run completes.
+- This closes stale visual feedback lifetime only; it does not prove human image-inspected still-frame quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 177: flipper blade hardware cue
 
 ### Root cause and decision
