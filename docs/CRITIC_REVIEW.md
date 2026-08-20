@@ -1,3 +1,20 @@
+# Deadlight Critic Review — Overhaul tick 138
+
+## Overhaul tick 138 verdict
+
+**Bumper-family silhouette pass: PASS as a bounded grayscale/readability improvement; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The production canvas now gives pulse and armor bumpers authored mechanical construction cues instead of relying on the shared round shell/glow language. This improves taxonomy without changing gameplay behavior.
+
+### Observed evidence
+
+- `index.html` `drawBumpers()` retains the standard round cap, adds a four-spoke coil plus striker bar for `pulse`, and adds an eight-point plated cage with cross-bracing for `armor`.
+- `tests/renderer-contract.test.mjs` asserts the live function and each type-specific geometry marker.
+- `npm test`: 50 passed, 0 failed. Node syntax checks and `git diff --check` passed.
+- Hosted exact portrait checks, screenshots, and human still-frame inspection are pending deployment; no visual quality claim is made for those absent observations.
+
+### Remaining risk / next smallest slice
+
+- Run the hosted standard and `?review=grayscale` checks at exact 320×568 and 390×844, then inspect the still frames. The largest remaining gap is the broader mine/tunnel material/depth read, not another persistent HUD element. Do not claim `LOOP_COMPLETE`.
+
 # Deadlight Critic Review — Overhaul tick 136
 
 ## Overhaul tick 137 verdict

@@ -127,6 +127,14 @@ assert.match(source, /function drawWellWallBevel\(\)/);
 assert.match(source, /const bevelTop = 124, bevelBottom = H - 112/);
 assert.match(source, /ctx\.globalAlpha = \.36/);
 assert.match(source, /drawWellWallBevel\(\);/);
+assert.match(source, /function drawBumpers\(\)/);
+assert.match(source, /const pulse = item\.type === 'pulse'; const armor = item\.type === 'armor'/);
+assert.match(source, /Armor bumpers read as plated cages/);
+assert.match(source, /for \(let plate = 0; plate < 8; plate \+= 1\)/);
+assert.match(source, /Pulse bumpers expose a mechanical coil/);
+assert.match(source, /for \(let coil = 0; coil < 4; coil \+= 1\)/);
+assert.match(source, /ctx\.strokeRect\(item\.x - item\.r \* \.32, item\.y - 2/);
+assert.match(source, /ctx\.moveTo\(item\.x - item\.r \* \.74, item\.y - item\.r \* \.42\)/);
 
 assert.match(source, /syncPixelsFromPhysics\(ball\); ball\.lastContact = contact;.*capBallSpeed\(ball\); state\.lastFlipperContact = summarizeFlipperContact/s,
   'flipper telemetry must summarize the capped live velocity');

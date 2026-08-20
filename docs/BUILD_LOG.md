@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 138: bumper-family silhouette/material pass
+
+### Decision
+
+- Closed the clearest remaining object-taxonomy gap with a bounded renderer-only pass in `drawBumpers()`. Standard bumpers retain the resilient round cap; pulse bumpers now expose a mechanical coil/striker assembly; armor bumpers use a faceted plated cage with cross-bracing. Physics, collision geometry, input, progression, and HUD layout are unchanged.
+- Added renderer-contract assertions for the three type-specific cues. This is a narrow grayscale/readability slice, not a global visual-completion claim.
+
+### Verification
+
+- Red/green loop: `npm test` passed 50/50 after the contract additions.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Exact hosted 320×568/390×844 browser checks and Pages deployment are pending push for this commit; no hosted or screenshot claim is made yet.
+
+### Remaining risk / next smallest slice
+
+- Inspect the deployed grayscale and standard portrait still frames before selecting another renderer change. The mine/tunnel overhaul, material depth, destructible readability, physics/effects completion, and human visual review remain open. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-19 — Overhaul tick 137: hosted portrait verification for thermal-lance seam
 
 ### Decision

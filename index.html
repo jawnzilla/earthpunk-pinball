@@ -1679,8 +1679,25 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
       faceGradient.addColorStop(0, pulse ? '#c08a55' : armor ? '#9aa79a' : '#765941');
       faceGradient.addColorStop(.52, rubber);
       faceGradient.addColorStop(1, '#1d2925');
-      ctx.fillStyle = faceGradient; ctx.strokeStyle = '#778078'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = faceGradient; ctx.strokeStyle = '#778078'; ctx.lineWidth = 2;
+      if (armor) {
+        // Armor bumpers read as plated cages, not another soft round target.
+        ctx.beginPath();
+        for (let plate = 0; plate < 8; plate += 1) { const angle = plate * Math.PI / 4 - Math.PI / 8; const radius = item.r * (plate % 2 ? .92 : 1.08); const x = item.x + Math.cos(angle) * radius, y = item.y + Math.sin(angle) * radius; plate ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
       ctx.globalAlpha = .58; ctx.strokeStyle = pulse ? '#f1c27a' : '#c9b08a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(item.x - item.r * .08, item.y - item.r * .08, item.r * .72, Math.PI * 1.08, Math.PI * 1.78); ctx.stroke(); ctx.globalAlpha = 1;
+      if (pulse) {
+        // Pulse bumpers expose a mechanical coil and striker assembly in silhouette.
+        ctx.strokeStyle = '#f1c27a'; ctx.lineWidth = 1.5; ctx.beginPath();
+        for (let coil = 0; coil < 4; coil += 1) { const angle = coil * Math.PI / 2 + Math.PI / 4; ctx.moveTo(item.x + Math.cos(angle) * item.r * .58, item.y + Math.sin(angle) * item.r * .58); ctx.lineTo(item.x + Math.cos(angle) * item.r * .96, item.y + Math.sin(angle) * item.r * .96); }
+        ctx.stroke();
+        ctx.strokeStyle = '#171614'; ctx.lineWidth = 2; ctx.strokeRect(item.x - item.r * .32, item.y - 2, item.r * .64, 4);
+      } else if (armor) {
+        ctx.strokeStyle = '#c9d6c7'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(item.x - item.r * .74, item.y - item.r * .42); ctx.lineTo(item.x + item.r * .74, item.y + item.r * .42); ctx.moveTo(item.x + item.r * .74, item.y - item.r * .42); ctx.lineTo(item.x - item.r * .74, item.y + item.r * .42); ctx.stroke();
+      }
       drawStaticContactLight(item.x, item.y, item.r * .78, pulse ? '#a8784b' : armor ? '#778078' : '#72533b', '#27332f', .82);
       ctx.fillStyle = pulse ? '#d7a45a' : armor ? '#6d6654' : '#8a7760'; ctx.beginPath(); ctx.arc(item.x, item.y, item.r * .3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#171614'; ctx.lineWidth = 2; ctx.stroke();
       for (let bolt = 0; bolt < 4; bolt += 1) { const angle = bolt * Math.PI / 2 + Math.PI / 4; const x = item.x + Math.cos(angle) * (item.r + 1), y = item.y + Math.sin(angle) * (item.r + 1); ctx.fillStyle = '#b3a58b'; ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill(); }
