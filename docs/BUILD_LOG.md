@@ -1,5 +1,22 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 181: bedrock strata material cue
+
+### Root cause and decision
+
+- Root-cause review found the mine backdrop had broad sediment lines but no bounded side-wall strata pass: the wall could still read as a uniform procedural fill around the authored well.
+- Added one bounded renderer-only slice: `drawMineStrata()` adds five deterministic, low-alpha paired sediment bands to the non-playable side margins. It is composed immediately after the backdrop and before tunnel/deck layers; physics, collision geometry, input, progression, and assets are unchanged.
+- Added a renderer-contract assertion for the helper, its earthpunk intent, and its live composition call.
+
+### Verification
+
+- Tight regression loop was red after the contract assertion was added (missing helper), then green after implementation: `npm test` passes 56/56 and `git diff --check` passes.
+- Exact local browser checks pass 10/10 at CSS 320x568 and 390x844 for standard, depth, grayscale, active-elements, and upgrade routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade buttons on upgrade, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- This slice is local until commit/push and GitHub Pages deployment are verified. Global overhaul remains NOT COMPLETE; hosted post-deploy checks, human still-frame inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 180: fail-closed destructible damage boundary
 
 ### Root cause and decision

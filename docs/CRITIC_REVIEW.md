@@ -1,4 +1,18 @@
-# Deadlight Critic Review — Overhaul tick 176
+# Deadlight Critic Review — Overhaul tick 181
+
+## Overhaul tick 181 verdict
+
+**Bedrock strata material cue: PASS as a bounded mine-wall material correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The side margins now carry a restrained geological banding cue outside the playable deck, giving the earthpunk wall a more authored sediment read without tinting the table or changing play.
+
+### Observed evidence
+
+- `index.html` adds `drawMineStrata()` with five deterministic paired bands, muted earth/green values, low opacity, and no gameplay state access; the live draw order calls it immediately after `drawMineBackdrop()`.
+- `tests/renderer-contract.test.mjs` asserts the helper, its non-playable bedrock intent, and the live composition seam. The new assertion was red before implementation; `npm test` passes 56/56 and `git diff --check` passes.
+- Local exact browser checks pass 10/10 at CSS 320x568 and 390x844 across standard, depth, grayscale, active-elements, and upgrade routes: HTTP 200, exact viewports, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page errors.
+
+### Limits and next gate
+
+- No subjective still-frame verdict is claimed from this scheduled tick. Hosted post-deploy verification is still required after push. The largest remaining product gap is human-observed mine/tunnel material/depth and contact-feel review, plus final hybrid fidelity; `LOOP_COMPLETE` remains open.
 
 ## Overhaul tick 180 verdict
 

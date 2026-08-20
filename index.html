@@ -1298,6 +1298,41 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     [[49, 72], [W - 49, 72], [49, H - 112], [W - 49, H - 112]].forEach(([x, y]) => { const glow = ctx.createRadialGradient(x, y, 1, x, y, 26); glow.addColorStop(0, 'rgba(255,228,163,.42)'); glow.addColorStop(1, 'rgba(215,164,90,0)'); ctx.fillStyle = glow; ctx.fillRect(x - 28, y - 28, 56, 56); ctx.fillStyle = '#ffe4a3'; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#895033'; ctx.lineWidth = 2; ctx.stroke(); });
     ctx.save(); ctx.strokeStyle = '#567b7a'; ctx.globalAlpha = .55; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(37, 170); ctx.bezierCurveTo(52, 190, 42, 218, 58, 242); ctx.bezierCurveTo(70, 262, 50, 292, 67, 318); ctx.bezierCurveTo(78, 338, 64, 366, 76, 390); ctx.stroke(); ctx.globalAlpha = .18; ctx.lineWidth = 7; ctx.stroke(); ctx.restore();
   }
+  function drawMineStrata() {
+    // Bedrock strata stay outside the playable deck: a quiet geological material cue,
+    // not another rail, target, or full-table color wash.
+    const bands = [
+      { y: 178, bend: 9, color: '#70543d', alpha: .34 },
+      { y: 246, bend: -12, color: '#4c6658', alpha: .26 },
+      { y: 318, bend: 15, color: '#8a6445', alpha: .3 },
+      { y: 390, bend: -10, color: '#3c5148', alpha: .24 },
+      { y: H - 184, bend: 12, color: '#765238', alpha: .28 }
+    ];
+    ctx.save();
+    bands.forEach(({ y, bend, color, alpha }, index) => {
+      const leftStart = 26 + (index % 2) * 7;
+      const rightStart = W - 26 - (index % 2) * 7;
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = index % 2 ? 2 : 3;
+      ctx.beginPath();
+      ctx.moveTo(leftStart, y);
+      ctx.bezierCurveTo(54, y - bend, 66, y + bend, 82, y + 2);
+      ctx.bezierCurveTo(94, y + bend * .7, 104, y - bend * .5, 116, y + 3);
+      ctx.moveTo(rightStart, y + 8);
+      ctx.bezierCurveTo(W - 54, y + bend, W - 66, y - bend, W - 82, y + 10);
+      ctx.bezierCurveTo(W - 94, y - bend * .7, W - 104, y + bend * .5, W - 116, y + 7);
+      ctx.stroke();
+      ctx.globalAlpha = alpha * .42;
+      ctx.strokeStyle = '#d7a45a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(leftStart + 2, y + 5); ctx.lineTo(82, y + 7);
+      ctx.moveTo(rightStart - 2, y + 13); ctx.lineTo(W - 82, y + 15);
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
   function drawMineGrime() {
     // Sparse deterministic grime marks make the earthwork read as worn material,
     // not a clean procedural backdrop. Keep them outside the playable well.
@@ -1503,7 +1538,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelDust(); drawMineTunnelSupportFootings(); drawMineTunnelSupportHardware();
+    drawMineBackdrop(); drawMineStrata(); drawMineGrime(); drawMineTunnelDepth(); drawMineTunnelLamps(); drawMineTunnelDust(); drawMineTunnelSupportFootings(); drawMineTunnelSupportHardware();
     // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
