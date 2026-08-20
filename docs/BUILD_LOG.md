@@ -11,7 +11,8 @@
 
 - Red/green loop: `npm test` passed 50/50 after the contract additions.
 - `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
-- Exact hosted 320×568/390×844 browser checks and Pages deployment are pending push for this commit; no hosted or screenshot claim is made yet.
+- GitHub Actions Pages run `32324008289` completed successfully for commit `06924a2`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32324008289.
+- Hosted Playwright checks against `https://jawnzilla.github.io/earthpunk-pinball/` ran at exact CSS `320×568` and `390×844` for standard and `?review=grayscale` routes. All four returned HTTP 200, exact viewport dimensions, one canvas, `scrollWidth === clientWidth`, and zero console/page/request errors. Grayscale fixtures reported `data-review-fixture="grayscale"`. Screenshots were written outside the repository under `%LOCALAPPDATA%/Temp/earthpunk-138-*.png`.
 
 ### Remaining risk / next smallest slice
 

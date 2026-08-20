@@ -9,7 +9,7 @@
 - `index.html` `drawBumpers()` retains the standard round cap, adds a four-spoke coil plus striker bar for `pulse`, and adds an eight-point plated cage with cross-bracing for `armor`.
 - `tests/renderer-contract.test.mjs` asserts the live function and each type-specific geometry marker.
 - `npm test`: 50 passed, 0 failed. Node syntax checks and `git diff --check` passed.
-- Hosted exact portrait checks, screenshots, and human still-frame inspection are pending deployment; no visual quality claim is made for those absent observations.
+- GitHub Actions Pages run `32324008289` completed successfully for commit `06924a2`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32324008289. Hosted Playwright at exact CSS `320×568` and `390×844` passed standard and `?review=grayscale`: HTTP 200, exact viewport dimensions, one canvas, no horizontal overflow, and zero console/page/request errors. Screenshots were captured outside the repository; they are runtime evidence, not a human visual verdict.
 
 ### Remaining risk / next smallest slice
 
