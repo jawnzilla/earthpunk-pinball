@@ -72,6 +72,14 @@ export function applyImpulse(ball, impulse = { x: 0, y: 0 }) {
 
 // Keep the gameplay speed ceiling as a pure velocity operation so callers can
 // measure/verify the post-cap state without duplicating vector math.
+// Contact friction also changes angular motion. Keep this as a separate impulse seam.
+export function applyAngularImpulse(body, angularImpulse = 0) {
+  if (!body || !Number.isFinite(body.angularInertia) || body.angularInertia <= 0) return body;
+  const safeImpulse = Number.isFinite(angularImpulse) ? angularImpulse : 0;
+  body.spin = (Number.isFinite(body.spin) ? body.spin : 0) + safeImpulse / body.angularInertia;
+  return body;
+}
+
 export function capVelocity(velocity = { x: 0, y: 0 }, maxSpeed = Infinity) {
   const safe = {
     x: Number.isFinite(velocity.x) ? velocity.x : 0,
@@ -140,13 +148,19 @@ export function resolveContact({ ball, surface = {}, point, normal, surfaceVeloc
   }
 
   applyImpulse(ball, impulse);
+  const ballOffset = subtract(point, ball.position);
+  const angularImpulse = ballOffset.x * impulse.y - ballOffset.y * impulse.x;
+  applyAngularImpulse(ball, angularImpulse);
   // Dynamic surfaces receive the equal/opposite contact impulse. Kinematic
   // table geometry keeps inverseMass=0 and remains unchanged, while future
   // moving bodies can conserve momentum instead of only borrowing a velocity.
   if (surface.inverseMass > 0 && surface.velocity) {
     applyImpulse(surface, scale(impulse, -1));
+    const surfaceOffset = surface.position ? subtract(point, surface.position) : { x: 0, y: 0 };
+    applyAngularImpulse(surface, surfaceOffset.x * -impulse.y - surfaceOffset.y * -impulse.x);
   }
   result.impulse = impulse;
+  result.angularImpulse = angularImpulse;
   result.impactEnergy = impactEnergyFromMassSpeed(ball.mass, result.impactSpeed);
   return result;
 }

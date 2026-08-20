@@ -13,6 +13,7 @@ import {
   impactEnergyFromMassSpeed,
   materialHardness,
   applyImpulse,
+  applyAngularImpulse,
   capVelocity,
   calibrateContactResponse,
   calibrateMovingSurfaceResponse,
@@ -46,6 +47,21 @@ const approx = (actual, expected, tolerance = 1e-6) => {
   assert.ok(ball.velocity.y < 5);
   assert.equal(contact.materialA, 'steel');
   assert.equal(contact.materialB, 'rubber');
+}
+
+{
+  const ball = createBall({ mass: 1, radius: 0.1, x: 0, y: 0, vx: 2, vy: -5 });
+  const contact = resolveContact({
+    ball,
+    surface: { material: 'rubber' },
+    point: { x: 0, y: 0.05 },
+    normal: { x: 0, y: 1 }
+  });
+  assert.notEqual(contact.angularImpulse, 0);
+  assert.notEqual(ball.spin, 0);
+  const previousSpin = ball.spin;
+  applyAngularImpulse(ball, Number.NaN);
+  assert.equal(ball.spin, previousSpin);
 }
 
 {
