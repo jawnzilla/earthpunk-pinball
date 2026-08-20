@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 163
 
+## Overhaul tick 164 verdict
+
+**Distant tunnel support hardware: PASS as a bounded architectural scale correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The tunnel destination now has a restrained timber frame with posts, brace, edge highlight, and fasteners, making the upper opening read more like supported excavation than a decorative arch.
+
+### Observed evidence
+
+- `index.html` adds `drawMineTunnelSupportHardware()` and composes it after the tunnel lamps and before `drawRecessedWellPlane()`, preserving the behind-the-playfield z-order.
+- The helper uses nested timber values, a dark occlusion stroke, warm edge highlight, and small fasteners. It does not alter gameplay, physics, input, timing, or HUD state.
+- `npm test` passes 54/54; syntax and whitespace checks pass.
+- Hosted Playwright exact CSS 320×568 and 390×844 standard, depth, grayscale, and upgrade routes pass 8/8 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Commit `a13a1ab` is deployed by successful Pages run `32362347353`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32362347353.
+- The hosted matrix is runtime/layout evidence, not an independently image-inspected still-frame verdict. The largest remaining gap is a complete material-and-depth pass judged from captured frames, alongside final contact feel and any remaining hybrid fidelity. `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 163 verdict
 
 **Tunnel work lamps and cable depth cues: PASS as a bounded depth/readability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Two distant work lights and one overhead cable give the recessed tunnel a quiet infrastructure/scale cue without turning the mine into a neon overlay.

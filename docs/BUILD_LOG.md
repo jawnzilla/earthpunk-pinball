@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 164: distant tunnel support hardware
+
+### Root cause and decision
+
+- Source tracing found the new tunnel arch and lamps established a destination and light scale cue, but the opening still lacked a load-bearing structure. In a portrait still frame it could read as a graphic arch rather than excavated infrastructure.
+- Added one bounded renderer-only slice: `drawMineTunnelSupportHardware()` adds two inset timber posts, a cross-brace, edge highlight, and small fasteners behind the playable well. Collision geometry, physics, input, timing, progression, HUD, and assets are unchanged.
+- Added renderer-contract assertions for the helper, deterministic bounds, authored intent marker, and live composition.
+
+### Verification
+
+- Tight red/green loop: `npm test` passed 54/54; `node --check tests/renderer-contract.test.mjs` and `git diff --check` passed.
+- Hosted Playwright exact CSS 320×568 and 390×844 across standard, depth, grayscale, and upgrade routes passed 8/8: HTTP 200, `readyState=complete`, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, zero console/page/request errors, and four upgrade buttons on upgrade routes.
+
+### Deployment / remaining risk
+
+- Commit `a13a1ab` was pushed only to `prototype`; GitHub Pages run `32362347353` completed successfully: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32362347353.
+- Hosted checks prove the deployed module graph and exact mobile layout execute cleanly. They do not prove subjective still-frame quality, final contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 163: tunnel work lamps and cable depth cues
 
 ### Root cause and decision
