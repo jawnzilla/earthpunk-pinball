@@ -18,7 +18,7 @@
 ### Remaining risk / next smallest slice
 
 - The rotating CCD query still needs a larger deterministic benchmark across miss/hit distributions and explicit earliest-time ordering coverage before the physics manifold can be called complete.
-- Hosted Pages deployment and exact portrait browser checks remain required after this commit. Visual overhaul, material/element hybrid depth, destructible readability, and subjective grayscale review remain open. Do not claim LOOP_COMPLETE.
+- GitHub Pages run `32316384587` completed successfully for commit `eea1f89`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32316384587. Hosted probe returned HTTP 200, 212462 bytes, one `<canvas>`, and retained the flipper-contact review/source markers. Exact 320x568/390x844 browser checks remain unrun because no local browser harness is available; no console or screenshot claim is made. Visual overhaul, material/element hybrid depth, destructible readability, and subjective grayscale review remain open. Do not claim LOOP_COMPLETE.
 
 ## 2026-08-19 — Overhaul tick 131: continuous rotating-segment CCD
 

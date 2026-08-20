@@ -9,7 +9,7 @@
 - `tests/flipper-contact.test.mjs` passes 18/18, including the new combined linear/rotational, endpoint-cap, radial near-miss, zero-radius/NaN, and work-budget cases.
 - `src/flipper-contact.js` exposes diagnostics only through the optional query options object; default callers retain the existing pure `{ x, y, t, segment }` / `null` contract.
 - Full `npm test` passes 48/48; syntax and whitespace checks pass.
-- No Chromium executable or local browser harness is present in this checkout. Exact 320x568/390x844 browser, hosted Pages, console, and screenshot claims are intentionally pending deployment.
+- GitHub Pages run `32316384587` completed successfully for commit `eea1f89`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32316384587. Hosted HTTP probe returned 200, 212462 bytes, one `<canvas>`, and retained the flipper-contact review/source markers. No Chromium executable or local browser harness is present in this checkout, so exact 320x568/390x844 browser, console, and screenshot claims remain unverified.
 
 ### Remaining risk / next smallest slice
 
