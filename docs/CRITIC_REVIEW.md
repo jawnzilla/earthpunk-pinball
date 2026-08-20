@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 151
 
+## Overhaul tick 154 verdict
+
+**Live manifold dispatch integration: PASS as a bounded physics-ownership correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The selected cross-family contact now routes through the stateful dispatch seam instead of leaving boundary, circle, segment, and flipper resolution split across parallel conditionals.
+
+### Observed evidence
+
+- `index.html` imports `dispatchRuntimeContact()` and invokes it with stateful boundary, circle, segment, and flipper handlers. Flipper cradle maintenance remains explicit only when no flipper won the sweep.
+- Updated renderer-contract assertions require the live dispatch call and each handler. `npm test` passes 53/53; syntax and whitespace checks pass.
+- Local exact CSS 320×568 and 390×844 active-elements checks pass 2/2 with one canvas, no horizontal overflow, the expected review fixture, and zero console/page errors.
+
+### Limits and next gate
+
+- Hosted Pages deployment and standard/upgrade/grayscale exact-viewport checks are still required after this commit. No still frame is independently inspected here.
+- The dispatch seam improves ownership and makes future residual replay auditable; it does not establish final contact feel, complete hybrid fidelity, or visual overhaul completion. `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 153 verdict
 
 **Live manifold candidate telemetry: PASS as a bounded observability correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Physics V2 loop now reports the number of normalized geometry-family candidates considered in the same fixed step as the selected winner, making contention and no-contact frames distinguishable in the developer readout.

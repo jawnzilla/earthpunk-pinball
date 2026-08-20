@@ -325,7 +325,7 @@
   </section>
 <script type="module">
 import { FIXED_DT, MATERIALS, addElementStack, advanceFlipperMotor, applyImpulse, capVelocity, createBall as createPhysicsBall, damageFromContact, decayElementStacks, integrateBall as integratePhysicsBall, resolveContact as resolvePhysicsContact, resolveHybrid } from './src/physics-core.js';
-import { collectRuntimeContactCandidates, selectEarliestContact } from './src/contact-manifold.js';
+import { collectRuntimeContactCandidates, dispatchRuntimeContact, selectEarliestContact } from './src/contact-manifold.js';
 import { collectDrainRecoveryCandidates, selectDrainRecoveryCandidate, selectEarliestFlipperContact, sweptFlipperContact, sweptSegmentContact, summarizeFlipperContact, summarizeFlipperContactSeries, summarizeFlipperContactSources } from './src/flipper-contact.js';
 import { advanceElementalBodyResidual, advanceElementalRuntime, checkEarthLinkCrossing, consumeRootSling, consumeSlurryBind, consumeSteamPressure, createElementalRuntime, onHardBounce, onMiniBallContact, onMiniBallStructureContact, onStructureContact, onWindEchoStructureContact, resolveMiniBallStructureDamage, resolveWindEchoStructureDamage, rewindElementalBodyToContact, selectEarliestSweptContact, sweptCircleContact } from './src/elemental-effects.js';
 import { projectActiveStatus } from './src/status-projection.js';
@@ -1157,24 +1157,38 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     state.physicsTelemetry.manifoldCandidateCount = runtimeContactCandidates.length;
     state.physicsTelemetry.manifoldFamily = runtimeContactWinner?.kind || null;
     state.physicsTelemetry.manifoldT = runtimeContactWinner?.t ?? null;
-    if (runtimeContactWinner?.kind === 'boundary') {
-      resolveBoundaryContact(b, runtimeContactWinner.normal, runtimeContactWinner.point, runtimeContactWinner.penetration);
-    }
-    if (primaryCircleCandidate && runtimeContactWinner?.kind === 'circle') {
-      const { type, item } = primaryCircleCandidate;
-      const contact = type === 'destructible' ? destructibleCollision(b, item) : circleCollision(b, item);
-      if (contact && !contact.separating) {
-        if (type === 'target') hitTarget(item);
-        else if (type === 'destructible') applyDestructibleContact(item, contact);
-        if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT);
+    const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
+    let leftHit = false; let rightHit = false;
+    dispatchRuntimeContact(runtimeContactWinner, {
+      boundary: winner => { resolveBoundaryContact(b, winner.normal, winner.point, winner.penetration); },
+      circle: () => {
+        const { type, item } = primaryCircleCandidate;
+        const contact = type === 'destructible' ? destructibleCollision(b, item) : circleCollision(b, item);
+        if (contact && !contact.separating) {
+          if (type === 'target') hitTarget(item);
+          else if (type === 'destructible') applyDestructibleContact(item, contact);
+          if (contact.sweptT < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.sweptT);
+        }
+        return { contactFraction: contact?.sweptT ?? 1 };
+      },
+      segment: () => { segmentCollisionWithResidual(b, preStaticSegmentCandidate.segment, routeGravity, dt); return { contactFraction: preStaticSegmentCandidate.swept.t }; },
+      flipper: () => {
+        const { side, flipper, contact } = preSelectedFlipperCandidate;
+        const hit = resolveFlipperCollision(b, flipper, side, side === 'left' ? input.left : input.right, contact);
+        if (side === 'left') leftHit = hit; else rightHit = hit;
+        if (hit && b.lastContact && !b.lastContact.separating && contact.t < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.t);
+        const otherSide = side === 'left' ? 'right' : 'left';
+        if (b.cradleSide === otherSide && hingeCradle(otherSide)) {
+          const otherHit = resolveFlipperCollision(b, flippers[otherSide], otherSide, true);
+          if (otherSide === 'left') leftHit = otherHit; else rightHit = otherHit;
+        }
+        return { contactFraction: contact.t, preserveHeldCradle: b.cradleSide === otherSide };
       }
-    }
+    });
     if (!state.running) return;
     // The pre-resolution candidate is authoritative. Re-querying after a circle
     // response would create a second trajectory and could reward a later gate.
-    if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate) {
-      segmentCollisionWithResidual(b, preStaticSegmentCandidate.segment, routeGravity, dt);
-    }
+
     const upperBumpers = getUpperBumpers();
     state.layout.bumpers.forEach(item => {
       const energetic = !item.oneWay || (b.y < item.y && b.vy > 0);
@@ -1191,24 +1205,10 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     if (runtimeContactWinner?.kind === 'segment' && preStaticSegmentCandidate?.kind === 'gate') { const multiplier = chainHit(); const reaction = reactWithEnvironment(state.layout.gate.element, (state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, `${state.layout.gate.element} relay opened`); state.charge = Math.min(99, state.charge + 1); state.score += Math.round((50 + (reaction ? 35 : 0)) * multiplier); state.relayCooldown = 12; emitImpact((state.layout.gate.x1 + state.layout.gate.x2) / 2, state.layout.gate.y1, reaction ? elementColors[state.layout.gate.element] : '#f1b35b', .9); setMessage(reaction ? `${state.layout.gate.element} relay opened. Chain x${multiplier.toFixed(2)}.` : `Relay gate charged. Chain x${multiplier.toFixed(2)}.`); }
     const leftWasCradled = hingeCradle('left'); const rightWasCradled = hingeCradle('right'); const leftEnteredCradle = leftWasCradled && b.cradleSide !== 'left'; const rightEnteredCradle = rightWasCradled && b.cradleSide !== 'right';
-    const leftActiveFresh = input.left && !state.flipperContacts.left; const rightActiveFresh = input.right && !state.flipperContacts.right;
     // The pre-resolution flipper candidate above is authoritative. Keep one
     // candidate query per family so a later post-dispatch sweep cannot mutate
     // the ball from a different trajectory.
-    let leftHit = false; let rightHit = false;
-    if (runtimeContactWinner?.kind === 'flipper' && preSelectedFlipperCandidate) {
-      const { side, flipper, contact } = preSelectedFlipperCandidate;
-      const hit = resolveFlipperCollision(b, flipper, side, side === 'left' ? input.left : input.right, contact);
-      if (side === 'left') leftHit = hit; else rightHit = hit;
-      if (hit && b.lastContact && !b.lastContact.separating && contact.t < 1) advancePrimaryBallResidual(b, routeGravity, dt, contact.t);
-      // Preserve a held cradle on the other side; selection must not erase a
-      // stable overlap merely because the opposite blade won the sweep race.
-      const otherSide = side === 'left' ? 'right' : 'left';
-      if (b.cradleSide === otherSide && hingeCradle(otherSide)) {
-        const otherHit = resolveFlipperCollision(b, flippers[otherSide], otherSide, true);
-        if (otherSide === 'left') leftHit = otherHit; else rightHit = otherHit;
-      }
-    } else {
+    if (!runtimeContactWinner || runtimeContactWinner.kind !== 'flipper') {
       // A held cradle can have no swept candidate because the ball is already
       // settled on the hinge; keep cradle maintenance alive.
       if (b.cradleSide === 'left' && hingeCradle('left')) leftHit = resolveFlipperCollision(b, flippers.left, 'left', true);

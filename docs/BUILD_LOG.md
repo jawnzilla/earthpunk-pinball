@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 154: live manifold dispatch integration
+
+### Root cause and decision
+
+- The cross-family manifold already selected one winner, but the live loop still resolved boundary, circle, segment, and flipper families through separate conditional branches. The contract helper was therefore not the actual stateful dispatch owner.
+- Integrated `dispatchRuntimeContact()` at the live Physics V2 seam. The selected handler now owns the stateful boundary/circle/segment/flipper response; flipper cradle maintenance remains an explicit no-swept-contact path. Collision constants, topology, rewards, input, and rendering are unchanged.
+- Updated renderer-contract coverage to require the live dispatch import and each stateful handler seam.
+
+### Verification
+
+- Tight red/green loop: `npm test` was red after adding the live-dispatch contract because the old source assertions described the pre-dispatch branches; after updating the contract and implementation, `npm test` passed 53/53.
+- `node --check src/contact-manifold.js`, `node --check src/physics-core.js`, and `git diff --check` passed.
+- Local Playwright exact CSS 320×568 and 390×844 `?review=active-elements` passed 2/2: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, active-elements fixture present, and zero console/page errors.
+
+### Deployment / remaining risk
+
+- Push only `prototype`, wait for the GitHub Pages workflow, and verify the hosted artifact with the same exact viewport checks plus standard, upgrade, and grayscale routes.
+- This closes the gap between the manifold contract and live stateful resolution, but does not prove final collision feel, visual material quality, or complete mine/tunnel overhaul. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 153: live manifold candidate telemetry
 
 ### Root cause and decision
