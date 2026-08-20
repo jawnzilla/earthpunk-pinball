@@ -16,7 +16,8 @@
 
 ### Deployment / remaining risk
 
-- This slice is ready for prototype deployment; Pages run and post-deploy hosted evidence will be recorded after push.
+- Commit `7e1d089` deployed successfully in Pages run `32387211820`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32387211820.
+- Hosted post-deploy exact CSS 320x568 and 390x844 standard, `?review=depth`, and `?review=upgrade` routes passed 12/12: HTTP 200, exact CSS viewports, no horizontal overflow, one canvas, four upgrade choices on upgrade, zero console/page/request errors, and hosted source retained `bandY = 96` with meter rail y=124.
 - It fixes a concrete HUD occlusion defect, not final image-inspected mine/tunnel material quality, flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 175: finite kinematic body boundary

@@ -14,7 +14,7 @@
 ### Limits and next gate
 
 - The change addresses one concrete HUD occlusion seam only. It does not prove image-inspected material/depth quality, final flipper contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
-- Post-deploy Pages run and hosted verification must be recorded after the prototype push.
+- Commit `7e1d089` deployed successfully in Pages run `32387211820`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32387211820. Hosted post-deploy exact CSS 320x568 and 390x844 standard, depth, and upgrade routes passed 12/12 with HTTP 200, exact CSS viewports, no overflow, one canvas, four upgrade choices on upgrade, and zero console/page/request errors; hosted source retained `bandY = 96` and meter rail y=124.
 
 ## Overhaul tick 175 verdict
 
