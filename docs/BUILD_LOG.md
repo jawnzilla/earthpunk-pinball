@@ -11,7 +11,7 @@
 
 - `npm test`: 50 passed, 0 failed; the new benchmark completed in 20.2 ms in this checkout.
 - `node --check src/flipper-contact.js` and `git diff --check` passed.
-- Local browser prerequisite discovery found no Chromium executable, but the global Playwright package is resolvable; exact browser checks remain scheduled after deployment.
+- Local browser prerequisite discovery found no Chromium executable, but the global Playwright package is resolvable. Post-deployment Playwright checks against Pages run `32317651491` passed at exact CSS 320×568 and 390×844: HTTP 200, exact `innerWidth`, one Canvas, `scrollWidth === clientWidth`, and zero page/console errors. Hosted source probes returned 212462 bytes for the HTML and 10763 bytes for `src/flipper-contact.js`, with the deployed flipper markers present.
 
 ### Remaining risk / next smallest slice
 

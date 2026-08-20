@@ -9,7 +9,7 @@
 - `tests/flipper-contact.test.mjs` passes 20/20 focused flipper tests, including 5,000 deterministic hits, 5,000 deterministic misses, bounded per-query and aggregate diagnostic work, and stable equal-time side ordering.
 - Full `npm test` passes 50/50; syntax and whitespace checks pass. The new benchmark completed in 20.2 ms in this checkout.
 - No renderer, input, progression, asset, or elemental behavior changed this tick.
-- No Chromium executable is installed locally. The global Playwright package is resolvable, so hosted exact viewport checks remain a post-deployment verification step rather than a source-only claim.
+- No Chromium executable is installed locally, but the global Playwright package is resolvable. Post-deployment hosted Playwright against Pages run `32317651491` passes exact CSS 320×568 and 390×844 with HTTP 200, exact widths, one Canvas, no horizontal overflow, and zero page/console errors. Deployed HTML and flipper-module source probes retain the expected markers.
 
 ### Remaining risk / next smallest slice
 
