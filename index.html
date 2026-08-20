@@ -1454,11 +1454,26 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     [[52, top + 31], [W - 52, top + 31]].forEach(([x, y]) => { ctx.globalAlpha = .8; ctx.fillStyle = '#101a1c'; ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#789487'; ctx.lineWidth = 1; ctx.stroke(); });
     ctx.restore();
   }
+  function drawTimberGrain(width, height) {
+    // Timber grain is a restrained material cue: directional, low-contrast, and never a gameplay mark.
+    ctx.save();
+    ctx.globalAlpha = .28;
+    ctx.strokeStyle = '#d7a45a';
+    ctx.lineWidth = 1;
+    for (let row = -height * .28; row <= height * .28; row += Math.max(5, height * .22)) {
+      ctx.beginPath();
+      ctx.moveTo(-width * .42, row);
+      ctx.quadraticCurveTo(-width * .12, row - 1.5, width * .12, row + .5);
+      ctx.quadraticCurveTo(width * .32, row + 1.5, width * .42, row);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
   function drawMineStructures() {
     ctx.save();
     // Supports are foreground hardware: a bevel and a cool occlusion edge keep the timber
     // from collapsing into the same flat brown as the mine wall behind it.
-    const beam = (x, y, width, height, angle = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(angle); const face = ctx.createLinearGradient(-width / 2, 0, width / 2, 0); face.addColorStop(0, '#2b2119'); face.addColorStop(.22, '#6d4930'); face.addColorStop(.58, '#93613d'); face.addColorStop(1, '#3b2a20'); ctx.fillStyle = face; ctx.fillRect(-width / 2, -height / 2, width, height); ctx.fillStyle = 'rgba(215,232,208,.22)'; ctx.fillRect(-width / 2 + 2, -height / 2 + 2, width - 4, 3); ctx.fillStyle = 'rgba(5,7,6,.42)'; ctx.fillRect(width / 2 - 4, -height / 2 + 3, 3, height - 6); ctx.strokeStyle = '#241b15'; ctx.lineWidth = 2; ctx.strokeRect(-width / 2, -height / 2, width, height); ctx.restore(); };
+    const beam = (x, y, width, height, angle = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(angle); const face = ctx.createLinearGradient(-width / 2, 0, width / 2, 0); face.addColorStop(0, '#2b2119'); face.addColorStop(.22, '#6d4930'); face.addColorStop(.58, '#93613d'); face.addColorStop(1, '#3b2a20'); ctx.fillStyle = face; ctx.fillRect(-width / 2, -height / 2, width, height); drawTimberGrain(width, height); ctx.fillStyle = 'rgba(215,232,208,.22)'; ctx.fillRect(-width / 2 + 2, -height / 2 + 2, width - 4, 3); ctx.fillStyle = 'rgba(5,7,6,.42)'; ctx.fillRect(width / 2 - 4, -height / 2 + 3, 3, height - 6); ctx.strokeStyle = '#241b15'; ctx.lineWidth = 2; ctx.strokeRect(-width / 2, -height / 2, width, height); ctx.restore(); };
     beam(62, 118, 13, 88, -.04); beam(W - 62, 118, 13, 88, .04); beam(W / 2, 78, W - 110, 12, 0); beam(62, 388, 10, 132, -.025); beam(W - 62, 388, 10, 132, .025);
     // Irregular rock faces establish a third material family above the playable well.
     const rockFace = (x, y, scale, flip = 1) => { ctx.save(); ctx.translate(x, y); ctx.scale(flip, 1); ctx.fillStyle = '#30271f'; ctx.strokeStyle = '#111513'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(28 * scale, -17 * scale); ctx.lineTo(55 * scale, -5 * scale); ctx.lineTo(42 * scale, 22 * scale); ctx.lineTo(14 * scale, 27 * scale); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#78604a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10 * scale, 4 * scale); ctx.lineTo(28 * scale, -8 * scale); ctx.lineTo(42 * scale, 1 * scale); ctx.moveTo(18 * scale, 19 * scale); ctx.lineTo(35 * scale, 8 * scale); ctx.stroke(); ctx.fillStyle = 'rgba(215,232,208,.18)'; ctx.beginPath(); ctx.moveTo(8 * scale, 1 * scale); ctx.lineTo(27 * scale, -12 * scale); ctx.lineTo(38 * scale, -7 * scale); ctx.lineTo(19 * scale, 4 * scale); ctx.closePath(); ctx.fill(); ctx.restore(); };

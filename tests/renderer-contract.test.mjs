@@ -215,6 +215,9 @@ assert.match(source, /Distant timber braces give the tunnel arch a believable lo
 assert.match(source, /const left = 96, right = W - 96, top = 50, bottom = 136/);
 assert.match(source, /drawMineTunnelSupportHardware\(\);/);
 assert.match(source, /function drawMineStructures\(\)/);
+assert.match(source, /function drawTimberGrain\(width, height\)/);
+assert.match(source, /drawTimberGrain\(width, height\);/);
+assert.match(source, /Timber grain is a restrained material cue/);
 assert.match(source, /const face = ctx\.createLinearGradient\(-width \/ 2, 0, width \/ 2, 0\)/);
 assert.match(source, /const rockFace = \(x, y, scale, flip = 1\)/);
 assert.match(source, /Irregular rock faces establish a third material family/);

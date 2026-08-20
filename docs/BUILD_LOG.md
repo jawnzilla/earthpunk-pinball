@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 179: add restrained timber grain
+
+### Root cause and decision
+
+- Root-cause review found the mine support beams used a directional gradient, bevel, and occlusion edge but had no surface-scale grain cue. In a still frame they could therefore read as colored rectangles rather than worn timber.
+- Added one bounded renderer-only slice: `drawTimberGrain(width, height)` lays down a few deterministic, low-contrast grain waves inside each beam. Physics, collision geometry, input, progression, and assets are unchanged.
+- Added a renderer-contract assertion for the helper and its live beam call. No new persistent effect or gameplay mark was introduced.
+
+### Verification
+
+- Tight regression loop was red after the contract assertion was added (missing helper), then green after implementation: `npm test` passes 56/56; `git diff --check` passes.
+- Exact local browser checks pass 16/16 across 320x568 and 390x844, short/tall heights, standard, `?review=upgrade`, `?review=active-elements`, and `?review=depth`: HTTP 200, exact viewport, no horizontal overflow, one canvas, four upgrade choices on upgrade, and zero console/page errors.
+- `node --check` is not applicable directly to the HTML entrypoint; browser module loading and runtime execution completed without page errors.
+
+### Deployment / remaining risk
+
+- This is a local renderer material cue only until committed and deployed. Global overhaul remains NOT COMPLETE; human image inspection, final flipper feel, complete hybrid fidelity, and broader mine/tunnel material review remain open.
+
 ## 2026-08-20 — Overhaul tick 178: bound the ball contact glint
 
 ### Root cause and decision

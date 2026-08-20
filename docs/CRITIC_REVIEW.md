@@ -1,5 +1,19 @@
 # Deadlight Critic Review — Overhaul tick 176
 
+## Overhaul tick 179 verdict
+
+**Restrained timber grain: PASS as a bounded material-read correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The mine support beam renderer now has a small directional grain cue in addition to its existing value gradient, bevel, and occlusion edge.
+
+### Observed evidence
+
+- `index.html` adds `drawTimberGrain(width, height)` and calls it from the shared beam renderer used by the live mine structures.
+- The cue is deterministic, low-opacity, and clipped by the beam's local transform; it does not alter gameplay state or collision geometry. The renderer contract covers the helper and live call.
+- `npm test` passes 56/56. Exact local browser checks pass 16/16, and hosted post-deploy checks pass 16/16, at 320x568 and 390x844 across standard, upgrade, active-elements, and depth review routes at short and tall viewport heights with no console/page errors or overflow.
+
+### Limits and next gate
+
+- No subjective image-inspected still-frame verdict is claimed from this tick. The largest remaining gap is a human-observed full-table material/depth/contact review, plus final flipper feel and complete hybrid fidelity. `LOOP_COMPLETE` remains open.
+
 ## Overhaul tick 178 verdict
 
 **Bounded ball contact glint: PASS as a localized-feedback correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The material glint now has an explicit fixed-step lifetime instead of persisting from stale contact state.
