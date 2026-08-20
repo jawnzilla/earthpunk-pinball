@@ -25,6 +25,15 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 };
 
 {
+  const malformed = createBall({ mass: -2, radius: Number.NaN, material: 'unobtanium' });
+  assert.equal(malformed.mass, 0);
+  assert.equal(malformed.inverseMass, 0);
+  assert.equal(malformed.angularInertia, 0);
+  assert.equal(malformed.radius, 0.08);
+  assert.equal(malformed.material, 'steel');
+}
+
+{
   const ball = createBall({ mass: 1, x: 0, y: 0 });
   integrateBall(ball, { gravity: { x: 0, y: 9.81 }, dt: 0.5 });
   approx(ball.position.y, 2.4525, 0.01);

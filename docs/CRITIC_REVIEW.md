@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 171
 
+## Overhaul tick 172 verdict
+
+**Physical body-input normalization: PASS as a bounded solver-boundary hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The physics core now refuses malformed mass/radius/material state before it can become negative inertia or an unknown material response.
+
+### Observed evidence
+
+- `src/physics-core.js` normalizes `mass`, `radius`, and `material` inside `createBall()` before deriving inverse mass and angular inertia. Invalid mass becomes static (`0`), invalid radius falls back to `0.08`, and unknown material falls back to steel.
+- `tests/physics-core.test.mjs` covers all five malformed-body invariants. The new test was red before the source change and `npm test` passes 56/56 after it.
+- Local Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes pass 16/16 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade choices on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- Hosted verification and Pages deployment are pending this tick; no hosted pass is claimed yet.
+- This is a data-boundary correction, not proof of final contact feel, subjective still-frame quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## Overhaul tick 171 verdict
 
 **Hybrid probe signature: PASS as a bounded gameplay-readability handoff; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Hybrid gameplay state was authoritative but visually collapsed into separate elemental rings and a HUD label. The probe now carries a compact split seam and reaction-specific glyph for each canonical hybrid.

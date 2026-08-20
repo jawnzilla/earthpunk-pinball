@@ -1,5 +1,23 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 172: physical body-input normalization
+
+### Root cause and decision
+
+- Root-cause review of `createBall()` found malformed authoring/config values could preserve negative mass, produce negative angular inertia, and retain unknown material IDs. The solver then had to defend against invalid body state at every contact seam.
+- Added one bounded physics-core slice: normalize mass to a finite non-negative value, radius to a finite positive value, and material to a known `MATERIALS` key at body creation. Valid body behavior and gameplay tuning are unchanged; invalid input now becomes an explicitly static steel body with safe inertia.
+- Added a regression contract covering negative mass, non-finite radius, unknown material, zero inverse mass, and zero angular inertia.
+
+### Verification
+
+- Tight red/green loop: the new malformed-body test failed before the normalization (`-2 !== 0`), then `npm test` passed 56/56 after implementation. `node --check src/physics-core.js` and `git diff --check` pass.
+- Local Playwright exact CSS 320x568 and 390x844 standard, depth, active-elements, and upgrade routes passed 16/16: HTTP 200, complete document, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This slice is ready for deployment, but no hosted result is claimed until the prototype push and Pages run complete.
+- It hardens the physics boundary; it does not prove final flipper feel, human image-inspected mine depth/material quality, complete hybrid fidelity, or `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 171: hybrid probe signature
 
 ### Root cause and decision

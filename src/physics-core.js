@@ -33,15 +33,21 @@ export function impactEnergyFromMassSpeed(mass = 0, speed = 0) {
 }
 
 export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius = 0.08, material = 'steel' } = {}) {
+  // Contact math assumes physical, non-negative mass and a positive radius. Normalize
+  // malformed authoring/config input at the body boundary so negative inertia or an
+  // unknown material cannot leak into the solver and create non-finite response.
+  const safeMass = Number.isFinite(mass) && mass > 0 ? mass : 0;
+  const safeRadius = Number.isFinite(radius) && radius > 0 ? radius : 0.08;
+  const safeMaterial = Object.hasOwn(MATERIALS, material) ? material : 'steel';
   return {
     position: { x, y },
     velocity: { x: vx, y: vy },
-    radius,
-    mass,
-    inverseMass: mass > 0 ? 1 / mass : 0,
-    material,
+    radius: safeRadius,
+    mass: safeMass,
+    inverseMass: safeMass > 0 ? 1 / safeMass : 0,
+    material: safeMaterial,
     spin: 0,
-    angularInertia: 0.5 * mass * radius * radius,
+    angularInertia: 0.5 * safeMass * safeRadius * safeRadius,
     effects: {},
     contactsThisStep: new Set(),
     pierceLedger: new Set()
