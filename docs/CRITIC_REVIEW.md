@@ -1,5 +1,21 @@
 # Deadlight Critic Review — Overhaul tick 131
 
+## Overhaul tick 132 verdict
+
+**Physics slice: PASS for fixture coverage and bounded-work instrumentation; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** The continuous rotating-segment query now has executable coverage for combined motion, endpoint caps, near misses, degenerate inputs, and opt-in work accounting. This is evidence hardening, not a new visual phase.
+
+### Observed evidence
+
+- `tests/flipper-contact.test.mjs` passes 18/18, including the new combined linear/rotational, endpoint-cap, radial near-miss, zero-radius/NaN, and work-budget cases.
+- `src/flipper-contact.js` exposes diagnostics only through the optional query options object; default callers retain the existing pure `{ x, y, t, segment }` / `null` contract.
+- Full `npm test` passes 48/48; syntax and whitespace checks pass.
+- No Chromium executable or local browser harness is present in this checkout. Exact 320x568/390x844 browser, hosted Pages, console, and screenshot claims are intentionally pending deployment.
+
+### Remaining risk / next smallest slice
+
+- Add deterministic earliest-time ordering and a 10,000-query hit/miss benchmark with recorded work distribution; then verify the deployed module and exact portrait browser path.
+- The mine/tunnel visual overhaul, material differentiation, elemental hybrids, destructible readability, and subjective grayscale still-frame review remain open. Do not claim LOOP_COMPLETE.
+
 ## Overhaul tick 131 verdict
 
 **Physics slice: PASS for a bounded continuous rotating-segment query; global overhaul: NOT COMPLETE; visual quality: unchanged; AAA-ready: FAIL / unverified.** Rotating flipper contact now searches the continuous combined-motion distance function rather than accepting the first pose-sampled hit. The resolver contract and state ownership are preserved.

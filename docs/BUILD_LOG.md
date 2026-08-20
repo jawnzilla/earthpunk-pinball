@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 132: rotating CCD fixture and bounded-work gate
+
+### Decision
+
+- Added regression coverage for the continuous rotating-segment query's combined linear-plus-rotational crossing, endpoint-cap contact, just-outside near miss, and degenerate zero-radius/NaN inputs.
+- Added opt-in diagnostics to `sweptFlipperContact()` (`distanceCalls`, `intervalVisits`, `binarySteps`, `maxDepth`) so the conservative interval solver's bounded work can be asserted without affecting the live resolver or default query contract.
+- The diagnostics are inert unless explicitly supplied; physics response, input ownership, progression, rendering, and elemental behavior are unchanged.
+
+### Verification
+
+- Red/green loop: the new endpoint/near-miss fixture initially exposed an invalid test point inside the blade's swept arc; after minimizing it to a radial 19px outside case, the focused flipper suite passed 18/18.
+- `npm test`: 48 passed, 0 failed; `node --check src/flipper-contact.js`; `git diff --check` all passed.
+- The bounded-work fixture records `maxDepth <= 14`, `distanceCalls <= 160`, and `intervalVisits <= 160` for a deterministic combined-motion query.
+- Exact 320x568/390x844 browser checks were not run: this checkout has no Chromium executable or `node_modules` browser harness. No screenshot, console, or visual-quality claim is made from source tests.
+
+### Remaining risk / next smallest slice
+
+- The rotating CCD query still needs a larger deterministic benchmark across miss/hit distributions and explicit earliest-time ordering coverage before the physics manifold can be called complete.
+- Hosted Pages deployment and exact portrait browser checks remain required after this commit. Visual overhaul, material/element hybrid depth, destructible readability, and subjective grayscale review remain open. Do not claim LOOP_COMPLETE.
+
 ## 2026-08-19 — Overhaul tick 131: continuous rotating-segment CCD
 
 ### Decision

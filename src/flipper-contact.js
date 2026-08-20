@@ -77,7 +77,7 @@ export function sweptSegmentContact(ball, segment, radius) {
   return { x: startX + velocityX * t, y: startY + velocityY * t, t };
 }
 
-export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } = {}) {
+export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0, diagnostics = null } = {}) {
   const startX = Number.isFinite(ball.prevX) ? ball.prevX : ball.x;
   const startY = Number.isFinite(ball.prevY) ? ball.prevY : ball.y;
   const previousAngle = Number.isFinite(flipper.previousAngle) ? flipper.previousAngle : flipper.angle;
@@ -86,6 +86,13 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   const ballTravel = Math.hypot(ball.x - startX, ball.y - startY);
   if (Math.max(ballTravel, tipTravel) < 0.01) return null;
   const queryRadius = radius + Math.min(10, tipTravel * 0.28);
+  const work = diagnostics && typeof diagnostics === 'object' ? diagnostics : null;
+  if (work) {
+    work.distanceCalls = 0;
+    work.intervalVisits = 0;
+    work.binarySteps = 0;
+    work.maxDepth = 0;
+  }
   // Continuous rotating-segment query. The distance function is Lipschitz
   // bounded by linear ball travel plus tip travel, so an interval can be
   // discarded only when its conservative lower bound is outside the capsule.
@@ -100,18 +107,27 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
   };
   const relativeTravel = ballTravel + tipTravel;
   const maxDepth = 14;
+  const distanceAtWithWork = time => {
+    if (work) work.distanceCalls += 1;
+    return distanceAt(time);
+  };
   const findContact = (from, to, fromDistance, toDistance, depth) => {
+    if (work) {
+      work.intervalVisits += 1;
+      work.maxDepth = Math.max(work.maxDepth, depth);
+    }
     if (fromDistance <= queryRadius) return from;
     const span = to - from;
     if (Math.min(fromDistance, toDistance) - relativeTravel * span > queryRadius) return null;
     const middle = (from + to) * 0.5;
-    const middleDistance = distanceAt(middle);
+    const middleDistance = distanceAtWithWork(middle);
     if (middleDistance <= queryRadius) {
       let low = from;
       let high = middle;
       for (let step = 0; step < 18; step += 1) {
+        if (work) work.binarySteps += 1;
         const probe = (low + high) * 0.5;
-        if (distanceAt(probe) <= queryRadius) high = probe;
+        if (distanceAtWithWork(probe) <= queryRadius) high = probe;
         else low = probe;
       }
       return high;
@@ -120,7 +136,7 @@ export function sweptFlipperContact(ball, flipper, radius, { lengthBonus = 0 } =
     return findContact(from, middle, fromDistance, middleDistance, depth + 1)
       ?? findContact(middle, to, middleDistance, toDistance, depth + 1);
   };
-  const contactTime = findContact(0, 1, distanceAt(0), distanceAt(1), 0);
+  const contactTime = findContact(0, 1, distanceAtWithWork(0), distanceAtWithWork(1), 0);
   if (contactTime === null) return null;
   const angle = previousAngle + angleDelta * contactTime;
   const segment = segmentAt(flipper, angle, lengthBonus);

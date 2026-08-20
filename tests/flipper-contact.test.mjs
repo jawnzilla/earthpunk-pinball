@@ -57,6 +57,43 @@ test('continuous rotating query reports the first stationary-ball crossing, not 
   assert.ok(Math.abs(hit.t - expected) < 0.002, `expected continuous TOI near ${expected}, got ${hit.t}`);
 });
 
+test('continuous query resolves combined linear and rotational motion before the end poses', () => {
+  const flipper = {
+    pivotX: 100,
+    pivotY: 100,
+    length: 100,
+    width: 17,
+    previousAngle: 0,
+    angle: Math.PI / 2
+  };
+  const hit = sweptFlipperContact({ prevX: 180, prevY: 40, x: 100, y: 180 }, flipper, 8);
+  assert.ok(hit, 'combined motion should cross the moving capsule');
+  assert.ok(hit.t > 0 && hit.t < 1);
+});
+
+test('continuous query catches endpoint-cap contact and rejects a just-outside near miss', () => {
+  const flipper = { pivotX: 100, pivotY: 100, length: 100, width: 17, previousAngle: 0, angle: 0.8 };
+  const tipAngle = 0.4;
+  const tip = { x: 100 + Math.cos(tipAngle) * 100, y: 100 + Math.sin(tipAngle) * 100 };
+  const hit = sweptFlipperContact({ prevX: tip.x, prevY: tip.y + 7, x: tip.x, y: tip.y + 7 }, flipper, 8);
+  assert.ok(hit, 'the moving tip cap should contact the stationary ball');
+  const nearMiss = { x: 100 + Math.cos(tipAngle) * 119, y: 100 + Math.sin(tipAngle) * 119 };
+  const miss = sweptFlipperContact({ prevX: nearMiss.x, prevY: nearMiss.y, x: nearMiss.x, y: nearMiss.y }, flipper, 8);
+  assert.equal(miss, null, 'a path outside the swept capsule must remain a miss');
+});
+
+test('continuous query remains safe for degenerate inputs and reports bounded work', () => {
+  const flipper = { pivotX: 0, pivotY: 0, length: 0, width: 17, previousAngle: 0, angle: 0 };
+  assert.equal(sweptFlipperContact({ prevX: 1, prevY: 1, x: 2, y: 2 }, flipper, 0), null);
+  assert.equal(sweptFlipperContact({ prevX: 1, prevY: 1, x: 2, y: 2 }, flipper, Number.NaN), null);
+  const diagnostics = {};
+  const moving = { pivotX: 100, pivotY: 100, length: 100, width: 17, previousAngle: -1.2, angle: 1.2 };
+  sweptFlipperContact({ prevX: 40, prevY: 260, x: 260, y: 40 }, moving, 8, { diagnostics });
+  assert.ok(diagnostics.distanceCalls <= 160, `distance work exceeded bounded budget: ${diagnostics.distanceCalls}`);
+  assert.ok(diagnostics.intervalVisits <= 160, `interval work exceeded bounded budget: ${diagnostics.intervalVisits}`);
+  assert.ok(diagnostics.maxDepth <= 14);
+});
+
 test('rotating flipper follows the short arc across the angle seam', () => {
   const delta = shortestAngularDelta(Math.PI - 0.05, -Math.PI + 0.05);
   assert.ok(Math.abs(delta - 0.1) < 1e-9, `expected a 0.1 radian seam crossing, got ${delta}`);
