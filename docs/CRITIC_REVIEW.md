@@ -8,11 +8,11 @@
 
 - `index.html` adds `drawMineTunnelDust()` and composes it after `drawMineTunnelLamps()` but before support footings and the playable well, preserving the behind-playfield z-order.
 - The helper uses two low-alpha tapered gradients and six fixed motes; it does not alter gameplay, physics, input, timing, HUD state, or assets.
-- The renderer contract covers helper presence, authored intent, and live composition. Local automated verification is required before deployment claims.
+- The renderer contract covers helper presence, authored intent, and live composition. `npm test` passes 56/56; `node --check tests/renderer-contract.test.mjs` and `git diff --check` pass.
 
 ### Limits and next gate
 
-- This entry is provisional until the prototype commit, Pages run, and hosted exact-viewport matrix are recorded below with real output.
+- Commit `823d860` deployed successfully in Pages run `32367254547`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32367254547. Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes passed 8/8 with HTTP 200, exact dimensions, no horizontal overflow, one canvas, four upgrade buttons on upgrade routes, hosted source retaining `drawMineTunnelDust`, and zero console/page/request errors.
 - No independent image-inspected still-frame verdict is claimed. Final material/depth quality, contact feel, remaining hybrid fidelity, and `LOOP_COMPLETE` remain open.
 
 ## Overhaul tick 166 verdict

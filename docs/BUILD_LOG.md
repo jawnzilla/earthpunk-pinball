@@ -11,11 +11,11 @@
 ### Verification
 
 - Tight red/green loop: renderer contract was red before the helper existed, then `npm test` passed after implementation; `node --check tests/renderer-contract.test.mjs` and `git diff --check` pass.
-- Hosted exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes will be verified after this commit is deployed. No hosted result is claimed before that check.
+- Hosted Playwright exact CSS 320x568 and 390x844 standard, depth, grayscale, and upgrade routes passed 8/8 against `https://jawnzilla.github.io/earthpunk-pinball/`: HTTP 200, complete documents, exact inner dimensions, `scrollWidth === clientWidth`, one canvas, four upgrade buttons on upgrade routes, the new helper retained in hosted source, and zero console/page/request errors. Screenshots were captured to the OS temp directory and not added to the repository.
 
 ### Deployment / remaining risk
 
-- This slice is not complete until the prototype commit is pushed and the GitHub Pages run plus hosted browser matrix are verified.
+- Commit `823d860` deployed successfully in GitHub Pages run `32367254547`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32367254547. Hosted source and runtime checks retained `drawMineTunnelDust`.
 - The effect is an atmospheric depth cue, not proof of final still-frame quality, contact feel, complete hybrid fidelity, or `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 166: executable flipper launch-balance gate
