@@ -21,6 +21,25 @@ export function contactTiming(candidate) {
   return Number.isFinite(candidate?.t) ? candidate.t : null;
 }
 
+// Dispatch exactly one already-selected family. The caller supplies the
+// stateful resolvers; this seam prevents a later family from mutating the same
+// trajectory and makes residual replay an explicit one-shot operation.
+export function dispatchRuntimeContact(winner, handlers = {}, replayResidual = null) {
+  if (!winner || typeof handlers[winner.kind] !== 'function') {
+    return { handled: false, kind: winner?.kind || null, residualReplayed: false };
+  }
+  const resolution = handlers[winner.kind](winner) || {};
+  const contactFraction = Number.isFinite(resolution.contactFraction) ? Math.max(0, Math.min(1, resolution.contactFraction)) : null;
+  const residualReplayed = contactFraction !== null && contactFraction < 1 && typeof replayResidual === 'function';
+  if (residualReplayed) replayResidual({ contactFraction });
+  return {
+    handled: true,
+    kind: winner.kind,
+    residualReplayed,
+    ...(resolution.preserveHeldCradle ? { preserveHeldCradle: true } : {})
+  };
+}
+
 export function summarizeContactManifold(candidates = []) {
   const valid = candidates.filter(candidate => Number.isFinite(candidate?.t) && candidate.t >= 0 && candidate.t <= 1);
   return {

@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 151
 
+## Overhaul tick 152 verdict
+
+**Single-winner runtime dispatch contract: PASS as a bounded physics-verification slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The manifold now has a focused contract for invoking one selected family, replaying residual time once, and leaving a held-cradle preservation signal explicit.
+
+### Observed evidence
+
+- `src/contact-manifold.js` exports `dispatchRuntimeContact()`; `tests/contact-manifold.test.mjs` verifies that circle/segment/flipper/boundary alternatives are not invoked when flipper wins, residual replay occurs once at `t=.25`, and held-cradle preservation does not trigger a second resolver.
+- Focused manifold tests pass 6/6; full suite passes 53/53. Syntax and whitespace checks pass.
+- Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes pass 8/8 with HTTP 200, exact dimensions, one canvas, no horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Limits and next gate
+
+- The contract helper is renderer-independent and does not replace the live stateful resolver branches; final live manifold mutation still needs an end-to-end regression at that seam.
+- Deployment evidence, hosted parity, and the independent still-frame visual verdict are recorded only after the commit is pushed. The mine/tunnel overhaul, complete hybrid fidelity, and `LOOP_COMPLETE` gate remain open.
+
 ## Overhaul tick 151 verdict
 
 **Fire/Wind thermal-lance contact damage: PASS as a bounded hybrid-fidelity correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Fire + Wind hybrid now does more than leave a burn-echo marker: the structure contact that creates the echo receives a capped 1.2× damage multiplier.

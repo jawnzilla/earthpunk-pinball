@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { collectRuntimeContactCandidates, contactTiming, normalizeContactCandidate, selectEarliestContact, summarizeContactManifold } from '../src/contact-manifold.js';
+import { collectRuntimeContactCandidates, contactTiming, dispatchRuntimeContact, normalizeContactCandidate, selectEarliestContact, summarizeContactManifold } from '../src/contact-manifold.js';
 
 test('cross-family manifold selects the earliest valid normalized contact', () => {
   const candidates = [
@@ -35,6 +35,29 @@ test('normalization clamps timing without mutating the source candidate', () => 
   assert.equal(normalized.t, 1);
   assert.equal(source.t, 1.4);
   assert.equal(normalizeContactCandidate({ payload: 'missing' }), null);
+});
+
+test('runtime dispatch invokes only the selected family and replays residual time once', () => {
+  const calls = [];
+  const winner = { kind: 'flipper', t: .25, payload: 'blade' };
+  const result = dispatchRuntimeContact(winner, {
+    circle: () => { calls.push('circle'); },
+    segment: () => { calls.push('segment'); },
+    flipper: contact => { calls.push(`${contact.payload}:resolve`); return { contactFraction: contact.t }; },
+    boundary: () => { calls.push('boundary'); }
+  }, ({ contactFraction }) => { calls.push(`residual:${contactFraction}`); });
+  assert.deepEqual(calls, ['blade:resolve', 'residual:0.25']);
+  assert.deepEqual(result, { handled: true, kind: 'flipper', residualReplayed: true });
+});
+
+test('runtime dispatch preserves a held cradle when another family wins', () => {
+  const calls = [];
+  const result = dispatchRuntimeContact({ kind: 'circle', t: .4 }, {
+    circle: () => { calls.push('circle'); return { preserveHeldCradle: true }; },
+    flipper: () => { calls.push('flipper'); }
+  }, () => { calls.push('residual'); });
+  assert.deepEqual(calls, ['circle']);
+  assert.deepEqual(result, { handled: true, kind: 'circle', residualReplayed: false, preserveHeldCradle: true });
 });
 
 test('runtime adapter exposes one comparable candidate per geometry family', () => {

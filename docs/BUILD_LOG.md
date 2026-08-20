@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 152: single-winner runtime dispatch contract
+
+### Root cause and decision
+
+- The live update loop already gathers circle, segment, flipper, and boundary candidates, but the renderer-independent manifold module only specified selection. That left the one-winner rule and residual replay behavior without a focused contract test.
+- Added one bounded physics-contract slice: `dispatchRuntimeContact()` invokes only the selected family handler, optionally replays residual time once when the handler returns a bounded contact fraction, and preserves an explicit held-cradle flag without invoking a second family. No collision constants, gameplay rewards, input, topology, or rendering changed.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/contact-manifold.test.mjs` was red before the missing export existed, then passed 6/6 after implementation.
+- `npm test` passed 53/53.
+- `node --check src/contact-manifold.js` and `git diff --check` passed.
+- Local Playwright exact CSS 320×568 and 390×844 standard, active-elements, upgrade, and grayscale routes passed 8/8: HTTP 200, exact inner dimensions, one canvas, `scrollWidth === clientWidth`, four upgrade effects on upgrade routes, and zero console/page/request errors.
+
+### Deployment / remaining risk
+
+- This tick is not deployed yet at log-authoring time; the commit and Pages run are recorded below after push verification.
+- The helper is a renderer-independent contract seam; the existing live loop remains the stateful owner of resolution. This does not prove final collision feel, visual quality, or global overhaul completion. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 151: Fire/Wind thermal-lance contact damage
 
 ### Root cause and decision
