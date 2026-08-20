@@ -12,7 +12,9 @@
 
 - Red/green loop: focused `node --test tests/elemental-effects.test.mjs` failed before the implementation with actual `type: 'none'`; after the branch was added, `npm test` passed 50/50.
 - `node --check src/elemental-effects.js` and `git diff --check` passed.
-- Exact 320x568/390x844 browser checks and hosted deployment are pending this commit; no browser, screenshot, console, or Pages result is claimed yet.
+- GitHub Pages run `32320410380` completed successfully for commit `2bf6bbd`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32320410380.
+- Hosted source/parity probe at `https://jawnzilla.github.io/earthpunk-pinball/?review=active-elements&cacheBust=2bf6bbd` returned HTTP 200, 213813 bytes, and retained the `thermal-lance` marker. The deployed `src/elemental-effects.js` returned HTTP 200, 20402 bytes, with the marker present.
+- Exact 320x568/390x844 browser execution, console capture, and screenshots remain unverified because this checkout has no Chromium executable; no visual or zero-console claim is made.
 
 ### Remaining risk / next smallest slice
 

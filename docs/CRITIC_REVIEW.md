@@ -10,7 +10,8 @@
 - `src/elemental-effects.js` now emits `{ type: 'thermal-lance', objectId, burnEcho: true }` after the existing steam/slurry/root branches and records the hybrid in `runtime.hybridUsed`.
 - The regression asserts the first Fire + Wind contact emits thermal-lance and a subsequent contact returns `none`.
 - `npm test` passes 50/50; `node --check src/elemental-effects.js` and `git diff --check` pass.
-- This commit is not yet deployed. Exact hosted 320×568/390×844 checks, source parity, console state, and screenshots are intentionally unclaimed.
+- GitHub Pages run `32320410380` completed successfully for commit `2bf6bbd`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32320410380. Hosted source/parity probes returned HTTP 200 for the active-elements URL and `src/elemental-effects.js`, with the deployed `thermal-lance` marker present.
+- Exact hosted 320×568/390×844 browser execution, console state, and screenshots are intentionally unclaimed because this checkout has no Chromium executable.
 
 ### Remaining risk / next smallest slice
 
