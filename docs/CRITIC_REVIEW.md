@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 138
 
+## Overhaul tick 139 verdict
+
+**Mine support depth/material pass: PASS as a bounded renderer improvement; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** Timber supports now have a directional material read and nearby faceted rock faces add a separate stone silhouette family. This is source- and runtime-contract evidence, not a subjective still-frame verdict.
+
+### Observed evidence
+
+- `index.html` `drawMineStructures()` now uses a timber face gradient with warm highlight and cool occlusion edge, plus four `rockFace()` instances with faceted outlines and fracture marks.
+- `tests/renderer-contract.test.mjs` asserts the support gradient, rock helper, placement markers, and live draw call.
+- `npm test`: 50 passed, 0 failed; syntax checks and `git diff --check` passed.
+- Pages run `32325302689` completed successfully for commit `e146937`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32325302689. Hosted exact 320×568 and 390×844 grayscale Playwright checks passed HTTP 200, exact viewport dimensions, one canvas, no horizontal overflow, and zero console/page/request errors. Screenshots are outside the repository and were not visually inspected here.
+
+### Remaining risk / next smallest slice
+
+- The largest remaining gap is still the authored mine/tunnel visual read across a human-inspected still: shell/well/foreground separation, grayscale silhouette hierarchy, material plausibility, and mobile HUD/overlay readability. Do not claim `LOOP_COMPLETE`.
+
 ## Overhaul tick 138 verdict
 
 **Bumper-family silhouette pass: PASS as a bounded grayscale/readability improvement; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The production canvas now gives pulse and armor bumpers authored mechanical construction cues instead of relying on the shared round shell/glow language. This improves taxonomy without changing gameplay behavior.

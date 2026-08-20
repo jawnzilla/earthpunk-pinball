@@ -1,5 +1,25 @@
 # Deadlight Build Log
 
+## 2026-08-19 — Overhaul tick 139: mine support depth/material pass
+
+### Decision
+
+- Added one bounded renderer-only slice in `drawMineStructures()`: timber supports now use a directional face gradient, warm catch, and cool occlusion edge; four irregular rock faces establish a distinct stone family above and beside the recessed well.
+- Physics, collision geometry, input, progression, destructible behavior, and asset loading are unchanged. Added renderer-contract assertions for the new support and rock markers.
+
+### Verification
+
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/physics-core.js`, `node --check src/elemental-effects.js`, and `git diff --check` passed.
+- Local Playwright exact CSS `320×568` and `390×844` grayscale checks: HTTP 200, one canvas, exact viewport dimensions, `scrollWidth === clientWidth`, fixture `grayscale`, and zero console/page/request errors. Screenshots captured outside the repository at `%LOCALAPPDATA%/Temp/earthpunk-139-320x568.png` and `%LOCALAPPDATA%/Temp/earthpunk-139-390x844.png`.
+- GitHub Actions Pages run `32325302689` completed successfully for commit `e146937`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32325302689.
+- Hosted Playwright exact CSS `320×568` and `390×844` grayscale checks passed with the same HTTP/canvas/viewport/overflow/error gates. Hosted source probe returned HTTP 200, 217429 bytes, and retained both `const face = ctx.createLinearGradient` and `const rockFace` markers.
+
+### Remaining risk / next smallest slice
+
+- Screenshots are runtime evidence but were not independently inspected by an image-capable reviewer in this scheduled environment; no subjective grayscale verdict is claimed.
+- The global mine/tunnel overhaul, full first-principles physics/effects completion, and AAA bar remain open. Next slice should be selected from still-frame evidence, not source inference. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-19 — Overhaul tick 138: bumper-family silhouette/material pass
 
 ### Decision
