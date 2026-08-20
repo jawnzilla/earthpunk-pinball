@@ -1304,6 +1304,33 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     });
     ctx.restore();
   }
+  function drawMineTunnelDepth() {
+    // A distant tunnel continuation gives the mine wall a readable destination behind
+    // the playable well. Keep the landmark quiet: depth, not another gameplay target.
+    const tunnelArch = { left: 86, right: W - 86, top: 42, bottom: 142 };
+    ctx.save();
+    const recess = ctx.createLinearGradient(0, tunnelArch.top, 0, tunnelArch.bottom);
+    recess.addColorStop(0, '#080b0b'); recess.addColorStop(1, '#131917');
+    ctx.fillStyle = recess;
+    ctx.beginPath();
+    ctx.moveTo(tunnelArch.left + 18, tunnelArch.top);
+    ctx.lineTo(tunnelArch.right - 18, tunnelArch.top);
+    ctx.quadraticCurveTo(tunnelArch.right, tunnelArch.top + 16, tunnelArch.right, tunnelArch.top + 34);
+    ctx.lineTo(tunnelArch.right, tunnelArch.bottom);
+    ctx.lineTo(tunnelArch.left, tunnelArch.bottom);
+    ctx.lineTo(tunnelArch.left, tunnelArch.top + 34);
+    ctx.quadraticCurveTo(tunnelArch.left, tunnelArch.top + 16, tunnelArch.left + 18, tunnelArch.top);
+    ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = .62; ctx.strokeStyle = '#070908'; ctx.lineWidth = 10; ctx.stroke();
+    ctx.globalAlpha = .72; ctx.strokeStyle = '#6d6654'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.globalAlpha = .28; ctx.strokeStyle = '#d7a45a'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(tunnelArch.left + 22, tunnelArch.top + 7); ctx.lineTo(tunnelArch.right - 22, tunnelArch.top + 7); ctx.stroke();
+    ctx.globalAlpha = .55; ctx.strokeStyle = '#3d4944'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(tunnelArch.left + 18, tunnelArch.bottom - 12); ctx.lineTo(tunnelArch.right - 18, tunnelArch.bottom - 12); ctx.stroke();
+    ctx.globalAlpha = .26; ctx.strokeStyle = '#789487'; ctx.lineWidth = 1;
+    for (let seam = 0; seam < 4; seam += 1) { const x = tunnelArch.left + 24 + seam * ((tunnelArch.right - tunnelArch.left - 48) / 3); ctx.beginPath(); ctx.moveTo(x, tunnelArch.top + 20); ctx.lineTo(x + (seam % 2 ? 4 : -3), tunnelArch.bottom - 18); ctx.stroke(); }
+    ctx.restore();
+  }
   function drawRecessedWellPlane() {
     // One explicit recessed plane keeps the mine table from reading as a flat poster.
     const left = 38, top = 124, right = W - 38, bottom = H - 112;
@@ -1382,7 +1409,7 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop(); drawMineGrime();
+    drawMineBackdrop(); drawMineGrime(); drawMineTunnelDepth();
     // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.

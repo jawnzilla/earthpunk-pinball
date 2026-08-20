@@ -173,6 +173,9 @@ assert.match(source, /ctx\.moveTo\(item\.x - item\.r \* \.74, item\.y - item\.r 
 assert.match(source, /function drawMineGrime\(\)/);
 assert.match(source, /const grimeMarks = \[\[34, 156, 18, 5\]/);
 assert.match(source, /drawMineGrime\(\);/);
+assert.match(source, /function drawMineTunnelDepth\(\)/);
+assert.match(source, /const tunnelArch = \{ left: 86, right: W - 86, top: 42, bottom: 142 \}/);
+assert.match(source, /drawMineTunnelDepth\(\);/);
 assert.match(source, /function drawMineStructures\(\)/);
 assert.match(source, /const face = ctx\.createLinearGradient\(-width \/ 2, 0, width \/ 2, 0\)/);
 assert.match(source, /const rockFace = \(x, y, scale, flip = 1\)/);
