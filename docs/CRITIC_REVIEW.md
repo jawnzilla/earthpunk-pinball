@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 148
 
+## Overhaul tick 149 verdict
+
+**Deterministic mine grime/material wear: PASS as a bounded visual texture correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The outer mine deck now has sparse, authored wear cues that support the earthpunk mine/tunnel read without turning the backdrop into noise or changing the playable well.
+
+### Observed evidence
+
+- `index.html` adds `drawMineGrime()` with six deterministic marks and composes it immediately after `drawMineBackdrop()` and before the recessed well.
+- `tests/renderer-contract.test.mjs` asserts the helper, deterministic `grimeMarks` seed, and live call. The focused contract was red before implementation and green afterward.
+- `npm test`: 50 passed, 0 failed; syntax and whitespace checks pass.
+
+### Limits and next gate
+
+- This tick has source/runtime-contract evidence only; no hosted deployment or independently image-inspected still frame has been claimed yet.
+- The mine/tunnel visual overhaul, grayscale/material still-frame verdict, remaining hybrid fidelity, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
+
 ## Overhaul tick 148 verdict
 
 **Fire/Water steam-pressure impulse: PASS as a bounded gameplay-correctness slice; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The Fire + Water hybrid now stores and consumes a capped mass-scaled pressure impulse along the struck structure normal after the ordinary material response, instead of leaving `extraTick` as inert metadata.

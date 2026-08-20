@@ -1257,6 +1257,20 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
     [[49, 72], [W - 49, 72], [49, H - 112], [W - 49, H - 112]].forEach(([x, y]) => { const glow = ctx.createRadialGradient(x, y, 1, x, y, 26); glow.addColorStop(0, 'rgba(255,228,163,.42)'); glow.addColorStop(1, 'rgba(215,164,90,0)'); ctx.fillStyle = glow; ctx.fillRect(x - 28, y - 28, 56, 56); ctx.fillStyle = '#ffe4a3'; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#895033'; ctx.lineWidth = 2; ctx.stroke(); });
     ctx.save(); ctx.strokeStyle = '#567b7a'; ctx.globalAlpha = .55; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(37, 170); ctx.bezierCurveTo(52, 190, 42, 218, 58, 242); ctx.bezierCurveTo(70, 262, 50, 292, 67, 318); ctx.bezierCurveTo(78, 338, 64, 366, 76, 390); ctx.stroke(); ctx.globalAlpha = .18; ctx.lineWidth = 7; ctx.stroke(); ctx.restore();
   }
+  function drawMineGrime() {
+    // Sparse deterministic grime marks make the earthwork read as worn material,
+    // not a clean procedural backdrop. Keep them outside the playable well.
+    const grimeMarks = [[34, 156, 18, 5], [W - 52, 198, 14, 4], [31, 284, 21, 6], [W - 55, 346, 19, 5], [45, H - 188, 16, 4], [W - 57, H - 232, 18, 5]];
+    ctx.save();
+    grimeMarks.forEach(([x, y, width, height], index) => {
+      const stain = ctx.createLinearGradient(x, y, x + width, y + height);
+      stain.addColorStop(0, 'rgba(5,7,6,.02)'); stain.addColorStop(.5, 'rgba(5,7,6,.28)'); stain.addColorStop(1, 'rgba(215,164,90,.04)');
+      ctx.fillStyle = stain; ctx.fillRect(x, y, width, height);
+      ctx.globalAlpha = .18; ctx.strokeStyle = index % 2 ? '#9c6b45' : '#567b7a'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x + 2, y + height + 3); ctx.lineTo(x + width - 3, y + height + 1); ctx.stroke();
+    });
+    ctx.restore();
+  }
   function drawRecessedWellPlane() {
     // One explicit recessed plane keeps the mine table from reading as a flat poster.
     const left = 38, top = 124, right = W - 38, bottom = H - 112;
@@ -1335,8 +1349,8 @@ import { collectBoundaryContactCandidates } from './src/boundary-contact.js';
   }
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    drawMineBackdrop();
-    // Compose the authored mine/deck planes before gameplay objects. These layers
+    drawMineBackdrop(); drawMineGrime();
+    // Compose the authored mine/deck planes before gameplay objects.
     // were previously defined but orphaned from the live renderer, leaving the
     // table on the procedural fallback despite the authored assets being loaded.
     drawReactor(); drawRecessedWellPlane(); drawDeckDetails(); drawWellWallBevel(); drawMineStructures(); drawMeters(); drawLowerMidLandmarks();

@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 149: deterministic mine grime/material wear
+
+### Root cause and decision
+
+- Source review found the mine backdrop had strata lines and authored structures, but the outer deck still read as uniformly clean. That weakened the earthwork/material read in a still frame without affecting gameplay.
+- Added one bounded renderer-only slice: `drawMineGrime()` paints six sparse, deterministic wear marks along the non-playable outer deck/backdrop edges. The marks use restrained dark/ochre/blue-green value cues and remain behind the recessed well, so physics, collision geometry, input, progression, effects, and asset loading are unchanged.
+- Added renderer-contract assertions for the helper, deterministic mark seed, and live composition call.
+
+### Verification
+
+- Tight red/green loop: `node --test tests/renderer-contract.test.mjs` failed before `drawMineGrime()` existed with the missing helper contract, then passed after implementation.
+- `npm test`: 50 passed, 0 failed.
+- `node --check src/elemental-effects.js`, `node --check src/physics-core.js`, and `git diff --check` passed.
+
+### Remaining risk / next smallest slice
+
+- Push only `prototype`, wait for the GitHub Pages workflow, and verify hosted source plus exact CSS 320×568/390×844 standard and grayscale routes if the browser executable is available.
+- The mine/tunnel overhaul still needs an independently inspected still-frame verdict, complete cross-family physics/effects fidelity, and the global completion gate. Do not claim `LOOP_COMPLETE`.
+
 ## 2026-08-20 — Overhaul tick 148: Fire/Water steam-pressure impulse
 
 ### Root cause and decision
