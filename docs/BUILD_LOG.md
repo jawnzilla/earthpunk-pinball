@@ -1,5 +1,24 @@
 # Deadlight Build Log
 
+## 2026-08-20 — Overhaul tick 184: fail-closed integrator input boundary
+
+### Root cause and decision
+
+- Root-cause investigation found `integrateBall()` trusted runtime `force`, `gravity`, and `dt` values after body creation. A malformed vector component or frame delta could therefore inject `NaN`/`Infinity` into velocity and position during the fixed-step loop.
+- Added one bounded physics-core slice: force and gravity components now normalize to finite values, while non-finite or negative `dt` falls back to `FIXED_DT`. Valid integration, material drag, rotation, and rolling resistance behavior remain unchanged.
+- Added a deterministic malformed-integrator regression. Renderer, collision geometry, input, progression, and assets are unchanged.
+
+### Verification
+
+- Tight regression loop was red after the malformed-input test was added (non-finite position); after the single solver-boundary change `npm test` passes 56/56.
+- `node --check src/physics-core.js` and `git diff --check` pass.
+- Exact local browser checks pass 10/10 at CSS 320x568 and 390x844 for standard, depth, upgrade, active-elements, and grayscale routes: HTTP 200, exact viewport, no horizontal overflow, one canvas, zero console/page/request errors. The upgrade fixture exposes 11 total overlay buttons in the live DOM (including utility/navigation controls); no UI change was made in this physics slice.
+
+### Deployment / remaining risk
+
+- This slice is local until commit/push and GitHub Pages deployment are verified. Current hosted pre-deploy checks pass the same 10/10 matrix against `https://jawnzilla.github.io/earthpunk-pinball/` on the prior build.
+- Global overhaul remains NOT COMPLETE; human still-frame inspection, final flipper contact feel, complete hybrid fidelity, and broader mine/tunnel review remain open.
+
 ## 2026-08-20 — Overhaul tick 183: distant timber grain cue
 
 ### Root cause and decision

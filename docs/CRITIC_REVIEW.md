@@ -1,5 +1,20 @@
 # Deadlight Critic Review — Overhaul tick 181
 
+## Overhaul tick 184 verdict
+
+**Fail-closed integrator input boundary: PASS as a bounded first-principles physics hardening; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The fixed-step integrator now rejects malformed force, gravity, and frame-delta input before it can contaminate live ball state.
+
+### Observed evidence
+
+- `src/physics-core.js` adds finite vector normalization for force/gravity and a safe non-negative `dt` fallback to `FIXED_DT`; drag, rotation, and rolling resistance use the normalized timestep.
+- `tests/physics-core.test.mjs` adds a malformed-integrator regression. The test was red before implementation and `npm test` passes 56/56 afterward; syntax and whitespace checks pass.
+- Exact local and prior-hosted browser checks pass 10/10 across CSS 320x568 and 390x844 standard, depth, upgrade, active-elements, and grayscale routes with HTTP 200, exact viewports, no overflow, one canvas, and zero console/page/request errors. The upgrade route currently contains 11 overlay buttons including non-choice controls; this slice does not alter that existing UI structure.
+
+### Limits and next gate
+
+- This is a solver boundary correction, not independent image inspection of the full table, proof of final flipper contact feel, or proof of complete hybrid fidelity. `LOOP_COMPLETE` remains open.
+- Deployment verification is pending for the new commit. The largest remaining product gap remains evidence-selected full-table material/depth and contact-feel review.
+
 ## Overhaul tick 183 verdict
 
 **Distant timber grain cue: PASS as a bounded tunnel-material correction; global overhaul: NOT COMPLETE; AAA-ready: FAIL / unverified.** The upper tunnel support posts now carry a restrained directional grain cue, improving the material distinction between distant timber and the surrounding bedrock without adding a competing gameplay mark.

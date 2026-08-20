@@ -48,6 +48,21 @@ const approx = (actual, expected, tolerance = 1e-6) => {
 }
 
 {
+  const ball = createBall({ mass: 1, x: 0, y: 0 });
+  integrateBall(ball, {
+    force: { x: Number.NaN, y: Number.POSITIVE_INFINITY },
+    gravity: { x: Number.NEGATIVE_INFINITY, y: Number.NaN },
+    dt: Number.NaN
+  });
+  assert.ok(Number.isFinite(ball.position.x));
+  assert.ok(Number.isFinite(ball.position.y));
+  assert.ok(Number.isFinite(ball.velocity.x));
+  assert.ok(Number.isFinite(ball.velocity.y));
+  assert.deepEqual(ball.position, { x: 0, y: 0 });
+  assert.deepEqual(ball.velocity, { x: 0, y: 0 });
+}
+
+{
   const ball = createBall({ mass: 1, vx: 0, vy: -2 });
   const contact = resolveContact({ ball, surface: { material: 'stone' }, point: { x: 0, y: 0 }, normal: { x: 0, y: -1 } });
   assert.equal(contact.separating, true);

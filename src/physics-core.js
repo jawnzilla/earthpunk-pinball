@@ -13,6 +13,10 @@ export const FIXED_DT = 1 / 120;
 const EPSILON = 1e-8;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const finiteOrZero = value => Number.isFinite(value) ? value : 0;
+const finiteVectorOrZero = value => ({
+  x: finiteOrZero(value?.x),
+  y: finiteOrZero(value?.y)
+});
 const dot = (a, b) => a.x * b.x + a.y * b.y;
 const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
 const scale = (a, scalar) => ({ x: a.x * scalar, y: a.y * scalar });
@@ -59,19 +63,24 @@ export function createBall({ x = 0, y = 0, vx = 0, vy = 0, mass = 0.032, radius 
 }
 
 export function integrateBall(ball, { force = { x: 0, y: 0 }, gravity = { x: 0, y: 9.81 }, dt = FIXED_DT } = {}) {
-  const acceleration = add(scale(force, ball.inverseMass), gravity);
-  ball.velocity = add(ball.velocity, scale(acceleration, dt));
-  ball.position = add(ball.position, scale(ball.velocity, dt));
+  // The fixed-step loop is a trust boundary: malformed forces, gravity, or
+  // frame deltas must fail closed instead of poisoning the body state.
+  const safeForce = finiteVectorOrZero(force);
+  const safeGravity = finiteVectorOrZero(gravity);
+  const safeDt = Number.isFinite(dt) && dt >= 0 ? dt : FIXED_DT;
+  const acceleration = add(scale(safeForce, ball.inverseMass), safeGravity);
+  ball.velocity = add(ball.velocity, scale(acceleration, safeDt));
+  ball.position = add(ball.position, scale(ball.velocity, safeDt));
   const drag = MATERIALS[ball.material]?.drag ?? MATERIALS.steel.drag;
-  const dragFactor = Math.exp(-drag * dt);
+  const dragFactor = Math.exp(-drag * safeDt);
   ball.velocity = scale(ball.velocity, dragFactor);
   const spin = Number.isFinite(ball.spin) ? ball.spin : 0;
   const rotation = Number.isFinite(ball.rotation) ? ball.rotation : 0;
-  ball.rotation = rotation + spin * dt;
+  ball.rotation = rotation + spin * safeDt;
   // Rolling resistance is an explicit material property: a stone/timber body
   // should shed contact spin faster than a polished steel or copper body.
   const rollingResistance = MATERIALS[ball.material]?.rollingResistance ?? drag * 4;
-  ball.spin = spin * Math.exp(-rollingResistance * dt);
+  ball.spin = spin * Math.exp(-rollingResistance * safeDt);
   return ball;
 }
 
