@@ -16,7 +16,8 @@
 
 ### Remaining risk / next smallest slice
 
-- Push only `prototype`, wait for GitHub Pages, then run exact hosted 320×568 and 390×844 standard/grayscale/active-elements checks with console, request, overflow, and source-parity evidence.
+- GitHub Actions Pages run `32337305525` completed successfully for commit `60fd2be`: https://github.com/jawnzilla/earthpunk-pinball/actions/runs/32337305525.
+- Hosted source probe returned HTTP 200, 222201 bytes, and retained `consumeSteamPressure`/`steamPressure` markers. Playwright exact CSS 320×568 and 390×844 standard, grayscale, active-elements, and upgrade routes passed 8/8: HTTP 200, exact dimensions, one canvas, zero horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors.
 - The mine/tunnel overhaul, remaining hybrid fidelity, independently inspected still frames, and full completion gate remain open. Do not claim `LOOP_COMPLETE`.
 
 ## 2026-08-20 — Overhaul tick 147: Water/Earth slurry-bind redirection

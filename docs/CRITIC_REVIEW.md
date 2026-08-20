@@ -12,7 +12,7 @@
 
 ### Limits and next gate
 
-- Deployment and hosted exact-viewport browser evidence are still pending for this commit.
+- GitHub Actions Pages run `32337305525` completed successfully for commit `60fd2be`. Hosted Playwright exact CSS 320×568 and 390×844 standard, grayscale, active-elements, and upgrade routes passed 8/8 with HTTP 200, exact dimensions, one canvas, zero horizontal overflow, four upgrade effects on upgrade routes, and zero console/page/request errors. Hosted source returned HTTP 200 and retained `consumeSteamPressure`/`steamPressure` markers.
 - The mine/tunnel visual overhaul, remaining hybrid fidelity, independently inspected still frames, and full physics/effects completion remain open. Do not claim `LOOP_COMPLETE`.
 
 # Deadlight Critic Review — Overhaul tick 147
